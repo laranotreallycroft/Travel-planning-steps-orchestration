@@ -1,16 +1,31 @@
-import { DatePicker, Form, Space } from "antd";
+import { Button, DatePicker, Form, Input } from "antd";
+import { IBasicTravelInfoPayload } from "./HomescreenContainer";
 
-interface HomescreenViewProps {}
+interface IHomescreenViewProps {
+  onFinish: (values: IBasicTravelInfoPayload) => void;
+}
 
 const { RangePicker } = DatePicker;
-const HomescreenView: React.FC = (props: HomescreenViewProps) => {
+const { Search } = Input;
+
+const HomescreenView: React.FC<IHomescreenViewProps> = (
+  props: IHomescreenViewProps
+) => {
   const [form] = Form.useForm<any>();
   return (
     <>
-      <Form form={form}>
-        <Space direction="vertical" size={12}>
+      <Form form={form} onFinish={props.onFinish}>
+        <Form.Item name={"dateFromTo"}>
           <RangePicker />
-        </Space>
+        </Form.Item>
+        <Form.Item name={"location"}>
+          <Search
+            placeholder="input location"
+            onSearch={(e) => console.log(e)}
+            style={{ width: 200 }}
+          />
+        </Form.Item>
+        <Button onClick={form.submit}>submit</Button>
       </Form>
     </>
   );

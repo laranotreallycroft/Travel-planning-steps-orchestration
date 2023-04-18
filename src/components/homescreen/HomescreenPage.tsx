@@ -1,8 +1,10 @@
 import HomescreenContainer from "./HomescreenContainer";
 
-interface HomescreenPageProps {}
+interface IHomescreenPageProps {}
 
-const HomescreenPage: React.FC = (props: HomescreenPageProps) => {
+const HomescreenPage: React.FC<IHomescreenPageProps> = (
+  props: IHomescreenPageProps
+) => {
   return <HomescreenContainer />;
 };
 
