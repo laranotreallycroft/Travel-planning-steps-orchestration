@@ -1,0 +1,39 @@
+.homeView__backgroundImage {
+    background-image: linear-gradient(to bottom,
+            rgb(37, 26, 3),
+            rgba(0, 0, 0, 0) 35%), url(../../img/homeBackground.jpg);
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: auto;
+}
+
+.homeView__title {
+    font-family: 'ArcherBold';
+    letter-spacing: 0.3rem;
+    color: #e9d8d5 !important;
+}
+
+.homeView__formContainer {
+    padding: 1vw;
+    border-radius: 0.3vw;
+    background-color: rgba(83, 59, 37, 0.6);
+    box-shadow: 0 0 5px 10px rgba(83, 59, 37, 0.6);
+}
+
+
+.homeView__contentContainer {
+    border: 0.15rem dashed #c98e49;
+    border-radius: 10px;
+    padding: 2vw;
+    overflow-y: auto;
+    display: flex;
+}
+
+@media only screen and (max-width: 600px) {
+    .homeView__contentContainer {
+
+        flex-direction: column;
+    }
+}
