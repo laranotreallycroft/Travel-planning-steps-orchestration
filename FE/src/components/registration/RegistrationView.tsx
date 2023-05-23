@@ -12,20 +12,25 @@ import Title from "antd/es/typography/Title";
 import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { RuleObject } from "antd/es/form";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { IRegistrationPayload } from "../../service/registration/registrationBusinessStore";
 
-export interface IRegisterForm {
+export interface IRegistrationForm {
   email: string;
   password: string;
   confirmPassword: string;
 }
-export interface IRegisterViewOwnProps {}
+export interface IRegistrationViewOwnProps {
+  onGoogleLogin: (googleCredential: CredentialResponse) => void;
+  onRegistration: (registrationValues: IRegistrationPayload) => void;
+}
 
-type IRegisterViewProps = IRegisterViewOwnProps;
+type IRegistrationViewProps = IRegistrationViewOwnProps;
 
-const RegisterView: React.FC<IRegisterViewProps> = (
-  props: IRegisterViewProps
+const RegistrationView: React.FC<IRegistrationViewProps> = (
+  props: IRegistrationViewProps
 ) => {
-  const [form] = Form.useForm<IRegisterForm>();
+  const [form] = Form.useForm<IRegistrationForm>();
 
   const validatePassword = (rule: RuleObject, value: string) => {
     if (
@@ -48,6 +53,11 @@ const RegisterView: React.FC<IRegisterViewProps> = (
       return Promise.reject("Make sure your passwords match.");
     }
   };
+
+  const handleFinish = (values: IRegistrationForm) => {
+    props.onRegistration({ email: values.email, password: values.password });
+  };
+
   return (
     <Row className="fullHeight loginView_container">
       <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form">
@@ -59,7 +69,11 @@ const RegisterView: React.FC<IRegisterViewProps> = (
             Welcome to Travel app
           </Title>
         </Row>
-        <Form form={form}>
+        <Form<IRegistrationForm>
+          form={form}
+          onFinish={handleFinish}
+          className="fullWidth"
+        >
           <Form.Item
             name={"email"}
             label={"Email"}
@@ -109,7 +123,12 @@ const RegisterView: React.FC<IRegisterViewProps> = (
             </Button>
           </Row>
           <Divider>Or</Divider>
-          <Row>SIGN WITH GOOGLE</Row>
+          <Row justify={"center"}>
+            <GoogleLogin
+              onSuccess={props.onGoogleLogin}
+              onError={() => console.log("A")}
+            />
+          </Row>
           <Row>
             Already have an account?
             <Typography.Link href={"/login"} className="margin-left-sm">
@@ -147,4 +166,4 @@ const RegisterView: React.FC<IRegisterViewProps> = (
   );
 };
 
-export default RegisterView;
+export default RegistrationView;

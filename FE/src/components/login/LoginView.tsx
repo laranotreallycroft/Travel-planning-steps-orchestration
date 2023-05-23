@@ -9,24 +9,29 @@ import {
   Typography,
 } from "antd";
 import Title from "antd/es/typography/Title";
-import React, { useCallback } from "react";
+import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { IRegularLoginPayload } from "../../service/login/loginBusinessStore";
 
 export interface ILoginForm {
   email: string;
   password: string;
 }
-export interface ILoginViewOwnProps {}
+export interface ILoginViewOwnProps {
+  onGoogleLogin: (response: CredentialResponse) => void;
+  onRegularLogin: (loginValues: IRegularLoginPayload) => void;
+}
 
 type ILoginViewProps = ILoginViewOwnProps;
 
 const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   const [form] = Form.useForm<ILoginForm>();
 
-  const responseGoogle = useCallback((response: any) => {
-    console.log(response);
-  }, []);
+  const handleFinish = (values: ILoginForm) => {
+    props.onRegularLogin(values);
+  };
+
   return (
     <Row className="fullHeight">
       <Col span={12} className="loginView__form ">
@@ -38,7 +43,11 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             Welcome to Travel app
           </Title>
         </Row>
-        <Form form={form}>
+        <Form<ILoginForm>
+          form={form}
+          onFinish={handleFinish}
+          className="fullWidth"
+        >
           <Form.Item
             name={"email"}
             label={"Email"}
@@ -72,13 +81,13 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
           <Divider>Or</Divider>
           <Row justify={"center"}>
             <GoogleLogin
-              onSuccess={responseGoogle}
+              onSuccess={props.onGoogleLogin}
               onError={() => console.log("A")}
             />
           </Row>
           <Row justify={"center"} className="margin-top-md">
             New to Travel App?
-            <Typography.Link href={"/register"} className="margin-left-sm">
+            <Typography.Link href={"/registration"} className="margin-left-sm">
               Create Account
             </Typography.Link>
           </Row>
