@@ -1,15 +1,23 @@
 import { CredentialResponse } from "@react-oauth/google";
 import {
   IGoogleLoginPayload,
-  IRegularLoginPayload,
+  ILoginPayload,
+  LoginBusinessStore,
   googleLogin,
-  regularLogin,
-} from "../../service/login/loginBusinessStore";
+} from "../../service/business/login/LoginBusinessStore";
 import LoginView from "./LoginView";
+import { connect } from "react-redux";
 
 export interface ILoginContainerOwnProps {}
-
-type ILoginContainerProps = ILoginContainerOwnProps;
+export interface ILoginContainerStateProps {
+  isUserLoggedIn: boolean;
+}
+export interface ILoginContainerDispatchProps {
+  doLogin: (loginPayload: ILoginPayload) => void;
+}
+type ILoginContainerProps = ILoginContainerOwnProps &
+  ILoginContainerStateProps &
+  ILoginContainerDispatchProps;
 
 const LoginContainer: React.FC<ILoginContainerProps> = (
   props: ILoginContainerProps
@@ -23,16 +31,27 @@ const LoginContainer: React.FC<ILoginContainerProps> = (
     }
   };
 
-  const handleRegularLogin = (loginValues: IRegularLoginPayload) => {
-    regularLogin(loginValues);
+  const handleLogin = (loginValues: ILoginPayload) => {
+    props.doLogin(loginValues);
   };
 
-  return (
-    <LoginView
-      onGoogleLogin={handleGoogleLogin}
-      onRegularLogin={handleRegularLogin}
-    />
-  );
+  return <LoginView onGoogleLogin={handleGoogleLogin} onLogin={handleLogin} />;
 };
 
-export default LoginContainer;
+const mapStateToProps = (state: any): ILoginContainerStateProps => ({
+  isUserLoggedIn: LoginBusinessStore.selectors.isUserLoggedIn(state),
+});
+
+const mapDispatchToProps = (dispatch: any): ILoginContainerDispatchProps => ({
+  doLogin: (loginPayload: ILoginPayload) =>
+    dispatch(LoginBusinessStore.actions.doLogin(loginPayload)),
+});
+
+export default connect<
+  ILoginContainerStateProps,
+  ILoginContainerDispatchProps,
+  ILoginContainerOwnProps
+>(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginContainer);

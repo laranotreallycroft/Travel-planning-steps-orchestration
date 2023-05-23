@@ -13,7 +13,7 @@ import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { RuleObject } from "antd/es/form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { IRegistrationPayload } from "../../service/registration/registrationBusinessStore";
+import { IRegistrationPayload } from "../../service/business/registration/RegistrationBusinessStore";
 
 export interface IRegistrationForm {
   email: string;

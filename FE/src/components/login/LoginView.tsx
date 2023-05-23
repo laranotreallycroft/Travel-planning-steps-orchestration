@@ -12,7 +12,7 @@ import Title from "antd/es/typography/Title";
 import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { IRegularLoginPayload } from "../../service/login/loginBusinessStore";
+import { ILoginPayload } from "../../service/business/login/LoginBusinessStore";
 
 export interface ILoginForm {
   email: string;
@@ -20,7 +20,7 @@ export interface ILoginForm {
 }
 export interface ILoginViewOwnProps {
   onGoogleLogin: (response: CredentialResponse) => void;
-  onRegularLogin: (loginValues: IRegularLoginPayload) => void;
+  onLogin: (loginValues: ILoginPayload) => void;
 }
 
 type ILoginViewProps = ILoginViewOwnProps;
@@ -29,7 +29,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   const [form] = Form.useForm<ILoginForm>();
 
   const handleFinish = (values: ILoginForm) => {
-    props.onRegularLogin(values);
+    props.onLogin(values);
   };
 
   return (

@@ -10,9 +10,10 @@ body, #root, html {
 
 @import '../fonts/font.css';
 @import 'common/common.css';
+@import 'common/layout/_appLayout.css';
+@import 'common/map/_mapElement.css';
 @import 'home/_homeView.css';
 @import 'home/_firstStep.css';
 @import 'home/_secondStep.css';
 @import 'home/_thirdStep.css';
-@import 'common/map/_mapElement.css';
 @import 'login/_loginView.css';

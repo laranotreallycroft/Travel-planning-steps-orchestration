@@ -7,6 +7,8 @@ import { ConfigProvider } from "antd";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleClientId } from "./env/const";
 import axios from "axios";
+import { Provider } from "react-redux";
+import { getStore } from "./service/business/RootBusinessStore";
 
 axios.defaults.baseURL = "http://localhost:8080/";
 //axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
@@ -34,21 +36,25 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const store = getStore();
+
 root.render(
   <React.StrictMode>
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#c98e49",
-          colorText: "#c98e49",
-          colorInfo: "#12374e",
-          fontFamily: "Verdana",
-        },
-      }}
-    >
-      <GoogleOAuthProvider clientId={googleClientId}>
-        <RouterProvider router={appRouter} />
-      </GoogleOAuthProvider>
-    </ConfigProvider>
+    <Provider store={store}>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#c98e49",
+            colorText: "#c98e49",
+            colorInfo: "#12374e",
+            fontFamily: "Verdana",
+          },
+        }}
+      >
+        <GoogleOAuthProvider clientId={googleClientId}>
+          <RouterProvider router={appRouter} />
+        </GoogleOAuthProvider>
+      </ConfigProvider>
+    </Provider>
   </React.StrictMode>
 );

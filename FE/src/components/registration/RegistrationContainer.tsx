@@ -3,11 +3,11 @@ import RegistrationView from "./RegistrationView";
 import {
   IGoogleLoginPayload,
   googleLogin,
-} from "../../service/login/loginBusinessStore";
+} from "../../service/business/login/LoginBusinessStore";
 import {
   IRegistrationPayload,
   registration,
-} from "../../service/registration/registrationBusinessStore";
+} from "../../service/business/registration/RegistrationBusinessStore";
 
 export interface IRegistrationContainerOwnProps {}
 

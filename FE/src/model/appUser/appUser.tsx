@@ -1,4 +1,4 @@
-export interface IAppUser {
+export interface IAppUserInfo {
   id: string;
   email: string;
 }
