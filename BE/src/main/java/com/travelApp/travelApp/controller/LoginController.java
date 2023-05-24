@@ -22,6 +22,7 @@ import com.travelApp.travelApp.model.GoogleUser;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.GoogleLoginPayload;
 import com.travelApp.travelApp.model.payload.LoginPayload;
+import com.travelApp.travelApp.model.payload.UserPayload;
 import com.travelApp.travelApp.repository.GoogleUserRepository;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
@@ -48,10 +49,13 @@ public class LoginController {
 			String passwordHash = user.getPasswordHash();
 			byte[] passwordSalt = user.getPasswordSalt();
 			String payloadPasswordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
-			if (payloadPasswordHash.equals(passwordHash))
-				return ResponseEntity.ok(payloadEmail);
+			if (payloadPasswordHash.equals(passwordHash)) {
+				UserPayload userPayload = new UserPayload(payloadEmail, user.getId().toString());
+				return ResponseEntity.ok(userPayload);
+			}
+
 		}
-		return ResponseEntity.ok("Email or password wrong.");
+		return ResponseEntity.badRequest().body("Email or password wrong.");
 	}
 
 	@PostMapping("/google")
@@ -59,8 +63,7 @@ public class LoginController {
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
 				// Specify the CLIENT_ID of the app that accesses the backend:
 				// Or, if multiple clients access the backend:
-				.setAudience(Arrays.asList(googleClientId))
-				.build();
+				.setAudience(Arrays.asList(googleClientId)).build();
 
 		GoogleIdToken idToken;
 		try {
@@ -73,17 +76,18 @@ public class LoginController {
 
 				GoogleUser user = new GoogleUser(payloadUserId, payloadEmail);
 				if (googleUserRepository.findById(payloadUserId) != null) {
-					return ResponseEntity.ok(user);
+					UserPayload userPayload = new UserPayload(payloadEmail, payloadUserId);
+					return ResponseEntity.ok(userPayload);
 				}
 				googleUserRepository.save(user);
 				return ResponseEntity.status(HttpStatus.CREATED).body(payloadEmail);
 
 			} else {
-				return ResponseEntity.ok("Invalid ID token." + googleLoginPayload.getCredential());
+				return ResponseEntity.badRequest().body("Invalid ID token." + googleLoginPayload.getCredential());
 			}
 		} catch (GeneralSecurityException | IOException e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(e.toString());
+			return ResponseEntity.badRequest().body(e.toString());
 		}
 	}
 }

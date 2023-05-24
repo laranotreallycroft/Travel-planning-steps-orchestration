@@ -30,7 +30,7 @@ public class RegistrationController {
 		String payloadPassword = loginPayload.getPassword();
 
 		if (userRepository.findByEmail(payloadEmail) != null) {
-			return ResponseEntity.ok("Email already exists");
+			return ResponseEntity.badRequest().body("Email already exists");
 		}
 		try {
 			byte[] passwordSalt = Security.getSalt();
@@ -41,7 +41,7 @@ public class RegistrationController {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.ok("Something went wrong.");
+		return ResponseEntity.badRequest().body("Something went wrong.");
 
 	}
 }

@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { IAppUserInfo } from "../../../model/appUser/appUser";
 import { IPayloadAction } from "../common/types";
 import { Action } from "redux";
-import { Observable, catchError, filter, ignoreElements, mergeMap } from "rxjs";
+import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 
 // -
 // -------------------- Selectors
@@ -16,8 +16,6 @@ const actions = {
   GOOGLE_LOGIN: "GOOGLE_LOGIN",
   LOGOUT: "LOGOUT",
   CURRENT_USER_STORE: "CURRENT_USER_STORE",
-  CURRENT_USER_FETCH: "CURRENT_USER_FETCH",
-  CURRENT_USER_CLEAR: "CURRENT_USER_CLEAR",
 };
 
 export interface IGoogleLoginPayload {
@@ -28,34 +26,27 @@ export interface ILoginPayload {
   password: string;
 }
 
-const doLogin = (payload: ILoginPayload): IPayloadAction<ILoginPayload> => {
+export const doLogin = (
+  payload: ILoginPayload
+): IPayloadAction<ILoginPayload> => {
   return { type: actions.LOGIN, payload: payload };
 };
 
 const doGoogleLogin = (
   payload: IGoogleLoginPayload
 ): IPayloadAction<IGoogleLoginPayload> => {
-  return { type: actions.LOGIN, payload: payload };
+  return { type: actions.GOOGLE_LOGIN, payload: payload };
 };
 
 const doLogout = (): Action => {
   return { type: actions.LOGOUT };
 };
 
-const fetchCurrentUser = (): Action => {
-  return { type: actions.CURRENT_USER_FETCH };
-};
-
-const storeCurrentUser = (
+export const storeCurrentUser = (
   payload: IAppUserInfo
 ): IPayloadAction<IAppUserInfo> => {
   return { type: actions.CURRENT_USER_STORE, payload: payload };
 };
-
-const clearCurrentUser = (): Action => {
-  return { type: actions.CURRENT_USER_CLEAR };
-};
-
 // -
 // -------------------- Side-effects
 
@@ -68,24 +59,22 @@ const doLoginEffect = (
       return action.type === actions.LOGIN;
     }),
     mergeMap((action) => {
-      // Make an Axios call to perform the login operation
       return axios
         .post("/login", action.payload)
         .then((response) => {
-          // Process the successful response if needed
-          console.log(response.data);
-          // Return any relevant actions
-          return /* relevant action */;
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            throw new Error(response.data);
+          }
         })
         .catch((error) => {
-          // Handle the error if needed
-          console.log(error);
-          // Return any relevant error actions
-          return /* relevant error action */;
+          console.log(error.response.data);
         });
     }),
-    ignoreElements(),
-    // reportCaughtMessage((error: any) => console.log(error)),
+    filter((data) => data !== undefined),
+    map((data) => storeCurrentUser(data)),
+    // reportCaughtMessage((error: any) => console.log(error)), TPSO-18
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
       return o;
@@ -93,15 +82,37 @@ const doLoginEffect = (
   );
 };
 
-export const googleLogin = (googleLoginPayload: IGoogleLoginPayload) =>
-  axios
-    .post("/login/google", googleLoginPayload)
-    .then((value: AxiosResponse<IAppUserInfo>) => console.log(value.data));
-
-export const regularLogin = (regularLoginPayload: ILoginPayload) =>
-  axios
-    .post("/login", regularLoginPayload)
-    .then((value: AxiosResponse<IAppUserInfo>) => console.log(value.data));
+const doGoogleLoginEffect = (
+  action$: Observable<IPayloadAction<ILoginPayload>>,
+  state$: Observable<any>
+) => {
+  return action$.pipe(
+    filter((action) => {
+      return action.type === actions.GOOGLE_LOGIN;
+    }),
+    mergeMap((action) => {
+      return axios
+        .post("/login/google", action.payload)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            throw new Error(response.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    }),
+    filter((data) => data !== undefined),
+    map((data) => storeCurrentUser(data)),
+    // reportCaughtMessage((error: any) => console.log(error)), TPSO-18
+    catchError((error: any, o: Observable<any>) => {
+      console.log(error);
+      return o;
+    })
+  );
+};
 
 // -
 // -------------------- Reducers
@@ -110,8 +121,9 @@ const currentUser = (
   state: any = null,
   action: IPayloadAction<IAppUserInfo>
 ) => {
-  if (action.type === actions.CURRENT_USER_STORE) return action.payload;
-  else if (action.type === actions.CURRENT_USER_CLEAR) return null;
+  if (action.type === actions.CURRENT_USER_STORE) {
+    return { ...action.payload };
+  } else if (action.type === actions.LOGOUT) return null;
   return state;
 };
 
@@ -120,11 +132,9 @@ export const LoginBusinessStore = {
     doLogin,
     doGoogleLogin,
     doLogout,
-    fetchCurrentUser,
     storeCurrentUser,
-    clearCurrentUser,
   },
   selectors: { getCurrentUser, isUserLoggedIn },
-  effects: { doLoginEffect },
+  effects: { doLoginEffect, doGoogleLoginEffect },
   reducers: { currentUser },
 };

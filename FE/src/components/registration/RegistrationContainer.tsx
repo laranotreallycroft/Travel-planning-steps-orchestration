@@ -2,32 +2,47 @@ import { CredentialResponse } from "@react-oauth/google";
 import RegistrationView from "./RegistrationView";
 import {
   IGoogleLoginPayload,
-  googleLogin,
+  LoginBusinessStore,
 } from "../../service/business/login/LoginBusinessStore";
 import {
   IRegistrationPayload,
-  registration,
+  RegistrationBusinessStore,
 } from "../../service/business/registration/RegistrationBusinessStore";
+import { connect } from "react-redux";
+import { useCallback } from "react";
 
 export interface IRegistrationContainerOwnProps {}
-
-type IRegistrationContainerProps = IRegistrationContainerOwnProps;
+export interface IRegistrationContainerStateProps {}
+export interface IRegistrationContainerDispatchProps {
+  doRegistration: (registrationPayload: IRegistrationPayload) => void;
+  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) => void;
+}
+type IRegistrationContainerProps = IRegistrationContainerOwnProps &
+  IRegistrationContainerStateProps &
+  IRegistrationContainerDispatchProps;
 
 const RegistrationContainer: React.FC<IRegistrationContainerProps> = (
   props: IRegistrationContainerProps
 ) => {
-  const handleGoogleLogin = (googleCredential: CredentialResponse) => {
-    if (googleCredential.credential) {
-      const googleLoginPayload: IGoogleLoginPayload = {
-        credential: googleCredential.credential,
-      };
-      googleLogin(googleLoginPayload);
-    }
-  };
+  const handleGoogleLogin = useCallback(
+    (googleCredential: CredentialResponse) => {
+      if (googleCredential.credential) {
+        const googleLoginPayload: IGoogleLoginPayload = {
+          credential: googleCredential.credential,
+        };
+        props.doGoogleLogin(googleLoginPayload);
+      }
+    },
+    [props.doGoogleLogin]
+  );
 
-  const handleRegistration = (registrationValues: IRegistrationPayload) => {
-    registration(registrationValues);
-  };
+  const handleRegistration = useCallback(
+    (registrationPayload: IRegistrationPayload) => {
+      props.doRegistration(registrationPayload);
+    },
+    [props.doRegistration]
+  );
+
   return (
     <RegistrationView
       onGoogleLogin={handleGoogleLogin}
@@ -36,4 +51,24 @@ const RegistrationContainer: React.FC<IRegistrationContainerProps> = (
   );
 };
 
-export default RegistrationContainer;
+const mapStateToProps = (state: any): IRegistrationContainerStateProps => ({});
+
+const mapDispatchToProps = (
+  dispatch: any
+): IRegistrationContainerDispatchProps => ({
+  doRegistration: (registrationPayload: IRegistrationPayload) =>
+    dispatch(
+      RegistrationBusinessStore.actions.doRegistration(registrationPayload)
+    ),
+  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) =>
+    dispatch(LoginBusinessStore.actions.doGoogleLogin(googleLoginPayload)),
+});
+
+export default connect<
+  IRegistrationContainerStateProps,
+  IRegistrationContainerDispatchProps,
+  IRegistrationContainerOwnProps
+>(
+  mapStateToProps,
+  mapDispatchToProps
+)(RegistrationContainer);

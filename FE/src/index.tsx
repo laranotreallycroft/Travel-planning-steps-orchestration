@@ -11,7 +11,6 @@ import { Provider } from "react-redux";
 import { getStore } from "./service/business/RootBusinessStore";
 
 axios.defaults.baseURL = "http://localhost:8080/";
-//axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 axios.interceptors.request.use(
