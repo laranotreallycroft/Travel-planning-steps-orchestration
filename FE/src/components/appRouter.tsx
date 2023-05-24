@@ -15,7 +15,7 @@ const appRouter = createBrowserRouter(
     <Route path="/" element={<AppLayout />}>
       <Route path="login" element={<LoginPage />} />
       <Route path="registration" element={<RegistrationPage />} />
-      <Route path="*" element={<p>There's nothing here: 404!</p>} />
+      <Route path="*" element={<HomePage />} />
       <Route element={<ProtectedRoute />}>
         <Route index element={<Navigate to="/home" />} />
         <Route index path="home" element={<HomePage />} />

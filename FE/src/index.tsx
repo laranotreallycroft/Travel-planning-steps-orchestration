@@ -8,52 +8,38 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleClientId } from "./env/const";
 import axios from "axios";
 import { Provider } from "react-redux";
-import { getStore } from "./service/business/RootBusinessStore";
+import { getPersistor, getStore } from "./service/business/RootBusinessStore";
+import { PersistGate } from "redux-persist/integration/react";
 
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
-
-axios.interceptors.request.use(
-  (request) => {
-    return request;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
 const store = getStore();
+const persistor = getPersistor();
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#c98e49",
-            colorText: "#c98e49",
-            colorInfo: "#12374e",
-            fontFamily: "Verdana",
-          },
-        }}
-      >
-        <GoogleOAuthProvider clientId={googleClientId}>
-          <RouterProvider router={appRouter} />
-        </GoogleOAuthProvider>
-      </ConfigProvider>
+      <PersistGate loading={<div>loading...</div>} persistor={persistor}>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#c98e49",
+              colorText: "#c98e49",
+              colorInfo: "#12374e",
+              fontFamily: "Verdana",
+            },
+          }}
+        >
+          <GoogleOAuthProvider clientId={googleClientId}>
+            <RouterProvider router={appRouter} />
+          </GoogleOAuthProvider>
+        </ConfigProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
