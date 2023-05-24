@@ -61,10 +61,10 @@ const doRegistrationEffect = (
 // -------------------- Reducers
 
 export const RegistrationBusinessStore = {
+  selectors: {},
   actions: {
     doRegistration,
   },
-  selectors: {},
   effects: { doRegistrationEffect },
   reducers: {},
 };

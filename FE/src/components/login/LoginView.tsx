@@ -46,6 +46,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
         <Form<ILoginForm>
           form={form}
           onFinish={handleFinish}
+          requiredMark={false}
           className="fullWidth"
         >
           <Form.Item
@@ -53,17 +54,25 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             label={"Email"}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
+            rules={[
+              {
+                //TODO:DELETE THIS   required: true,
+                //TODO:DELETE THIS  type: "email",
+                message: "Input is not a valid E-mail.",
+              },
+            ]}
           >
-            <Input placeholder="email" />
+            <Input placeholder="Input email" />
           </Form.Item>
           <Form.Item
             name={"password"}
             label={"Password"}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
+            rules={[{ required: true, message: "Please input a password." }]}
           >
             <Input.Password
-              placeholder="input password"
+              placeholder="Input password"
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }

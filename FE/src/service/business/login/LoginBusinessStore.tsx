@@ -122,19 +122,20 @@ const currentUser = (
   action: IPayloadAction<IAppUserInfo>
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
+    console.log("first");
     return { ...action.payload };
   } else if (action.type === actions.LOGOUT) return null;
   return state;
 };
 
 export const LoginBusinessStore = {
+  selectors: { getCurrentUser, isUserLoggedIn },
   actions: {
     doLogin,
     doGoogleLogin,
     doLogout,
     storeCurrentUser,
   },
-  selectors: { getCurrentUser, isUserLoggedIn },
   effects: { doLoginEffect, doGoogleLoginEffect },
   reducers: { currentUser },
 };
