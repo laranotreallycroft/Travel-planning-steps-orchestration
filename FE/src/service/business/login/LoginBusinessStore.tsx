@@ -3,6 +3,7 @@ import { IAppUserInfo } from "../../../model/appUser/appUser";
 import { IPayloadAction } from "../common/types";
 import { Action } from "redux";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
+import notificationService from "../util/notificationService";
 
 // -
 // -------------------- Selectors
@@ -62,19 +63,13 @@ const doLoginEffect = (
       return axios
         .post("/login", action.payload)
         .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else {
-            throw new Error(response.data);
-          }
+          if (response.status === 200) return response.data;
         })
         .catch((error) => {
-          console.log(error.response.data);
+          notificationService.error("Unable to log in", error.response.data);
         });
     }),
-    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
-    // reportCaughtMessage((error: any) => console.log(error)), TPSO-18
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
       return o;
@@ -94,19 +89,13 @@ const doGoogleLoginEffect = (
       return axios
         .post("/login/google", action.payload)
         .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else {
-            throw new Error(response.data);
-          }
+          if (response.status === 200) return response.data;
         })
         .catch((error) => {
-          console.log(error.response.data);
+          notificationService.error("Unable to log in", error.response.data);
         });
     }),
-    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
-    // reportCaughtMessage((error: any) => console.log(error)), TPSO-18
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
       return o;
@@ -122,7 +111,6 @@ const currentUser = (
   action: IPayloadAction<IAppUserInfo>
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
-    console.log("first");
     return { ...action.payload };
   } else if (action.type === actions.LOGOUT) return null;
   return state;

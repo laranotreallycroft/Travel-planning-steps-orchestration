@@ -41,7 +41,7 @@ public class RegistrationController {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.badRequest().body("Something went wrong.");
+		return ResponseEntity.badRequest().body("Something went wrong");
 
 	}
 }

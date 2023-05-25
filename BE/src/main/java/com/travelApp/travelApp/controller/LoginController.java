@@ -55,7 +55,7 @@ public class LoginController {
 			}
 
 		}
-		return ResponseEntity.badRequest().body("Email or password wrong.");
+		return ResponseEntity.badRequest().body("Wrong email or password");
 	}
 
 	@PostMapping("/google")
@@ -83,7 +83,7 @@ public class LoginController {
 				return ResponseEntity.status(HttpStatus.CREATED).body(payloadEmail);
 
 			} else {
-				return ResponseEntity.badRequest().body("Invalid ID token." + googleLoginPayload.getCredential());
+				return ResponseEntity.badRequest().body("Unable to login with Google");
 			}
 		} catch (GeneralSecurityException | IOException e) {
 			e.printStackTrace();

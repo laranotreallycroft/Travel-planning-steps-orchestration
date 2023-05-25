@@ -108,7 +108,10 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
             label={"Confirm Password"}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true }, { validator: validateConfirmPassword }]}
+            rules={[
+              { required: true, message: "Please input a password." },
+              { validator: validateConfirmPassword },
+            ]}
           >
             <Input.Password
               placeholder="Confirm Password"
@@ -119,7 +122,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
           </Form.Item>
           <Row justify={"center"}>
             <Button className="loginView" type="primary" onClick={form.submit}>
-              Sign in
+              Sign up
             </Button>
           </Row>
           <Divider>Or</Divider>
@@ -129,7 +132,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
               onError={() => console.log("A")}
             />
           </Row>
-          <Row>
+          <Row justify={"center"}>
             Already have an account?
             <Typography.Link href={"/login"} className="margin-left-sm">
               Login

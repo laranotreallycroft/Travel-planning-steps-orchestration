@@ -2,6 +2,7 @@ import axios from "axios";
 import { IPayloadAction } from "../common/types";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import { storeCurrentUser } from "../login/LoginBusinessStore";
+import notificationService from "../util/notificationService";
 
 // -
 // -------------------- Selectors
@@ -38,17 +39,15 @@ const doRegistrationEffect = (
       return axios
         .post("/registration", action.payload)
         .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else {
-            throw new Error(response.data);
-          }
+          if (response.status === 201) return response.data;
         })
         .catch((error) => {
-          console.log(error.response.data);
+          notificationService.error(
+            "Unable to register user",
+            error.response.data
+          );
         });
     }),
-    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
