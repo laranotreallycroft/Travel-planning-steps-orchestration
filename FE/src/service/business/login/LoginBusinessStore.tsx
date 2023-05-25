@@ -63,7 +63,10 @@ const doLoginEffect = (
       return axios
         .post("/login", action.payload)
         .then((response) => {
-          if (response.status === 200) return response.data;
+          if (response.status === 200) {
+            notificationService.success("Login Successfull");
+            return response.data;
+          }
         })
         .catch((error) => {
           notificationService.error("Unable to log in", error.response.data);
@@ -89,7 +92,10 @@ const doGoogleLoginEffect = (
       return axios
         .post("/login/google", action.payload)
         .then((response) => {
-          if (response.status === 200) return response.data;
+          if (response.status === 200) {
+            notificationService.success("Login Successfull");
+            return response.data;
+          }
         })
         .catch((error) => {
           notificationService.error("Unable to log in", error.response.data);
@@ -112,7 +118,10 @@ const currentUser = (
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.LOGOUT) return null;
+  } else if (action.type === actions.LOGOUT) {
+    notificationService.success("Logout Successfull");
+    return null;
+  }
   return state;
 };
 

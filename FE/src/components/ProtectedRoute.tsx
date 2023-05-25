@@ -5,6 +5,7 @@ import { LoginBusinessStore } from "../service/business/login/LoginBusinessStore
 
 export interface IProtectedRouteOwnProps {
   children?: React.ReactElement;
+  forLoggedIn: boolean;
 }
 export interface IProtectedRouteStateProps {
   isUserLoggedIn: boolean;
@@ -17,8 +18,10 @@ type IProtectedRouteProps = IProtectedRouteOwnProps &
 const ProtectedRoute: React.FC<IProtectedRouteProps> = (
   props: IProtectedRouteProps
 ) => {
-  if (!props.isUserLoggedIn) {
+  if (!props.isUserLoggedIn && props.forLoggedIn) {
     return <Navigate to={"login"} replace />;
+  } else if (props.isUserLoggedIn && !props.forLoggedIn) {
+    return <Navigate to={"home"} replace />;
   }
   return props.children ? props.children : <Outlet />;
 };

@@ -39,7 +39,10 @@ const doRegistrationEffect = (
       return axios
         .post("/registration", action.payload)
         .then((response) => {
-          if (response.status === 201) return response.data;
+          if (response.status === 201) {
+            notificationService.success("Registration Successfull");
+            return response.data;
+          }
         })
         .catch((error) => {
           notificationService.error(
