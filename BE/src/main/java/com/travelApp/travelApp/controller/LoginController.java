@@ -18,12 +18,10 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.travelApp.travelApp.model.GoogleUser;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.GoogleLoginPayload;
 import com.travelApp.travelApp.model.payload.LoginPayload;
 import com.travelApp.travelApp.model.payload.UserPayload;
-import com.travelApp.travelApp.repository.GoogleUserRepository;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
 
@@ -33,18 +31,16 @@ public class LoginController {
 	@Value("${google.clientId}")
 	private String googleClientId;
 	private final UserRepository userRepository;
-	private final GoogleUserRepository googleUserRepository;
 
-	public LoginController(UserRepository userRepository, GoogleUserRepository googleUserRepository) {
+	public LoginController(UserRepository userRepository) {
 		this.userRepository = userRepository;
-		this.googleUserRepository = googleUserRepository;
 	}
 
 	@PostMapping
 	public ResponseEntity login(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
 		String payloadEmail = loginPayload.getEmail();
 		String payloadPassword = loginPayload.getPassword();
-		User user = userRepository.findByEmail(payloadEmail);
+		User user = userRepository.findByEmail(payloadEmail,false);
 		if (user != null) {
 			String passwordHash = user.getPasswordHash();
 			byte[] passwordSalt = user.getPasswordSalt();
@@ -74,12 +70,12 @@ public class LoginController {
 				String payloadUserId = payload.getSubject();
 				String payloadEmail = payload.getEmail();
 
-				GoogleUser user = new GoogleUser(payloadUserId, payloadEmail);
-				if (googleUserRepository.findById(payloadUserId) != null) {
+				User user = new User(true,payloadUserId, payloadEmail);
+				if (userRepository.findByEmail(payloadEmail,true) != null) {
 					UserPayload userPayload = new UserPayload(payloadEmail, payloadUserId);
 					return ResponseEntity.ok(userPayload);
 				}
-				googleUserRepository.save(user);
+				userRepository.save(user);
 				return ResponseEntity.status(HttpStatus.CREATED).body(payloadEmail);
 
 			} else {

@@ -3,8 +3,8 @@ package com.travelApp.travelApp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.travelApp.travelApp.model.GoogleUser;
+import com.travelApp.travelApp.model.Trip;
 
 @Repository
-public interface GoogleUserRepository extends JpaRepository<GoogleUser, String> {
+public interface TripRepository extends JpaRepository<Trip, String> {
 }

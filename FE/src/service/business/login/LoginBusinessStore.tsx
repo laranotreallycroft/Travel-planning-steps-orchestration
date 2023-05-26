@@ -72,6 +72,7 @@ const doLoginEffect = (
           notificationService.error("Unable to log in", error.response.data);
         });
     }),
+    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
@@ -92,7 +93,7 @@ const doGoogleLoginEffect = (
       return axios
         .post("/login/google", action.payload)
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 201) {
             notificationService.success("Login Successfull");
             return response.data;
           }
@@ -101,6 +102,7 @@ const doGoogleLoginEffect = (
           notificationService.error("Unable to log in", error.response.data);
         });
     }),
+    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
@@ -117,6 +119,7 @@ const currentUser = (
   action: IPayloadAction<IAppUserInfo>
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
+    console.log("first");
     return { ...action.payload };
   } else if (action.type === actions.LOGOUT) {
     notificationService.success("Logout Successfull");

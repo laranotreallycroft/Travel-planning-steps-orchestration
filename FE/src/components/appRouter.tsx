@@ -10,6 +10,7 @@ import RegistrationPage from "./pages/RegistrationPage";
 import AppLayout from "./common/layout/AppLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import FallbackPage from "./pages/FallbackPage";
+import HomePage from "./pages/HomePage";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -20,8 +21,9 @@ const appRouter = createBrowserRouter(
       </Route>
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>
-        <Route index element={<Navigate to="/createTrip" />} />
-        <Route index path="createTrip" element={<CreateTripPage />} />
+        <Route index element={<Navigate to="/home" />} />
+        <Route index path="home" element={<HomePage />} />
+        <Route path="createTrip" element={<CreateTripPage />} />
       </Route>
 
       <Route path="*" element={<FallbackPage />} />

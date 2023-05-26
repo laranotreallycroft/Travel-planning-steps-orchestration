@@ -17,6 +17,8 @@ public class User {
 	private String email;
 	private byte[] password_salt;
 	private String password_hash;
+	private boolean google_user;
+	private String google_user_id;
 
 	public User() {
 
@@ -27,6 +29,13 @@ public class User {
 		this.email = email;
 		this.password_salt = password_salt;
 		this.password_hash = password_hash;
+	}
+	
+	public User(boolean google_user,String google_user_id,String email ) {
+		super();
+		this.google_user = google_user;
+		this.google_user_id = google_user_id;
+		this.email = email;
 	}
 
 	public Long getId() {
@@ -60,5 +69,23 @@ public class User {
 	public void setPasswordHash(String password_hash) {
 		this.password_hash = password_hash;
 	}
+
+	public boolean isGoogleUser() {
+		return google_user;
+	}
+
+	public void setGoogleUser(boolean google_user) {
+		this.google_user = google_user;
+	}
+
+	public String getGoogleUserId() {
+		return google_user_id;
+	}
+
+	public void setGoogleUserId(String google_user_id) {
+		this.google_user_id = google_user_id;
+	}
+
+
 
 }

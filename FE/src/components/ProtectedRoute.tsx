@@ -21,7 +21,7 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = (
   if (!props.isUserLoggedIn && props.forLoggedIn) {
     return <Navigate to={"login"} replace />;
   } else if (props.isUserLoggedIn && !props.forLoggedIn) {
-    return <Navigate to={"createTrip"} replace />;
+    return <Navigate to={"home"} replace />;
   }
   return props.children ? props.children : <Outlet />;
 };

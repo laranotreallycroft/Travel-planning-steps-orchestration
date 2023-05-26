@@ -51,6 +51,7 @@ const doRegistrationEffect = (
           );
         });
     }),
+    filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data)),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);

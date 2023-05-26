@@ -29,7 +29,7 @@ public class RegistrationController {
 		String payloadEmail = loginPayload.getEmail();
 		String payloadPassword = loginPayload.getPassword();
 
-		if (userRepository.findByEmail(payloadEmail) != null) {
+		if (userRepository.findByEmail(payloadEmail, false) != null) {
 			return ResponseEntity.badRequest().body("Email already exists");
 		}
 		try {
