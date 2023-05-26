@@ -14,7 +14,7 @@ import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.repository.UserRepository;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	private final UserRepository userRepository;
 
@@ -29,7 +29,7 @@ public class UserController {
 		User user = userRepository.findById(userId).orElse(null);
 		if (user != null) {
 			 List<Trip> trips=user.getTrips();
-			return ResponseEntity.ok(trips);
+			return ResponseEntity.ok(trips.toArray());
 
 		}
 		return ResponseEntity.badRequest().body("Something went wrong");

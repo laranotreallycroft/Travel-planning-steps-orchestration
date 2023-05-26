@@ -76,7 +76,6 @@ public class LoginController {
 				}
 				user = new User(true, payloadUserId, payloadEmail);
 				userRepository.save(user);
-				//RETURN ID???
 				IdPayload idPayload = new IdPayload(user.getId());
 				return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
 

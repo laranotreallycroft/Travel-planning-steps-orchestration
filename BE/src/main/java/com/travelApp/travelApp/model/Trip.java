@@ -1,8 +1,14 @@
 package com.travelApp.travelApp.model;
 
+import java.time.LocalDate;
 import java.util.Date;
+
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,23 +26,26 @@ public class Trip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date date_from;
-	private Date date_to;
+	@Column(name = "date_from")
+	private LocalDate dateFrom;
+	@Column(name = "date_to")
+	private LocalDate dateTo;
 
 	private Point location;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@JsonBackReference
 	private User user;
 
 	public Trip() {
 
 	}
 
-	public Trip(Date date_from, Date date_to, Point location, User user) {
+	public Trip(LocalDate dateFrom, LocalDate dateTo, Point location, User user) {
 		super();
-		this.date_from = date_from;
-		this.date_to = date_to;
+		this.dateFrom = dateFrom;
+		this.dateTo = dateTo;
 		this.location = location;
 		this.user = user;
 	}
@@ -49,24 +58,24 @@ public class Trip {
 		this.id = id;
 	}
 
-	public Date getDate_from() {
-		return date_from;
+	public LocalDate getDateFrom() {
+		return dateFrom;
 	}
 
-	public void setDate_from(Date date_from) {
-		this.date_from = date_from;
+	public void setDateFrom(LocalDate dateFrom) {
+		this.dateFrom = dateFrom;
 	}
 
-	public Date getDate_to() {
-		return date_to;
+	public LocalDate getDateTo() {
+		return dateTo;
 	}
 
-	public void setDate_to(Date date_to) {
-		this.date_to = date_to;
+	public void setDateTo(LocalDate dateTo) {
+		this.dateTo = dateTo;
 	}
 
-	public Point getLocation() {
-		return location;
+	public Coordinate getLocation() {
+		return location.getCoordinate();
 	}
 
 	public void setLocation(Point location) {
@@ -80,7 +89,5 @@ public class Trip {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	
 
 }

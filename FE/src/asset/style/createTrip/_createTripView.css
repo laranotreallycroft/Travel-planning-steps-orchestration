@@ -9,12 +9,6 @@
     overflow: auto;
 }
 
-.createTripView__title {
-    font-family: 'ArcherBold';
-    letter-spacing: 0.3rem;
-    color: #e9d8d5 !important;
-}
-
 .createTripView__formContainer {
     padding: 1vw;
     border-radius: 0.3vw;

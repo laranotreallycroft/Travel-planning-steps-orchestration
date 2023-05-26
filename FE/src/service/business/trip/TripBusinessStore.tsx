@@ -12,10 +12,11 @@ const getCurrentTrip = (store: any): ITrip => store.currentTrip;
 // -------------------- Actions
 const actions = {
   TRIP_CREATE: "TRIP_CREATE",
-  TRIP_UPDATE: "TRIP_UPDATE",
+  // TRIP_UPDATE: "TRIP_UPDATE",
   TRIP_STORE: "TRIP_STORE",
-  TRIP_FETCH: "TRIP_FETCH",
+  // TRIP_FETCH: "TRIP_FETCH",
   TRIP_DELETE: "TRIP_DELETE",
+  TRIP_CLEAR: "TRIP_CLEAR",
 };
 
 export const createTrip = (
@@ -73,8 +74,7 @@ const createTripEffect = (
 const currentTrip = (state: any = null, action: IPayloadAction<ITrip>) => {
   if (action.type === actions.TRIP_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.TRIP_DELETE) {
-    notificationService.success("Trip successfully deleted");
+  } else if (action.type === actions.TRIP_CLEAR) {
     return null;
   }
   return state;

@@ -39,7 +39,6 @@ public class RegistrationController {
 			String passwordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
 			User user = new User(payloadEmail, passwordSalt, passwordHash);
 			userRepository.save(user);	
-			//RETURN ID???
 			IdPayload idPayload=new IdPayload(user.getId());
 			return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
 		} catch (NoSuchAlgorithmException e) {

@@ -61,7 +61,7 @@ const CreateTripView: React.FC<ICreateTripViewProps> = (
   return (
     <div className="createTripView__backgroundImage">
       <Row justify={"center"}>
-        <Title className="createTripView__title">
+        <Title className="title">
           Hi traveller, where are you heading next?
         </Title>
       </Row>

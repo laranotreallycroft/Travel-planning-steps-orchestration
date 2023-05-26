@@ -17,3 +17,4 @@ body, #root, html {
 @import 'createTrip/_secondStep.css';
 @import 'createTrip/_thirdStep.css';
 @import 'login/_loginView.css';
+@import 'home/_homeView.css'

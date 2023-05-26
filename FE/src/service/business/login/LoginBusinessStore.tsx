@@ -16,6 +16,7 @@ const actions = {
   GOOGLE_LOGIN: "GOOGLE_LOGIN",
   LOGOUT: "LOGOUT",
   CURRENT_USER_STORE: "CURRENT_USER_STORE",
+  CURRENT_USER_CLEAR: "CURRENT_USER_CLEAR",
 };
 
 export interface IGoogleLoginPayload {
@@ -46,6 +47,10 @@ export const storeCurrentUser = (
   payload: IIdPayload
 ): IPayloadAction<IIdPayload> => {
   return { type: actions.CURRENT_USER_STORE, payload: payload };
+};
+
+export const clearCurrentUser = (): Action => {
+  return { type: actions.CURRENT_USER_CLEAR };
 };
 // -
 // -------------------- Side-effects
@@ -119,8 +124,10 @@ const currentUser = (
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.LOGOUT) {
-    notificationService.success("Logout Successfull");
+  } else if (
+    action.type === actions.LOGOUT ||
+    action.type === actions.CURRENT_USER_CLEAR
+  ) {
     return null;
   }
   return state;

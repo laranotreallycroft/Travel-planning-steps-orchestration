@@ -1,8 +1,9 @@
 package com.travelApp.travelApp.model;
 
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,29 +20,35 @@ public class User {
 	private Long id;
 
 	private String email;
-	private byte[] password_salt;
-	private String password_hash;
-	private boolean google_user;
-	private String google_user_id;
+	@Column(name = "password_salt")
+	private byte[] passwordSalt;
+	@Column(name = "password_hash")
+	private String passwordHash;
+	@Column(name = "google_user")
+	private boolean googleUser;
+	@Column(name = "google_user_id")
+	private String googleUserId;
+	
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Trip> trips;
 
 	public User() {
 
 	}
 
-	public User(String email, byte[] password_salt, String password_hash) {
+	public User(String email, byte[] passwordSalt, String passwordHash) {
 		super();
 		this.email = email;
-		this.password_salt = password_salt;
-		this.password_hash = password_hash;
+		this.passwordSalt = passwordSalt;
+		this.passwordHash = passwordHash;
 	}
 
-	public User(boolean google_user, String google_user_id, String email) {
+	public User(boolean googleUser, String googleUserId, String email) {
 		super();
-		this.google_user = google_user;
-		this.google_user_id = google_user_id;
+		this.googleUser = googleUser;
+		this.googleUserId = googleUserId;
 		this.email = email;
 	}
 
@@ -62,35 +69,35 @@ public class User {
 	}
 
 	public byte[] getPasswordSalt() {
-		return password_salt;
+		return passwordSalt;
 	}
 
-	public void setPasswordSalt(byte[] password_salt) {
-		this.password_salt = password_salt;
+	public void setPasswordSalt(byte[] passwordSalt) {
+		this.passwordSalt = passwordSalt;
 	}
 
 	public String getPasswordHash() {
-		return password_hash;
+		return passwordHash;
 	}
 
-	public void setPasswordHash(String password_hash) {
-		this.password_hash = password_hash;
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
 	public boolean isGoogleUser() {
-		return google_user;
+		return googleUser;
 	}
 
-	public void setGoogleUser(boolean google_user) {
-		this.google_user = google_user;
+	public void setGoogleUser(boolean googleUser) {
+		this.googleUser = googleUser;
 	}
 
 	public String getGoogleUserId() {
-		return google_user_id;
+		return googleUserId;
 	}
 
-	public void setGoogleUserId(String google_user_id) {
-		this.google_user_id = google_user_id;
+	public void setGoogleUserId(String googleUserId) {
+		this.googleUserId = googleUserId;
 	}
 
 	public List<Trip> getTrips() {
@@ -101,6 +108,4 @@ public class User {
 		this.trips = trips;
 	}
 
-	
-	
 }
