@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IAppUserInfo } from "../../../model/appUser/appUser";
-import { IPayloadAction } from "../common/types";
+import { IIdPayload, IPayloadAction } from "../common/types";
 import { Action } from "redux";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
@@ -44,8 +44,8 @@ const doLogout = (): Action => {
 };
 
 export const storeCurrentUser = (
-  payload: IAppUserInfo
-): IPayloadAction<IAppUserInfo> => {
+  payload: IIdPayload
+): IPayloadAction<IIdPayload> => {
   return { type: actions.CURRENT_USER_STORE, payload: payload };
 };
 // -
@@ -119,7 +119,6 @@ const currentUser = (
   action: IPayloadAction<IAppUserInfo>
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
-    console.log("first");
     return { ...action.payload };
   } else if (action.type === actions.LOGOUT) {
     notificationService.success("Logout Successfull");

@@ -3,13 +3,13 @@ package com.travelApp.travelApp.model.payload;
 public class GoogleLoginPayload {
 	private String credential;
 
+	public GoogleLoginPayload() {
+
+	}
+
 	public GoogleLoginPayload(String credential) {
 		super();
 		this.credential = credential;
-	}
-
-	public GoogleLoginPayload() {
-
 	}
 
 	public String getCredential() {

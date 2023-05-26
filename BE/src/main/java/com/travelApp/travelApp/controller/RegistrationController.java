@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travelApp.travelApp.model.User;
+import com.travelApp.travelApp.model.payload.IdPayload;
 import com.travelApp.travelApp.model.payload.LoginPayload;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
@@ -32,12 +33,15 @@ public class RegistrationController {
 		if (userRepository.findByEmail(payloadEmail, false) != null) {
 			return ResponseEntity.badRequest().body("Email already exists");
 		}
+		
 		try {
 			byte[] passwordSalt = Security.getSalt();
 			String passwordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
 			User user = new User(payloadEmail, passwordSalt, passwordHash);
-			userRepository.save(user);
-			return ResponseEntity.status(HttpStatus.CREATED).body(payloadEmail);
+			userRepository.save(user);	
+			//RETURN ID???
+			IdPayload idPayload=new IdPayload(user.getId());
+			return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

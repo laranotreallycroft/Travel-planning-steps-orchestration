@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.travelApp.travelApp.model.Trip;
 
 @Repository
-public interface TripRepository extends JpaRepository<Trip, String> {
+public interface TripRepository extends JpaRepository<Trip, Long> {
 }

@@ -8,5 +8,5 @@ import com.travelApp.travelApp.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT * FROM users WHERE email = ?1 AND google_user = ?2", nativeQuery=true)
-	public User findByEmail(String email,boolean isGoogleUser);
+	public User findByEmail (String email,boolean isGoogleUser);
 }

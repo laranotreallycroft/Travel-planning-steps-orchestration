@@ -20,8 +20,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.GoogleLoginPayload;
+import com.travelApp.travelApp.model.payload.IdPayload;
 import com.travelApp.travelApp.model.payload.LoginPayload;
-import com.travelApp.travelApp.model.payload.UserPayload;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
 
@@ -40,14 +40,16 @@ public class LoginController {
 	public ResponseEntity login(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
 		String payloadEmail = loginPayload.getEmail();
 		String payloadPassword = loginPayload.getPassword();
-		User user = userRepository.findByEmail(payloadEmail,false);
+
+		User user = userRepository.findByEmail(payloadEmail, false);
 		if (user != null) {
 			String passwordHash = user.getPasswordHash();
 			byte[] passwordSalt = user.getPasswordSalt();
 			String payloadPasswordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
+
 			if (payloadPasswordHash.equals(passwordHash)) {
-				UserPayload userPayload = new UserPayload(payloadEmail, user.getId().toString());
-				return ResponseEntity.ok(userPayload);
+				IdPayload idPayload = new IdPayload(user.getId());
+				return ResponseEntity.ok(idPayload);
 			}
 
 		}
@@ -57,8 +59,6 @@ public class LoginController {
 	@PostMapping("/google")
 	public ResponseEntity googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) throws URISyntaxException {
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-				// Specify the CLIENT_ID of the app that accesses the backend:
-				// Or, if multiple clients access the backend:
 				.setAudience(Arrays.asList(googleClientId)).build();
 
 		GoogleIdToken idToken;
@@ -66,17 +66,19 @@ public class LoginController {
 			idToken = verifier.verify(googleLoginPayload.getCredential());
 			if (idToken != null) {
 				Payload payload = idToken.getPayload();
-
 				String payloadUserId = payload.getSubject();
 				String payloadEmail = payload.getEmail();
 
-				User user = new User(true,payloadUserId, payloadEmail);
-				if (userRepository.findByEmail(payloadEmail,true) != null) {
-					UserPayload userPayload = new UserPayload(payloadEmail, payloadUserId);
-					return ResponseEntity.ok(userPayload);
+				User user = userRepository.findByEmail(payloadEmail, true);
+				if (user != null) {
+					IdPayload idPayload = new IdPayload(user.getId());
+					return ResponseEntity.ok(idPayload);
 				}
+				user = new User(true, payloadUserId, payloadEmail);
 				userRepository.save(user);
-				return ResponseEntity.status(HttpStatus.CREATED).body(payloadEmail);
+				//RETURN ID???
+				IdPayload idPayload = new IdPayload(user.getId());
+				return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
 
 			} else {
 				return ResponseEntity.badRequest().body("Unable to login with Google");
