@@ -22,7 +22,7 @@ export interface ICreateTripViewOwnProps {
 
 export interface ITripCreateForm {
   dateRange: RangeValue<Dayjs>;
-  location: string;
+  location: IGeosearchPayload;
   reminderType: IReminderType;
   reminders: IReminder;
 }

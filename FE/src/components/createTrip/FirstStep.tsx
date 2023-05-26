@@ -3,6 +3,7 @@ import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
 import MapElement from "../common/map/MapElement";
 import { IGeosearchPayload } from "./CreateTripContainer";
+import { ITrip } from "../../model/trip/Trip";
 
 export interface IFirstStepOwnProps {
   isHidden: boolean;
@@ -14,10 +15,12 @@ type IFirstStepProps = IFirstStepOwnProps;
 
 const FirstStep: React.FC<IFirstStepProps> = (props: IFirstStepProps) => {
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>();
+  const form = Form.useFormInstance<ITrip>();
 
   const handleSelectLocation = useCallback((value: string) => {
     const parsedValue: IGeosearchPayload = JSON.parse(value);
     setSelectedLocation(parsedValue);
+    form.setFieldValue("location", parsedValue);
   }, []);
 
   return (

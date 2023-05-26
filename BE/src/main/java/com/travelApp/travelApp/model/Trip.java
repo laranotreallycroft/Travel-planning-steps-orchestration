@@ -1,6 +1,8 @@
 package com.travelApp.travelApp.model;
 
-import java.time.LocalDate;
+import java.util.Date;
+import org.locationtech.jts.geom.Point;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,10 +20,10 @@ public class Trip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private LocalDate date_from;
-	private LocalDate date_to;
+	private Date date_from;
+	private Date date_to;
 
-	private String location;
+	private Point location;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -31,7 +33,7 @@ public class Trip {
 
 	}
 
-	public Trip(LocalDate date_from, LocalDate date_to, String location, User user) {
+	public Trip(Date date_from, Date date_to, Point location, User user) {
 		super();
 		this.date_from = date_from;
 		this.date_to = date_to;
@@ -47,27 +49,27 @@ public class Trip {
 		this.id = id;
 	}
 
-	public LocalDate getDate_from() {
+	public Date getDate_from() {
 		return date_from;
 	}
 
-	public void setDate_from(LocalDate date_from) {
+	public void setDate_from(Date date_from) {
 		this.date_from = date_from;
 	}
 
-	public LocalDate getDate_to() {
+	public Date getDate_to() {
 		return date_to;
 	}
 
-	public void setDate_to(LocalDate date_to) {
+	public void setDate_to(Date date_to) {
 		this.date_to = date_to;
 	}
 
-	public String getLocation() {
+	public Point getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(Point location) {
 		this.location = location;
 	}
 
@@ -78,5 +80,7 @@ public class Trip {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	
 
 }

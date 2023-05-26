@@ -49,11 +49,10 @@ const CreateTripContainer: React.FC<ICreateTripContainerProps> = (
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
         userId: props.currentUser.id,
-        dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD HH:mm:ss") ?? "",
-        dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD HH:mm:ss") ?? "",
-        location: values.location,
+        dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD") ?? "",
+        dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD") ?? "",
+        location: { x: values.location.x, y: values.location.y },
       };
-
       props.createTrip(payload);
     },
     [provider.search]

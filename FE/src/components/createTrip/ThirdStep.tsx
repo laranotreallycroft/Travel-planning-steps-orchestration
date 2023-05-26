@@ -30,23 +30,17 @@ const ThirdStep: React.FC<IThirdStepProps> = (props: IThirdStepProps) => {
           ...travelRemindersDefaultValues,
           ...travelRemindersWarmValues,
         };
-        return form.setFieldsValue({
-          reminders: warmReminders,
-        });
+        return form.setFieldValue("reminders", warmReminders);
       }
       case IReminderType.COLD: {
         const coldReminders = {
           ...travelRemindersDefaultValues,
           ...travelRemindersColdValues,
         };
-        return form.setFieldsValue({
-          reminders: coldReminders,
-        });
+        return form.setFieldValue("reminders", coldReminders);
       }
       default:
-        return form.setFieldsValue({
-          reminders: travelRemindersDefaultValues,
-        });
+        return form.setFieldValue("reminders", travelRemindersDefaultValues);
     }
   }, [reminderType]);
 
