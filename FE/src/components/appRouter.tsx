@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import CreateTripPage from "./pages/CreateTripPage";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AppLayout from "./common/layout/AppLayout";
@@ -20,8 +20,8 @@ const appRouter = createBrowserRouter(
       </Route>
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>
-        <Route index element={<Navigate to="/home" />} />
-        <Route index path="home" element={<HomePage />} />
+        <Route index element={<Navigate to="/createTrip" />} />
+        <Route index path="createTrip" element={<CreateTripPage />} />
       </Route>
 
       <Route path="*" element={<FallbackPage />} />

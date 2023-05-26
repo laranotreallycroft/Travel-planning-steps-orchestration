@@ -2,7 +2,7 @@ import axios from "axios";
 import { IPayloadAction } from "../common/types";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import { storeCurrentUser } from "../login/LoginBusinessStore";
-import notificationService from "../util/notificationService";
+import notificationService from "../../util/notificationService";
 
 // -
 // -------------------- Selectors

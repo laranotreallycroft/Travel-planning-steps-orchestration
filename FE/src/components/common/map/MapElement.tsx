@@ -1,5 +1,5 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { IGeosearchPayload } from "../../home/HomeContainer";
+import { IGeosearchPayload } from "../../createTrip/CreateTripContainer";
 import { ChangeView, initMap } from "./utils";
 
 export interface IMapElementOwnProps {

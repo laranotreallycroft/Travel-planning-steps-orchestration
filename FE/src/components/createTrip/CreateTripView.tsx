@@ -3,30 +3,21 @@ import Title from "antd/es/typography/Title";
 import { useCallback, useState } from "react";
 import React from "react";
 import FirstStep from "./FirstStep";
-import { IGeosearchPayload } from "./HomeContainer";
+import { IGeosearchPayload } from "./CreateTripContainer";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import {
-  IReminder,
   IReminderType,
   travelRemindersDefaultValues,
 } from "../../model/reminder/reminder";
-import { RangeValue } from "rc-picker/lib/interface";
-import { Dayjs } from "dayjs";
+import { ITripCreatePayload } from "../../model/trip/trip";
 
-export interface IHomeViewOwnProps {
+export interface ICreateTripViewOwnProps {
   onLocationSearch: (searchValue: string) => void;
   locationArray?: IGeosearchPayload[];
 }
 
-type IHomeViewProps = IHomeViewOwnProps;
-
-export interface IHomeViewForm {
-  dateRange: RangeValue<Dayjs>;
-  location: string;
-  reminderType: IReminderType;
-  reminders: IReminder;
-}
+type ICreateTripViewProps = ICreateTripViewOwnProps;
 
 const steps = [
   {
@@ -43,9 +34,11 @@ const steps = [
   },
 ];
 
-const HomeView: React.FC<IHomeViewProps> = (props: IHomeViewProps) => {
+const CreateTripView: React.FC<ICreateTripViewProps> = (
+  props: ICreateTripViewProps
+) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [form] = Form.useForm<IHomeViewForm>();
+  const [form] = Form.useForm<ITripCreatePayload>();
 
   const nextStep = useCallback(() => {
     setCurrentStep(currentStep + 1);
@@ -55,18 +48,14 @@ const HomeView: React.FC<IHomeViewProps> = (props: IHomeViewProps) => {
     setCurrentStep(currentStep - 1);
   }, [currentStep]);
 
-  const handleFinish = useCallback((values: IHomeViewForm) => {
-    //console.log(values.dateRange?.[0]?.format("YYYY-MM-DD HH:mm:ss"));
-    //console.log(values.dateRange?.[1]?.format("YYYY-MM-DD HH:mm:ss"));
-    //console.log(JSON.parse(values.location));
-    //console.log(values.reminderType);
-    //console.log(values.reminders);
+  const handleFinish = useCallback((values: ITripCreatePayload) => {
+    console.log(values);
   }, []);
 
   return (
-    <div className="homeView__backgroundImage">
+    <div className="createTripView__backgroundImage">
       <Row justify={"center"}>
-        <Title className="homeView__title">
+        <Title className="createTripView__title">
           Hi traveller, where are you heading next?
         </Title>
       </Row>
@@ -79,7 +68,10 @@ const HomeView: React.FC<IHomeViewProps> = (props: IHomeViewProps) => {
           reminders: travelRemindersDefaultValues,
         }}
       >
-        <Row gutter={[0, 12]} className="homeView__formContainer margin-xl">
+        <Row
+          gutter={[0, 12]}
+          className="createTripView__formContainer margin-xl"
+        >
           <Col span={24}>
             <Steps
               current={currentStep}
@@ -87,7 +79,7 @@ const HomeView: React.FC<IHomeViewProps> = (props: IHomeViewProps) => {
               items={steps}
             />
           </Col>
-          <Col span={24} className="homeView__contentContainer">
+          <Col span={24} className="createTripView__contentContainer">
             {/* ---------------------- Step 1 ---------------------- */}
             <FirstStep
               isHidden={currentStep !== 0}
@@ -124,4 +116,4 @@ const HomeView: React.FC<IHomeViewProps> = (props: IHomeViewProps) => {
   );
 };
 
-export default HomeView;
+export default CreateTripView;

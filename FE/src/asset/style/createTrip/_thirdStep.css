@@ -1,0 +1,3 @@
+.thirdStep_customReminder >* > * >* > * > *> * > button:nth-child(2){
+    display: none;
+}

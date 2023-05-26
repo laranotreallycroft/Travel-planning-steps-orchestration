@@ -10,9 +10,11 @@ const FallbackView: React.FC<IFallbackViewProps> = (
   props: IFallbackViewProps
 ) => {
   return (
-    <div className="homeView__backgroundImage">
+    <div className="createTripView__backgroundImage">
       <Row justify={"center"}>
-        <Title className="homeView__title">This page does not exist...</Title>
+        <Title className="createTripView__title">
+          This page does not exist...
+        </Title>
       </Row>
     </div>
   );

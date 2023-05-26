@@ -10,6 +10,11 @@
     margin-top: 1vh;
 }
 
+.margin-bottom-md {
+    margin-bottom: 1vh;
+}
+
+
 .margin-top-l {
     margin-top: 4vh;
 }
@@ -17,6 +22,7 @@
 .margin-xl {
     margin: 5vw;
 }
+
 
 .font-neutral {
     font-family: "ArcherBold";

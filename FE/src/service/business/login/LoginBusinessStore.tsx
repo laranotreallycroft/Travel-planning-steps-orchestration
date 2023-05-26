@@ -3,7 +3,7 @@ import { IAppUserInfo } from "../../../model/appUser/appUser";
 import { IPayloadAction } from "../common/types";
 import { Action } from "redux";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
-import notificationService from "../util/notificationService";
+import notificationService from "../../util/notificationService";
 
 // -
 // -------------------- Selectors

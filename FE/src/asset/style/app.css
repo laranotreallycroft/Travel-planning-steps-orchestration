@@ -12,8 +12,8 @@ body, #root, html {
 @import 'common/common.css';
 @import 'common/layout/_appLayout.css';
 @import 'common/map/_mapElement.css';
-@import 'home/_homeView.css';
-@import 'home/_firstStep.css';
-@import 'home/_secondStep.css';
-@import 'home/_thirdStep.css';
+@import 'createTrip/_createTripView.css';
+@import 'createTrip/_firstStep.css';
+@import 'createTrip/_secondStep.css';
+@import 'createTrip/_thirdStep.css';
 @import 'login/_loginView.css';

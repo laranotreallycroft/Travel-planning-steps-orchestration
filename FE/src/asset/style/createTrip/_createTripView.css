@@ -1,7 +1,7 @@
-.homeView__backgroundImage {
+.createTripView__backgroundImage {
     background-image: linear-gradient(to bottom,
             rgb(37, 26, 3),
-            rgba(0, 0, 0, 0) 35%), url(../../img/homeBackground.jpg);
+            rgba(0, 0, 0, 0) 35%), url(../../img/createTripBackground.jpg);
     height: 100%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -9,13 +9,13 @@
     overflow: auto;
 }
 
-.homeView__title {
+.createTripView__title {
     font-family: 'ArcherBold';
     letter-spacing: 0.3rem;
     color: #e9d8d5 !important;
 }
 
-.homeView__formContainer {
+.createTripView__formContainer {
     padding: 1vw;
     border-radius: 0.3vw;
     background-color: rgba(83, 59, 37, 0.6);
@@ -23,7 +23,7 @@
 }
 
 
-.homeView__contentContainer {
+.createTripView__contentContainer {
     border: 0.15rem dashed #c98e49;
     border-radius: 10px;
     padding: 2vw;
@@ -32,7 +32,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-    .homeView__contentContainer {
+    .createTripView__contentContainer {
 
         flex-direction: column;
     }

@@ -6,7 +6,7 @@
 .loginView__carouselImage {
     background-image: linear-gradient(to bottom,
             rgb(37, 26, 3),
-            rgba(0, 0, 0, 0) 35%), url(../../img/homeBackground.jpg);
+            rgba(0, 0, 0, 0) 35%), url(../../img/createTripBackground.jpg);
     height: 100%;
     background-size: cover;
     background-repeat: no-repeat;

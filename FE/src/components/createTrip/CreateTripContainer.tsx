@@ -1,5 +1,5 @@
 import { BoundsTuple } from "leaflet-geosearch/dist/providers/provider";
-import HomeView from "./HomeView";
+import CreateTripView from "./CreateTripView";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { useCallback, useState } from "react";
 
@@ -12,12 +12,12 @@ export interface IGeosearchPayload {
 }
 const provider = new OpenStreetMapProvider();
 
-export interface IHomeContainerOwnProps {}
+export interface ICreateTripContainerOwnProps {}
 
-type IHomeContainerProps = IHomeContainerOwnProps;
+type ICreateTripContainerProps = ICreateTripContainerOwnProps;
 
-const HomeContainer: React.FC<IHomeContainerProps> = (
-  props: IHomeContainerProps
+const CreateTripContainer: React.FC<ICreateTripContainerProps> = (
+  props: ICreateTripContainerProps
 ) => {
   const [locationArray, setlocationArray] = useState<IGeosearchPayload[]>();
 
@@ -32,11 +32,11 @@ const HomeContainer: React.FC<IHomeContainerProps> = (
     [provider.search]
   );
   return (
-    <HomeView
+    <CreateTripView
       onLocationSearch={handleLocationSearch}
       locationArray={locationArray}
     />
   );
 };
 
-export default HomeContainer;
+export default CreateTripContainer;

@@ -2,7 +2,7 @@ import { Col, DatePicker, Form, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
 import MapElement from "../common/map/MapElement";
-import { IGeosearchPayload } from "./HomeContainer";
+import { IGeosearchPayload } from "./CreateTripContainer";
 
 export interface IFirstStepOwnProps {
   isHidden: boolean;
