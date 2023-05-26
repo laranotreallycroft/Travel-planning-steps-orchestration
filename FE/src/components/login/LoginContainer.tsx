@@ -12,8 +12,8 @@ import React from "react";
 export interface ILoginContainerOwnProps {}
 export interface ILoginContainerStateProps {}
 export interface ILoginContainerDispatchProps {
-  doLogin: (loginPayload: ILoginPayload) => void;
-  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) => void;
+  login: (loginPayload: ILoginPayload) => void;
+  googleLogin: (googleLoginPayload: IGoogleLoginPayload) => void;
 }
 type ILoginContainerProps = ILoginContainerOwnProps &
   ILoginContainerStateProps &
@@ -28,17 +28,17 @@ const LoginContainer: React.FC<ILoginContainerProps> = (
         const googleLoginPayload: IGoogleLoginPayload = {
           credential: googleCredential.credential,
         };
-        props.doGoogleLogin(googleLoginPayload);
+        props.googleLogin(googleLoginPayload);
       }
     },
-    [props.doGoogleLogin]
+    [props.googleLogin]
   );
 
   const handleLogin = useCallback(
     (loginValues: ILoginPayload) => {
-      props.doLogin(loginValues);
+      props.login(loginValues);
     },
-    [props.doLogin]
+    [props.login]
   );
 
   return (
@@ -51,10 +51,10 @@ const LoginContainer: React.FC<ILoginContainerProps> = (
 const mapStateToProps = (state: any): ILoginContainerStateProps => ({});
 
 const mapDispatchToProps = (dispatch: any): ILoginContainerDispatchProps => ({
-  doLogin: (loginPayload: ILoginPayload) =>
-    dispatch(LoginBusinessStore.actions.doLogin(loginPayload)),
-  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) =>
-    dispatch(LoginBusinessStore.actions.doGoogleLogin(googleLoginPayload)),
+  login: (loginPayload: ILoginPayload) =>
+    dispatch(LoginBusinessStore.actions.login(loginPayload)),
+  googleLogin: (googleLoginPayload: IGoogleLoginPayload) =>
+    dispatch(LoginBusinessStore.actions.googleLogin(googleLoginPayload)),
 });
 
 export default connect<

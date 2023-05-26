@@ -7,14 +7,24 @@ import { IGeosearchPayload } from "./CreateTripContainer";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import {
+  IReminder,
   IReminderType,
   travelRemindersDefaultValues,
-} from "../../model/reminder/reminder";
-import { ITripCreatePayload } from "../../model/trip/trip";
+} from "../../model/reminder/Reminder";
+import { RangeValue } from "rc-picker/lib/interface";
+import { Dayjs } from "dayjs";
 
 export interface ICreateTripViewOwnProps {
-  onLocationSearch: (searchValue: string) => void;
   locationArray?: IGeosearchPayload[];
+  onLocationSearch: (searchValue: string) => void;
+  onTripCreate: (values: ITripCreateForm) => void;
+}
+
+export interface ITripCreateForm {
+  dateRange: RangeValue<Dayjs>;
+  location: string;
+  reminderType: IReminderType;
+  reminders: IReminder;
 }
 
 type ICreateTripViewProps = ICreateTripViewOwnProps;
@@ -38,7 +48,7 @@ const CreateTripView: React.FC<ICreateTripViewProps> = (
   props: ICreateTripViewProps
 ) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [form] = Form.useForm<ITripCreatePayload>();
+  const [form] = Form.useForm<ITripCreateForm>();
 
   const nextStep = useCallback(() => {
     setCurrentStep(currentStep + 1);
@@ -47,10 +57,6 @@ const CreateTripView: React.FC<ICreateTripViewProps> = (
   const prevStep = useCallback(() => {
     setCurrentStep(currentStep - 1);
   }, [currentStep]);
-
-  const handleFinish = useCallback((values: ITripCreatePayload) => {
-    console.log(values);
-  }, []);
 
   return (
     <div className="createTripView__backgroundImage">
@@ -62,7 +68,7 @@ const CreateTripView: React.FC<ICreateTripViewProps> = (
 
       <Form
         form={form}
-        onFinish={handleFinish}
+        onFinish={props.onTripCreate}
         initialValues={{
           reminderType: IReminderType.DEFAULT,
           reminders: travelRemindersDefaultValues,

@@ -1,9 +1,13 @@
 package com.travelApp.travelApp.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +24,9 @@ public class User {
 	private boolean google_user;
 	private String google_user_id;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Trip> trips;
+
 	public User() {
 
 	}
@@ -30,8 +37,8 @@ public class User {
 		this.password_salt = password_salt;
 		this.password_hash = password_hash;
 	}
-	
-	public User(boolean google_user,String google_user_id,String email ) {
+
+	public User(boolean google_user, String google_user_id, String email) {
 		super();
 		this.google_user = google_user;
 		this.google_user_id = google_user_id;
@@ -86,6 +93,14 @@ public class User {
 		this.google_user_id = google_user_id;
 	}
 
+	public List<Trip> getTrips() {
+		return trips;
+	}
 
+	public void setTrips(List<Trip> trips) {
+		this.trips = trips;
+	}
 
+	
+	
 }

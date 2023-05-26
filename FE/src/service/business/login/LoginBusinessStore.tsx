@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IAppUserInfo } from "../../../model/appUser/appUser";
+import { IUserCredentials } from "../../../model/user/User";
 import { IIdPayload, IPayloadAction } from "../common/types";
 import { Action } from "redux";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
@@ -7,7 +7,6 @@ import notificationService from "../../util/notificationService";
 
 // -
 // -------------------- Selectors
-const getCurrentUser = (store: any): IAppUserInfo => store.currentUser;
 const isUserLoggedIn = (store: any): boolean => store.currentUser != null;
 
 // -
@@ -27,19 +26,19 @@ export interface ILoginPayload {
   password: string;
 }
 
-export const doLogin = (
+export const login = (
   payload: ILoginPayload
 ): IPayloadAction<ILoginPayload> => {
   return { type: actions.LOGIN, payload: payload };
 };
 
-const doGoogleLogin = (
+const googleLogin = (
   payload: IGoogleLoginPayload
 ): IPayloadAction<IGoogleLoginPayload> => {
   return { type: actions.GOOGLE_LOGIN, payload: payload };
 };
 
-const doLogout = (): Action => {
+const logout = (): Action => {
   return { type: actions.LOGOUT };
 };
 
@@ -51,7 +50,7 @@ export const storeCurrentUser = (
 // -
 // -------------------- Side-effects
 
-const doLoginEffect = (
+const loginEffect = (
   action$: Observable<IPayloadAction<ILoginPayload>>,
   state$: Observable<any>
 ) => {
@@ -81,7 +80,7 @@ const doLoginEffect = (
   );
 };
 
-const doGoogleLoginEffect = (
+const googleLoginEffect = (
   action$: Observable<IPayloadAction<ILoginPayload>>,
   state$: Observable<any>
 ) => {
@@ -116,7 +115,7 @@ const doGoogleLoginEffect = (
 
 const currentUser = (
   state: any = null,
-  action: IPayloadAction<IAppUserInfo>
+  action: IPayloadAction<IUserCredentials>
 ) => {
   if (action.type === actions.CURRENT_USER_STORE) {
     return { ...action.payload };
@@ -128,13 +127,13 @@ const currentUser = (
 };
 
 export const LoginBusinessStore = {
-  selectors: { getCurrentUser, isUserLoggedIn },
+  selectors: { isUserLoggedIn },
   actions: {
-    doLogin,
-    doGoogleLogin,
-    doLogout,
+    login,
+    googleLogin,
+    logout,
     storeCurrentUser,
   },
-  effects: { doLoginEffect, doGoogleLoginEffect },
+  effects: { loginEffect, googleLoginEffect },
   reducers: { currentUser },
 };

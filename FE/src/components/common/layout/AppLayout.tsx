@@ -1,18 +1,19 @@
-import { Avatar, Button, Dropdown, MenuProps } from "antd";
+import { Avatar, Dropdown, MenuProps } from "antd";
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
-import { IAppUserInfo } from "../../../model/appUser/appUser";
+import { IUserCredentials } from "../../../model/user/User";
 import { LoginBusinessStore } from "../../../service/business/login/LoginBusinessStore";
 import { connect } from "react-redux";
+import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
 
 export interface IAppLayoutOwnProps {}
 export interface IAppLayoutStateProps {
   isUserLoggedIn: boolean;
-  currentUser: IAppUserInfo;
+  currentUser: IUserCredentials;
 }
 export interface IAppLayoutDispatchProps {
-  doLogout: () => void;
+  logout: () => void;
 }
 type IAppLayoutProps = IAppLayoutOwnProps &
   IAppLayoutStateProps &
@@ -24,7 +25,7 @@ const AppLayout: React.FC<IAppLayoutProps> = (props: IAppLayoutProps) => {
     {
       key: "1",
       label: "Logout",
-      onClick: props.doLogout,
+      onClick: props.logout,
     },
   ];
   const loggedOutItems: MenuProps["items"] = [
@@ -56,12 +57,12 @@ const AppLayout: React.FC<IAppLayoutProps> = (props: IAppLayoutProps) => {
 };
 
 const mapStateToProps = (state: any): IAppLayoutStateProps => ({
-  currentUser: LoginBusinessStore.selectors.getCurrentUser(state),
+  currentUser: UserBusinessStore.selectors.getCurrentUser(state),
   isUserLoggedIn: LoginBusinessStore.selectors.isUserLoggedIn(state),
 });
 
 const mapDispatchToProps = (dispatch: any): IAppLayoutDispatchProps => ({
-  doLogout: () => dispatch(LoginBusinessStore.actions.doLogout()),
+  logout: () => dispatch(LoginBusinessStore.actions.logout()),
 });
 
 export default connect<

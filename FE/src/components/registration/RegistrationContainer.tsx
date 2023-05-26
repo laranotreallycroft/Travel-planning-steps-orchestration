@@ -14,8 +14,8 @@ import { useCallback } from "react";
 export interface IRegistrationContainerOwnProps {}
 export interface IRegistrationContainerStateProps {}
 export interface IRegistrationContainerDispatchProps {
-  doRegistration: (registrationPayload: IRegistrationPayload) => void;
-  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) => void;
+  registration: (registrationPayload: IRegistrationPayload) => void;
+  googleLogin: (googleLoginPayload: IGoogleLoginPayload) => void;
 }
 type IRegistrationContainerProps = IRegistrationContainerOwnProps &
   IRegistrationContainerStateProps &
@@ -30,17 +30,17 @@ const RegistrationContainer: React.FC<IRegistrationContainerProps> = (
         const googleLoginPayload: IGoogleLoginPayload = {
           credential: googleCredential.credential,
         };
-        props.doGoogleLogin(googleLoginPayload);
+        props.googleLogin(googleLoginPayload);
       }
     },
-    [props.doGoogleLogin]
+    [props.googleLogin]
   );
 
   const handleRegistration = useCallback(
     (registrationPayload: IRegistrationPayload) => {
-      props.doRegistration(registrationPayload);
+      props.registration(registrationPayload);
     },
-    [props.doRegistration]
+    [props.registration]
   );
 
   return (
@@ -56,12 +56,12 @@ const mapStateToProps = (state: any): IRegistrationContainerStateProps => ({});
 const mapDispatchToProps = (
   dispatch: any
 ): IRegistrationContainerDispatchProps => ({
-  doRegistration: (registrationPayload: IRegistrationPayload) =>
+  registration: (registrationPayload: IRegistrationPayload) =>
     dispatch(
-      RegistrationBusinessStore.actions.doRegistration(registrationPayload)
+      RegistrationBusinessStore.actions.registration(registrationPayload)
     ),
-  doGoogleLogin: (googleLoginPayload: IGoogleLoginPayload) =>
-    dispatch(LoginBusinessStore.actions.doGoogleLogin(googleLoginPayload)),
+  googleLogin: (googleLoginPayload: IGoogleLoginPayload) =>
+    dispatch(LoginBusinessStore.actions.googleLogin(googleLoginPayload)),
 });
 
 export default connect<

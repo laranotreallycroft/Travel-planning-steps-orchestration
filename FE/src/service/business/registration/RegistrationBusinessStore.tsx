@@ -18,7 +18,7 @@ export interface IRegistrationPayload {
   password: string;
 }
 
-const doRegistration = (
+const registration = (
   payload: IRegistrationPayload
 ): IPayloadAction<IRegistrationPayload> => {
   return { type: actions.REGISTRATION, payload: payload };
@@ -27,7 +27,7 @@ const doRegistration = (
 // -
 // -------------------- Side-effects
 
-const doRegistrationEffect = (
+const registrationEffect = (
   action$: Observable<IPayloadAction<IRegistrationPayload>>,
   state$: Observable<any>
 ) => {
@@ -66,8 +66,8 @@ const doRegistrationEffect = (
 export const RegistrationBusinessStore = {
   selectors: {},
   actions: {
-    doRegistration,
+    registration,
   },
-  effects: { doRegistrationEffect },
+  effects: { registrationEffect },
   reducers: {},
 };

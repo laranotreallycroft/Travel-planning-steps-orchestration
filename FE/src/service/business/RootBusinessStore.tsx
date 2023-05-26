@@ -10,6 +10,8 @@ import { LoginBusinessStore } from "./login/LoginBusinessStore";
 import { RegistrationBusinessStore } from "./registration/RegistrationBusinessStore";
 import storage from "redux-persist/es/storage";
 import { persistReducer, persistStore } from "redux-persist";
+import { TripBusinessStore } from "./trip/TripBusinessStore";
+import { UserBusinessStore } from "./user/UserBusinessStore";
 
 const storeMiddleware = [];
 const epicMiddleware = createEpicMiddleware();
@@ -21,12 +23,20 @@ const rootEpic = combineEpics(
   ),
   ...Object.keys(RegistrationBusinessStore.effects).map(
     (key) => (RegistrationBusinessStore.effects as any)[key]
+  ),
+  ...Object.keys(TripBusinessStore.effects).map(
+    (key) => (TripBusinessStore.effects as any)[key]
+  ),
+  ...Object.keys(UserBusinessStore.effects).map(
+    (key) => (UserBusinessStore.effects as any)[key]
   )
 );
 
 const rootReducer = combineReducers({
   ...LoginBusinessStore.reducers,
   ...RegistrationBusinessStore.reducers,
+  ...TripBusinessStore.reducers,
+  ...UserBusinessStore.reducers,
 });
 
 const persistConfig = {

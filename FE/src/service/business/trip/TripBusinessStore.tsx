@@ -1,9 +1,8 @@
 import axios from "axios";
-import { IAppUserInfo } from "../../../model/appUser/appUser";
 import { IPayloadAction } from "../common/types";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
-import { ITrip, ITripCreatePayload } from "../../../model/trip/trip";
+import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
 
 // -
 // -------------------- Selectors
@@ -28,11 +27,11 @@ export const createTrip = (
 export const storeTrip = (payload: ITrip): IPayloadAction<ITrip> => {
   return { type: actions.TRIP_STORE, payload: payload };
 };
-
+/*
 export const deleteTrip = (payload: ITrip): IPayloadAction<ITrip> => {
   return { type: actions.TRIP_DELETE, payload: payload };
 };
-
+*/
 // -
 // -------------------- Side-effects
 
@@ -48,7 +47,7 @@ const createTripEffect = (
       return axios
         .post("/trip", action.payload)
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 201) {
             notificationService.success("New trip successfully created!");
             return response.data;
           }
@@ -71,10 +70,7 @@ const createTripEffect = (
 // -
 // -------------------- Reducers
 
-const currentTrip = (
-  state: any = null,
-  action: IPayloadAction<IAppUserInfo>
-) => {
+const currentTrip = (state: any = null, action: IPayloadAction<ITrip>) => {
   if (action.type === actions.TRIP_STORE) {
     return { ...action.payload };
   } else if (action.type === actions.TRIP_DELETE) {
@@ -84,12 +80,12 @@ const currentTrip = (
   return state;
 };
 
-export const LoginBusinessStore = {
+export const TripBusinessStore = {
   selectors: { getCurrentTrip },
   actions: {
     createTrip,
     storeTrip,
-    deleteTrip,
+    //deleteTrip,
   },
   effects: { createTripEffect },
   reducers: { currentTrip },

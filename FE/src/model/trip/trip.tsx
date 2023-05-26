@@ -1,6 +1,6 @@
 import { RangeValue } from "rc-picker/lib/interface";
 import { Dayjs } from "dayjs";
-import { IReminder, IReminderType } from "../reminder/reminder";
+import { IReminder, IReminderType } from "../reminder/Reminder";
 
 export interface ITrip {
   id: string;
@@ -11,8 +11,8 @@ export interface ITrip {
 }
 
 export interface ITripCreatePayload {
-  dateRange: RangeValue<Dayjs>;
+  userId: number;
+  dateFrom: string;
+  dateTo: string;
   location: string;
-  reminderType: IReminderType;
-  reminders: IReminder;
 }

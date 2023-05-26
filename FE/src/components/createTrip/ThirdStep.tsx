@@ -10,9 +10,9 @@ import {
   travelRemindersColdValues,
   travelRemindersDefaultValues,
   travelRemindersWarmValues,
-} from "../../model/reminder/reminder";
+} from "../../model/reminder/Reminder";
 import Custom from "./thirdStep/Custom";
-import { ITrip } from "../../model/trip/trip";
+import { ITrip } from "../../model/trip/Trip";
 
 export interface IThirdStepOwnProps {
   isHidden: boolean;
