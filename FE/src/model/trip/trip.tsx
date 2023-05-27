@@ -1,9 +1,9 @@
-import { RangeValue } from "rc-picker/lib/interface";
 import { IReminder, IReminderType } from "../reminder/Reminder";
 import { ICoordinates } from "../geometry/Coordinates";
 
 export interface ITrip {
-  id: string;
+  id: number;
+  name: string;
   dateFrom: string;
   dateTo: string;
   location: ICoordinates;
@@ -13,6 +13,7 @@ export interface ITrip {
 
 export interface ITripCreatePayload {
   userId: number;
+  name: string;
   dateFrom: string;
   dateTo: string;
   location: ICoordinates;

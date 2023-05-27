@@ -1,0 +1,14 @@
+.homeLayoutViewHeader__selectTrip{
+    width: 20vw;
+    margin: 2vw;
+}
+
+.homeLayoutViewHeader__tripTitle{
+    cursor: text;
+    margin: 0; 
+}
+
+.homeLayoutViewHeader__tripTitle:hover{
+    background-color: rgb(244, 244, 244);
+    border-radius: 2px;
+}

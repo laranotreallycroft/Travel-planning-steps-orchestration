@@ -26,6 +26,8 @@ public class Trip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String name;
+
 	@Column(name = "date_from")
 	private LocalDate dateFrom;
 	@Column(name = "date_to")
@@ -42,12 +44,21 @@ public class Trip {
 
 	}
 
-	public Trip(LocalDate dateFrom, LocalDate dateTo, Point location, User user) {
+	public Trip(String name, LocalDate dateFrom, LocalDate dateTo, Point location, User user) {
 		super();
+		this.name = name;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 		this.location = location;
 		this.user = user;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getId() {

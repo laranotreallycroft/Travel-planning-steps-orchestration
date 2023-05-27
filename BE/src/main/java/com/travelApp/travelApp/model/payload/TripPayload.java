@@ -1,24 +1,34 @@
 package com.travelApp.travelApp.model.payload;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class TripCreatePayload {
+public class TripPayload {
 
+	private String name;
 	private Long userId;
-	private Date dateFrom;
-	private Date dateTo;
+	private LocalDate dateFrom;
+	private LocalDate dateTo;
 	private PointPayload location;
 
-	public TripCreatePayload() {
+	public TripPayload() {
 
 	}
 
-	public TripCreatePayload(Long userId, Date dateFrom, Date dateTo, PointPayload location) {
+	public TripPayload(String name, Long userId, LocalDate dateFrom, LocalDate dateTo, PointPayload location) {
 		super();
+		this.name = name;
 		this.userId = userId;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
 		this.location = location;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getUserId() {
@@ -29,19 +39,19 @@ public class TripCreatePayload {
 		this.userId = userId;
 	}
 
-	public Date getDateFrom() {
+	public LocalDate getDateFrom() {
 		return dateFrom;
 	}
 
-	public void setDateFrom(Date dateFrom) {
+	public void setDateFrom(LocalDate dateFrom) {
 		this.dateFrom = dateFrom;
 	}
 
-	public Date getDateTo() {
+	public LocalDate getDateTo() {
 		return dateTo;
 	}
 
-	public void setDateTo(Date dateTo) {
+	public void setDateTo(LocalDate dateTo) {
 		this.dateTo = dateTo;
 	}
 

@@ -30,7 +30,7 @@ root.render(
             token: {
               colorPrimary: "#c98e49",
               colorText: "#c98e49",
-              colorInfo: "#12374e",
+              colorInfo: "#eae4e1",
               fontFamily: "Verdana",
             },
           }}

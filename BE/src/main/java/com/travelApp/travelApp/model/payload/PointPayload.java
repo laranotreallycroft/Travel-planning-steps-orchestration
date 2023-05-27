@@ -1,5 +1,9 @@
 package com.travelApp.travelApp.model.payload;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+
 public class PointPayload {
 
 	private Double x;
@@ -29,6 +33,11 @@ public class PointPayload {
 
 	public void setY(Double y) {
 		this.y = y;
+	}
+
+	public Point toPoint() {
+		GeometryFactory gf = new GeometryFactory();
+		return gf.createPoint(new Coordinate(x, y));
 	}
 
 }

@@ -23,7 +23,7 @@ export interface ICreateTripContainerStateProps {
   currentUser: IUserCredentials;
 }
 export interface ICreateTripContainerDispatchProps {
-  createTrip: (tripCreatePayload: ITripCreatePayload) => void;
+  tripCreate: (tripCreatePayload: ITripCreatePayload) => void;
 }
 type ICreateTripContainerProps = ICreateTripContainerOwnProps &
   ICreateTripContainerStateProps &
@@ -49,11 +49,12 @@ const CreateTripContainer: React.FC<ICreateTripContainerProps> = (
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
         userId: props.currentUser.id,
+        name: values.location.label,
         dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD") ?? "",
         dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD") ?? "",
         location: { x: values.location.x, y: values.location.y },
       };
-      props.createTrip(payload);
+      props.tripCreate(payload);
     },
     [provider.search]
   );
@@ -73,8 +74,8 @@ const mapStateToProps = (state: any): ICreateTripContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): ICreateTripContainerDispatchProps => ({
-  createTrip: (tripCreatePayload: ITripCreatePayload) =>
-    dispatch(TripBusinessStore.actions.createTrip(tripCreatePayload)),
+  tripCreate: (tripCreatePayload: ITripCreatePayload) =>
+    dispatch(TripBusinessStore.actions.tripCreate(tripCreatePayload)),
 });
 
 export default connect<

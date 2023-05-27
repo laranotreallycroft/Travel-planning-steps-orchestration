@@ -46,7 +46,15 @@
 
 
 .title {
-    font-family: 'ArcherBold';
-    letter-spacing: 0.3rem;
+  /*  font-family: 'ArcherBold';*/
+    letter-spacing: 0.3rem ;
     color: #e9d8d5 !important;
 }
+
+
+.container{
+    margin: 5vh 10vw 5vh 10vw;
+    padding: 2vh 2vw 2vh 2vw;
+    background-color: white;
+    border-radius: 20px;
+  }
