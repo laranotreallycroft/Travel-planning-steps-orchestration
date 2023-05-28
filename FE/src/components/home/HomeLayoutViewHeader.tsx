@@ -1,4 +1,4 @@
-import { Col, Row, Select } from "antd";
+import { Button, Col, Row, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback } from "react";
 import { ITrip } from "../../model/trip/Trip";
@@ -28,10 +28,10 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
   };
 
   return (
-    <Row align={"middle"}>
-      <Col span={8}>
+    <Row align={"middle"} gutter={[16, 16]}>
+      <Col span={4}>
         <Select
-          className="homeLayoutViewHeader__selectTrip"
+          className="fullWidth"
           onChange={props.onTripSelect}
           defaultValue={props.selectedTrip.id}
           options={props.userTrips.map((trip: ITrip) => {
@@ -42,24 +42,29 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
           })}
         />
       </Col>
-      <Col span={8}>
+      <Col span={4}>
         <Select
-          className="homeLayoutViewHeader__selectTrip"
+          className="fullWidth"
           onChange={handleSubmenuChange}
           defaultValue={SUBMENU_OPTIONS[0].value}
           options={SUBMENU_OPTIONS}
         />
       </Col>
-      <Title
-        className="title homeLayoutViewHeader__tripTitle"
-        editable={{
-          onChange: handleTripNameChange,
-          triggerType: ["text"],
-          enterIcon: null,
-        }}
-      >
-        {props.selectedTrip.name}
-      </Title>
+      <Col span={4}>
+        <Title
+          className="homeLayoutViewHeader__tripTitle"
+          editable={{
+            onChange: handleTripNameChange,
+            triggerType: ["text"],
+            enterIcon: null,
+          }}
+        >
+          {props.selectedTrip.name}
+        </Title>
+      </Col>
+      <Col span={4}>
+        <Button type="primary">Create</Button>
+      </Col>
     </Row>
   );
 };
