@@ -32,6 +32,7 @@ root.render(
               colorText: "#274C77",
               colorInfo: "#A3CEF1",
               fontFamily: "Verdana",
+              fontSize: 16,
             },
           }}
         >

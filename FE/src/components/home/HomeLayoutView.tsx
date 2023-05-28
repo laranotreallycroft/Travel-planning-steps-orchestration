@@ -5,6 +5,7 @@ import React from "react";
 import { ITrip } from "../../model/trip/Trip";
 import HomeLayoutViewHeader from "./HomeLayoutViewHeader";
 import { IUserCredentials } from "../../model/user/User";
+import HomeLayoutViewSider from "./HomeLayoutViewSider";
 
 export interface IHomeLayoutViewOwnProps {
   userTrips: ITrip[];
@@ -34,7 +35,9 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
         />
       </Header>
       <Layout hasSider>
-        <Sider className="homeLayoutView__sider">Sider</Sider>
+        <Sider width={300} className="homeLayoutView__sider">
+          <HomeLayoutViewSider />
+        </Sider>
         <Content className="homeLayoutView__content">Content</Content>
       </Layout>
     </Layout>

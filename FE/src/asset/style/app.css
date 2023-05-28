@@ -17,4 +17,5 @@ body, #root, html {
 @import 'createTrip/_thirdStep.css';
 @import 'login/_loginView.css';
 @import 'home/_homeLayoutView.css';
-@import 'home/_homeLayoutViewHeader.css' 
+@import 'home/_homeLayoutViewHeader.css';
+@import 'home/_homeLayoutViewSider.css' 

@@ -65,7 +65,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
           Create
         </Button>
       </Col>
-      <Col offset={12}>
+      <Col offset={11}>
         <Dropdown
           menu={{ items: userProfileItems }}
           trigger={["click"]}

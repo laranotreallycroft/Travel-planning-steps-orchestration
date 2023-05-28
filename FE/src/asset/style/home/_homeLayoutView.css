@@ -17,8 +17,6 @@
   }
 
   .homeLayoutView__sider{
-    text-align: center !important;
-    line-height: 120px !important;
-    color: #fff !important;
+    color: #fff;
     background-color: #6096BA !important;
   }
