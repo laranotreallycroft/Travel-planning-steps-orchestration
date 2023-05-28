@@ -1,10 +1,7 @@
-.homeLayoutViewHeader__tripTitle{
-    color: #AD7434  !important;
-    cursor: text;
-    margin: 0 !important;
+.homeLayoutViewHeader__logo{
+  font-size: 20px;
 }
 
-.homeLayoutViewHeader__tripTitle:hover{
-    background-color: rgb(244, 244, 244);
-    border-radius: 2px;
+.homeLayoutViewHeader__dropdown {
+    cursor: pointer;
 }

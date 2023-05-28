@@ -1,0 +1,24 @@
+.homeLayoutView__header{
+    color: #fff;
+    height: 5rem;
+    background-color: #274C77;
+    display: grid;
+    align-items: center;
+    padding-left: .5rem;
+    padding-right: 1rem;
+  }
+
+  .homeLayoutView__content{
+    text-align: center !important;
+    min-height: 120px !important;
+    line-height: 120px !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
+
+  .homeLayoutView__sider{
+    text-align: center !important;
+    line-height: 120px !important;
+    color: #fff !important;
+    background-color: #6096BA !important;
+  }

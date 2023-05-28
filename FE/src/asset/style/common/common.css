@@ -1,23 +1,44 @@
 .margin-top-sm {
     margin-top: 0.5vh;
 }
-
+.margin-bottom-sm {
+    margin-bottom: 0.5vh;
+}
 .margin-left-sm {
-    margin-left: 0.3rem;
+    margin-left: 0.5vw;
+}
+.margin-right-sm {
+    margin-right: 0.5vw;
 }
 
 .margin-top-md {
     margin-top: 1vh;
 }
-
 .margin-bottom-md {
     margin-bottom: 1vh;
+}
+.margin-left-md {
+    margin-right: 1vw;
+}
+.margin-right-md {
+    margin-right: 1vw;
 }
 
 
 .margin-top-l {
-    margin-top: 4vh;
+    margin-top: 2vh;
 }
+.margin-bottom-l {
+    margin-top: 2vh;
+}
+.margin-left-l {
+    margin-left: 2vw;
+}
+.margin-right-l {
+    margin-right: 2vw;
+}
+
+
 
 .margin-xl {
     margin: 5vw;
@@ -42,13 +63,6 @@
 .fullSize {
     width: 100%;
     height: 100%;
-}
-
-
-.title {
-  /*  font-family: 'ArcherBold';*/
-    letter-spacing: 0.3rem ;
-    color: #e9d8d5 !important;
 }
 
 

@@ -7,14 +7,13 @@ import {
 import CreateTripPage from "./pages/CreateTripPage";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
-import AppLayout from "./common/layout/AppLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import FallbackPage from "./pages/FallbackPage";
-import HomeLayout from "./common/layout/HomeLayout";
+import HomeLayout from "./layout/HomeLayout";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
-    <Route element={<AppLayout />}>
+    <Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="registration" element={<RegistrationPage />} />

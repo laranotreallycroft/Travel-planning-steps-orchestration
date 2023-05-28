@@ -28,9 +28,9 @@ root.render(
         <ConfigProvider
           theme={{
             token: {
-              colorPrimary: "#c98e49",
-              colorText: "#c98e49",
-              colorInfo: "#375770",
+              colorPrimary: "#6096BA",
+              colorText: "#274C77",
+              colorInfo: "#A3CEF1",
               fontFamily: "Verdana",
             },
           }}

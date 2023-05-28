@@ -10,7 +10,6 @@ body, #root, html {
 
 @import '../fonts/font.css';
 @import 'common/common.css';
-@import 'common/layout/_appLayout.css';
 @import 'common/map/_mapElement.css';
 @import 'createTrip/_createTripView.css';
 @import 'createTrip/_firstStep.css';
