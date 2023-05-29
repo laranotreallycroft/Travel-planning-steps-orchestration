@@ -33,7 +33,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   };
 
   return (
-    <Row className="fullHeight">
+    <Row className="fullScreen">
       <Col span={12} className="loginView__form ">
         <Row justify={"center"}>
           <Title className="loginView__title">Travel app</Title>
@@ -94,7 +94,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
               onError={() => console.log("A")}
             />
           </Row>
-          <Row justify={"center"} className="margin-top-md">
+          <Row justify={"center"} align={"middle"} className="margin-top-md">
             New to Travel App?
             <Typography.Link href={"/registration"} className="margin-left-sm">
               Create Account

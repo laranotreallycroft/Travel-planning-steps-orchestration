@@ -1,5 +1,5 @@
-import { IReminder, IReminderType } from "../reminder/Reminder";
 import { ICoordinates } from "../geometry/Coordinates";
+import { IPackingList } from "./packingList/PackingList";
 
 export interface ITrip {
   id: number;
@@ -7,8 +7,7 @@ export interface ITrip {
   dateFrom: string;
   dateTo: string;
   location: ICoordinates;
-  reminderType?: IReminderType;
-  reminders?: IReminder;
+  packingList: IPackingList;
 }
 
 export interface ITripCreatePayload {

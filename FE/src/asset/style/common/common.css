@@ -1,5 +1,5 @@
 .margin-top-sm {
-    margin-top: 0.5vh;
+    margin-top: 0.5vh !;
 }
 
 .margin-bottom-sm {
@@ -53,7 +53,7 @@
 }
 
 .margin-bottom-xl {
-    margin-top: 4vh;
+    margin-bottom: 4vh;
 }
 
 .margin-left-xl {
@@ -87,4 +87,13 @@
 .fullSize {
     width: 100%;
     height: 100%;
+}
+
+.fullScreen {
+    height: 100vh;
+    width: 100vw;
+}
+
+.ant-typography {
+    margin: 0.2rem !important;
 }

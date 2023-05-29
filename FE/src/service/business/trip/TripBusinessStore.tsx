@@ -7,7 +7,7 @@ import { userTripsFetch } from "../user/UserBusinessStore";
 
 // -
 // -------------------- Selectors
-const getCurrentTrip = (store: any): ITrip => store.currentTrip;
+export const getCurrentTrip = (store: any): ITrip => store.currentTrip;
 
 // -
 // -------------------- Actions

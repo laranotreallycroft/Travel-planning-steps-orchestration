@@ -59,7 +59,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
   };
 
   return (
-    <Row className="fullHeight loginView_container">
+    <Row className="fullScreen">
       <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form">
         <Row justify={"center"}>
           <Title className="loginView__title">Travel app</Title>
@@ -132,7 +132,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
               onError={() => console.log("A")}
             />
           </Row>
-          <Row justify={"center"}>
+          <Row justify={"center"} align={"middle"} className="margin-top-md">
             Already have an account?
             <Typography.Link href={"/login"} className="margin-left-sm">
               Login

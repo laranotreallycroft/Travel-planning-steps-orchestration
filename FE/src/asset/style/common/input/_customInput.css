@@ -1,0 +1,14 @@
+.customInput>*>*>*>*>*>*>button:nth-child(2) {
+    display: none;
+}
+
+.customInput__notFoundContentRender {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customInput__deleteButton {
+    border: none;
+    background-color: inherit;
+}
