@@ -9,6 +9,10 @@ import RegistrationPage from "./pages/RegistrationPage";
 import ProtectedRoute from "./ProtectedRoute";
 import FallbackPage from "./pages/FallbackPage";
 import HomeLayout from "./layout/HomeLayout";
+import TripSettingsPage from "./pages/TripSettingsPage";
+import TripPackingListPage from "./pages/TripPackingListPage";
+import TripWeatherPage from "./pages/TripWeatherPage";
+import TripSightseeingPage from "./pages/TripSightseeingPage";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -24,7 +28,10 @@ const appRouter = createBrowserRouter(
             path="/"
             element={<Navigate to="/packinglist" replace={true} />}
           />
-          <Route path="packinglist" element={<div>aaa</div>} />
+          <Route path="packinglist" element={<TripPackingListPage />} />
+          <Route path="weather" element={<TripWeatherPage />} />
+          <Route path="sightseeing" element={<TripSightseeingPage />} />
+          <Route path="settings" element={<TripSettingsPage />} />
         </Route>
       </Route>
 

@@ -1,13 +1,13 @@
-import { Layout, Modal } from "antd";
+import { Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
-import { ITrip } from "../../model/trip/Trip";
-import HomeLayoutViewHeader from "./HomeLayoutViewHeader";
-import { IUserCredentials } from "../../model/user/User";
-import HomeLayoutViewSider from "./HomeLayoutViewSider";
-import CreateTripContainer from "../createTrip/CreateTripContainer";
 import { Outlet } from "react-router-dom";
+import { ITrip } from "../../model/trip/Trip";
+import { IUserCredentials } from "../../model/user/User";
+import TripCreateContainer from "../trip/create/TripCreateContainer";
+import HomeLayoutViewHeader from "./HomeLayoutViewHeader";
+import HomeLayoutViewSider from "./HomeLayoutViewSider";
 
 export interface IHomeLayoutViewOwnProps {
   userTrips: ITrip[];
@@ -24,15 +24,15 @@ type IHomeLayoutViewProps = IHomeLayoutViewOwnProps;
 const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
   props: IHomeLayoutViewProps
 ) => {
-  const [isCreateTripModalOpen, setIsCreateTripModalOpen] =
+  const [isTripCreateModalOpen, setIsTripCreateModalOpen] =
     useState<boolean>(false);
 
-  const handleCreateTripModalOpen = () => {
-    setIsCreateTripModalOpen(true);
+  const handleTripCreateModalOpen = () => {
+    setIsTripCreateModalOpen(true);
   };
 
-  const handleCreateTripModalClose = () => {
-    setIsCreateTripModalOpen(false);
+  const handleTripCreateModalClose = () => {
+    setIsTripCreateModalOpen(false);
   };
 
   return (
@@ -45,7 +45,7 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
           currentUser={props.currentUser}
           isUserLoggedIn={props.isUserLoggedIn}
           logout={props.onLogout}
-          openCreateTripModal={handleCreateTripModalOpen}
+          openTripCreateModal={handleTripCreateModalOpen}
         />
       </Header>
       <Layout hasSider>
@@ -53,19 +53,16 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
           <HomeLayoutViewSider />
         </Sider>
         <Content className="homeLayoutView__content">
-          <Outlet />
+          <div className="homeLayoutView__contentPanel">
+            <Outlet />
+          </div>
         </Content>
       </Layout>
-      <Modal
-        title="Create trip"
-        open={isCreateTripModalOpen}
-        footer={null}
-        className="homeLayoutView__createTripModal"
-      >
-        <CreateTripContainer
-          onCreateTripModalClose={handleCreateTripModalClose}
-        />
-      </Modal>
+
+      <TripCreateContainer
+        onTripCreateModalClose={handleTripCreateModalClose}
+        createTripModalOpen={isTripCreateModalOpen}
+      />
     </Layout>
   );
 };

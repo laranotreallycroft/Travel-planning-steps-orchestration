@@ -11,9 +11,9 @@ body, #root, html {
 @import '../fonts/font.css';
 @import 'common/common.css';
 @import 'common/map/_mapElement.css';
-@import 'createTrip/_secondStep.css';
-@import 'createTrip/_thirdStep.css';
 @import 'login/_loginView.css';
 @import 'home/_homeLayoutView.css';
 @import 'home/_homeLayoutViewHeader.css';
-@import 'home/_homeLayoutViewSider.css'
+@import 'home/_homeLayoutViewSider.css';
+@import 'trip/_tripCreateView.css';
+@import 'trip/_packingListView.css'

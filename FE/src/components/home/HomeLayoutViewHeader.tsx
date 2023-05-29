@@ -14,7 +14,7 @@ export interface IHomeLayoutViewHeaderOwnProps {
   currentUser: IUserCredentials;
   onTripSelect: (selectedTrip: number) => void;
   logout: () => void;
-  openCreateTripModal: () => void;
+  openTripCreateModal: () => void;
 }
 
 type IHomeLayoutViewHeaderProps = IHomeLayoutViewHeaderOwnProps;
@@ -62,7 +62,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
       </Col>
 
       <Col span={1}>
-        <Button type="primary" onClick={props.openCreateTripModal}>
+        <Button type="primary" onClick={props.openTripCreateModal}>
           Create
         </Button>
       </Col>

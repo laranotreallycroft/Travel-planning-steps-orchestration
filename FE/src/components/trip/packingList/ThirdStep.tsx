@@ -1,18 +1,18 @@
 import { Col, Form } from "antd";
 import Title from "antd/es/typography/Title";
-import Basics from "./thirdStep/Basics";
-import Miscellaneous from "./thirdStep/Miscellaneous";
-import Clothes from "./thirdStep/Clothes";
-import Hygiene from "./thirdStep/Hygiene";
 import { useEffect } from "react";
 import {
   IReminderType,
   travelRemindersColdValues,
   travelRemindersDefaultValues,
   travelRemindersWarmValues,
-} from "../../model/reminder/Reminder";
+} from "../../../model/reminder/Reminder";
+import { ITrip } from "../../../model/trip/Trip";
+import Basics from "./thirdStep/Basics";
+import Clothes from "./thirdStep/Clothes";
 import Custom from "./thirdStep/Custom";
-import { ITrip } from "../../model/trip/Trip";
+import Hygiene from "./thirdStep/Hygiene";
+import Miscellaneous from "./thirdStep/Miscellaneous";
 
 export interface IThirdStepOwnProps {
   isHidden: boolean;

@@ -8,6 +8,7 @@
   margin: 0 !important;
   width: 100% !important;
   border-radius: 0 !important;
+  height: 3rem !important;
 }
 
 .homeLayoutViewSider_menuItem.ant-menu-item-selected, .homeLayoutViewSider_menuItem:active {

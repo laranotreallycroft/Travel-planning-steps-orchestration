@@ -1,84 +1,95 @@
-import { Col, Form, Row, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { MISCELLANEOUS } from "../../../model/reminder/const";
+import { Col, Form, Row, Select } from "antd";
+import { CLOTHES } from "../../../../model/reminder/const";
 
-export interface IMiscellaneousOwnProps {
+export interface IClothesOwnProps {
   isHidden: boolean;
 }
-type IMiscellaneousProps = IMiscellaneousOwnProps;
+type IClothesProps = IClothesOwnProps;
 
-const Miscellaneous: React.FC<IMiscellaneousProps> = (
-  props: IMiscellaneousProps
-) => {
+const Clothes: React.FC<IClothesProps> = (props: IClothesProps) => {
   return (
     <React.Fragment>
       <Title level={3} className="font-neutral" hidden={props.isHidden}>
-        Miscellaneous
+        Clothes
       </Title>
       <Row gutter={[16, 16]}>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Documents
+            Basics
           </Title>
-          <Form.Item name={["reminders", "miscellaneous", "documents"]}>
+          <Form.Item name={["reminders", "clothes", "basics"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={MISCELLANEOUS.documents}
+              options={CLOTHES.basics}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Bags
+            Dressy
           </Title>
-          <Form.Item name={["reminders", "miscellaneous", "bags"]}>
+          <Form.Item name={["reminders", "clothes", "dressy"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={MISCELLANEOUS.bags}
+              options={CLOTHES.dressy}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Miscellaneous
+            Outerwear
           </Title>
-          <Form.Item name={["reminders", "miscellaneous", "miscellaneous"]}>
+          <Form.Item name={["reminders", "clothes", "outerwear"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={MISCELLANEOUS.miscellaneous}
+              options={CLOTHES.outerwear}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Technology
+            Casual
           </Title>
-          <Form.Item name={["reminders", "miscellaneous", "technology"]}>
+          <Form.Item name={["reminders", "clothes", "casual"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={MISCELLANEOUS.technology}
+              options={CLOTHES.casual}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Work
+            Footwear
           </Title>
-          <Form.Item name={["reminders", "miscellaneous", "work"]}>
+          <Form.Item name={["reminders", "clothes", "footwear"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={MISCELLANEOUS.work}
+              options={CLOTHES.footwear}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Title level={4} className="font-neutral" hidden={props.isHidden}>
+            Accessories
+          </Title>
+          <Form.Item name={["reminders", "clothes", "accessories"]}>
+            <Select
+              mode="multiple"
+              allowClear
+              placeholder="Please select"
+              options={CLOTHES.accessories}
             />
           </Form.Item>
         </Col>
@@ -87,4 +98,4 @@ const Miscellaneous: React.FC<IMiscellaneousProps> = (
   );
 };
 
-export default Miscellaneous;
+export default Clothes;

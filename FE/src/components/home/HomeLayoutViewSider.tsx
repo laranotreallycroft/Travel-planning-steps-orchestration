@@ -1,7 +1,12 @@
-import { MailOutlined } from "@ant-design/icons";
+import {
+  CloudOutlined,
+  SettingOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
+import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Menu, MenuProps } from "antd";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface IHomeLayoutViewSiderOwnProps {}
 
@@ -26,13 +31,25 @@ const items: MenuProps["items"] = [
   getItem(
     "Packing list",
     "packinglist",
-    <MailOutlined />,
+    <UnorderedListOutlined />,
     "homeLayoutViewSider_menuItem"
   ),
   getItem(
-    "General information",
-    "general",
-    <MailOutlined />,
+    "Weather",
+    "weather",
+    <CloudOutlined />,
+    "homeLayoutViewSider_menuItem"
+  ),
+  getItem(
+    "Sightseeing",
+    "sightseeing",
+    <MapOutlinedIcon />,
+    "homeLayoutViewSider_menuItem"
+  ),
+  getItem(
+    "Settings",
+    "settings",
+    <SettingOutlined />,
     "homeLayoutViewSider_menuItem"
   ),
 ];
@@ -41,6 +58,13 @@ const HomeLayoutViewSider: React.FC<IHomeLayoutViewSiderProps> = (
   props: IHomeLayoutViewSiderProps
 ) => {
   const navigator = useNavigate();
+  const location = useLocation();
+
+  const currentTab = useMemo(
+    () => location.pathname.substring(location.pathname.lastIndexOf("/") + 1),
+    [location.pathname]
+  );
+
   const onClick: MenuProps["onClick"] = (e) => {
     navigator(e.key);
   };
@@ -48,7 +72,7 @@ const HomeLayoutViewSider: React.FC<IHomeLayoutViewSiderProps> = (
     <Menu
       onClick={onClick}
       style={{ width: 256 }}
-      defaultSelectedKeys={["packinglist"]}
+      selectedKeys={[currentTab]}
       mode="inline"
       items={items}
       className="homeLayoutViewSider_menu"

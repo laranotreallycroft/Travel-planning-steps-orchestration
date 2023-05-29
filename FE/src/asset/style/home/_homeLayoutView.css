@@ -1,7 +1,8 @@
 .homeLayoutView__header {
   color: #fff;
-  height: 5rem;
   background-color: #274C77;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  height: 5rem;
   display: grid;
   align-items: center;
   padding-left: .5rem;
@@ -11,13 +12,20 @@
 .homeLayoutView__content {
   color: #000000 !important;
   background-color: #E7ECEF !important;
+  display: flex;
+}
+
+.homeLayoutView__contentPanel {
+  margin: 2vw;
+  padding: 2vw;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .homeLayoutView__sider {
   color: #fff;
   background-color: #6096BA !important;
-}
-
-.homeLayoutView__createTripModal {
-  width: 40vw !important;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
 }

@@ -1,95 +1,84 @@
+import { Col, Form, Row, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { Col, Form, Row, Select } from "antd";
-import { CLOTHES } from "../../../model/reminder/const";
+import { MISCELLANEOUS } from "../../../../model/reminder/const";
 
-export interface IClothesOwnProps {
+export interface IMiscellaneousOwnProps {
   isHidden: boolean;
 }
-type IClothesProps = IClothesOwnProps;
+type IMiscellaneousProps = IMiscellaneousOwnProps;
 
-const Clothes: React.FC<IClothesProps> = (props: IClothesProps) => {
+const Miscellaneous: React.FC<IMiscellaneousProps> = (
+  props: IMiscellaneousProps
+) => {
   return (
     <React.Fragment>
       <Title level={3} className="font-neutral" hidden={props.isHidden}>
-        Clothes
+        Miscellaneous
       </Title>
       <Row gutter={[16, 16]}>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Basics
+            Documents
           </Title>
-          <Form.Item name={["reminders", "clothes", "basics"]}>
+          <Form.Item name={["reminders", "miscellaneous", "documents"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={CLOTHES.basics}
+              options={MISCELLANEOUS.documents}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Dressy
+            Bags
           </Title>
-          <Form.Item name={["reminders", "clothes", "dressy"]}>
+          <Form.Item name={["reminders", "miscellaneous", "bags"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={CLOTHES.dressy}
+              options={MISCELLANEOUS.bags}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Outerwear
+            Miscellaneous
           </Title>
-          <Form.Item name={["reminders", "clothes", "outerwear"]}>
+          <Form.Item name={["reminders", "miscellaneous", "miscellaneous"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={CLOTHES.outerwear}
+              options={MISCELLANEOUS.miscellaneous}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Casual
+            Technology
           </Title>
-          <Form.Item name={["reminders", "clothes", "casual"]}>
+          <Form.Item name={["reminders", "miscellaneous", "technology"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={CLOTHES.casual}
+              options={MISCELLANEOUS.technology}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Footwear
+            Work
           </Title>
-          <Form.Item name={["reminders", "clothes", "footwear"]}>
+          <Form.Item name={["reminders", "miscellaneous", "work"]}>
             <Select
               mode="multiple"
               allowClear
               placeholder="Please select"
-              options={CLOTHES.footwear}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Title level={4} className="font-neutral" hidden={props.isHidden}>
-            Accessories
-          </Title>
-          <Form.Item name={["reminders", "clothes", "accessories"]}>
-            <Select
-              mode="multiple"
-              allowClear
-              placeholder="Please select"
-              options={CLOTHES.accessories}
+              options={MISCELLANEOUS.work}
             />
           </Form.Item>
         </Col>
@@ -98,4 +87,4 @@ const Clothes: React.FC<IClothesProps> = (props: IClothesProps) => {
   );
 };
 
-export default Clothes;
+export default Miscellaneous;

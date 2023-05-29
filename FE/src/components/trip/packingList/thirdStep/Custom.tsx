@@ -2,8 +2,8 @@ import { Button, Col, Form, Input, Row, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ILabelValue } from "../../../model/reminder/const";
-import { ITrip } from "../../../model/trip/Trip";
+import { ILabelValue } from "../../../../model/reminder/const";
+import { ITrip } from "../../../../model/trip/Trip";
 
 export interface ICustomOwnProps {
   isHidden: boolean;

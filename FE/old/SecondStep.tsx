@@ -1,7 +1,7 @@
 import { Avatar, Col, Form, Radio } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { IReminderType } from "../../model/reminder/Reminder";
+import { IReminderType } from "../../../model/reminder/Reminder";
 import basic from "../../asset/img/basic.jpg";
 import warm from "../../asset/img/warm.jpg";
 import cold from "../../asset/img/cold.jpg";

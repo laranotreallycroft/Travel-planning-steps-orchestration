@@ -1,7 +1,7 @@
 import { Col, Form, Row, Select } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { BASICS } from "../../../model/reminder/const";
+import { BASICS } from "../../../../model/reminder/const";
 
 export interface IBasicsOwnProps {
   isHidden: boolean;

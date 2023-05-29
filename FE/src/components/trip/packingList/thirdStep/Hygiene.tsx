@@ -1,7 +1,7 @@
 import Title from "antd/es/typography/Title";
 import React from "react";
 import { Row, Col, Form, Select } from "antd";
-import { HYGIENE } from "../../../model/reminder/const";
+import { HYGIENE } from "../../../../model/reminder/const";
 
 export interface IHygieneOwnProps {
   isHidden: boolean;
