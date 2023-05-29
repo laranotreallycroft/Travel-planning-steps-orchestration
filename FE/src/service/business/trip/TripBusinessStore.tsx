@@ -3,6 +3,7 @@ import { IIdPayload, IPayloadAction } from "../common/types";
 import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
 import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
+import { userTripsFetch } from "../user/UserBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -64,7 +65,7 @@ const tripCreateEffect = (
           );
         });
     }),
-    map((data) => tripStore(data)),
+    map((data) => userTripsFetch()),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
       return o;

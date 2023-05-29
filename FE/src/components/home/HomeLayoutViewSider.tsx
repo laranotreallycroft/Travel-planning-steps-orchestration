@@ -1,6 +1,7 @@
 import { MailOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface IHomeLayoutViewSiderOwnProps {}
 
@@ -23,8 +24,8 @@ function getItem(
 }
 const items: MenuProps["items"] = [
   getItem(
-    "Reminders",
-    "reminders",
+    "Packing list",
+    "packinglist",
     <MailOutlined />,
     "homeLayoutViewSider_menuItem"
   ),
@@ -39,15 +40,15 @@ const items: MenuProps["items"] = [
 const HomeLayoutViewSider: React.FC<IHomeLayoutViewSiderProps> = (
   props: IHomeLayoutViewSiderProps
 ) => {
+  const navigator = useNavigate();
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
+    navigator(e.key);
   };
   return (
     <Menu
       onClick={onClick}
       style={{ width: 256 }}
-      defaultSelectedKeys={["1"]}
-      defaultOpenKeys={["sub1"]}
+      defaultSelectedKeys={["packinglist"]}
       mode="inline"
       items={items}
       className="homeLayoutViewSider_menu"

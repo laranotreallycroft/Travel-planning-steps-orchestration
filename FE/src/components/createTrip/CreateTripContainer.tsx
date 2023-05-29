@@ -17,7 +17,9 @@ export interface IGeosearchPayload {
 }
 const provider = new OpenStreetMapProvider();
 
-export interface ICreateTripContainerOwnProps {}
+export interface ICreateTripContainerOwnProps {
+  onCreateTripModalClose: () => void;
+}
 
 export interface ICreateTripContainerStateProps {
   currentUser: IUserCredentials;
@@ -63,6 +65,7 @@ const CreateTripContainer: React.FC<ICreateTripContainerProps> = (
       onLocationSearch={handleLocationSearch}
       locationArray={locationArray}
       onTripCreate={handleTripCreate}
+      onCreateTripModalClose={props.onCreateTripModalClose}
     />
   );
 };

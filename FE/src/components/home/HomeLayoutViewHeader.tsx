@@ -14,6 +14,7 @@ export interface IHomeLayoutViewHeaderOwnProps {
   currentUser: IUserCredentials;
   onTripSelect: (selectedTrip: number) => void;
   logout: () => void;
+  openCreateTripModal: () => void;
 }
 
 type IHomeLayoutViewHeaderProps = IHomeLayoutViewHeaderOwnProps;
@@ -46,7 +47,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
         <Avatar src={logo} className="margin-right-sm" />
         forget-me-not
       </Col>
-      <Col span={4}>
+      <Col offset={1} span={4}>
         <Select
           className="fullWidth"
           onChange={props.onTripSelect}
@@ -60,12 +61,13 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
         />
       </Col>
 
-      <Col span={4}>
-        <Button type="primary" onClick={() => navigate("/createTrip")}>
+      <Col span={1}>
+        <Button type="primary" onClick={props.openCreateTripModal}>
           Create
         </Button>
       </Col>
-      <Col offset={11}>
+
+      <Col offset={13}>
         <Dropdown
           menu={{ items: userProfileItems }}
           trigger={["click"]}

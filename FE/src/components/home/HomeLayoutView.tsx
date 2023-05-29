@@ -1,11 +1,13 @@
-import { Layout } from "antd";
+import { Layout, Modal } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
-import React from "react";
+import React, { useState } from "react";
 import { ITrip } from "../../model/trip/Trip";
 import HomeLayoutViewHeader from "./HomeLayoutViewHeader";
 import { IUserCredentials } from "../../model/user/User";
 import HomeLayoutViewSider from "./HomeLayoutViewSider";
+import CreateTripContainer from "../createTrip/CreateTripContainer";
+import { Outlet } from "react-router-dom";
 
 export interface IHomeLayoutViewOwnProps {
   userTrips: ITrip[];
@@ -22,6 +24,17 @@ type IHomeLayoutViewProps = IHomeLayoutViewOwnProps;
 const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
   props: IHomeLayoutViewProps
 ) => {
+  const [isCreateTripModalOpen, setIsCreateTripModalOpen] =
+    useState<boolean>(false);
+
+  const handleCreateTripModalOpen = () => {
+    setIsCreateTripModalOpen(true);
+  };
+
+  const handleCreateTripModalClose = () => {
+    setIsCreateTripModalOpen(false);
+  };
+
   return (
     <Layout className="fullHeight">
       <Header className="homeLayoutView__header">
@@ -32,35 +45,29 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
           currentUser={props.currentUser}
           isUserLoggedIn={props.isUserLoggedIn}
           logout={props.onLogout}
+          openCreateTripModal={handleCreateTripModalOpen}
         />
       </Header>
       <Layout hasSider>
         <Sider width={300} className="homeLayoutView__sider">
           <HomeLayoutViewSider />
         </Sider>
-        <Content className="homeLayoutView__content">Content</Content>
+        <Content className="homeLayoutView__content">
+          <Outlet />
+        </Content>
       </Layout>
+      <Modal
+        title="Create trip"
+        open={isCreateTripModalOpen}
+        footer={null}
+        className="homeLayoutView__createTripModal"
+      >
+        <CreateTripContainer
+          onCreateTripModalClose={handleCreateTripModalClose}
+        />
+      </Modal>
     </Layout>
   );
 };
 
 export default HomeLayoutView;
-/*<div className="createTripView__backgroundImage">
-      <HomeLayoutViewHeader
-        userTrips={props.userTrips}
-        selectedTrip={props.selectedTrip}
-        onTripSelect={props.onTripSelect}
-        onTripUpdate={props.onTripUpdate}
-      />
-      <Row justify={"space-between"}>
-        <Col>
-          <HomeLayoutViewSider
-            selectedTrip={props.selectedTrip}
-            onTripUpdate={props.onTripUpdate}
-          />
-        </Col>
-        <Col>
-          <Outlet />
-        </Col>
-      </Row>
-    </div>*/

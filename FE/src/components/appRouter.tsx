@@ -4,7 +4,6 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import CreateTripPage from "./pages/CreateTripPage";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -20,12 +19,13 @@ const appRouter = createBrowserRouter(
       </Route>
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>
-        <Route index element={<Navigate to="home" />} />
-        <Route path="home" element={<HomeLayout />}>
-          <Route index element={<Navigate to="tripreminders" />} />
-          <Route index path="tripreminders" element={<div>aaa</div>} />
+        <Route element={<HomeLayout />}>
+          <Route
+            path="/"
+            element={<Navigate to="/packinglist" replace={true} />}
+          />
+          <Route path="packinglist" element={<div>aaa</div>} />
         </Route>
-        <Route path="createTrip" element={<CreateTripPage />} />
       </Route>
 
       <Route path="*" element={<FallbackPage />} />
