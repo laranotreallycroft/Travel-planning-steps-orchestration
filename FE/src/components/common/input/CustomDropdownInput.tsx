@@ -4,14 +4,16 @@ import React, { useCallback, useMemo, useState } from "react";
 import { ITrip } from "../../../model/trip/Trip";
 import { ILabelValue } from "../../../model/trip/const/packingList";
 
-export interface ICustomInputOwnProps {
+export interface ICustomDropdownInputOwnProps {
   group: string;
   subgroup: string;
   initialItems?: ILabelValue[];
 }
-type ICustomInputProps = ICustomInputOwnProps;
+type ICustomDropdownInputProps = ICustomDropdownInputOwnProps;
 
-const CustomInput: React.FC<ICustomInputProps> = (props: ICustomInputProps) => {
+const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
+  props: ICustomDropdownInputProps
+) => {
   const form = Form.useFormInstance<ITrip>();
 
   const [dropdownItems, setDropdownItems] = useState<ILabelValue[]>(
@@ -113,4 +115,4 @@ const CustomInput: React.FC<ICustomInputProps> = (props: ICustomInputProps) => {
   );
 };
 
-export default CustomInput;
+export default CustomDropdownInput;

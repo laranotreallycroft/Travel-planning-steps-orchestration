@@ -17,3 +17,4 @@ body, #root, html {
 @import 'home/_homeLayoutViewSider.css';
 @import 'trip/_tripCreateView.css';
 @import 'common/input/_customInput.css';
+@import 'trip/_tripPackingListCreateView.css'

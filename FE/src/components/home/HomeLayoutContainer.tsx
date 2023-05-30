@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { ITrip } from "../../model/trip/Trip";
+import { IUserCredentials } from "../../model/user/User";
+import { IIdPayload } from "../../service/business/common/types";
+import { LoginBusinessStore } from "../../service/business/login/LoginBusinessStore";
+import { TripBusinessStore } from "../../service/business/trip/TripBusinessStore";
 import { UserBusinessStore } from "../../service/business/user/UserBusinessStore";
 import HomeView from "./HomeLayoutView";
-import { TripBusinessStore } from "../../service/business/trip/TripBusinessStore";
-import { IIdPayload } from "../../service/business/common/types";
-import { IUserCredentials } from "../../model/user/User";
-import { LoginBusinessStore } from "../../service/business/login/LoginBusinessStore";
 
 export interface IHomeLayoutContainerOwnProps {}
 export interface IHomeLayoutContainerStateProps {
@@ -30,7 +30,7 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
 ) => {
   useEffect(() => {
     props.userTripsFetch();
-  }, []);
+  }, [props.currentUser]);
 
   const handleTripSelect = (selectedTripId: number) => {
     props.tripFetch({ id: selectedTripId });

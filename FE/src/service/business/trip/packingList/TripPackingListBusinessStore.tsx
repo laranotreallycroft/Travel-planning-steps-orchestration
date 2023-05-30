@@ -7,14 +7,11 @@ import {
   mergeMap,
   withLatestFrom,
 } from "rxjs";
-import {
-  IPackingList,
-  IPackingListCreatePayload,
-  IPackingListUpdatePayload,
-} from "../../../../model/trip/packingList/PackingList";
+import { IPackingList } from "../../../../model/trip/packingList/PackingList";
 import { IIdPayload, IPayloadAction } from "../../common/types";
 import { getCurrentTrip } from "../TripBusinessStore";
 import notificationService from "../../../util/notificationService";
+import { Action } from "redux";
 
 // -
 // -------------------- Selectors
@@ -33,20 +30,18 @@ const actions = {
 };
 
 export const tripPackingListCreate = (
-  payload: IPackingListCreatePayload
-): IPayloadAction<IPackingListCreatePayload> => {
+  payload: IPackingList
+): IPayloadAction<IPackingList> => {
   return { type: actions.TRIP_PACKING_LIST_CREATE, payload: payload };
 };
 
-export const tripPackingListFetch = (
-  payload: IIdPayload
-): IPayloadAction<IIdPayload> => {
-  return { type: actions.TRIP_PACKING_LIST_FETCH, payload: payload };
+export const tripPackingListFetch = (): Action => {
+  return { type: actions.TRIP_PACKING_LIST_FETCH };
 };
 
 export const tripPackingListUpdate = (
-  payload: IPackingListUpdatePayload
-): IPayloadAction<IPackingListUpdatePayload> => {
+  payload: IPackingList
+): IPayloadAction<IPackingList> => {
   return { type: actions.TRIP_PACKING_LIST_UPDATE, payload: payload };
 };
 
@@ -56,11 +51,15 @@ export const tripPackingListStore = (
   return { type: actions.TRIP_PACKING_LIST_STORE, payload: payload };
 };
 
+export const tripPackingListClear = (): Action => {
+  return { type: actions.TRIP_PACKING_LIST_CLEAR };
+};
+
 // -
 // -------------------- Side-effects
 
 const tripPackingListCreateEffect = (
-  action$: Observable<IPayloadAction<IPackingListCreatePayload>>,
+  action$: Observable<IPayloadAction<IPackingList>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -112,7 +111,7 @@ const tripPackingListFetchEffect = (
         .then((response) => {
           if (response.status === 200) {
             return response.data;
-          }
+          } else if (response.status === 204) return undefined;
         })
         .catch((error) => {
           notificationService.error(
@@ -121,7 +120,6 @@ const tripPackingListFetchEffect = (
           );
         });
     }),
-    filter((data) => data !== undefined),
     map((data) => tripPackingListStore(data)),
     catchError((error: any, o: Observable<any>) => {
       console.log(error);
@@ -131,7 +129,7 @@ const tripPackingListFetchEffect = (
 };
 
 const tripPackingListUpdateffect = (
-  action$: Observable<IPayloadAction<IPackingListUpdatePayload>>,
+  action$: Observable<IPayloadAction<IPackingList>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -172,7 +170,8 @@ const currentPackingList = (
   action: IPayloadAction<IPackingList>
 ) => {
   if (action.type === actions.TRIP_PACKING_LIST_STORE) {
-    return { ...action.payload };
+    if (action.payload) return { ...action.payload };
+    else return null;
   } else if (action.type === actions.TRIP_PACKING_LIST_CLEAR) {
     return null;
   }
@@ -186,6 +185,7 @@ export const TripPackingListBusinessStore = {
     tripPackingListFetch,
     tripPackingListUpdate,
     tripPackingListStore,
+    tripPackingListClear,
   },
   effects: {
     tripPackingListCreateEffect,

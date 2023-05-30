@@ -1,13 +1,3 @@
-export interface IPackingListCreatePayload {
-  tripId: number;
-  packingListType: IPackingListType;
-}
-
-export interface IPackingListUpdatePayload {
-  tripId: number;
-  packingList: IPackingList;
-}
-
 export enum IPackingListType {
   DEFAULT = 1,
   WARM = 2,

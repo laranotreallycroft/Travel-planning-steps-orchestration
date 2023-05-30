@@ -8,11 +8,11 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ProtectedRoute from "./ProtectedRoute";
 import FallbackPage from "./pages/FallbackPage";
-import HomeLayout from "./layout/HomeLayout";
+import HomeLayout from "./pages/layout/HomeLayout";
+import PackingListPage from "./pages/PackingListPage";
+import SightseeingPage from "./pages/SightseeingPage";
 import TripSettingsPage from "./pages/TripSettingsPage";
-import TripPackingListPage from "./pages/TripPackingListPage";
-import TripWeatherPage from "./pages/TripWeatherPage";
-import TripSightseeingPage from "./pages/TripSightseeingPage";
+import WeatherPage from "./pages/WeatherPage";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -28,9 +28,9 @@ const appRouter = createBrowserRouter(
             path="/"
             element={<Navigate to="/packinglist" replace={true} />}
           />
-          <Route path="packinglist" element={<TripPackingListPage />} />
-          <Route path="weather" element={<TripWeatherPage />} />
-          <Route path="sightseeing" element={<TripSightseeingPage />} />
+          <Route path="packinglist" element={<PackingListPage />} />
+          <Route path="weather" element={<WeatherPage />} />
+          <Route path="sightseeing" element={<SightseeingPage />} />
           <Route path="settings" element={<TripSettingsPage />} />
         </Route>
       </Route>

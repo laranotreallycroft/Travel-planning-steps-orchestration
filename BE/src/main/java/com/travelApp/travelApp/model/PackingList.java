@@ -12,6 +12,13 @@ import jakarta.persistence.Table;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.travelApp.travelApp.model.payload.Basics;
+import com.travelApp.travelApp.model.payload.Clothes;
+import com.travelApp.travelApp.model.payload.Hygiene;
+import com.travelApp.travelApp.model.payload.Miscellaneous;
+import com.travelApp.travelApp.model.payload.PackingListPayload;
+
 @Entity
 @Table(name = "packing_list")
 public class PackingList {
@@ -21,6 +28,7 @@ public class PackingList {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trip_id", nullable = false)
+	@JsonManagedReference
 	private Trip trip;
 
 	@Column(name = "basics_travel_aids")
@@ -95,6 +103,35 @@ public class PackingList {
 		this.miscellaneousMiscellaneous = miscellaneousMiscellaneous;
 		this.miscellaneousTechnology = miscellaneousTechnology;
 		this.miscellaneousWork = miscellaneousWork;
+	}
+
+	public PackingListPayload modelToPayload() {
+		Basics basics = new Basics(getBasicsTravelAids(), getBasicsFunds(), getBasicsTravelInfo());
+		Clothes clothes = new Clothes(getClothesBasics(), getClothesDressy(), getClothesOuterwear(), getClothesCasual(),
+				getClothesFootwear(), getClothesAccessories());
+		Hygiene hygiene = new Hygiene(getHygieneHygiene());
+		Miscellaneous miscellaneous = new Miscellaneous(getMiscellaneousDocuments(), getMiscellaneousBags(),
+				getMiscellaneousMiscellaneous(), getMiscellaneousTechnology(), getMiscellaneousWork());
+
+		return new PackingListPayload(basics, clothes, hygiene, miscellaneous);
+	}
+
+	public void updateFromPayload(PackingListPayload packingListPayload) {
+		setBasicsFunds(packingListPayload.getBasics().getFunds());
+		setBasicsTravelAids(packingListPayload.getBasics().getTravelAids());
+		setBasicsTravelInfo(packingListPayload.getBasics().getTravelInfo());
+		setClothesBasics(packingListPayload.getClothes().getBasics());
+		setClothesDressy(packingListPayload.getClothes().getDressy());
+		setClothesOuterwear(packingListPayload.getClothes().getOuterwear());
+		setClothesCasual(packingListPayload.getClothes().getCasual());
+		setClothesFootwear(packingListPayload.getClothes().getFootwear());
+		setClothesAccessories(packingListPayload.getClothes().getAccessories());
+		setHygieneHygiene(packingListPayload.getHygiene().getHygiene());
+		setMiscellaneousDocuments(packingListPayload.getMiscellaneous().getDocuments());
+		setMiscellaneousBags(packingListPayload.getMiscellaneous().getBags());
+		setMiscellaneousMiscellaneous(packingListPayload.getMiscellaneous().getMiscellaneous());
+		setMiscellaneousTechnology(packingListPayload.getMiscellaneous().getTechnology());
+		setMiscellaneousWork(packingListPayload.getMiscellaneous().getWork());
 	}
 
 	public Long getId() {

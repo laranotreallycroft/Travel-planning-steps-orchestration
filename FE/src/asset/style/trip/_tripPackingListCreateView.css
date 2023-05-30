@@ -1,18 +1,17 @@
 .secondStep__radioButton {
-    margin: 2vw;
+    margin-right: 2vw;
     width: 10rem;
     height: 10rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0;
+    border: none;
     border-start-start-radius: 6px;
     border-end-start-radius: 6px;
     border-start-end-radius: 6px;
     border-end-end-radius: 6px;
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 0;
+    padding: 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .secondStep__radioButton::before {
@@ -20,8 +19,8 @@
 }
 
 .secondStep__radioButton:hover {
-    background-color: #d6aa6f !important;
-    border-color: #d6aa6f !important;
+    background-color: #6096ba !important;
+    border-color: #6096ba !important;
 }
 
 /** target all children*/
@@ -31,11 +30,6 @@
 
 .secondStep__reminderIcon {
     height: 8rem
-}
-
-.secondStep__reminderTitle {
-    margin: 0;
-    text-align: center;
 }
 
 .secondStep__radioButton:hover>*>*, .ant-radio-button-wrapper-checked.secondStep__radioButton>*>* {

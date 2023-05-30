@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
 import { BASICS } from "../../../../model/trip/const/packingList";
-import CustomInput from "../../../common/input/CustomInput";
+import CustomInput from "../../../common/input/CustomDropdownInput";
 
 export interface IBasicsOwnProps {}
 type IBasicsProps = IBasicsOwnProps;

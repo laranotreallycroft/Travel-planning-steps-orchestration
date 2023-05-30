@@ -497,7 +497,6 @@ export const travelPackingListsDefaultValues: IPackingList = {
       "jewelry",
       "sunglasses",
       "readingGlasses",
-      "glassesCases",
     ],
   },
   hygiene: {
