@@ -126,7 +126,7 @@ const currentWeather = (
   return state;
 };
 
-export const TripWeatherBusinessStore = {
+export const WeatherBusinessStore = {
   selectors: { getCurrentWeather },
   actions: {
     tripWeatherFetch,

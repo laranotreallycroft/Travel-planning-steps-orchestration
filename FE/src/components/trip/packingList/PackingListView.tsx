@@ -7,9 +7,9 @@ import Hygiene from "./packingListGroups/Hygiene";
 import Miscellaneous from "./packingListGroups/Miscellaneous";
 
 export interface IPackingListViewOwnProps {
-  currentTripPackingList: IPackingList;
+  currentPackingList: IPackingList;
   editPackingList: () => void;
-  onTripPackingListUpdate: (packingListPayload: IPackingList) => void;
+  onPackingListUpdate: (packingListPayload: IPackingList) => void;
 }
 type IPackingListViewProps = IPackingListViewOwnProps;
 
@@ -20,14 +20,14 @@ const PackingListView: React.FC<IPackingListViewProps> = (
 
   const handleFinish = (values: IPackingList) => {
     console.log(values);
-    //TODO CHECKLIST?? props.onTripPackingListUpdate(values);
+    //TODO CHECKLIST?? props.onPackingListUpdate(values);
   };
 
   return (
     <Form<IPackingList>
       form={form}
       onFinish={handleFinish}
-      initialValues={props.currentTripPackingList}
+      initialValues={props.currentPackingList}
     >
       <Row>
         <Col span={12} className="margin-bottom-xl">

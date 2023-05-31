@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import appRouter from "./components/appRouter";
 import { RouterProvider } from "react-router-dom";
@@ -22,25 +21,23 @@ const store = getStore();
 const persistor = getPersistor();
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={<div>loading...</div>} persistor={persistor}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "#6096BA",
-              colorText: "#274C77",
-              colorInfo: "#A3CEF1",
-              fontFamily: "Verdana",
-              fontSize: 16,
-            },
-          }}
-        >
-          <GoogleOAuthProvider clientId={googleClientId}>
-            <RouterProvider router={appRouter} />
-          </GoogleOAuthProvider>
-        </ConfigProvider>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={<div>loading...</div>} persistor={persistor}>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#6096BA",
+            colorText: "#274C77",
+            colorInfo: "#A3CEF1",
+            fontFamily: "Verdana",
+            fontSize: 16,
+          },
+        }}
+      >
+        <GoogleOAuthProvider clientId={googleClientId}>
+          <RouterProvider router={appRouter} />
+        </GoogleOAuthProvider>
+      </ConfigProvider>
+    </PersistGate>
+  </Provider>
 );

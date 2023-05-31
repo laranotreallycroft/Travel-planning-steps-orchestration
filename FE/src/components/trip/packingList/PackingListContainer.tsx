@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { IPackingList } from "../../../model/trip/packingList/PackingList";
-import { TripPackingListBusinessStore } from "../../../service/business/trip/packingList/TripPackingListBusinessStore";
-import TripPackingListCreateView from "./PackingListCreateView";
-import TripPackingListUpdateView from "./PackingListUpdateView";
+import { PackingListBusinessStore } from "../../../service/business/trip/packingList/PackingListBusinessStore";
+import PackingListCreateView from "./PackingListCreateView";
+import PackingListUpdateView from "./PackingListUpdateView";
 import PackingListView from "./PackingListView";
 import { ITrip } from "../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 
-export interface ITripPackingListContainerOwnProps {}
-export interface ITripPackingListContainerStateProps {
-  currentTripPackingList: IPackingList;
+export interface IPackingListContainerOwnProps {}
+export interface IPackingListContainerStateProps {
+  currentPackingList: IPackingList;
   currentTrip: ITrip;
 }
-export interface ITripPackingListContainerDispatchProps {
+export interface IPackingListContainerDispatchProps {
   tripPackingListCreate: (packingListCreatePayload: IPackingList) => void;
   tripPackingListFetch: () => void;
   tripPackingListUpdate: (packingListUpdatePayload: IPackingList) => void;
   tripPackingListClear: () => void;
 }
-type ITripPackingListContainerProps = ITripPackingListContainerOwnProps &
-  ITripPackingListContainerStateProps &
-  ITripPackingListContainerDispatchProps;
+type IPackingListContainerProps = IPackingListContainerOwnProps &
+  IPackingListContainerStateProps &
+  IPackingListContainerDispatchProps;
 
-const TripPackingListContainer: React.FC<ITripPackingListContainerProps> = (
-  props: ITripPackingListContainerProps
+const PackingListContainer: React.FC<IPackingListContainerProps> = (
+  props: IPackingListContainerProps
 ) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -42,60 +42,60 @@ const TripPackingListContainer: React.FC<ITripPackingListContainerProps> = (
 
   return (
     <React.Fragment>
-      {props.currentTripPackingList !== null && isEditing && (
-        <TripPackingListUpdateView
-          currentTripPackingList={props.currentTripPackingList}
-          onTripPackingListUpdate={handlePackingListUpdate}
+      {props.currentPackingList !== null && isEditing && (
+        <PackingListUpdateView
+          currentPackingList={props.currentPackingList}
+          onPackingListUpdate={handlePackingListUpdate}
         />
       )}
-      {props.currentTripPackingList !== null && !isEditing && (
+      {props.currentPackingList !== null && !isEditing && (
         <PackingListView
-          currentTripPackingList={props.currentTripPackingList}
+          currentPackingList={props.currentPackingList}
           editPackingList={() => setIsEditing(true)}
-          onTripPackingListUpdate={props.tripPackingListUpdate}
+          onPackingListUpdate={props.tripPackingListUpdate}
         />
       )}
-      {props.currentTripPackingList === null && (
-        <TripPackingListCreateView
-          onTripPackingListCreate={props.tripPackingListCreate}
+      {props.currentPackingList === null && (
+        <PackingListCreateView
+          onPackingListCreate={props.tripPackingListCreate}
         />
       )}
     </React.Fragment>
   );
 };
 
-const mapStateToProps = (state: any): ITripPackingListContainerStateProps => ({
-  currentTripPackingList:
-    TripPackingListBusinessStore.selectors.getCurrentPackingList(state),
+const mapStateToProps = (state: any): IPackingListContainerStateProps => ({
+  currentPackingList:
+    PackingListBusinessStore.selectors.getCurrentPackingList(state),
   currentTrip: TripBusinessStore.selectors.getCurrentTrip(state),
 });
 
 const mapDispatchToProps = (
   dispatch: any
-): ITripPackingListContainerDispatchProps => ({
+): IPackingListContainerDispatchProps => ({
   tripPackingListCreate: (packingListCreatePayload: IPackingList) =>
     dispatch(
-      TripPackingListBusinessStore.actions.tripPackingListCreate(
+      PackingListBusinessStore.actions.tripPackingListCreate(
         packingListCreatePayload
       )
     ),
   tripPackingListFetch: () =>
-    dispatch(TripPackingListBusinessStore.actions.tripPackingListFetch()),
+    dispatch(PackingListBusinessStore.actions.tripPackingListFetch()),
   tripPackingListUpdate: (packingListUpdatePayload: IPackingList) =>
     dispatch(
-      TripPackingListBusinessStore.actions.tripPackingListUpdate(
+      PackingListBusinessStore.actions.tripPackingListUpdate(
         packingListUpdatePayload
       )
     ),
   tripPackingListClear: () =>
-    dispatch(TripPackingListBusinessStore.actions.tripPackingListClear()),
+    dispatch(PackingListBusinessStore.actions.tripPackingListClear()),
 });
 
 export default connect<
-  ITripPackingListContainerStateProps,
-  ITripPackingListContainerDispatchProps,
-  ITripPackingListContainerOwnProps
+  IPackingListContainerStateProps,
+  IPackingListContainerDispatchProps,
+  IPackingListContainerOwnProps
 >(
   mapStateToProps,
   mapDispatchToProps
-)(TripPackingListContainer);
+)(PackingListContainer);

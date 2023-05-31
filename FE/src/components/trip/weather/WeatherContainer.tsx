@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { IWeather, IWeatherPayload } from "../../../model/trip/weather/Weather";
-import { TripWeatherBusinessStore } from "../../../service/business/trip/weather/TripWeatherBusinessStore";
+import { WeatherBusinessStore } from "../../../service/business/trip/weather/WeatherBusinessStore";
 import { useEffect } from "react";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { ITrip } from "../../../model/trip/Trip";
@@ -45,17 +45,16 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
 };
 
 const mapStateToProps = (state: any): IWeatherContainerStateProps => ({
-  currentTripWeather:
-    TripWeatherBusinessStore.selectors.getCurrentWeather(state),
+  currentTripWeather: WeatherBusinessStore.selectors.getCurrentWeather(state),
   currentTrip: TripBusinessStore.selectors.getCurrentTrip(state),
 });
 
 const mapDispatchToProps = (dispatch: any): IWeatherContainerDispatchProps => ({
   tripWeatherFetch: (weatherPayload: IWeatherPayload) =>
-    dispatch(TripWeatherBusinessStore.actions.tripWeatherFetch(weatherPayload)),
+    dispatch(WeatherBusinessStore.actions.tripWeatherFetch(weatherPayload)),
 
   tripWeatherClear: () =>
-    dispatch(TripWeatherBusinessStore.actions.tripWeatherClear()),
+    dispatch(WeatherBusinessStore.actions.tripWeatherClear()),
 });
 
 export default connect<

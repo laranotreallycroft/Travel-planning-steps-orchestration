@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../model/trip/Trip";
 import { IUserCredentials } from "../../model/user/User";
@@ -17,6 +17,7 @@ export interface IHomeLayoutContainerStateProps {
 }
 export interface IHomeLayoutContainerDispatchProps {
   userTripsFetch: () => void;
+  userTripsClear: () => void;
   tripFetch: (payload: IIdPayload) => void;
   tripUpdate: (payload: ITrip) => void;
   logout: () => void;
@@ -30,15 +31,18 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
 ) => {
   useEffect(() => {
     props.userTripsFetch();
+    return () => {
+      props.userTripsClear();
+    };
   }, [props.currentUser]);
 
-  const handleTripSelect = (selectedTripId: number) => {
+  const handleTripSelect = useCallback((selectedTripId: number) => {
     props.tripFetch({ id: selectedTripId });
-  };
+  }, []);
 
-  const handleTripUpdate = (trip: ITrip) => {
+  const handleTripUpdate = useCallback((trip: ITrip) => {
     props.tripUpdate(trip);
-  };
+  }, []);
 
   return (
     <HomeView
@@ -64,6 +68,7 @@ const mapDispatchToProps = (
   dispatch: any
 ): IHomeLayoutContainerDispatchProps => ({
   userTripsFetch: () => dispatch(UserBusinessStore.actions.userTripsFetch()),
+  userTripsClear: () => dispatch(UserBusinessStore.actions.userTripsClear()),
   tripFetch: (payload: IIdPayload) =>
     dispatch(TripBusinessStore.actions.tripFetch(payload)),
   tripUpdate: (payload: ITrip) =>

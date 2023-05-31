@@ -12,8 +12,8 @@ import storage from "redux-persist/es/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { TripBusinessStore } from "./trip/TripBusinessStore";
 import { UserBusinessStore } from "./user/UserBusinessStore";
-import { TripPackingListBusinessStore } from "./trip/packingList/TripPackingListBusinessStore";
-import { TripWeatherBusinessStore } from "./trip/weather/TripWeatherBusinessStore";
+import { PackingListBusinessStore } from "./trip/packingList/PackingListBusinessStore";
+import { WeatherBusinessStore } from "./trip/weather/WeatherBusinessStore";
 
 const storeMiddleware = [];
 const epicMiddleware = createEpicMiddleware();
@@ -32,11 +32,11 @@ const rootEpic = combineEpics(
   ...Object.keys(UserBusinessStore.effects).map(
     (key) => (UserBusinessStore.effects as any)[key]
   ),
-  ...Object.keys(TripPackingListBusinessStore.effects).map(
-    (key) => (TripPackingListBusinessStore.effects as any)[key]
+  ...Object.keys(PackingListBusinessStore.effects).map(
+    (key) => (PackingListBusinessStore.effects as any)[key]
   ),
-  ...Object.keys(TripWeatherBusinessStore.effects).map(
-    (key) => (TripWeatherBusinessStore.effects as any)[key]
+  ...Object.keys(WeatherBusinessStore.effects).map(
+    (key) => (WeatherBusinessStore.effects as any)[key]
   )
 );
 
@@ -45,8 +45,8 @@ const rootReducer = combineReducers({
   ...RegistrationBusinessStore.reducers,
   ...TripBusinessStore.reducers,
   ...UserBusinessStore.reducers,
-  ...TripPackingListBusinessStore.reducers,
-  ...TripWeatherBusinessStore.reducers,
+  ...PackingListBusinessStore.reducers,
+  ...WeatherBusinessStore.reducers,
 });
 
 const persistConfig = {

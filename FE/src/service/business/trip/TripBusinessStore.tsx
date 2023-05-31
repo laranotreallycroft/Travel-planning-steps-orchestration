@@ -54,7 +54,7 @@ const tripCreateEffect = (
         .post("/trips", action.payload)
         .then((response) => {
           if (response.status === 201) {
-            notificationService.success("New trip successfully created!");
+            notificationService.success("New trip successfully created");
             return response.data;
           }
         })

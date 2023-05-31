@@ -14,16 +14,16 @@ import {
 } from "../../../model/trip/const/packingList";
 import _ from "lodash";
 
-export interface ITripPackingListCreateViewOwnProps {
-  onTripPackingListCreate: (packingListCreatePayload: IPackingList) => void;
+export interface IPackingListCreateViewOwnProps {
+  onPackingListCreate: (packingListCreatePayload: IPackingList) => void;
 }
-type ITripPackingListCreateViewProps = ITripPackingListCreateViewOwnProps;
+type IPackingListCreateViewProps = IPackingListCreateViewOwnProps;
 
 export interface IPackingListCreateForm {
   packingListType: IPackingListType;
 }
-const TripPackingListCreateView: React.FC<ITripPackingListCreateViewProps> = (
-  props: ITripPackingListCreateViewProps
+const PackingListCreateView: React.FC<IPackingListCreateViewProps> = (
+  props: IPackingListCreateViewProps
 ) => {
   const [form] = Form.useForm<IPackingListCreateForm>();
 
@@ -34,7 +34,7 @@ const TripPackingListCreateView: React.FC<ITripPackingListCreateViewProps> = (
         : values.packingListType === IPackingListType.COLD
         ? _.merge(travelPackingListsDefaultValues, travelPackingListsColdValues)
         : travelPackingListsDefaultValues;
-    props.onTripPackingListCreate(initialPackingListValues);
+    props.onPackingListCreate(initialPackingListValues);
   };
 
   return (
@@ -94,4 +94,4 @@ const TripPackingListCreateView: React.FC<ITripPackingListCreateViewProps> = (
   );
 };
 
-export default TripPackingListCreateView;
+export default PackingListCreateView;

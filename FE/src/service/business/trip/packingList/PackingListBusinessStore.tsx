@@ -74,7 +74,7 @@ const tripPackingListCreateEffect = (
         .then((response) => {
           if (response.status === 201) {
             notificationService.success(
-              "New trip packing list successfully created!"
+              "New trip packing list successfully created"
             );
             return response.data;
           }
@@ -178,7 +178,7 @@ const currentPackingList = (
   return state;
 };
 
-export const TripPackingListBusinessStore = {
+export const PackingListBusinessStore = {
   selectors: { getCurrentPackingList },
   actions: {
     tripPackingListCreate,

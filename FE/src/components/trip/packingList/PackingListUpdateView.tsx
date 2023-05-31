@@ -6,27 +6,27 @@ import Clothes from "./packingListGroups/Clothes";
 import Hygiene from "./packingListGroups/Hygiene";
 import Miscellaneous from "./packingListGroups/Miscellaneous";
 
-export interface ITripPackingListUpdateViewOwnProps {
-  currentTripPackingList: IPackingList;
-  onTripPackingListUpdate: (packingListUpdatePayload: IPackingList) => void;
+export interface IPackingListUpdateViewOwnProps {
+  currentPackingList: IPackingList;
+  onPackingListUpdate: (packingListUpdatePayload: IPackingList) => void;
 }
-type ITripPackingListUpdateViewProps = ITripPackingListUpdateViewOwnProps;
+type IPackingListUpdateViewProps = IPackingListUpdateViewOwnProps;
 
-const TripPackingListUpdateView: React.FC<ITripPackingListUpdateViewProps> = (
-  props: ITripPackingListUpdateViewProps
+const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
+  props: IPackingListUpdateViewProps
 ) => {
   const [form] = Form.useForm<IPackingList>();
 
   const handleFinish = (values: IPackingList) => {
     console.log(values);
-    props.onTripPackingListUpdate(values);
+    props.onPackingListUpdate(values);
   };
 
   return (
     <Form<IPackingList>
       form={form}
       onFinish={handleFinish}
-      initialValues={props.currentTripPackingList}
+      initialValues={props.currentPackingList}
     >
       <Row>
         <Col span={12} className="margin-bottom-xl">
@@ -47,4 +47,4 @@ const TripPackingListUpdateView: React.FC<ITripPackingListUpdateViewProps> = (
   );
 };
 
-export default TripPackingListUpdateView;
+export default PackingListUpdateView;
