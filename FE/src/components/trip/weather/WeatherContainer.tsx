@@ -9,12 +9,15 @@ import React from "react";
 export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {
-  weather: IWeather;
+  currentWeather: IWeather;
+  predictedWeather: IWeather;
   trip: ITrip;
 }
 export interface IWeatherContainerDispatchProps {
-  weatherFetch: (weatherPayload: IWeatherPayload) => void;
-  weatherClear: () => void;
+  currentWeatherFetch: (weatherPayload: IWeatherPayload) => void;
+  currentWeatherClear: () => void;
+  predictedWeatherFetch: (weatherPayload: IWeatherPayload) => void;
+  predictedWeatherClear: () => void;
 }
 type IWeatherContainerProps = IWeatherContainerOwnProps &
   IWeatherContainerStateProps &
@@ -24,29 +27,33 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
   props: IWeatherContainerProps
 ) => {
   useEffect(() => {
-    props.weatherFetch({
-      isHistory: false,
+    props.currentWeatherFetch({
+      lat: props.trip.location.y,
+      lon: props.trip.location.x,
+    });
+    props.predictedWeatherFetch({
       lat: props.trip.location.y,
       lon: props.trip.location.x,
     });
     return () => {
-      props.weatherClear();
+      props.currentWeatherClear();
+      props.predictedWeatherClear();
     };
   }, [props.trip]);
 
   return (
     <React.Fragment>
       <ReactWeather
-        data={props.weather}
+        data={props.currentWeather}
         lang="en"
-        locationLabel={props.weather?.name}
+        locationLabel={props.currentWeather?.name}
         unitsLabels={{ temperature: "C", windSpeed: "Km/h" }}
         showForecast
       />
       <ReactWeather
-        data={props.weather}
+        data={props.predictedWeather}
         lang="en"
-        locationLabel={props.weather?.name}
+        locationLabel={props.predictedWeather?.name}
         unitsLabels={{ temperature: "C", windSpeed: "Km/h" }}
         showForecast
       />
@@ -55,14 +62,22 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
 };
 
 const mapStateToProps = (state: any): IWeatherContainerStateProps => ({
-  weather: WeatherBusinessStore.selectors.getweather(state),
+  currentWeather: WeatherBusinessStore.selectors.getCurrentWeather(state),
+  predictedWeather: WeatherBusinessStore.selectors.getPredictedWeather(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (dispatch: any): IWeatherContainerDispatchProps => ({
-  weatherFetch: (weatherPayload: IWeatherPayload) =>
-    dispatch(WeatherBusinessStore.actions.weatherFetch(weatherPayload)),
-  weatherClear: () => dispatch(WeatherBusinessStore.actions.weatherClear()),
+  currentWeatherFetch: (weatherPayload: IWeatherPayload) =>
+    dispatch(WeatherBusinessStore.actions.currentWeatherFetch(weatherPayload)),
+  currentWeatherClear: () =>
+    dispatch(WeatherBusinessStore.actions.currentWeatherClear()),
+  predictedWeatherFetch: (weatherPayload: IWeatherPayload) =>
+    dispatch(
+      WeatherBusinessStore.actions.predictedWeatherFetch(weatherPayload)
+    ),
+  predictedWeatherClear: () =>
+    dispatch(WeatherBusinessStore.actions.predictedWeatherClear()),
 });
 
 export default connect<

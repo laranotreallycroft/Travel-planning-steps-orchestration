@@ -1,5 +1,4 @@
 export interface IWeatherPayload {
-  isHistory: boolean;
   lat: number;
   lon: number;
 }

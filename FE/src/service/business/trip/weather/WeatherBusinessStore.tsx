@@ -1,5 +1,13 @@
 import axios from "axios";
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
+import {
+  Observable,
+  filter,
+  forkJoin,
+  from,
+  map,
+  mergeMap,
+  toArray,
+} from "rxjs";
 import {
   IWeather,
   IWeatherPayload,
@@ -11,48 +19,68 @@ import { mapData } from "./utils";
 
 // -
 // -------------------- Selectors
-const getweather = (store: any): IWeather => store.weather;
+const getCurrentWeather = (store: any): IWeather => store.currentWeather;
+const getPredictedWeather = (store: any): IWeather => store.predictedWeather;
 
 // -
 // -------------------- Actions
 const actions = {
-  TRIP_WEATHER_FETCH: "TRIP_WEATHER_FETCH",
-  TRIP_WEATHER_STORE: "TRIP_WEATHER_STORE",
-  TRIP_WEATHER_CLEAR: "TRIP_WEATHER_CLEAR",
+  CURRENT_WEATHER_FETCH: "CURRENT_WEATHER_FETCH",
+  CURRENT_WEATHER_STORE: "CURRENT_WEATHER_STORE",
+  CURRENT_WEATHER_CLEAR: "CURRENT_WEATHER_CLEAR",
+
+  PREDICTED_WEATHER_FETCH: "PREDICTED_WEATHER_FETCH",
+  PREDICTED_WEATHER_STORE: "PREDICTED_WEATHER_STORE",
+  PREDICTED_WEATHER_CLEAR: "PREDICTED_WEATHER_CLEAR",
 };
 
-export const weatherFetch = (
+export const currentWeatherFetch = (
   payload: IWeatherPayload
 ): IPayloadAction<IWeatherPayload> => {
-  return { type: actions.TRIP_WEATHER_FETCH, payload: payload };
+  return { type: actions.CURRENT_WEATHER_FETCH, payload: payload };
 };
 
-export const weatherStore = (payload: IWeather): IPayloadAction<IWeather> => {
-  return { type: actions.TRIP_WEATHER_STORE, payload: payload };
+export const currentWeatherStore = (
+  payload: IWeather
+): IPayloadAction<IWeather> => {
+  return { type: actions.CURRENT_WEATHER_STORE, payload: payload };
 };
 
-export const weatherClear = (): IAction => {
-  return { type: actions.TRIP_WEATHER_CLEAR };
+export const currentWeatherClear = (): IAction => {
+  return { type: actions.CURRENT_WEATHER_CLEAR };
+};
+
+export const predictedWeatherFetch = (
+  payload: IWeatherPayload
+): IPayloadAction<IWeatherPayload> => {
+  return { type: actions.PREDICTED_WEATHER_FETCH, payload: payload };
+};
+
+export const predictedWeatherStore = (
+  payload: IWeather
+): IPayloadAction<IWeather> => {
+  return { type: actions.PREDICTED_WEATHER_STORE, payload: payload };
+};
+
+export const predictedWeatherClear = (): IAction => {
+  return { type: actions.PREDICTED_WEATHER_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const weatherFetchEffect = (
+const currentWeatherFetchEffect = (
   action$: Observable<IPayloadAction<IWeatherPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.TRIP_WEATHER_FETCH;
+      return action.type === actions.CURRENT_WEATHER_FETCH;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
+    mergeMap((action) => {
       const baseUrl = "https://api.openweathermap.org/data/3.0/";
-      const url = action.payload.isHistory
-        ? `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`
-        : `onecall?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`;
-      //if longterm vs shortterm
+      const url = `onecall?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`;
+
       return from(
         axios({
           method: "get",
@@ -94,7 +122,57 @@ const weatherFetchEffect = (
     filter((data) => data !== undefined),
 
     map((data) => {
-      return weatherStore(data!);
+      return currentWeatherStore(data!);
+    })
+  );
+};
+
+const predictedWeatherFetchEffect = (
+  action$: Observable<IPayloadAction<IWeatherPayload>>,
+  state$: Observable<any>
+) => {
+  return action$.pipe(
+    filter((action) => {
+      return action.type === actions.PREDICTED_WEATHER_FETCH;
+    }),
+    mergeMap((action) => {
+      const baseUrl = "https://api.openweathermap.org/data/3.0/"; //TODO DT
+
+      const requests: any[] = [];
+      requests.push(
+        axios({
+          method: "get",
+          url: `reverse?lat=${action.payload.lat}&lon=${action.payload.lon}&limit=5&appid=e767a44febd8dff85969c3726d040132`,
+          baseURL: "http://api.openweathermap.org/geo/1.0/",
+        })
+      );
+
+      for (let i = 0; i < 5; i += 1) {
+        const timestamp = 1643803200 + i * 86400;
+        requests.push(
+          axios({
+            method: "get",
+            url: `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&dt=${timestamp}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`,
+            baseURL: baseUrl,
+          })
+        );
+      }
+      return forkJoin(requests).pipe(
+        mergeMap((responses) => {
+          const data = responses.map((response) =>
+            response.status === 200 ? response.data : undefined
+          );
+          return data;
+        }),
+        toArray()
+      );
+    }),
+
+    map((data) => {
+      const namePayload = data[0];
+      const dataPayload = data.slice(1).map((data) => data.data[0]);
+      const payload = mapData(dataPayload, dataPayload[0], "en");
+      return predictedWeatherStore({ ...payload, name: namePayload.name });
     })
   );
 };
@@ -102,24 +180,44 @@ const weatherFetchEffect = (
 // -
 // -------------------- Reducers
 
-const weather = (state: any = null, action: IPayloadAction<IWeather>) => {
-  if (action.type === actions.TRIP_WEATHER_STORE) {
+const currentWeather = (
+  state: any = null,
+  action: IPayloadAction<IWeather>
+) => {
+  if (action.type === actions.CURRENT_WEATHER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.TRIP_WEATHER_CLEAR) {
+  } else if (action.type === actions.CURRENT_WEATHER_CLEAR) {
+    return null;
+  }
+  return state;
+};
+
+const predictedWeather = (
+  state: any = null,
+  action: IPayloadAction<IWeather>
+) => {
+  if (action.type === actions.PREDICTED_WEATHER_STORE) {
+    return { ...action.payload };
+  } else if (action.type === actions.PREDICTED_WEATHER_CLEAR) {
     return null;
   }
   return state;
 };
 
 export const WeatherBusinessStore = {
-  selectors: { getweather },
+  selectors: { getCurrentWeather, getPredictedWeather },
   actions: {
-    weatherFetch,
-    weatherStore,
-    weatherClear,
+    currentWeatherFetch,
+    currentWeatherStore,
+    currentWeatherClear,
+
+    predictedWeatherFetch,
+    predictedWeatherStore,
+    predictedWeatherClear,
   },
   effects: {
-    weatherFetchEffect,
+    currentWeatherFetchEffect,
+    predictedWeatherFetchEffect,
   },
-  reducers: { weather },
+  reducers: { currentWeather, predictedWeather },
 };

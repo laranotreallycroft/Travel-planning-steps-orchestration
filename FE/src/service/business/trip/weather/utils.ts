@@ -28,7 +28,7 @@ export const mapCurrent = (day: any, lang: string): any => {
 
 export const mapForecast = (forecast: any[], lang: string): any[] => {
   const mappedForecast: any[] = [];
-  for (let i = 0; i < 5; i += 1) {
+  for (let i = 0; i < forecast.length; i += 1) {
     mappedForecast.push({
       date: formatDate(forecast[i].dt, lang),
       description: forecast[i].weather[0]
@@ -36,8 +36,12 @@ export const mapForecast = (forecast: any[], lang: string): any[] => {
         : null,
       icon: forecast[i].weather[0] && getIcon(forecast[i].weather[0].icon),
       temperature: {
-        min: forecast[i].temp.min.toFixed(0),
-        max: forecast[i].temp.max.toFixed(0),
+        min: forecast[i].temp.min
+          ? forecast[i].temp.min.toFixed(0)
+          : forecast[i].temp.toFixed(0),
+        max: forecast[i].temp.max
+          ? forecast[i].temp.max.toFixed(0)
+          : forecast[i].temp.toFixed(0),
       },
       wind: forecast[i].wind_speed.toFixed(0),
       humidity: forecast[i].humidity,
