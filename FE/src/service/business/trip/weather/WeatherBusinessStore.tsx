@@ -96,7 +96,6 @@ const tripWeatherFetchEffect = (
     filter((data) => data !== undefined),
 
     map((data) => {
-      console.log(data);
       return tripWeatherStore(data!);
     })
   );

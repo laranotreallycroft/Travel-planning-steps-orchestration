@@ -6,7 +6,7 @@ import { IIdPayload } from "../../service/business/common/types";
 import { LoginBusinessStore } from "../../service/business/login/LoginBusinessStore";
 import { TripBusinessStore } from "../../service/business/trip/TripBusinessStore";
 import { UserBusinessStore } from "../../service/business/user/UserBusinessStore";
-import HomeView from "./HomeLayoutView";
+import HomeLayoutView from "./HomeLayoutView";
 
 export interface IHomeLayoutContainerOwnProps {}
 export interface IHomeLayoutContainerStateProps {
@@ -45,7 +45,7 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
   }, []);
 
   return (
-    <HomeView
+    <HomeLayoutView
       userTrips={props.userTrips}
       selectedTrip={props.currentTrip}
       currentUser={props.currentUser}
