@@ -40,7 +40,7 @@ const registrationEffect = (
         .post("/registration", action.payload)
         .then((response) => {
           if (response.status === 201) {
-            notificationService.success("Registration Successfull");
+            notificationService.success("Registration Successful");
             return response.data;
           }
         })

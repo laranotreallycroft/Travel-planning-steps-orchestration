@@ -68,7 +68,7 @@ const loginEffect = (
         .post("/login", action.payload)
         .then((response) => {
           if (response.status === 200) {
-            notificationService.success("Login Successfull");
+            notificationService.success("Login Successful");
             return response.data;
           }
         })
@@ -98,7 +98,7 @@ const googleLoginEffect = (
         .post("/login/google", action.payload)
         .then((response) => {
           if (response.status === 200 || response.status === 201) {
-            notificationService.success("Login Successfull");
+            notificationService.success("Login Successful");
             return response.data;
           }
         })

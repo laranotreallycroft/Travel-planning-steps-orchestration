@@ -52,7 +52,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
           className="fullWidth"
           onChange={props.onTripSelect}
           defaultValue={props.selectedTrip.id}
-          options={props.userTrips.map((trip: ITrip) => {
+          options={props.userTrips?.map((trip: ITrip) => {
             return {
               value: trip.id,
               label: trip.name,
