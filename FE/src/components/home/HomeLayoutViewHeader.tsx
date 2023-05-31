@@ -40,7 +40,6 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
   const userProfileItems: MenuProps["items"] = props.isUserLoggedIn
     ? loggedInUserProfileItems
     : loggedOutUserProfileItems;
-
   return (
     <Row align={"middle"} gutter={[16, 16]}>
       <Col span={3} className="homeLayoutViewHeader__logo">
@@ -51,7 +50,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
         <Select
           className="fullWidth"
           onChange={props.onTripSelect}
-          value={props.selectedTrip.id}
+          value={props.selectedTrip?.id}
           options={props.userTrips?.map((trip: ITrip) => {
             return {
               value: trip.id,

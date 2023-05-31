@@ -35,6 +35,8 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
     setIsTripCreateModalOpen(false);
   };
 
+  const userHasTrip = props.userTrips?.length > 0;
+
   return (
     <Layout className="fullHeight">
       <Header className="homeLayoutView__header">
@@ -48,16 +50,18 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
           openTripCreateModal={handleTripCreateModalOpen}
         />
       </Header>
-      <Layout hasSider>
-        <Sider width={300} className="homeLayoutView__sider">
-          <HomeLayoutViewSider />
-        </Sider>
-        <Content className="homeLayoutView__content">
-          <div className="homeLayoutView__contentPanel">
-            <Outlet />
-          </div>
-        </Content>
-      </Layout>
+      {userHasTrip && (
+        <Layout hasSider>
+          <Sider width={300} className="homeLayoutView__sider">
+            <HomeLayoutViewSider />
+          </Sider>
+          <Content className="homeLayoutView__content">
+            <div className="homeLayoutView__contentPanel">
+              <Outlet />
+            </div>
+          </Content>
+        </Layout>
+      )}
 
       <TripCreateContainer
         onTripCreateModalClose={handleTripCreateModalClose}

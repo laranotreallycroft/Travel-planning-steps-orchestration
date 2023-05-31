@@ -20,6 +20,7 @@ export interface IHomeLayoutContainerDispatchProps {
   userTripsClear: () => void;
   tripFetch: (payload: IIdPayload) => void;
   tripUpdate: (payload: ITrip) => void;
+  tripClear: () => void;
   logout: () => void;
 }
 type IHomeLayoutContainerProps = IHomeLayoutContainerOwnProps &
@@ -33,10 +34,12 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
     props.userTripsFetch();
     return () => {
       props.userTripsClear();
+      props.tripClear();
     };
   }, [props.currentUser]);
 
   const handleTripSelect = useCallback((selectedTripId: number) => {
+    console.log(selectedTripId);
     props.tripFetch({ id: selectedTripId });
   }, []);
 
@@ -73,6 +76,7 @@ const mapDispatchToProps = (
     dispatch(TripBusinessStore.actions.tripFetch(payload)),
   tripUpdate: (payload: ITrip) =>
     dispatch(TripBusinessStore.actions.tripUpdate(payload)),
+  tripClear: () => dispatch(TripBusinessStore.actions.tripClear()),
   logout: () => dispatch(LoginBusinessStore.actions.logout()),
 });
 

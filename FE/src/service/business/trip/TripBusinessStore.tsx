@@ -12,7 +12,7 @@ import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
 import notificationService from "../../util/notificationService";
 import { IIdPayload, IPayloadAction } from "../common/types";
 import { getCurrentUser, userTripsFetch } from "../user/UserBusinessStore";
-import trackAction from "../../util/trackAction";
+import trackAction, { IAction } from "../../util/trackAction";
 
 // -
 // -------------------- Selectors
@@ -45,6 +45,10 @@ export const tripUpdate = (payload: ITrip): IPayloadAction<ITrip> => {
 
 export const tripStore = (payload: ITrip): IPayloadAction<ITrip> => {
   return { type: actions.TRIP_STORE, payload: payload };
+};
+
+export const tripClear = (): IAction => {
+  return { type: actions.TRIP_CLEAR };
 };
 
 // -
@@ -163,6 +167,7 @@ export const TripBusinessStore = {
     tripFetch,
     tripUpdate,
     tripStore,
+    tripClear,
   },
   effects: { tripCreateEffect, tripFetchEffect, tripUpdateffect },
   reducers: { currentTrip },
