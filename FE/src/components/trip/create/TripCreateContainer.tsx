@@ -10,6 +10,7 @@ import {
   ITrackableAction,
   createTrackableAction,
 } from "../../../service/util/trackAction";
+import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
 
 export interface IGeosearchPayload {
   x: number;
@@ -28,6 +29,7 @@ export interface ITripCreateContainerOwnProps {
 export interface ITripCreateContainerStateProps {}
 export interface ITripCreateContainerDispatchProps {
   tripCreate: (tripCreatePayload: ITripCreatePayload) => ITrackableAction;
+  userTripsFetch: () => void;
 }
 type ITripCreateContainerProps = ITripCreateContainerOwnProps &
   ITripCreateContainerStateProps &
@@ -63,7 +65,7 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
         .tripCreate(payload)
         .track()
         .subscribe(() => {
-          console.log("first");
+          props.userTripsFetch();
         });
       navigator("/settings");
     },
@@ -91,6 +93,8 @@ const mapDispatchToProps = (
         TripBusinessStore.actions.tripCreate(tripCreatePayload)
       )
     ),
+
+  userTripsFetch: () => dispatch(UserBusinessStore.actions.userTripsFetch()),
 });
 
 export default connect<

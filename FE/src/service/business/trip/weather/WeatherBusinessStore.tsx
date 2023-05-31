@@ -1,11 +1,11 @@
 import axios from "axios";
-import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
+import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
 import {
   IWeather,
   IWeatherPayload,
 } from "../../../../model/trip/weather/Weather";
 import notificationService from "../../../util/notificationService";
-import { IAction } from "../../../util/trackAction";
+import trackAction, { IAction } from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
 import { mapData } from "./utils";
 
@@ -55,22 +55,24 @@ const tripWeatherFetchEffect = (
         ? `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`
         : `onecall?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`;
       //if longterm vs shortterm
-      return axios({
-        method: "get",
-        url: url,
-        baseURL: baseUrl,
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else return undefined;
+      return from(
+        axios({
+          method: "get",
+          url: url,
+          baseURL: baseUrl,
         })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to fetch weather data",
-            error.response.data.message
-          );
-        });
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            } else return undefined;
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to fetch weather data",
+              error.response.data.message
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     mergeMap((data) => {
       return axios({

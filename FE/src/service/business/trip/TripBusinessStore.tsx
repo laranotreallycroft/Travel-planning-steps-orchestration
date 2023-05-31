@@ -92,19 +92,21 @@ const tripFetchEffect = (
       return action.type === actions.TRIP_FETCH;
     }),
     mergeMap((action) => {
-      return axios
-        .get("/trips/" + action.payload.id)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to fetch trip data",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .get("/trips/" + action.payload.id)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to fetch trip data",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => tripStore(data))
@@ -120,19 +122,21 @@ const tripUpdateffect = (
       return action.type === actions.TRIP_UPDATE;
     }),
     mergeMap((action) => {
-      return axios
-        .put("/trips/" + action.payload.id, action.payload)
-        .then((response) => {
-          if (response.status === 204) {
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to update trip",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .put("/trips/" + action.payload.id, action.payload)
+          .then((response) => {
+            if (response.status === 204) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to update trip",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => tripStore(data)),

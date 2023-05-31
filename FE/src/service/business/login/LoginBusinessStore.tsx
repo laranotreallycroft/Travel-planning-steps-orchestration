@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Observable, filter, map, mergeMap } from "rxjs";
+import { Observable, filter, from, map, mergeMap } from "rxjs";
 import { IUserCredentials } from "../../../model/user/User";
 import notificationService from "../../util/notificationService";
-import { IAction } from "../../util/trackAction";
+import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
 
 // -
@@ -64,17 +64,19 @@ const loginEffect = (
       return action.type === actions.LOGIN;
     }),
     mergeMap((action) => {
-      return axios
-        .post("/login", action.payload)
-        .then((response) => {
-          if (response.status === 200) {
-            notificationService.success("Login Successful");
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error("Unable to log in", error.response.data);
-        });
+      return from(
+        axios
+          .post("/login", action.payload)
+          .then((response) => {
+            if (response.status === 200) {
+              notificationService.success("Login Successful");
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error("Unable to log in", error.response.data);
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data))
@@ -90,17 +92,19 @@ const googleLoginEffect = (
       return action.type === actions.GOOGLE_LOGIN;
     }),
     mergeMap((action) => {
-      return axios
-        .post("/login/google", action.payload)
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            notificationService.success("Login Successful");
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error("Unable to log in", error.response.data);
-        });
+      return from(
+        axios
+          .post("/login/google", action.payload)
+          .then((response) => {
+            if (response.status === 200 || response.status === 201) {
+              notificationService.success("Login Successful");
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error("Unable to log in", error.response.data);
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data))

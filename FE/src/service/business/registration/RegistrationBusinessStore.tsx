@@ -1,8 +1,9 @@
 import axios from "axios";
-import { Observable, filter, map, mergeMap } from "rxjs";
+import { Observable, filter, from, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
 import { IPayloadAction } from "../common/types";
 import { storeCurrentUser } from "../login/LoginBusinessStore";
+import trackAction from "../../util/trackAction";
 
 // -
 // -------------------- Selectors
@@ -36,20 +37,22 @@ const registrationEffect = (
       return action.type === actions.REGISTRATION;
     }),
     mergeMap((action) => {
-      return axios
-        .post("/registration", action.payload)
-        .then((response) => {
-          if (response.status === 201) {
-            notificationService.success("Registration Successful");
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to register user",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .post("/registration", action.payload)
+          .then((response) => {
+            if (response.status === 201) {
+              notificationService.success("Registration Successful");
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to register user",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => storeCurrentUser(data))

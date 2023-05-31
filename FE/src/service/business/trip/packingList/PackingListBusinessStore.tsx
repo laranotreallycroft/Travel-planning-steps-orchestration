@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
+import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
 import { IPackingList } from "../../../../model/trip/packingList/PackingList";
 import notificationService from "../../../util/notificationService";
-import { IAction } from "../../../util/trackAction";
+import trackAction, { IAction } from "../../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../../common/types";
 import { getCurrentTrip } from "../TripBusinessStore";
 
@@ -62,22 +62,24 @@ const tripPackingListCreateEffect = (
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
       const currentTrip = getCurrentTrip(state);
-      return axios
-        .post(`/trips/${currentTrip.id}/packinglist`, action.payload)
-        .then((response) => {
-          if (response.status === 201) {
-            notificationService.success(
-              "New trip packing list successfully created"
+      return from(
+        axios
+          .post(`/trips/${currentTrip.id}/packinglist`, action.payload)
+          .then((response) => {
+            if (response.status === 201) {
+              notificationService.success(
+                "New trip packing list successfully created"
+              );
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to create trip packing list",
+              error.response.data
             );
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to create trip packing list",
-            error.response.data
-          );
-        });
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => tripPackingListStore(data))
@@ -95,19 +97,21 @@ const tripPackingListFetchEffect = (
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
       const currentTrip = getCurrentTrip(state);
-      return axios
-        .get(`/trips/${currentTrip.id}/packinglist`)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          } else if (response.status === 204) return undefined;
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to fetch trip data",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .get(`/trips/${currentTrip.id}/packinglist`)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            } else if (response.status === 204) return undefined;
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to fetch trip data",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     map((data) => tripPackingListStore(data))
   );
@@ -124,19 +128,21 @@ const tripPackingListUpdateffect = (
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
       const currentTrip = getCurrentTrip(state);
-      return axios
-        .put(`/trips/${currentTrip.id}/packinglist`, action.payload)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to update trip",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .put(`/trips/${currentTrip.id}/packinglist`, action.payload)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to update trip",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
     map((data) => tripPackingListStore(data))

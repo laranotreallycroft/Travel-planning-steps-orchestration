@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
+import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
 import { ITrip } from "../../../model/trip/Trip";
 import { IUserCredentials } from "../../../model/user/User";
 import notificationService from "../../util/notificationService";
-import { IAction } from "../../util/trackAction";
+import trackAction, { IAction } from "../../util/trackAction";
 import { IPayloadAction } from "../common/types";
 
 // -
@@ -46,19 +46,21 @@ const userTripsFetchEffect = (
     mergeMap(([action, state]) => {
       const currentUser = getCurrentUser(state);
 
-      return axios
-        .get(`/users/${currentUser.id}/trips`)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to fetch user trips",
-            error.response.data
-          );
-        });
+      return from(
+        axios
+          .get(`/users/${currentUser.id}/trips`)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to fetch user trips",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
 
     filter((data) => data !== undefined),
