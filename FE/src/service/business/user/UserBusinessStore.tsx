@@ -1,21 +1,15 @@
-import {
-  Observable,
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  withLatestFrom,
-} from "rxjs";
+import axios from "axios";
+import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
 import { ITrip } from "../../../model/trip/Trip";
 import { IUserCredentials } from "../../../model/user/User";
-import { IPayloadAction } from "../common/types";
-import axios from "axios";
 import notificationService from "../../util/notificationService";
-import { Action } from "redux";
+import { IAction } from "../../util/trackAction";
+import { IPayloadAction } from "../common/types";
 
 // -
 // -------------------- Selectors
-const getCurrentUser = (store: any): IUserCredentials => store.currentUser;
+export const getCurrentUser = (store: any): IUserCredentials =>
+  store.currentUser;
 const getUserTrips = (store: any): ITrip[] => store.userTrips;
 
 // -
@@ -26,7 +20,7 @@ const actions = {
   USER_TRIPS_CLEAR: "USER_TRIPS_CLEAR",
 };
 
-export const userTripsFetch = (): Action => {
+export const userTripsFetch = (): IAction => {
   return { type: actions.USER_TRIPS_FETCH };
 };
 
@@ -34,7 +28,7 @@ export const userTripsStore = (payload: ITrip[]): IPayloadAction<ITrip[]> => {
   return { type: actions.USER_TRIPS_STORE, payload: payload };
 };
 
-const userTripsClear = (): Action => {
+const userTripsClear = (): IAction => {
   return { type: actions.USER_TRIPS_CLEAR };
 };
 
@@ -42,7 +36,7 @@ const userTripsClear = (): Action => {
 // -------------------- Side-effects
 
 const userTripsFetchEffect = (
-  action$: Observable<Action>,
+  action$: Observable<IAction>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -68,11 +62,7 @@ const userTripsFetchEffect = (
     }),
 
     filter((data) => data !== undefined),
-    map((data) => userTripsStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => userTripsStore(data))
   );
 };
 

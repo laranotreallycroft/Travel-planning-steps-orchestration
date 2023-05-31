@@ -47,7 +47,7 @@ public class TripController {
 			Trip trip = new Trip(tripCreatePayload.getName(), tripCreatePayload.getDateFrom(),
 					tripCreatePayload.getDateTo(), tripCreatePayload.getLocation().toPoint(), user);
 			tripRepository.save(trip);
-			return ResponseEntity.status(HttpStatus.CREATED).body(trip.getId());
+			return ResponseEntity.status(HttpStatus.CREATED).body(trip);
 
 		}
 		return ResponseEntity.badRequest().body("Something went wrong");

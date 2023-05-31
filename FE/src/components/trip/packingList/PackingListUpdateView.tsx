@@ -18,7 +18,6 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
   const [form] = Form.useForm<IPackingList>();
 
   const handleFinish = (values: IPackingList) => {
-    console.log(values);
     props.onPackingListUpdate(values);
   };
 

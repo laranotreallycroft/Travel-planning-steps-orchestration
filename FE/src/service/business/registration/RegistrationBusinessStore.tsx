@@ -1,8 +1,8 @@
 import axios from "axios";
-import { IPayloadAction } from "../common/types";
-import { Observable, catchError, filter, map, mergeMap } from "rxjs";
-import { storeCurrentUser } from "../login/LoginBusinessStore";
+import { Observable, filter, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
+import { IPayloadAction } from "../common/types";
+import { storeCurrentUser } from "../login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -52,11 +52,7 @@ const registrationEffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => storeCurrentUser(data))
   );
 };
 

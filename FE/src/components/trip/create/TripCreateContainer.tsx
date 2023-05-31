@@ -4,10 +4,12 @@ import { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ITripCreatePayload } from "../../../model/trip/Trip";
-import { IUserCredentials } from "../../../model/user/User";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
 import TripCreateView, { ITripCreateForm } from "./TripCreateView";
+import {
+  ITrackableAction,
+  createTrackableAction,
+} from "../../../service/util/trackAction";
 
 export interface IGeosearchPayload {
   x: number;
@@ -23,11 +25,9 @@ export interface ITripCreateContainerOwnProps {
   createTripModalOpen: boolean;
 }
 
-export interface ITripCreateContainerStateProps {
-  currentUser: IUserCredentials;
-}
+export interface ITripCreateContainerStateProps {}
 export interface ITripCreateContainerDispatchProps {
-  tripCreate: (tripCreatePayload: ITripCreatePayload) => void;
+  tripCreate: (tripCreatePayload: ITripCreatePayload) => ITrackableAction;
 }
 type ITripCreateContainerProps = ITripCreateContainerOwnProps &
   ITripCreateContainerStateProps &
@@ -54,13 +54,17 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   const handleTripCreate = useCallback(
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
-        userId: props.currentUser.id,
         name: values.location.label,
         dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD") ?? "",
         dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD") ?? "",
         location: { x: values.location.x, y: values.location.y },
       };
-      props.tripCreate(payload);
+      props
+        .tripCreate(payload)
+        .track()
+        .subscribe(() => {
+          console.log("first");
+        });
       navigator("/settings");
     },
     [provider.search]
@@ -76,15 +80,17 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   );
 };
 
-const mapStateToProps = (state: any): ITripCreateContainerStateProps => ({
-  currentUser: UserBusinessStore.selectors.getCurrentUser(state),
-});
+const mapStateToProps = (state: any): ITripCreateContainerStateProps => ({});
 
 const mapDispatchToProps = (
   dispatch: any
 ): ITripCreateContainerDispatchProps => ({
   tripCreate: (tripCreatePayload: ITripCreatePayload) =>
-    dispatch(TripBusinessStore.actions.tripCreate(tripCreatePayload)),
+    dispatch(
+      createTrackableAction(
+        TripBusinessStore.actions.tripCreate(tripCreatePayload)
+      )
+    ),
 });
 
 export default connect<

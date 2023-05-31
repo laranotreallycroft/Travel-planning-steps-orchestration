@@ -1,17 +1,10 @@
 import axios from "axios";
-import {
-  Observable,
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  withLatestFrom,
-} from "rxjs";
+import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
 import { IPackingList } from "../../../../model/trip/packingList/PackingList";
+import notificationService from "../../../util/notificationService";
+import { IAction } from "../../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../../common/types";
 import { getCurrentTrip } from "../TripBusinessStore";
-import notificationService from "../../../util/notificationService";
-import { Action } from "redux";
 
 // -
 // -------------------- Selectors
@@ -35,7 +28,7 @@ export const tripPackingListCreate = (
   return { type: actions.TRIP_PACKING_LIST_CREATE, payload: payload };
 };
 
-export const tripPackingListFetch = (): Action => {
+export const tripPackingListFetch = (): IAction => {
   return { type: actions.TRIP_PACKING_LIST_FETCH };
 };
 
@@ -51,7 +44,7 @@ export const tripPackingListStore = (
   return { type: actions.TRIP_PACKING_LIST_STORE, payload: payload };
 };
 
-export const tripPackingListClear = (): Action => {
+export const tripPackingListClear = (): IAction => {
   return { type: actions.TRIP_PACKING_LIST_CLEAR };
 };
 
@@ -87,11 +80,7 @@ const tripPackingListCreateEffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => tripPackingListStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => tripPackingListStore(data))
   );
 };
 
@@ -120,11 +109,7 @@ const tripPackingListFetchEffect = (
           );
         });
     }),
-    map((data) => tripPackingListStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => tripPackingListStore(data))
   );
 };
 
@@ -154,11 +139,7 @@ const tripPackingListUpdateffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => tripPackingListStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => tripPackingListStore(data))
   );
 };
 

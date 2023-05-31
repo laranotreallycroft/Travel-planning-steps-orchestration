@@ -11,7 +11,6 @@ export interface ITrip {
 }
 
 export interface ITripCreatePayload {
-  userId: number;
   name: string;
   dateFrom: string;
   dateTo: string;

@@ -1,18 +1,11 @@
 import axios from "axios";
-import { Action } from "redux";
-import {
-  Observable,
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  withLatestFrom,
-} from "rxjs";
+import { Observable, filter, map, mergeMap, withLatestFrom } from "rxjs";
 import {
   IWeather,
   IWeatherPayload,
 } from "../../../../model/trip/weather/Weather";
 import notificationService from "../../../util/notificationService";
+import { IAction } from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
 import { mapData } from "./utils";
 
@@ -40,7 +33,7 @@ export const tripWeatherStore = (
   return { type: actions.TRIP_WEATHER_STORE, payload: payload };
 };
 
-export const tripWeatherClear = (): Action => {
+export const tripWeatherClear = (): IAction => {
   return { type: actions.TRIP_WEATHER_CLEAR };
 };
 
@@ -103,10 +96,6 @@ const tripWeatherFetchEffect = (
     map((data) => {
       console.log(data);
       return tripWeatherStore(data!);
-    }),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
     })
   );
 };

@@ -1,6 +1,6 @@
-import { Action } from "redux";
+import { IAction } from "../../util/trackAction";
 
-export interface IPayloadAction<T> extends Action<string> {
+export interface IPayloadAction<T> extends IAction {
   payload: T;
 }
 

@@ -1,9 +1,18 @@
 import axios from "axios";
-import { Observable, catchError, filter, map, mergeMap } from "rxjs";
+import {
+  Observable,
+  filter,
+  from,
+  map,
+  mergeMap,
+  tap,
+  withLatestFrom,
+} from "rxjs";
 import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
 import notificationService from "../../util/notificationService";
 import { IIdPayload, IPayloadAction } from "../common/types";
-import { userTripsFetch } from "../user/UserBusinessStore";
+import { getCurrentUser, userTripsFetch } from "../user/UserBusinessStore";
+import trackAction from "../../util/trackAction";
 
 // -
 // -------------------- Selectors
@@ -49,27 +58,28 @@ const tripCreateEffect = (
     filter((action) => {
       return action.type === actions.TRIP_CREATE;
     }),
-    mergeMap((action) => {
-      return axios
-        .post("/trips", action.payload)
-        .then((response) => {
-          if (response.status === 201) {
-            notificationService.success("New trip successfully created");
-            return response.data;
-          }
-        })
-        .catch((error) => {
-          notificationService.error(
-            "Unable to create trip",
-            error.response.data
-          );
-        });
+    withLatestFrom(state$),
+    mergeMap(([action, state]) => {
+      const currentUser = getCurrentUser(state);
+      return from(
+        axios
+          .post("/trips", { ...action.payload, userId: currentUser.id })
+          .then((response) => {
+            if (response.status === 201) {
+              notificationService.success("New trip successfully created");
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to create trip",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
     }),
-    map((data) => userTripsFetch()),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    filter((data) => data !== undefined),
+    map((data) => tripStore(data))
   );
 };
 
@@ -97,11 +107,7 @@ const tripFetchEffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => tripStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => tripStore(data))
   );
 };
 
@@ -117,7 +123,7 @@ const tripUpdateffect = (
       return axios
         .put("/trips/" + action.payload.id, action.payload)
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 204) {
             return response.data;
           }
         })
@@ -130,10 +136,7 @@ const tripUpdateffect = (
     }),
     filter((data) => data !== undefined),
     map((data) => tripStore(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    tap(() => userTripsFetch())
   );
 };
 

@@ -1,9 +1,9 @@
 import axios from "axios";
+import { Observable, filter, map, mergeMap } from "rxjs";
 import { IUserCredentials } from "../../../model/user/User";
-import { IIdPayload, IPayloadAction } from "../common/types";
-import { Action } from "redux";
-import { Observable, catchError, filter, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
+import { IAction } from "../../util/trackAction";
+import { IIdPayload, IPayloadAction } from "../common/types";
 
 // -
 // -------------------- Selectors
@@ -39,7 +39,7 @@ const googleLogin = (
   return { type: actions.GOOGLE_LOGIN, payload: payload };
 };
 
-const logout = (): Action => {
+const logout = (): IAction => {
   return { type: actions.LOGOUT };
 };
 
@@ -49,7 +49,7 @@ export const storeCurrentUser = (
   return { type: actions.CURRENT_USER_STORE, payload: payload };
 };
 
-export const clearCurrentUser = (): Action => {
+export const clearCurrentUser = (): IAction => {
   return { type: actions.CURRENT_USER_CLEAR };
 };
 // -
@@ -77,11 +77,7 @@ const loginEffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => storeCurrentUser(data))
   );
 };
 
@@ -107,11 +103,7 @@ const googleLoginEffect = (
         });
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data)),
-    catchError((error: any, o: Observable<any>) => {
-      console.log(error);
-      return o;
-    })
+    map((data) => storeCurrentUser(data))
   );
 };
 
