@@ -10,13 +10,13 @@ import {
 } from "rxjs";
 import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
 import notificationService from "../../util/notificationService";
-import { IIdPayload, IPayloadAction } from "../common/types";
-import { getCurrentUser, userTripsFetch } from "../user/UserBusinessStore";
 import trackAction, { IAction } from "../../util/trackAction";
+import { IIdPayload, IPayloadAction } from "../common/types";
+import { getUser, userTripsFetch } from "../user/UserBusinessStore";
 
 // -
 // -------------------- Selectors
-export const getCurrentTrip = (store: any): ITrip => store.currentTrip;
+export const getTrip = (store: any): ITrip => store.trip;
 
 // -
 // -------------------- Actions
@@ -64,7 +64,7 @@ const tripCreateEffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentUser = getCurrentUser(state);
+      const currentUser = getUser(state);
       return from(
         axios
           .post("/trips", { ...action.payload, userId: currentUser.id })
@@ -151,7 +151,7 @@ const tripUpdateffect = (
 // -
 // -------------------- Reducers
 
-const currentTrip = (state: any = null, action: IPayloadAction<ITrip>) => {
+const trip = (state: any = null, action: IPayloadAction<ITrip>) => {
   if (action.type === actions.TRIP_STORE) {
     return { ...action.payload };
   } else if (action.type === actions.TRIP_CLEAR) {
@@ -161,7 +161,7 @@ const currentTrip = (state: any = null, action: IPayloadAction<ITrip>) => {
 };
 
 export const TripBusinessStore = {
-  selectors: { getCurrentTrip },
+  selectors: { getTrip },
   actions: {
     tripCreate,
     tripFetch,
@@ -170,5 +170,5 @@ export const TripBusinessStore = {
     tripClear,
   },
   effects: { tripCreateEffect, tripFetchEffect, tripUpdateffect },
-  reducers: { currentTrip },
+  reducers: { trip },
 };

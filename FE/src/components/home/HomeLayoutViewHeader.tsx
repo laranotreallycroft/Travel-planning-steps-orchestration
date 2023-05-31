@@ -11,7 +11,7 @@ export interface IHomeLayoutViewHeaderOwnProps {
   userTrips: ITrip[];
   selectedTrip: ITrip;
   isUserLoggedIn: boolean;
-  currentUser: IUserCredentials;
+  user: IUserCredentials;
   onTripSelect: (selectedTrip: number) => void;
   logout: () => void;
   openTripCreateModal: () => void;

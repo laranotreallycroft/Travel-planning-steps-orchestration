@@ -8,8 +8,7 @@ import { IPayloadAction } from "../common/types";
 
 // -
 // -------------------- Selectors
-export const getCurrentUser = (store: any): IUserCredentials =>
-  store.currentUser;
+export const getUser = (store: any): IUserCredentials => store.user;
 const getUserTrips = (store: any): ITrip[] => store.userTrips;
 
 // -
@@ -44,7 +43,7 @@ const userTripsFetchEffect = (
 
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentUser = getCurrentUser(state);
+      const currentUser = getUser(state);
 
       return from(
         axios
@@ -81,7 +80,7 @@ const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
 };
 
 export const UserBusinessStore = {
-  selectors: { getCurrentUser, getUserTrips },
+  selectors: { getUser, getUserTrips },
   actions: { userTripsFetch, userTripsStore, userTripsClear },
   effects: { userTripsFetchEffect },
   reducers: { userTrips },

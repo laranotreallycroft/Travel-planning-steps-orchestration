@@ -7,7 +7,7 @@ import { IIdPayload, IPayloadAction } from "../common/types";
 
 // -
 // -------------------- Selectors
-const isUserLoggedIn = (store: any): boolean => store.currentUser != null;
+const isUserLoggedIn = (store: any): boolean => store.user != null;
 
 // -
 // -------------------- Actions
@@ -114,10 +114,7 @@ const googleLoginEffect = (
 // -
 // -------------------- Reducers
 
-const currentUser = (
-  state: any = null,
-  action: IPayloadAction<IUserCredentials>
-) => {
+const user = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
   if (action.type === actions.CURRENT_USER_STORE) {
     return { ...action.payload };
   } else if (
@@ -138,5 +135,5 @@ export const LoginBusinessStore = {
     storeCurrentUser,
   },
   effects: { loginEffect, googleLoginEffect },
-  reducers: { currentUser },
+  reducers: { user },
 };

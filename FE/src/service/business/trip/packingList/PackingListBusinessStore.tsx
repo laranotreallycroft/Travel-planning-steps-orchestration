@@ -4,12 +4,11 @@ import { IPackingList } from "../../../../model/trip/packingList/PackingList";
 import notificationService from "../../../util/notificationService";
 import trackAction, { IAction } from "../../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../../common/types";
-import { getCurrentTrip } from "../TripBusinessStore";
+import { getTrip } from "../TripBusinessStore";
 
 // -
 // -------------------- Selectors
-const getCurrentPackingList = (store: any): IPackingList =>
-  store.currentPackingList;
+const getCurrentPackingList = (store: any): IPackingList => store.packingList;
 
 // -
 // -------------------- Actions
@@ -61,10 +60,10 @@ const tripPackingListCreateEffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentTrip = getCurrentTrip(state);
+      const trip = getTrip(state);
       return from(
         axios
-          .post(`/trips/${currentTrip.id}/packinglist`, action.payload)
+          .post(`/trips/${trip.id}/packinglist`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success(
@@ -96,10 +95,10 @@ const tripPackingListFetchEffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentTrip = getCurrentTrip(state);
+      const trip = getTrip(state);
       return from(
         axios
-          .get(`/trips/${currentTrip.id}/packinglist`)
+          .get(`/trips/${trip.id}/packinglist`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -127,10 +126,10 @@ const tripPackingListUpdateffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentTrip = getCurrentTrip(state);
+      const trip = getTrip(state);
       return from(
         axios
-          .put(`/trips/${currentTrip.id}/packinglist`, action.payload)
+          .put(`/trips/${trip.id}/packinglist`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -152,7 +151,7 @@ const tripPackingListUpdateffect = (
 // -
 // -------------------- Reducers
 
-const currentPackingList = (
+const packingList = (
   state: any = null,
   action: IPayloadAction<IPackingList>
 ) => {
@@ -179,5 +178,5 @@ export const PackingListBusinessStore = {
     tripPackingListFetchEffect,
     tripPackingListUpdateffect,
   },
-  reducers: { currentPackingList },
+  reducers: { packingList },
 };

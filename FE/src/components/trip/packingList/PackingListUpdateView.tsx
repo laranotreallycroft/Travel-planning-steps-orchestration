@@ -7,7 +7,7 @@ import Hygiene from "./packingListGroups/Hygiene";
 import Miscellaneous from "./packingListGroups/Miscellaneous";
 
 export interface IPackingListUpdateViewOwnProps {
-  currentPackingList: IPackingList;
+  packingList: IPackingList;
   onPackingListUpdate: (packingListUpdatePayload: IPackingList) => void;
 }
 type IPackingListUpdateViewProps = IPackingListUpdateViewOwnProps;
@@ -25,7 +25,7 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
     <Form<IPackingList>
       form={form}
       onFinish={handleFinish}
-      initialValues={props.currentPackingList}
+      initialValues={props.packingList}
     >
       <Row>
         <Col span={12} className="margin-bottom-xl">

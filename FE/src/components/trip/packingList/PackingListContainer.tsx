@@ -10,8 +10,8 @@ import { TripBusinessStore } from "../../../service/business/trip/TripBusinessSt
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {
-  currentPackingList: IPackingList;
-  currentTrip: ITrip;
+  packingList: IPackingList;
+  trip: ITrip;
 }
 export interface IPackingListContainerDispatchProps {
   tripPackingListCreate: (packingListCreatePayload: IPackingList) => void;
@@ -33,7 +33,7 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
     return () => {
       props.tripPackingListClear();
     };
-  }, [props.currentTrip]);
+  }, [props.trip]);
 
   const handlePackingListUpdate = (values: IPackingList) => {
     setIsEditing(false);
@@ -42,20 +42,20 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
 
   return (
     <React.Fragment>
-      {props.currentPackingList !== null && isEditing && (
+      {props.packingList !== null && isEditing && (
         <PackingListUpdateView
-          currentPackingList={props.currentPackingList}
+          packingList={props.packingList}
           onPackingListUpdate={handlePackingListUpdate}
         />
       )}
-      {props.currentPackingList !== null && !isEditing && (
+      {props.packingList !== null && !isEditing && (
         <PackingListView
-          currentPackingList={props.currentPackingList}
+          packingList={props.packingList}
           editPackingList={() => setIsEditing(true)}
           onPackingListUpdate={props.tripPackingListUpdate}
         />
       )}
-      {props.currentPackingList === null && (
+      {props.packingList === null && (
         <PackingListCreateView
           onPackingListCreate={props.tripPackingListCreate}
         />
@@ -65,9 +65,8 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
 };
 
 const mapStateToProps = (state: any): IPackingListContainerStateProps => ({
-  currentPackingList:
-    PackingListBusinessStore.selectors.getCurrentPackingList(state),
-  currentTrip: TripBusinessStore.selectors.getCurrentTrip(state),
+  packingList: PackingListBusinessStore.selectors.getCurrentPackingList(state),
+  trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (

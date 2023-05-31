@@ -15,7 +15,7 @@ export interface IHomeLayoutViewOwnProps {
   onTripSelect: (selectedTrip: number) => void;
   onTripUpdate: (trip: ITrip) => void;
   isUserLoggedIn: boolean;
-  currentUser: IUserCredentials;
+  user: IUserCredentials;
   onLogout: () => void;
 }
 
@@ -35,8 +35,6 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
     setIsTripCreateModalOpen(false);
   };
 
-  const userHasTrip = props.userTrips?.length > 0;
-
   return (
     <Layout className="fullHeight">
       <Header className="homeLayoutView__header">
@@ -44,13 +42,13 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
           onTripSelect={props.onTripSelect}
           selectedTrip={props.selectedTrip}
           userTrips={props.userTrips}
-          currentUser={props.currentUser}
+          user={props.user}
           isUserLoggedIn={props.isUserLoggedIn}
           logout={props.onLogout}
           openTripCreateModal={handleTripCreateModalOpen}
         />
       </Header>
-      {userHasTrip && (
+      {props.selectedTrip && (
         <Layout hasSider>
           <Sider width={300} className="homeLayoutView__sider">
             <HomeLayoutViewSider />

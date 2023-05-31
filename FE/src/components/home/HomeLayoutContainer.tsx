@@ -11,9 +11,9 @@ import HomeLayoutView from "./HomeLayoutView";
 export interface IHomeLayoutContainerOwnProps {}
 export interface IHomeLayoutContainerStateProps {
   userTrips: ITrip[];
-  currentTrip: ITrip;
+  trip: ITrip;
   isUserLoggedIn: boolean;
-  currentUser: IUserCredentials;
+  user: IUserCredentials;
 }
 export interface IHomeLayoutContainerDispatchProps {
   userTripsFetch: () => void;
@@ -36,10 +36,9 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
       props.userTripsClear();
       props.tripClear();
     };
-  }, [props.currentUser]);
+  }, [props.user]);
 
   const handleTripSelect = useCallback((selectedTripId: number) => {
-    console.log(selectedTripId);
     props.tripFetch({ id: selectedTripId });
   }, []);
 
@@ -50,8 +49,8 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
   return (
     <HomeLayoutView
       userTrips={props.userTrips}
-      selectedTrip={props.currentTrip}
-      currentUser={props.currentUser}
+      selectedTrip={props.trip}
+      user={props.user}
       isUserLoggedIn={props.isUserLoggedIn}
       onTripSelect={handleTripSelect}
       onTripUpdate={handleTripUpdate}
@@ -62,8 +61,8 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
 
 const mapStateToProps = (state: any): IHomeLayoutContainerStateProps => ({
   userTrips: UserBusinessStore.selectors.getUserTrips(state),
-  currentTrip: TripBusinessStore.selectors.getCurrentTrip(state),
-  currentUser: UserBusinessStore.selectors.getCurrentUser(state),
+  trip: TripBusinessStore.selectors.getTrip(state),
+  user: UserBusinessStore.selectors.getUser(state),
   isUserLoggedIn: LoginBusinessStore.selectors.isUserLoggedIn(state),
 });
 

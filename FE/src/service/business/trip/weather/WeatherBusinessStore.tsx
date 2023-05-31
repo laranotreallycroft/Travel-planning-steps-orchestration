@@ -11,7 +11,7 @@ import { mapData } from "./utils";
 
 // -
 // -------------------- Selectors
-const getCurrentWeather = (store: any): IWeather => store.currentWeather;
+const getweather = (store: any): IWeather => store.weather;
 
 // -
 // -------------------- Actions
@@ -21,26 +21,24 @@ const actions = {
   TRIP_WEATHER_CLEAR: "TRIP_WEATHER_CLEAR",
 };
 
-export const tripWeatherFetch = (
+export const weatherFetch = (
   payload: IWeatherPayload
 ): IPayloadAction<IWeatherPayload> => {
   return { type: actions.TRIP_WEATHER_FETCH, payload: payload };
 };
 
-export const tripWeatherStore = (
-  payload: IWeather
-): IPayloadAction<IWeather> => {
+export const weatherStore = (payload: IWeather): IPayloadAction<IWeather> => {
   return { type: actions.TRIP_WEATHER_STORE, payload: payload };
 };
 
-export const tripWeatherClear = (): IAction => {
+export const weatherClear = (): IAction => {
   return { type: actions.TRIP_WEATHER_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const tripWeatherFetchEffect = (
+const weatherFetchEffect = (
   action$: Observable<IPayloadAction<IWeatherPayload>>,
   state$: Observable<any>
 ) => {
@@ -96,7 +94,7 @@ const tripWeatherFetchEffect = (
     filter((data) => data !== undefined),
 
     map((data) => {
-      return tripWeatherStore(data!);
+      return weatherStore(data!);
     })
   );
 };
@@ -104,10 +102,7 @@ const tripWeatherFetchEffect = (
 // -
 // -------------------- Reducers
 
-const currentWeather = (
-  state: any = null,
-  action: IPayloadAction<IWeather>
-) => {
+const weather = (state: any = null, action: IPayloadAction<IWeather>) => {
   if (action.type === actions.TRIP_WEATHER_STORE) {
     return { ...action.payload };
   } else if (action.type === actions.TRIP_WEATHER_CLEAR) {
@@ -117,14 +112,14 @@ const currentWeather = (
 };
 
 export const WeatherBusinessStore = {
-  selectors: { getCurrentWeather },
+  selectors: { getweather },
   actions: {
-    tripWeatherFetch,
-    tripWeatherStore,
-    tripWeatherClear,
+    weatherFetch,
+    weatherStore,
+    weatherClear,
   },
   effects: {
-    tripWeatherFetchEffect,
+    weatherFetchEffect,
   },
-  reducers: { currentWeather },
+  reducers: { weather },
 };
