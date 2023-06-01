@@ -7,7 +7,7 @@ import { ILabelValue } from "../../../model/trip/const/packingList";
 export interface ICustomDropdownInputOwnProps {
   group: string;
   subgroup: string;
-  initialItems?: ILabelValue[];
+  initialItems: string[];
 }
 type ICustomDropdownInputProps = ICustomDropdownInputOwnProps;
 
@@ -17,7 +17,11 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
   const form = Form.useFormInstance<ITrip>();
 
   const [dropdownItems, setDropdownItems] = useState<ILabelValue[]>(
-    props.initialItems ?? []
+    props.initialItems
+      ? props.initialItems.map((item) => {
+          return { label: item, value: item };
+        })
+      : []
   );
   const [searchValue, setSearchValue] = useState("");
 
@@ -66,7 +70,7 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
 
   const notFoundContentRender = useMemo(
     () => (
-      <div className="customInput__notFoundContentRender">
+      <div className="customDropdownInput__notFoundContentRender">
         No matches found
         <Button onClick={() => handleAdd(searchValue)} icon={<PlusOutlined />}>
           Create new
@@ -91,7 +95,7 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
             icon={<DeleteOutlined />}
             onClick={(e) => handleDelete(e, item)}
             size="small"
-            className="customInput__deleteButton"
+            className="customDropdownInput__deleteButton"
           />
         </div>
       </Select.Option>
@@ -104,7 +108,7 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
         mode="multiple"
         allowClear
         placeholder="Please select"
-        className="customInput"
+        className="customDropdownInput"
         searchValue={searchValue}
         onSearch={setSearchValue}
         notFoundContent={notFoundContentRender}

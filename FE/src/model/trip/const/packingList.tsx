@@ -4,575 +4,142 @@ export interface ILabelValue {
   label: string;
   value: string;
 }
-export const BASICS = {
-  travelAids: [
-    {
-      label: "Pleasure Reading",
-      value: "pleasureReading",
-    },
-    {
-      label: "Chewing Gum",
-      value: "chewingGum",
-    },
-    {
-      label: "Snacks",
-      value: "snacks",
-    },
-    {
-      label: "Water Bottle",
-      value: "waterBottle",
-    },
-    {
-      label: "Earplugs",
-      value: "earplugs",
-    },
-    {
-      label: "Sleeping Mask",
-      value: "sleepingMask",
-    },
-    {
-      label: "Travel Pillow",
-      value: "travelPillow",
-    },
-    {
-      label: "Motion Sickness Remedy",
-      value: "motionSicknessRemedy",
-    },
-    {
-      label: "Sleeping Pills",
-      value: "sleepingPills",
-    },
-    {
-      label: "Anxiety Medication",
-      value: "anxietyMedication",
-    },
-  ],
-  funds: [
-    {
-      label: "Wallet",
-      value: "wallet",
-    },
-    {
-      label: "Cash",
-      value: "cash",
-    },
-    {
-      label: "Credit Cards",
-      value: "creditCards",
-    },
-  ],
-  travelInfo: [
-    {
-      label: "Passport",
-      value: "passport",
-    },
-    {
-      label: "Visa",
-      value: "visa",
-    },
-    {
-      label: "Driver's Licence",
-      value: "driversLicence",
-    },
-    {
-      label: "Maps",
-      value: "maps",
-    },
-    {
-      label: "Travel Tickets",
-      value: "travelTickets",
-    },
-    {
-      label: "Travel Guides",
-      value: "travelGuides",
-    },
-  ],
-};
-
-export const CLOTHES = {
-  basics: [
-    {
-      label: "Underwear",
-      value: "underwear",
-    },
-    {
-      label: "Socks",
-      value: "socks",
-    },
-    {
-      label: "Undershirts",
-      value: "undershirts",
-    },
-    {
-      label: "Bras",
-      value: "bras",
-    },
-    {
-      label: "Pantyhose",
-      value: "pantyhose",
-    },
-    {
-      label: "Sleepwear",
-      value: "sleepwear",
-    },
-    {
-      label: "Robe",
-      value: "robe",
-    },
-  ],
-
-  dressy: [
-    {
-      label: "Dress Shirts",
-      value: "dressShirts",
-    },
-    {
-      label: "Blazers",
-      value: "blazers",
-    },
-    {
-      label: "Slacks",
-      value: "slacks",
-    },
-    {
-      label: "Skirts",
-      value: "skirts",
-    },
-    {
-      label: "Dresses",
-      value: "dresses",
-    },
-    {
-      label: "Suits",
-      value: "suits",
-    },
-    {
-      label: "Tuxedo",
-      value: "tuxedo",
-    },
-    {
-      label: "Sweaters",
-      value: "sweaters",
-    },
-  ],
-
-  outerwear: [
-    {
-      label: "Jackets",
-      value: "jackets",
-    },
-    {
-      label: "Raincoats",
-      value: "raincoats",
-    },
-    {
-      label: "Coats",
-      value: "coats",
-    },
-    {
-      label: "Skiwear",
-      value: "skiwear",
-    },
-  ],
-
-  casual: [
-    {
-      label: "T-Shirts",
-      value: "tShirts",
-    },
-    {
-      label: "Tank Tops",
-      value: "tankTops",
-    },
-    {
-      label: "Sweatshirts",
-      value: "sweatshirts",
-    },
-    {
-      label: "Jeans",
-      value: "jeans",
-    },
-    {
-      label: "Exercise Clothing",
-      value: "exerciseClothing",
-    },
-    {
-      label: "Shorts",
-      value: "shorts",
-    },
-    {
-      label: "Swimsuits",
-      value: "swimsuits",
-    },
-  ],
-
-  footwear: [
-    {
-      label: "Athletic Shoes",
-      value: "athleticShoes",
-    },
-    {
-      label: "Leisure Shoes",
-      value: "leisureShoes",
-    },
-    {
-      label: "Dress Shoes",
-      value: "dressShoes",
-    },
-    {
-      label: "Slippers",
-      value: "slippers",
-    },
-    {
-      label: "Sandals",
-      value: "sandals",
-    },
-  ],
-
-  accessories: [
-    {
-      label: "Belts",
-      value: "belts",
-    },
-    {
-      label: "Ties",
-      value: "ties",
-    },
-    {
-      label: "Scarves",
-      value: "scarves",
-    },
-    {
-      label: "Hats",
-      value: "hats",
-    },
-    {
-      label: "Gloves",
-      value: "gloves",
-    },
-    {
-      label: "Jewelry",
-      value: "jewelry",
-    },
-    {
-      label: "Sunglasses",
-      value: "sunglasses",
-    },
-    {
-      label: "Reading Glasses",
-      value: "readingGlasses",
-    },
-    {
-      label: "Wristwatches",
-      value: "wristwatches",
-    },
-  ],
-};
-
-export const HYGIENE = {
-  hygiene: [
-    { label: "Toothbrush", value: "toothbrush" },
-    { label: "Toothpaste", value: "toothpaste" },
-    { label: "Dental Floss", value: "dentalFloss" },
-    { label: "Mouthwash", value: "mouthwash" },
-    { label: "Soap", value: "soap" },
-    { label: "Washcloth", value: "washcloth" },
-    { label: "Deodorant", value: "deodorant" },
-    { label: "Shampoo", value: "shampoo" },
-    { label: "Conditioner", value: "conditioner" },
-    { label: "Brush", value: "brush" },
-    { label: "Comb", value: "comb" },
-    { label: "Curling Iron", value: "curlingIron" },
-    { label: "Flat Iron", value: "flatIron" },
-    { label: "Styling Products", value: "stylingProducts" },
-    { label: "Hair Accessories", value: "hairAccessories" },
-    { label: "Mirror", value: "mirror" },
-    { label: "Cleanser", value: "cleanser" },
-    { label: "Sunscreen", value: "sunscreen" },
-    { label: "Moisturizer", value: "moisturizer" },
-    { label: "Lip Balm", value: "lipBalm" },
-    { label: "Contact Lenses", value: "contactLenses" },
-    { label: "Saline Solution", value: "salineSolution" },
-    { label: "Shaving Cream", value: "shavingCream" },
-    { label: "Razor", value: "razor" },
-    { label: "Perfume", value: "perfume" },
-    { label: "Makeup", value: "makeup" },
-    { label: "Makeup Remover", value: "makeupRemover" },
-    { label: "Birth Control", value: "birthControl" },
-    { label: "Feminine Hygiene", value: "feminineHygiene" },
-    { label: "Nail Clippers", value: "nailClippers" },
-    { label: "Nail File", value: "nailFile" },
-    { label: "Hand Wipes", value: "handWipes" },
-    { label: "Tissues", value: "tissues" },
-    { label: "Cotton Swabs", value: "cottonSwabs" },
-    { label: "Tweezers", value: "tweezers" },
-    { label: "Insect Repellent", value: "insectRepellent" },
-    { label: "Medications", value: "medications" },
-    { label: "Pain Reliever", value: "painReliever" },
-    { label: "Vitamins", value: "vitamins" },
-    { label: "First Aid", value: "firstAid" },
-    { label: "Band Aids", value: "bandAids" },
-    { label: "Towels", value: "towels" },
-  ],
-};
-
-export const MISCELLANEOUS = {
-  documents: [
-    {
-      label: "Emergency Contact Info",
-      value: "emergencyContactInfo",
-    },
-    {
-      label: "Medical Insurance Card",
-      value: "medicalInsuranceCard",
-    },
-    {
-      label: "Prescriptions",
-      value: "prescriptions",
-    },
-    {
-      label: "Travel Insurance",
-      value: "travelInsurance",
-    },
-    {
-      label: "Car Insurance Card",
-      value: "carInsuranceCard",
-    },
-  ],
-
-  miscellaneous: [
-    {
-      label: "Umbrella",
-      value: "umbrella",
-    },
-    {
-      label: "House Keys",
-      value: "houseKeys",
-    },
-    {
-      label: "Luggage Tags",
-      value: "luggageTags",
-    },
-    {
-      label: "Hospitality Gifts",
-      value: "hospitalityGifts",
-    },
-    {
-      label: "Journal",
-      value: "journal",
-    },
-    {
-      label: "Beach Towel",
-      value: "beachTowel",
-    },
-    {
-      label: "Beach Ball",
-      value: "beachBall",
-    },
-  ],
-
-  bags: [
-    {
-      label: "Backpack",
-      value: "backpack",
-    },
-    {
-      label: "Purse",
-      value: "purse",
-    },
-    {
-      label: "Tote",
-      value: "tote",
-    },
-    {
-      label: "Plastic Bags",
-      value: "plasticBags",
-    },
-  ],
-  technology: [
-    {
-      label: "Cell Phone",
-      value: "cellPhone",
-    },
-    {
-      label: "Cell Phone Charger",
-      value: "cellPhoneCharger",
-    },
-    {
-      label: "Laptop",
-      value: "laptop",
-    },
-    {
-      label: "Laptop Charger",
-      value: "laptopCharger",
-    },
-    {
-      label: "Camera",
-      value: "camera",
-    },
-    {
-      label: "Camera Charger",
-      value: "cameraCharger",
-    },
-    {
-      label: "Headphones",
-      value: "headphones",
-    },
-    {
-      label: "Batteries",
-      value: "batteries",
-    },
-    {
-      label: "Flashlight",
-      value: "flashlight",
-    },
-  ],
-
-  work: [
-    {
-      label: "Work Documents",
-      value: "workDocuments",
-    },
-    {
-      label: "Office Supplies",
-      value: "officeSupplies",
-    },
-    {
-      label: "Notebook",
-      value: "notebook",
-    },
-  ],
-};
 
 export const travelPackingListsDefaultValues: IPackingList = {
   basics: {
     travelAids: [
-      "pleasureReading",
-      "chewingGum",
-      "snacks",
-      "waterBottle",
-      "earplugs",
-      "sleepingMask",
-      "travelPillow",
-      "motionSicknessRemedy",
-      "sleepingPills",
-      "anxietyMedication",
+      "Pleasure Reading",
+      "Chewing Gum",
+      "Snacks",
+      "Water Bottle",
+      "Earplugs",
+      "Sleeping Mask",
+      "Travel Pillow",
+      "Motion Sickness Remedy",
+      "Sleeping Pills",
+      "Anxiety Medication",
     ],
-    funds: ["wallet", "cash", "creditCards"],
+    funds: ["Wallet", "Cash", "Credit Cards"],
     travelInfo: [
-      "passport",
-      "visa",
-      "driversLicence",
-      "maps",
-      "travelTickets",
-      "travelGuides",
+      "Passport",
+      "Visa",
+      "Driver's Licence",
+      "Maps",
+      "Travel Tickets",
+      "Travel Guides",
     ],
   },
   clothes: {
     basics: [
-      "underwear",
-      "socks",
-      "undershirts",
-      "bras",
-      "pantyhose",
-      "sleepwear",
-      "robe",
+      "Underwear",
+      "Socks",
+      "Undershirts",
+      "Bras",
+      "Pantyhose",
+      "Sleepwear",
+      "Robe",
     ],
     dressy: [
-      "dressShirts",
-      "blazers",
-      "slacks",
-      "skirts",
-      "dresses",
-      "suits",
-      "tuxedo",
+      "Dress Shirts",
+      "Blazers",
+      "Slacks",
+      "Skirts",
+      "Dresses",
+      "Suits",
+      "Tuxedo",
     ],
-    outerwear: ["jackets", "raincoats"],
-    casual: ["tShirts", "tankTops", "sweatshirts", "jeans", "exerciseClothing"],
-    footwear: ["athleticShoes", "leisureShoes", "dressShoes", "slippers"],
+    outerwear: ["Jackets", "Raincoats"],
+    casual: [
+      "T-Shirts",
+      "Tank Tops",
+      "Sweatshirts",
+      "Jeans",
+      "Exercise Clothing",
+    ],
+    footwear: ["Athletic Shoes", "Leisure Shoes", "Dress Shoes", "Slippers"],
     accessories: [
-      "belts",
-      "ties",
-      "wristwatches",
-      "jewelry",
-      "sunglasses",
-      "readingGlasses",
+      "Belts",
+      "Ties",
+      "Wristwatches",
+      "Jewelry",
+      "Sunglasses",
+      "Reading Glasses",
     ],
   },
   hygiene: {
     hygiene: [
-      "toothbrush",
-      "toothpaste",
-      "dentalFloss",
-      "mouthwash",
-      "soap",
-      "washcloth",
-      "deodorant",
-      "shampoo",
-      "conditioner",
-      "brush",
-      "comb",
-      "curlingIron",
-      "flatIron",
-      "stylingProducts",
-      "hairAccessories",
-      "mirror",
-      "cleanser",
-      "sunscreen",
-      "moisturizer",
-      "lipBalm",
-      "contactLenses",
-      "salineSolution",
-      "shavingCream",
-      "razor",
-      "perfume",
-      "makeup",
-      "makeupRemover",
-      "birthControl",
-      "feminineHygiene",
-      "nailClippers",
-      "nailFile",
-      "handWipes",
-      "tissues",
-      "cottonSwabs",
-      "tweezers",
-      "insectRepellent",
-      "medications",
-      "painReliever",
-      "vitamins",
-      "firstAid",
-      "bandAids",
-      "towels",
+      "Toothbrush",
+      "Toothpaste",
+      "Dental Floss",
+      "Mouthwash",
+      "Soap",
+      "Washcloth",
+      "Deodorant",
+      "Shampoo",
+      "Conditioner",
+      "Brush",
+      "Comb",
+      "Curling Iron",
+      "Flat Iron",
+      "Styling Products",
+      "Hair Accessories",
+      "Mirror",
+      "Cleanser",
+      "Sunscreen",
+      "Moisturizer",
+      "Lip Balm",
+      "Contact Lenses",
+      "Saline Solution",
+      "Shaving Cream",
+      "Razor",
+      "Perfume",
+      "Makeup",
+      "Makeup Remover",
+      "Birth Control",
+      "Feminine Hygiene",
+      "Nail Clippers",
+      "Nail File",
+      "Hand Wipes",
+      "Tissues",
+      "Cotton Swabs",
+      "Tweezers",
+      "Insect Repellent",
+      "Medications",
+      "Pain Reliever",
+      "Vitamins",
+      "First Aid",
+      "Band Aids",
+      "Towels",
     ],
   },
   miscellaneous: {
     documents: [
-      "emergencyContactInfo",
-      "medicalInsuranceCard",
-      "prescriptions",
-      "travelInsurance",
-      "carInsuranceCard",
+      "Emergency Contact Info",
+      "Medical Insurance Card",
+      "Prescriptions",
+      "Travel Insurance",
+      "Car Insurance Card",
     ],
-    bags: ["backpack", "purse", "tote", "plasticBags"],
+    bags: ["Backpack", "Purse", "Tote", "Plastic Bags"],
     miscellaneous: [
-      "umbrella",
-      "houseKeys",
-      "luggageTags",
-      "hospitalityGifts",
-      "journal",
+      "Umbrella",
+      "House Keys",
+      "Luggage Tags",
+      "Hospitality Gifts",
+      "Journal",
     ],
     technology: [
-      "cellPhone",
-      "cellPhoneCharger",
-      "laptop",
-      "laptopCharger",
-      "camera",
-      "cameraCharger",
-      "headphones",
-      "batteries",
-      "flashlight",
+      "Cell Phone",
+      "Cell Phone Charger",
+      "Laptop",
+      "Laptop Charger",
+      "Camera",
+      "Camera Charger",
+      "Headphones",
+      "Batteries",
+      "Flashlight",
     ],
-    work: ["workDocuments", "officeSupplies", "notebook"],
+    work: ["Work Documents", "Office Supplies", "Business Cards", "Laptop Bag"],
   },
 };
 
@@ -586,8 +153,8 @@ export const travelPackingListsWarmValues: IPackingList = {
     basics: [],
     dressy: [],
     outerwear: [],
-    casual: ["shorts", "swimsuits"],
-    footwear: ["sandals"],
+    casual: ["Shorts", "Swimsuits"],
+    footwear: ["Sandals"],
     accessories: [],
   },
   hygiene: {
@@ -596,7 +163,7 @@ export const travelPackingListsWarmValues: IPackingList = {
   miscellaneous: {
     documents: [],
     bags: [],
-    miscellaneous: ["beachTowel", "beachBall"],
+    miscellaneous: ["Beach Towel", "Beach Ball"],
     technology: [],
     work: [],
   },
@@ -610,11 +177,11 @@ export const travelPackingListsColdValues: IPackingList = {
   },
   clothes: {
     basics: [],
-    dressy: ["sweaters"],
-    outerwear: ["coats", "skiwear"],
+    dressy: ["Sweaters"],
+    outerwear: ["Coats", "Skiwear"],
     casual: [],
     footwear: [],
-    accessories: ["hats", "gloves", "scarves"],
+    accessories: ["Hats", "Gloves", "Scarves"],
   },
   hygiene: {
     hygiene: [],

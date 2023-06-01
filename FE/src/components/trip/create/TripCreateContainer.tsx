@@ -66,8 +66,8 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
         .track()
         .subscribe(() => {
           props.userTripsFetch();
+          navigator("/settings");
         });
-      navigator("/settings");
     },
     [provider.search]
   );

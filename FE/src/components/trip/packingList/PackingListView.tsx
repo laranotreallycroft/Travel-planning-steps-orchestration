@@ -38,11 +38,13 @@ const PackingListView: React.FC<IPackingListViewProps> = (
           </Button>
         </Col>
       </Row>
-
-      <Basics />
-      <Miscellaneous />
-      <Clothes />
-      <Hygiene />
+      <Basics isEditing={false} packingList={props.packingList.basics} />
+      <Miscellaneous
+        isEditing={false}
+        packingList={props.packingList.miscellaneous}
+      />
+      <Clothes isEditing={false} packingList={props.packingList.clothes} />
+      <Hygiene isEditing={false} packingList={props.packingList.hygiene} />
     </Form>
   );
 };

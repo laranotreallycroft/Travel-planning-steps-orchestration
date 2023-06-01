@@ -1,14 +1,14 @@
-.customInput>*>*>*>*>*>*>button:nth-child(2) {
+.customDropdownInput>*>*>*>*>*>*>button:nth-child(2) {
     display: none;
 }
 
-.customInput__notFoundContentRender {
+.customDropdownInput__notFoundContentRender {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.customInput__deleteButton {
+.customDropdownInput__deleteButton {
     border: none;
     background-color: inherit;
 }

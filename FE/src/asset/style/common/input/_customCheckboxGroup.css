@@ -1,0 +1,24 @@
+.customCheckboxGroup__container {
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2), 0 -1px 1px rgba(0, 0, 0, 0.1);
+    display: grid;
+    padding: 0.5vw;
+}
+
+.customCheckboxGroup__container>*>.ant-checkbox {
+    display: none
+}
+
+
+:where(.css-dev-only-do-not-override-1bby1ad).ant-checkbox-wrapper+.ant-checkbox-wrapper {
+    margin-inline-start: 0;
+}
+
+.ant-checkbox-wrapper-checked {
+    text-decoration: line-through;
+    color: #82acc8
+}
+
+.customCheckboxGroup__hygiene {
+    grid-template-columns: repeat(3, 1fr);
+}

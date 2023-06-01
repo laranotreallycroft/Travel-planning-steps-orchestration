@@ -1,10 +1,14 @@
 import { Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { HYGIENE } from "../../../../model/trip/const/packingList";
-import CustomInput from "../../../common/input/CustomDropdownInput";
+import CustomDropdownInput from "../../../common/input/CustomDropdownInput";
+import CustomCheckboxInput from "../../../common/input/CustomCheckboxGroup";
+import { IHygiene } from "../../../../model/trip/packingList/PackingList";
 
-export interface IHygieneOwnProps {}
+export interface IHygieneOwnProps {
+  isEditing: boolean;
+  packingList: IHygiene;
+}
 type IHygieneProps = IHygieneOwnProps;
 
 const Hygiene: React.FC<IHygieneProps> = (props: IHygieneProps) => {
@@ -14,11 +18,20 @@ const Hygiene: React.FC<IHygieneProps> = (props: IHygieneProps) => {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={5}>Hygiene</Title>
-          <CustomInput
-            group="hygiene"
-            subgroup="hygiene"
-            initialItems={HYGIENE.hygiene}
-          />
+          {props.isEditing ? (
+            <CustomDropdownInput
+              group="hygiene"
+              subgroup="hygiene"
+              initialItems={props.packingList.hygiene}
+            />
+          ) : (
+            <CustomCheckboxInput
+              group="hygiene"
+              subgroup="hygiene"
+              initialItems={props.packingList.hygiene}
+              className="customCheckboxGroup__hygiene"
+            />
+          )}
         </Col>
       </Row>
     </React.Fragment>

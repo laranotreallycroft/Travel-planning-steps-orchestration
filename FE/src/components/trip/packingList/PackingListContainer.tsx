@@ -7,6 +7,10 @@ import PackingListUpdateView from "./PackingListUpdateView";
 import PackingListView from "./PackingListView";
 import { ITrip } from "../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
+import {
+  ITrackableAction,
+  createTrackableAction,
+} from "../../../service/util/trackAction";
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {
@@ -16,7 +20,9 @@ export interface IPackingListContainerStateProps {
 export interface IPackingListContainerDispatchProps {
   tripPackingListCreate: (packingListCreatePayload: IPackingList) => void;
   tripPackingListFetch: () => void;
-  tripPackingListUpdate: (packingListUpdatePayload: IPackingList) => void;
+  tripPackingListUpdate: (
+    packingListUpdatePayload: IPackingList
+  ) => ITrackableAction;
   tripPackingListClear: () => void;
 }
 type IPackingListContainerProps = IPackingListContainerOwnProps &
@@ -36,8 +42,10 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
   }, [props.trip]);
 
   const handlePackingListUpdate = (values: IPackingList) => {
-    setIsEditing(false);
-    // props.tripPackingListUpdate(values);
+    props
+      .tripPackingListUpdate(values)
+      .track()
+      .subscribe(() => setIsEditing(false));
   };
 
   return (
@@ -82,8 +90,10 @@ const mapDispatchToProps = (
     dispatch(PackingListBusinessStore.actions.tripPackingListFetch()),
   tripPackingListUpdate: (packingListUpdatePayload: IPackingList) =>
     dispatch(
-      PackingListBusinessStore.actions.tripPackingListUpdate(
-        packingListUpdatePayload
+      createTrackableAction(
+        PackingListBusinessStore.actions.tripPackingListUpdate(
+          packingListUpdatePayload
+        )
       )
     ),
   tripPackingListClear: () =>
