@@ -16,6 +16,7 @@ import notificationService from "../../../util/notificationService";
 import trackAction, { IAction } from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
 import { mapData } from "./utils";
+import { loginActions } from "../../login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -190,7 +191,10 @@ const currentWeather = (
 ) => {
   if (action.type === actions.CURRENT_WEATHER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.CURRENT_WEATHER_CLEAR) {
+  } else if (
+    action.type === actions.CURRENT_WEATHER_CLEAR ||
+    action.type === loginActions.LOGOUT
+  ) {
     return null;
   }
   return state;
@@ -202,7 +206,10 @@ const predictedWeather = (
 ) => {
   if (action.type === actions.PREDICTED_WEATHER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.PREDICTED_WEATHER_CLEAR) {
+  } else if (
+    action.type === actions.PREDICTED_WEATHER_CLEAR ||
+    action.type === loginActions.LOGOUT
+  ) {
     return null;
   }
   return state;

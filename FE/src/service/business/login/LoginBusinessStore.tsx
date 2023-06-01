@@ -11,7 +11,7 @@ const isUserLoggedIn = (store: any): boolean => store.user != null;
 
 // -
 // -------------------- Actions
-const actions = {
+export const loginActions = {
   LOGIN: "LOGIN",
   GOOGLE_LOGIN: "GOOGLE_LOGIN",
   LOGOUT: "LOGOUT",
@@ -30,27 +30,27 @@ export interface ILoginPayload {
 export const login = (
   payload: ILoginPayload
 ): IPayloadAction<ILoginPayload> => {
-  return { type: actions.LOGIN, payload: payload };
+  return { type: loginActions.LOGIN, payload: payload };
 };
 
 const googleLogin = (
   payload: IGoogleLoginPayload
 ): IPayloadAction<IGoogleLoginPayload> => {
-  return { type: actions.GOOGLE_LOGIN, payload: payload };
+  return { type: loginActions.GOOGLE_LOGIN, payload: payload };
 };
 
 const logout = (): IAction => {
-  return { type: actions.LOGOUT };
+  return { type: loginActions.LOGOUT };
 };
 
 export const storeCurrentUser = (
   payload: IIdPayload
 ): IPayloadAction<IIdPayload> => {
-  return { type: actions.CURRENT_USER_STORE, payload: payload };
+  return { type: loginActions.CURRENT_USER_STORE, payload: payload };
 };
 
 export const clearCurrentUser = (): IAction => {
-  return { type: actions.CURRENT_USER_CLEAR };
+  return { type: loginActions.CURRENT_USER_CLEAR };
 };
 // -
 // -------------------- Side-effects
@@ -61,7 +61,7 @@ const loginEffect = (
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.LOGIN;
+      return action.type === loginActions.LOGIN;
     }),
     mergeMap((action) => {
       return from(
@@ -89,7 +89,7 @@ const googleLoginEffect = (
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.GOOGLE_LOGIN;
+      return action.type === loginActions.GOOGLE_LOGIN;
     }),
     mergeMap((action) => {
       return from(
@@ -115,11 +115,11 @@ const googleLoginEffect = (
 // -------------------- Reducers
 
 const user = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
-  if (action.type === actions.CURRENT_USER_STORE) {
+  if (action.type === loginActions.CURRENT_USER_STORE) {
     return { ...action.payload };
   } else if (
-    action.type === actions.LOGOUT ||
-    action.type === actions.CURRENT_USER_CLEAR
+    action.type === loginActions.LOGOUT ||
+    action.type === loginActions.CURRENT_USER_CLEAR
   ) {
     return null;
   }

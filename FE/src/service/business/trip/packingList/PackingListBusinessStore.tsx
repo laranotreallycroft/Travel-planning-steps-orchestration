@@ -5,6 +5,7 @@ import notificationService from "../../../util/notificationService";
 import trackAction, { IAction } from "../../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../../common/types";
 import { getTrip } from "../TripBusinessStore";
+import { loginActions } from "../../login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -158,7 +159,10 @@ const packingList = (
   if (action.type === actions.TRIP_PACKING_LIST_STORE) {
     if (action.payload) return { ...action.payload };
     else return null;
-  } else if (action.type === actions.TRIP_PACKING_LIST_CLEAR) {
+  } else if (
+    action.type === actions.TRIP_PACKING_LIST_CLEAR ||
+    action.type === loginActions.LOGOUT
+  ) {
     return null;
   }
   return state;

@@ -5,6 +5,7 @@ import { IUserCredentials } from "../../../model/user/User";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IPayloadAction } from "../common/types";
+import { loginActions } from "../login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -73,7 +74,10 @@ const userTripsFetchEffect = (
 const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
   if (action.type === actions.USER_TRIPS_STORE) {
     return [...action.payload];
-  } else if (action.type === actions.USER_TRIPS_CLEAR) {
+  } else if (
+    action.type === actions.USER_TRIPS_CLEAR ||
+    action.type === loginActions.LOGOUT
+  ) {
     return null;
   }
   return state;

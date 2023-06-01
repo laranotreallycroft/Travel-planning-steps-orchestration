@@ -23,7 +23,6 @@ export interface IPackingListContainerDispatchProps {
   tripPackingListUpdate: (
     packingListUpdatePayload: IPackingList
   ) => ITrackableAction;
-  tripPackingListClear: () => void;
 }
 type IPackingListContainerProps = IPackingListContainerOwnProps &
   IPackingListContainerStateProps &
@@ -36,9 +35,6 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
 
   useEffect(() => {
     props.tripPackingListFetch();
-    return () => {
-      props.tripPackingListClear();
-    };
   }, [props.trip]);
 
   const handlePackingListUpdate = (values: IPackingList) => {
@@ -96,8 +92,6 @@ const mapDispatchToProps = (
         )
       )
     ),
-  tripPackingListClear: () =>
-    dispatch(PackingListBusinessStore.actions.tripPackingListClear()),
 });
 
 export default connect<

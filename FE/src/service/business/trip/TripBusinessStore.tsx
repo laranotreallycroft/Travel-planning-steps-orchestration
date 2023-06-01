@@ -13,6 +13,7 @@ import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
 import { getUser, userTripsFetch } from "../user/UserBusinessStore";
+import { loginActions } from "../login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -154,7 +155,10 @@ const tripUpdateffect = (
 const trip = (state: any = null, action: IPayloadAction<ITrip>) => {
   if (action.type === actions.TRIP_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.TRIP_CLEAR) {
+  } else if (
+    action.type === actions.TRIP_CLEAR ||
+    action.type === loginActions.LOGOUT
+  ) {
     return null;
   }
   return state;
