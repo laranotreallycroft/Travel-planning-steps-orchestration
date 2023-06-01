@@ -53,34 +53,34 @@ const PackingListCreateView: React.FC<IPackingListCreateViewProps> = (
         <Radio.Group buttonStyle="solid">
           <Radio.Button
             value={IPackingListType.DEFAULT}
-            className="secondStep__radioButton"
+            className="packingListCreateView__radioButton"
           >
             <Avatar
               src={<img src={basic} alt="defaultReminder" />}
               shape="square"
-              className="secondStep__reminderIcon"
+              className="packingListCreateView__reminderIcon"
             />
             <Title level={5}>Basic</Title>
           </Radio.Button>
           <Radio.Button
             value={IPackingListType.WARM}
-            className="secondStep__radioButton"
+            className="packingListCreateView__radioButton"
           >
             <Avatar
               src={<img src={warm} alt="warmReminder" />}
               shape="square"
-              className="secondStep__reminderIcon"
+              className="packingListCreateView__reminderIcon"
             />
             <Title level={5}>Warm</Title>
           </Radio.Button>
           <Radio.Button
             value={IPackingListType.COLD}
-            className="secondStep__radioButton"
+            className="packingListCreateView__radioButton"
           >
             <Avatar
               src={<img src={cold} alt="coldReminder" />}
               shape="square"
-              className="secondStep__reminderIcon"
+              className="packingListCreateView__reminderIcon"
             />
             <Title level={5}>Cold</Title>
           </Radio.Button>

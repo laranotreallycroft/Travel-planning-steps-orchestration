@@ -1,4 +1,4 @@
-.secondStep__radioButton {
+.packingListCreateView__radioButton {
     margin-right: 2vw;
     width: 10rem;
     height: 10rem;
@@ -14,24 +14,24 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.secondStep__radioButton::before {
+.packingListCreateView__radioButton::before {
     visibility: hidden;
 }
 
-.secondStep__radioButton:hover {
+.packingListCreateView__radioButton:hover {
     background-color: #6096ba !important;
     border-color: #6096ba !important;
 }
 
 /** target all children*/
-.secondStep__radioButton * {
+.packingListCreateView__radioButton * {
     width: 100%;
 }
 
-.secondStep__reminderIcon {
+.packingListCreateView__reminderIcon {
     height: 8rem
 }
 
-.secondStep__radioButton:hover>*>*, .ant-radio-button-wrapper-checked.secondStep__radioButton>*>* {
+.packingListCreateView__radioButton:hover>*>*, .ant-radio-button-wrapper-checked.packingListCreateView__radioButton>*>* {
     color: white !important;
 }

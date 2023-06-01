@@ -4,8 +4,8 @@ import { WeatherBusinessStore } from "../../../service/business/trip/weather/Wea
 import { useEffect } from "react";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { ITrip } from "../../../model/trip/Trip";
-import ReactWeather from "react-open-weather";
 import React from "react";
+import WeatherView from "./WeatherView";
 export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {
@@ -34,6 +34,9 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
     props.predictedWeatherFetch({
       lat: props.trip.location.y,
       lon: props.trip.location.x,
+      // minus one year
+      timestampFrom: new Date(props.trip.dateFrom).getTime() / 1000 - 31536000,
+      timestampTo: new Date(props.trip.dateTo).getTime() / 1000 - 31536000,
     });
     return () => {
       props.currentWeatherClear();
@@ -42,22 +45,10 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
   }, [props.trip]);
 
   return (
-    <React.Fragment>
-      <ReactWeather
-        data={props.currentWeather}
-        lang="en"
-        locationLabel={props.currentWeather?.name}
-        unitsLabels={{ temperature: "C", windSpeed: "Km/h" }}
-        showForecast
-      />
-      <ReactWeather
-        data={props.predictedWeather}
-        lang="en"
-        locationLabel={props.predictedWeather?.name}
-        unitsLabels={{ temperature: "C", windSpeed: "Km/h" }}
-        showForecast
-      />
-    </React.Fragment>
+    <WeatherView
+      currentWeather={props.currentWeather}
+      predictedWeather={props.predictedWeather}
+    />
   );
 };
 

@@ -136,7 +136,7 @@ const predictedWeatherFetchEffect = (
       return action.type === actions.PREDICTED_WEATHER_FETCH;
     }),
     mergeMap((action) => {
-      const baseUrl = "https://api.openweathermap.org/data/3.0/"; //TODO DT
+      const baseUrl = "https://api.openweathermap.org/data/3.0/";
 
       const requests: any[] = [];
       requests.push(
@@ -147,12 +147,16 @@ const predictedWeatherFetchEffect = (
         })
       );
 
-      for (let i = 0; i < 5; i += 1) {
-        const timestamp = 1643803200 + i * 86400;
+      for (
+        let i = action.payload.timestampFrom!;
+        i <= action.payload.timestampTo! &&
+        i <= action.payload.timestampFrom! + 86400 * 10;
+        i += 86400
+      ) {
         requests.push(
           axios({
             method: "get",
-            url: `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&dt=${timestamp}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`,
+            url: `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&dt=${i}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`,
             baseURL: baseUrl,
           })
         );
@@ -169,7 +173,7 @@ const predictedWeatherFetchEffect = (
     }),
 
     map((data) => {
-      const namePayload = data[0];
+      const namePayload = data[0][0];
       const dataPayload = data.slice(1).map((data) => data.data[0]);
       const payload = mapData(dataPayload, dataPayload[0], "en");
       return predictedWeatherStore({ ...payload, name: namePayload.name });
