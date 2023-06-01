@@ -44,11 +44,11 @@ const userTripsFetchEffect = (
 
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentUser = getUser(state);
+      const user = getUser(state);
 
       return from(
         axios
-          .get(`/users/${currentUser.id}/trips`)
+          .get(`/users/${user.id}/trips`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

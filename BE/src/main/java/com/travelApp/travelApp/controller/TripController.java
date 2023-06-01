@@ -119,4 +119,30 @@ public class TripController {
 		}
 		return ResponseEntity.badRequest().body("Something went wrong");
 	}
+	
+	@GetMapping("/{tripId}/packinglist/checked")
+	public ResponseEntity getTripPackingListChecked(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
+		Trip trip = tripRepository.findById(tripId).orElse(null);
+		if (trip != null) {
+			PackingList packingList = trip.getPackingList();
+			if (packingList != null)
+				return ResponseEntity.ok(packingList.modelToPayloadChecked());
+			return ResponseEntity.noContent().build();
+
+		}
+		return ResponseEntity.badRequest().body("Something went wrong");
+	}
+
+	@PutMapping("/{tripId}/packinglist/checked")
+	public ResponseEntity updateTripPackingListChecked(@PathVariable(value = "tripId") Long tripId,
+			@RequestBody PackingListPayload packingListPayload) throws URISyntaxException {
+		PackingList packingList = packingListRepository.findByTripId(tripId);
+		if (packingList != null) {
+			packingList.updateFromPayloadChecked(packingListPayload);
+			packingListRepository.save(packingList);
+			return  ResponseEntity.ok(packingListPayload);
+
+		}
+		return ResponseEntity.badRequest().body("Something went wrong");
+	}
 }

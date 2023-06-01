@@ -65,10 +65,10 @@ const tripCreateEffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const currentUser = getUser(state);
+      const user = getUser(state);
       return from(
         axios
-          .post("/trips", { ...action.payload, userId: currentUser.id })
+          .post("/trips", { ...action.payload, userId: user.id })
           .then((response) => {
             if (response.status === 201) {
               notificationService.success("New trip successfully created");

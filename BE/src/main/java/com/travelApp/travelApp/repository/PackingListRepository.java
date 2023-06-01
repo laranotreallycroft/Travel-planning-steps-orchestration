@@ -8,6 +8,6 @@ import com.travelApp.travelApp.model.PackingList;
 
 @Repository
 public interface PackingListRepository extends JpaRepository<PackingList, Long> {
-	@Query(value = "SELECT * FROM packing_list WHERE trip_id = ?1", nativeQuery=true)
+	@Query(value = "SELECT * FROM packing_lists WHERE trip_id = ?1", nativeQuery=true)
 	public PackingList findByTripId (Long tripId);
 }

@@ -5,11 +5,14 @@ import Basics from "./packingListGroups/Basics";
 import Clothes from "./packingListGroups/Clothes";
 import Hygiene from "./packingListGroups/Hygiene";
 import Miscellaneous from "./packingListGroups/Miscellaneous";
+import _ from "lodash";
+import { useEffect } from "react";
 
 export interface IPackingListViewOwnProps {
   packingList: IPackingList;
+  packingListChecked: IPackingList;
   editPackingList: () => void;
-  onPackingListUpdate: (packingListPayload: IPackingList) => void;
+  onPackingListCheckedUpdate: (packingListPayload: IPackingList) => void;
 }
 type IPackingListViewProps = IPackingListViewOwnProps;
 
@@ -17,16 +20,21 @@ const PackingListView: React.FC<IPackingListViewProps> = (
   props: IPackingListViewProps
 ) => {
   const [form] = Form.useForm<IPackingList>();
+  useEffect(() => {
+    form.setFieldsValue(props.packingListChecked);
+  }, [props.packingListChecked]);
 
-  const handleFinish = (values: IPackingList) => {
-    //TODO CHECKLIST?? props.onPackingListUpdate(values);
+  const handleFormChange = (changedValues: any) => {
+    props.onPackingListCheckedUpdate(
+      _.merge(props.packingListChecked, changedValues)
+    );
   };
 
   return (
     <Form<IPackingList>
       form={form}
-      onFinish={handleFinish}
-      initialValues={props.packingList}
+      initialValues={props.packingListChecked}
+      onValuesChange={handleFormChange}
     >
       <Row>
         <Col span={12} className="margin-bottom-xl">
