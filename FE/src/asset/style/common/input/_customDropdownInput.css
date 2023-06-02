@@ -12,3 +12,8 @@
     border: none;
     background-color: inherit;
 }
+
+div.ant-select-item-option-selected>*:nth-child(2) {
+    position: absolute;
+    right: 40px;
+}
