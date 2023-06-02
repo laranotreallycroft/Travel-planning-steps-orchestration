@@ -19,6 +19,7 @@ export const initMap = () => {
 
 export const ChangeView = (props: IChangeViewProps) => {
   const map = useMap();
+  map.invalidateSize();
   map.setView(props.center, props.zoom);
   return null;
 };

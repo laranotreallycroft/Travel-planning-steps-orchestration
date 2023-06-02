@@ -56,9 +56,8 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             wrapperCol={{ span: 24 }}
             rules={[
               {
-                //TODO:DELETE THIS   required: true,
-                //TODO:DELETE THIS  type: "email",
-                message: "Input is not a valid E-mail.",
+                required: true,
+                message: "Please input an e-mail",
               },
             ]}
           >
@@ -69,7 +68,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             label={"Password"}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input a password." }]}
+            rules={[{ required: true, message: "Please input a password" }]}
           >
             <Input.Password
               placeholder="Input password"
