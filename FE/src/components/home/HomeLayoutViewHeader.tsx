@@ -61,9 +61,8 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
 
   return (
     <Row align={"middle"} gutter={[16, 16]}>
-      <Col span={3} className="homeLayoutViewHeader__logo">
-        <Avatar src={logo} className="margin-right-sm" />
-        forget-me-not
+      <Col span={3}>
+        <Avatar src={logo} shape="square" className="fullSize" />
       </Col>
       <Col offset={1} span={4}>
         <Select
