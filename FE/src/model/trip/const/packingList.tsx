@@ -103,7 +103,6 @@ export const travelPackingListsDefaultValues: IPackingList = {
       "Tissues",
       "Cotton Swabs",
       "Tweezers",
-      "Insect Repellent",
       "Medications",
       "Pain Reliever",
       "Vitamins",
@@ -142,7 +141,6 @@ export const travelPackingListsDefaultValues: IPackingList = {
     work: ["Work Documents", "Office Supplies", "Business Cards", "Laptop Bag"],
   },
 };
-
 export const travelPackingListsWarmValues: IPackingList = {
   basics: {
     travelAids: [],
@@ -153,9 +151,9 @@ export const travelPackingListsWarmValues: IPackingList = {
     basics: [],
     dressy: [],
     outerwear: [],
-    casual: ["Shorts", "Swimsuits"],
-    footwear: ["Sandals"],
-    accessories: [],
+    casual: ["Shorts", "Swimsuits", "Tank tops", "Sun hat"],
+    footwear: ["Sandals", "Flip-flops"],
+    accessories: ["Insect repellent", "Beach cover-up", "Bandana"],
   },
   hygiene: {
     hygiene: [],
@@ -163,7 +161,16 @@ export const travelPackingListsWarmValues: IPackingList = {
   miscellaneous: {
     documents: [],
     bags: [],
-    miscellaneous: ["Beach Towel", "Beach Ball"],
+    miscellaneous: [
+      "Beach Towel",
+      "Beach Ball",
+      "Snorkeling gear",
+      "Waterproof phone case",
+      "Beach umbrella",
+      "Cooler bag",
+      "Hammock",
+      "Beach chair",
+    ],
     technology: [],
     work: [],
   },
@@ -176,12 +183,19 @@ export const travelPackingListsColdValues: IPackingList = {
     travelInfo: [],
   },
   clothes: {
-    basics: [],
+    basics: ["Thermal socks", "Wool socks"],
     dressy: ["Sweaters"],
-    outerwear: ["Coats", "Skiwear"],
-    casual: [],
-    footwear: [],
-    accessories: ["Hats", "Gloves", "Scarves"],
+    outerwear: ["Coats", "Skiwear", "Thermal underwear"],
+    casual: ["Long-sleeve shirts", "Warm hoodies", "Fleece jackets"],
+    footwear: ["Winter boots"],
+    accessories: [
+      "Hats",
+      "Gloves",
+      "Scarves",
+      "Ear muffs",
+      "Thermal leggings",
+      "Neck warmers",
+    ],
   },
   hygiene: {
     hygiene: [],
@@ -189,7 +203,16 @@ export const travelPackingListsColdValues: IPackingList = {
   miscellaneous: {
     documents: [],
     bags: [],
-    miscellaneous: [],
+    miscellaneous: [
+      "Hand warmers",
+      "Hot water bottle",
+      "Hot packs",
+      "Thermal blanket",
+      "Pocket warmers",
+      "Snow goggles",
+      "Ice grips for shoes",
+      "Ski gloves",
+    ],
     technology: [],
     work: [],
   },

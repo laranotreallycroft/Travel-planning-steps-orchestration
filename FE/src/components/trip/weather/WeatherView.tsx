@@ -14,8 +14,9 @@ type IWeatherViewProps = IWeatherViewOwnProps;
 const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
   return (
     <Row gutter={[16, 16]}>
-      <Col span={12} className="tripWeatherView__reactWeather">
+      <Col span={12}>
         <Title level={4}>Current weather</Title>
+
         {props.currentWeather == null ? (
           <Spin size="large" className="weatherView__spin" />
         ) : (

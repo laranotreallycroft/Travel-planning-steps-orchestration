@@ -1,8 +1,26 @@
 .rw-forecast-days-panel {
-    height: 18vh;
+    height: 20vh;
 }
 
 .weatherView__spin {
-    margin-left: 5vw;
-    margin-top: 5vh
+    background-color: #0492d9;
+    height: 50vh;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weatherView__spin>.ant-spin-dot {
+    height: 2em;
+    width: 2em;
+}
+
+.weatherView__spin>.ant-spin-dot>* {
+    background-color: white;
+    height: 25px !important;
+    width: 25px !important;
+
 }

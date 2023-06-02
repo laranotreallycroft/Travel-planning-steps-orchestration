@@ -36,9 +36,7 @@ export const mapForecast = (forecast: any[], lang: string): any[] => {
         : null,
       icon: forecast[i].weather[0] && getIcon(forecast[i].weather[0].icon),
       temperature: {
-        min: forecast[i].temp.min
-          ? forecast[i].temp.min.toFixed(0)
-          : forecast[i].temp.toFixed(0),
+        min: forecast[i].temp.min?.toFixed(0) ?? undefined,
         max: forecast[i].temp.max
           ? forecast[i].temp.max.toFixed(0)
           : forecast[i].temp.toFixed(0),

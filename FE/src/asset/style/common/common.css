@@ -1,75 +1,89 @@
 .margin-top-sm {
-    margin-top: 0.5vh !;
+    margin-top: 0.5vh !important;
 }
 
 .margin-bottom-sm {
-    margin-bottom: 0.5vh;
+    margin-bottom: 0.5vh !important;
+
 }
 
 .margin-left-sm {
-    margin-left: 0.5vw;
+    margin-left: 0.5vw !important;
 }
 
 .margin-right-sm {
-    margin-right: 0.5vw;
+    margin-right: 0.5vw !important;
+
 }
 
 .margin-top-md {
-    margin-top: 1vh;
+    margin-top: 1vh !important;
+
 }
 
 .margin-bottom-md {
-    margin-bottom: 1vh;
+    margin-bottom: 1vh !important;
+
 }
 
 .margin-left-md {
-    margin-right: 1vw;
+    margin-right: 1vw !important;
+
 }
 
 .margin-right-md {
-    margin-right: 1vw;
+    margin-right: 1vw !important;
+
 }
 
 
 .margin-top-l {
-    margin-top: 2vh;
+    margin-top: 2vh !important;
+
 }
 
 .margin-bottom-l {
-    margin-top: 2vh;
+    margin-top: 2vh !important;
+
 }
 
 .margin-left-l {
-    margin-left: 2vw;
+    margin-left: 2vw !important;
+
 }
 
 .margin-right-l {
-    margin-right: 2vw;
+    margin-right: 2vw !important;
+
 }
 
 .margin-l {
-    margin: 2vw;
+    margin: 2vw !important;
+
 }
 
 
 .margin-top-xl {
-    margin-top: 4vh;
+    margin-top: 4vh !important;
+
 }
 
 .margin-bottom-xl {
-    margin-bottom: 4vh;
+    margin-bottom: 4vh !important;
 }
 
 .margin-left-xl {
-    margin-left: 4vw;
+    margin-left: 4vw !important;
 }
 
 .margin-right-xl {
-    margin-right: 4vw;
+    margin-right: 4vw !important;
+
 }
 
 .margin-xl {
-    margin: 5vw;
+    margin: 5vw !important;
+
 }
 
 
@@ -99,5 +113,5 @@
 }
 
 .ant-typography {
-    margin: 0.2rem !important;
+    margin: 0.3rem !important;
 }

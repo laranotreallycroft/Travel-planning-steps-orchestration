@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row } from "antd";
+import { Button, Form, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { IPackingList } from "../../../model/trip/packingList/PackingList";
 import Basics from "./packingListGroups/Basics";
@@ -27,15 +27,14 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
       onFinish={handleFinish}
       initialValues={props.packingList}
     >
-      <Row>
-        <Col span={12} className="margin-bottom-xl">
-          <Title level={3}>Edit packing list items or add your own</Title>
-        </Col>
-        <Col offset={9} span={1}>
-          <Button type="primary" onClick={form.submit}>
-            Save
-          </Button>
-        </Col>
+      <Row justify={"space-between"}>
+        <Title level={3} className="margin-bottom-xl">
+          Edit packing list items or add your own
+        </Title>
+
+        <Button type="primary" onClick={form.submit}>
+          Save
+        </Button>
       </Row>
 
       <Basics isEditing={true} packingList={props.packingList.basics} />
@@ -45,6 +44,12 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
       />
       <Clothes isEditing={true} packingList={props.packingList.clothes} />
       <Hygiene isEditing={true} packingList={props.packingList.hygiene} />
+
+      <Row justify={"end"}>
+        <Button type="primary" onClick={form.submit}>
+          Save
+        </Button>
+      </Row>
     </Form>
   );
 };

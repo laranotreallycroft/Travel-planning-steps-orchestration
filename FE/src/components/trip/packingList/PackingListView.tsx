@@ -53,6 +53,11 @@ const PackingListView: React.FC<IPackingListViewProps> = (
       />
       <Clothes isEditing={false} packingList={props.packingList.clothes} />
       <Hygiene isEditing={false} packingList={props.packingList.hygiene} />
+      <Row justify={"end"}>
+        <Button type="primary" onClick={props.editPackingList}>
+          Edit packing list
+        </Button>
+      </Row>
     </Form>
   );
 };
