@@ -3,6 +3,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { useCallback, useState } from "react";
 import { IGeosearchPayload } from "./MapElement";
 import { initMap } from "./utils";
+import { debounce } from "lodash";
 
 export interface IMapSearchOwnProps {
   onSelectLocation: (value: string) => void;
@@ -16,22 +17,27 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
     useState<IGeosearchPayload[]>();
 
   const handleLocationSearch = useCallback(
-    (value: string) => {
-      if (value.length > 0)
+    debounce((value: string) => {
+      if (value.length > 0) {
         provider
           .search({ query: value })
           .then((geosearchPayloadArray: IGeosearchPayload[]) => {
             setSearchLocationArray(geosearchPayloadArray);
           });
-      else setSearchLocationArray([]);
-    },
+      } else {
+        setSearchLocationArray([]);
+      }
+    }, 500),
     [provider.search]
   );
 
-  const handleLocationSelect = (value: string) => {
-    props.onSelectLocation(value);
-    handleLocationSearch("");
-  };
+  const handleLocationSelect = useCallback(
+    (value: string) => {
+      props.onSelectLocation(value);
+      handleLocationSearch("");
+    },
+    [props.onSelectLocation, handleLocationSearch]
+  );
   return (
     <Select
       filterOption={false}
@@ -46,6 +52,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
           key: location.raw?.place_id,
         };
       })}
+      className="fullWidth"
     />
   );
 };

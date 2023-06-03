@@ -75,7 +75,10 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
         >
           <MapSearch onSelectLocation={handleSelectLocation} />
         </Form.Item>
-        <MapElement selectedLocation={selectedLocation} />
+        <MapElement
+          selectedLocation={selectedLocation}
+          locations={selectedLocation ? [selectedLocation] : undefined}
+        />
         <Row
           gutter={[16, 16]}
           justify={"end"}

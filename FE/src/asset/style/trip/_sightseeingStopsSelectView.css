@@ -1,0 +1,11 @@
+.sightseeingStopsSelectView__locationList {
+    height: 100%;
+}
+
+.sightseeingStopsSelectView__listItem {
+    cursor: pointer;
+}
+
+.sightseeingStopsSelectView__mapContainer {
+    height: 50vh;
+}

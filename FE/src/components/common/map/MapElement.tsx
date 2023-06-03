@@ -8,6 +8,8 @@ export interface IGeosearchPayload {
 }
 export interface IMapElementOwnProps {
   selectedLocation?: IGeosearchPayload;
+  locations?: IGeosearchPayload[];
+  className?: string;
 }
 type IMapElementProps = IMapElementOwnProps;
 
@@ -19,7 +21,7 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
       center={[51.505, -0.09]}
       zoom={13}
       scrollWheelZoom={true}
-      className="mapElement__MapContainer"
+      className={"mapElement__MapContainer " + props.className}
     >
       <ChangeView
         center={
@@ -34,16 +36,16 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {props.selectedLocation && (
+      {props.locations?.map((location) => (
         <Marker
-          key={`marker-${props.selectedLocation?.label}`}
-          position={[props.selectedLocation?.y, props.selectedLocation.x]}
+          key={`marker-${location.label}`}
+          position={[location.y, location.x]}
         >
           <Popup>
-            <span>{props.selectedLocation.label}</span>
+            <span>{location.label}</span>
           </Popup>
         </Marker>
-      )}
+      ))}
     </MapContainer>
   );
 };
