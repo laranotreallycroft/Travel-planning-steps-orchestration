@@ -5,10 +5,11 @@ import React, { useCallback, useState } from "react";
 import { ISightseeingRoutePayload } from "../../../model/trip/sightseeing/Sightseeing";
 import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
 import MapSearch from "../../common/map/MapSearch";
+import notificationService from "../../../service/util/notificationService";
 
 export interface ISightseeingStopsSelectViewOwnProps {
   selectedLocation: IGeosearchPayload;
-  onSightseeingStopsSelect: (value: ISightseeingRoutePayload) => void;
+  onSightseeingStopsSelect: (value: IGeosearchPayload[]) => void;
 }
 
 type ISightseeingStopsSelectViewProps = ISightseeingStopsSelectViewOwnProps;
@@ -44,7 +45,12 @@ const SightseeingStopsSelectView: React.FC<ISightseeingStopsSelectViewProps> = (
   );
 
   const handleNext = () => {
-    props.onSightseeingStopsSelect({ locations });
+    if (locations.length >= 2) props.onSightseeingStopsSelect(locations);
+    else
+      notificationService.error(
+        "Unable to generate route",
+        "Please select at least two stops"
+      );
   };
 
   return (

@@ -1,8 +1,14 @@
 import { connect } from "react-redux";
 import { ITrip } from "../../../model/trip/Trip";
-import { ISightseeingRoutePayload } from "../../../model/trip/sightseeing/Sightseeing";
+import {
+  IShortestRoute,
+  IShortestRouteOpenrouteservicePayload,
+  ISightseeingRoutePayload,
+} from "../../../model/trip/sightseeing/Sightseeing";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import SightseeingStopsSelectView from "./SightseeingStopsSelectView";
+import { SightseeingBusinessStore } from "../../../service/business/sightseeing/SightseeingBusinessStore";
+import { IGeosearchPayload } from "../../common/map/MapElement";
 
 export interface ISightseeingStopsSelectContainerOwnProps {
   onNextStep: () => void;
@@ -10,8 +16,13 @@ export interface ISightseeingStopsSelectContainerOwnProps {
 
 export interface ISightseeingStopsSelectContainerStateProps {
   trip: ITrip;
+  shortestRouteOpenrouteservice: IShortestRoute;
 }
-export interface ISightseeingStopsSelectContainerDispatchProps {}
+export interface ISightseeingStopsSelectContainerDispatchProps {
+  shortestRouteOpenrouteserviceFetch: (
+    shortestRoutePayload: IShortestRouteOpenrouteservicePayload
+  ) => void;
+}
 type ISightseeingStopsSelectContainerProps =
   ISightseeingStopsSelectContainerOwnProps &
     ISightseeingStopsSelectContainerStateProps &
@@ -20,8 +31,23 @@ type ISightseeingStopsSelectContainerProps =
 const SightseeingStopsSelectContainer: React.FC<
   ISightseeingStopsSelectContainerProps
 > = (props: ISightseeingStopsSelectContainerProps) => {
-  const handleSightseeingStopsSelect = (values: ISightseeingRoutePayload) => {
-    console.log(values);
+  const handleSightseeingStopsSelect = (values: IGeosearchPayload[]) => {
+    const payload: IShortestRouteOpenrouteservicePayload = {
+      jobs: values.map((value, index) => {
+        return { id: index, location: [value.x, value.y], skills: [1] };
+      }),
+      vehicles: [
+        {
+          id: 1,
+          profile: "driving-car",
+          start: [values[0].x, values[0].y],
+          end: [values[0].x, values[0].y],
+          capacity: [4],
+          skills: [1, 14],
+        },
+      ],
+    };
+    props.shortestRouteOpenrouteserviceFetch(payload);
     //   props.onNextStep();
   };
 
@@ -37,11 +63,22 @@ const mapStateToProps = (
   state: any
 ): ISightseeingStopsSelectContainerStateProps => ({
   trip: TripBusinessStore.selectors.getTrip(state),
+  shortestRouteOpenrouteservice:
+    SightseeingBusinessStore.selectors.getShortestRouteOpenrouteservice(state),
 });
 
 const mapDispatchToProps = (
   dispatch: any
-): ISightseeingStopsSelectContainerDispatchProps => ({});
+): ISightseeingStopsSelectContainerDispatchProps => ({
+  shortestRouteOpenrouteserviceFetch: (
+    shortestRoutePayload: IShortestRouteOpenrouteservicePayload
+  ) =>
+    dispatch(
+      SightseeingBusinessStore.actions.shortestRouteOpenrouteserviceFetch(
+        shortestRoutePayload
+      )
+    ),
+});
 
 export default connect<
   ISightseeingStopsSelectContainerStateProps,

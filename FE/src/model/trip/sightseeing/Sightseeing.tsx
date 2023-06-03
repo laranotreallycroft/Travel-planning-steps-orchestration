@@ -4,5 +4,24 @@ export interface ISightseeingRoutePayload {
   locations: IGeosearchPayload[];
 }
 
-export interface IShortestRoute {}
-export interface IShortestRouteOpenrouteservicePayload {}
+export interface IShortestRoute {
+  locations: IGeosearchPayload[];
+}
+export interface IShortestRouteOpenrouteservicePayload {
+  jobs: IShortestRouteOpenrouteservicePayloadJobs[];
+  vehicles: IShortestRouteOpenrouteservicePayloadVehicles[];
+}
+export interface IShortestRouteOpenrouteservicePayloadJobs {
+  id: number;
+  location: number[];
+  skills: number[];
+}
+
+export interface IShortestRouteOpenrouteservicePayloadVehicles {
+  id: number;
+  profile: string;
+  start: number[];
+  end: number[];
+  capacity: number[];
+  skills: number[];
+}
