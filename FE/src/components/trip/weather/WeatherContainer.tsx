@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { IWeather, IWeatherPayload } from "../../../model/trip/weather/Weather";
-import { WeatherBusinessStore } from "../../../service/business/trip/weather/WeatherBusinessStore";
+import { WeatherBusinessStore } from "../../../service/business/weather/WeatherBusinessStore";
 import { useEffect } from "react";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { ITrip } from "../../../model/trip/Trip";

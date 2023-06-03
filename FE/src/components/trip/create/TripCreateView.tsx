@@ -2,8 +2,8 @@ import { DatePicker, Form, Modal, Row } from "antd";
 import { Dayjs } from "dayjs";
 import { RangeValue } from "rc-picker/lib/interface";
 import React, { useCallback, useState } from "react";
-import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
 import MapSearch from "../../common/map/MapSearch";
+import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
 
 export interface ITripCreateViewOwnProps {
   createTripModalOpen: boolean;

@@ -1,7 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Col, Form, List, Row } from "antd";
+import { Button, Col, List, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ISightseeingRoutePayload } from "../../../model/trip/sightseeing/Sightseeing";
 import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
 import MapSearch from "../../common/map/MapSearch";

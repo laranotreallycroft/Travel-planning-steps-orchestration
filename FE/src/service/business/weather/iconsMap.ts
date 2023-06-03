@@ -1,4 +1,4 @@
-import weatherIcons from "../../../../asset/img/weatherIcons";
+import weatherIcons from "../../../asset/img/weatherIcons";
 
 interface IconsMap {
   [key: string]: string;

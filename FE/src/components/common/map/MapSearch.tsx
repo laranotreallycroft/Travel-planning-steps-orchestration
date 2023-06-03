@@ -1,9 +1,9 @@
 import { Select } from "antd";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { useCallback, useState } from "react";
-import { IGeosearchPayload } from "./MapElement";
 import { initMap } from "./utils";
 import { debounce } from "lodash";
+import { IGeosearchPayload } from "./MapElement";
 
 export interface IMapSearchOwnProps {
   onSelectLocation: (value: string) => void;

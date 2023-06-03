@@ -1,5 +1,7 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 import { ChangeView, initMap } from "./utils";
+
 export interface IGeosearchPayload {
   x: number;
   y: number;
