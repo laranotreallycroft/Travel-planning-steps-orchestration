@@ -1,7 +1,11 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { IGeosearchPayload } from "../../trip/create/TripCreateContainer";
 import { ChangeView, initMap } from "./utils";
-
+export interface IGeosearchPayload {
+  x: number;
+  y: number;
+  label: string;
+  raw?: { place_id: string };
+}
 export interface IMapElementOwnProps {
   selectedLocation?: IGeosearchPayload;
 }

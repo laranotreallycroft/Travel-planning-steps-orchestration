@@ -1,24 +1,17 @@
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { BoundsTuple } from "leaflet-geosearch/dist/providers/provider";
 import { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ITripCreatePayload } from "../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import TripCreateView, { ITripCreateForm } from "./TripCreateView";
+import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
 } from "../../../service/util/trackAction";
-import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
+import TripCreateView, { ITripCreateForm } from "./TripCreateView";
+import { IGeosearchPayload } from "../../common/map/MapElement";
 
-export interface IGeosearchPayload {
-  x: number;
-  y: number;
-  label: string;
-  bounds: BoundsTuple | null;
-  raw: { place_id: string };
-}
 const provider = new OpenStreetMapProvider();
 
 export interface ITripCreateContainerOwnProps {

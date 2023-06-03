@@ -1,3 +1,5 @@
+import SightseeingContainer from "../trip/sightseeing/SightseeingContainer";
+
 export interface ISightseeingPageOwnProps {}
 
 type ISightseeingPageProps = ISightseeingPageOwnProps;
@@ -5,7 +7,7 @@ type ISightseeingPageProps = ISightseeingPageOwnProps;
 const SightseeingPage: React.FC<ISightseeingPageProps> = (
   props: ISightseeingPageProps
 ) => {
-  return <div />;
+  return <SightseeingContainer />;
 };
 
 export default SightseeingPage;
