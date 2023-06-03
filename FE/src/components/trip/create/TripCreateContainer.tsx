@@ -1,5 +1,5 @@
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ITripCreatePayload } from "../../../model/trip/Trip";
@@ -10,7 +10,6 @@ import {
   createTrackableAction,
 } from "../../../service/util/trackAction";
 import TripCreateView, { ITripCreateForm } from "./TripCreateView";
-import { IGeosearchPayload } from "../../common/map/MapElement";
 
 const provider = new OpenStreetMapProvider();
 
@@ -31,20 +30,7 @@ type ITripCreateContainerProps = ITripCreateContainerOwnProps &
 const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   props: ITripCreateContainerProps
 ) => {
-  const [locationArray, setLocationArray] = useState<IGeosearchPayload[]>();
   const navigator = useNavigate();
-  const handleLocationSearch = useCallback(
-    (value: string) => {
-      if (value.length > 0)
-        provider
-          .search({ query: value })
-          .then((geosearchPayloadArray: IGeosearchPayload[]) => {
-            setLocationArray(geosearchPayloadArray);
-          });
-      else setLocationArray([]);
-    },
-    [provider.search]
-  );
 
   const handleTripCreate = useCallback(
     (values: ITripCreateForm) => {
@@ -66,8 +52,6 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   );
   return (
     <TripCreateView
-      onLocationSearch={handleLocationSearch}
-      locationArray={locationArray}
       createTripModalOpen={props.createTripModalOpen}
       onTripCreate={handleTripCreate}
       onTripCreateModalClose={props.onTripCreateModalClose}

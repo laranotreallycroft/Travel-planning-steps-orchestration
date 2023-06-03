@@ -1,14 +1,12 @@
-import { DatePicker, Form, Modal, Row, Select } from "antd";
+import { DatePicker, Form, Modal, Row } from "antd";
 import { Dayjs } from "dayjs";
 import { RangeValue } from "rc-picker/lib/interface";
 import React, { useCallback, useState } from "react";
-
 import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
+import MapSearch from "../../common/map/MapSearch";
 
 export interface ITripCreateViewOwnProps {
   createTripModalOpen: boolean;
-  locationArray?: IGeosearchPayload[];
-  onLocationSearch: (searchValue: string) => void;
   onTripCreate: (values: ITripCreateForm) => void;
   onTripCreateModalClose: () => void;
 }
@@ -30,7 +28,6 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
     const parsedValue: IGeosearchPayload = JSON.parse(value);
     setSelectedLocation(parsedValue);
     form.setFieldValue("location", parsedValue);
-    props.onLocationSearch("");
   }, []);
 
   const handleCancelButtonClick = useCallback(() => {
@@ -76,20 +73,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
             },
           ]}
         >
-          <Select
-            filterOption={false}
-            showSearch={true}
-            placeholder="Location"
-            onChange={handleSelectLocation}
-            onSearch={props.onLocationSearch}
-            options={props.locationArray?.map((location: IGeosearchPayload) => {
-              return {
-                label: location.label,
-                value: JSON.stringify(location),
-                key: location.raw?.place_id,
-              };
-            })}
-          />
+          <MapSearch onSelectLocation={handleSelectLocation} />
         </Form.Item>
         <MapElement selectedLocation={selectedLocation} />
         <Row
