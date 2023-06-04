@@ -43,6 +43,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
       filterOption={false}
       showSearch={true}
       placeholder="Location"
+      value={null}
       onChange={handleLocationSelect}
       onSearch={handleLocationSearch}
       options={searchLocationArray?.map((location: IGeosearchPayload) => {
