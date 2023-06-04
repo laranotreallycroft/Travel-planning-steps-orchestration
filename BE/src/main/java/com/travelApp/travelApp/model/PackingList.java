@@ -13,7 +13,9 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.travelApp.travelApp.model.payload.Basics;
 import com.travelApp.travelApp.model.payload.Clothes;
 import com.travelApp.travelApp.model.payload.Hygiene;
@@ -30,7 +32,9 @@ public class PackingList {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trip_id", nullable = false)
-	@JsonManagedReference
+	@JsonIdentityInfo(
+			  generator = ObjectIdGenerators.PropertyGenerator.class, 
+			  property = "id")
 	private Trip trip;
 
 	@Column(name = "basics_travel_aids")

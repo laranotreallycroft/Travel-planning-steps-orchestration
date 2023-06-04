@@ -145,4 +145,5 @@ public class TripController {
 		}
 		return ResponseEntity.badRequest().body("Something went wrong");
 	}
+	
 }

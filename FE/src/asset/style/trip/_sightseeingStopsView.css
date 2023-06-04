@@ -1,0 +1,11 @@
+.sightseeingStopsView__locationList {
+    height: 44.5vh;
+}
+
+.sightseeingStopsView__listItem {
+    cursor: pointer;
+}
+
+.sightseeingStopsView__mapContainer {
+    height: 55vh;
+}

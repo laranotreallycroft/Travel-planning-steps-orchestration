@@ -1,35 +1,34 @@
 import { connect } from "react-redux";
-import { ITrip } from "../../../model/trip/Trip";
+import { ITrip } from "../../../../model/trip/Trip";
 import {
   IShortestRoute,
   IShortestRouteOpenrouteservicePayload,
-} from "../../../model/trip/sightseeing/Sightseeing";
-import { SightseeingBusinessStore } from "../../../service/business/sightseeing/SightseeingBusinessStore";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { IGeosearchPayload } from "../../common/map/MapElement";
-import SightseeingStopsSelectView from "./SightseeingStopsSelectView";
+} from "../../../../model/trip/sightseeing/Sightseeing";
+import { SightseeingBusinessStore } from "../../../../service/business/sightseeing/SightseeingBusinessStore";
+import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
+import { IGeosearchPayload } from "../../../common/map/MapElement";
+import SightseeingStopsView from "./SightseeingStopsView";
 
-export interface ISightseeingStopsSelectContainerOwnProps {
+export interface ISightseeingStopsContainerOwnProps {
   onNextStep: () => void;
 }
 
-export interface ISightseeingStopsSelectContainerStateProps {
+export interface ISightseeingStopsContainerStateProps {
   trip: ITrip;
   shortestRouteOpenrouteservice: IShortestRoute;
 }
-export interface ISightseeingStopsSelectContainerDispatchProps {
+export interface ISightseeingStopsContainerDispatchProps {
   shortestRouteOpenrouteserviceFetch: (
     shortestRoutePayload: IShortestRouteOpenrouteservicePayload
   ) => void;
 }
-type ISightseeingStopsSelectContainerProps =
-  ISightseeingStopsSelectContainerOwnProps &
-    ISightseeingStopsSelectContainerStateProps &
-    ISightseeingStopsSelectContainerDispatchProps;
+type ISightseeingStopsContainerProps = ISightseeingStopsContainerOwnProps &
+  ISightseeingStopsContainerStateProps &
+  ISightseeingStopsContainerDispatchProps;
 
-const SightseeingStopsSelectContainer: React.FC<
-  ISightseeingStopsSelectContainerProps
-> = (props: ISightseeingStopsSelectContainerProps) => {
+const SightseeingStopsContainer: React.FC<ISightseeingStopsContainerProps> = (
+  props: ISightseeingStopsContainerProps
+) => {
   const handleSightseeingStopsSelect = (values: IGeosearchPayload[]) => {
     const payload: IShortestRouteOpenrouteservicePayload = {
       jobs: values.map((value, index) => {
@@ -50,16 +49,14 @@ const SightseeingStopsSelectContainer: React.FC<
     //   props.onNextStep();
   };
   return (
-    <SightseeingStopsSelectView
+    <SightseeingStopsView
       originLocation={{ ...props.trip.location, label: props.trip.name }}
       onSightseeingStopsSelect={handleSightseeingStopsSelect}
     />
   );
 };
 
-const mapStateToProps = (
-  state: any
-): ISightseeingStopsSelectContainerStateProps => ({
+const mapStateToProps = (state: any): ISightseeingStopsContainerStateProps => ({
   trip: TripBusinessStore.selectors.getTrip(state),
   shortestRouteOpenrouteservice:
     SightseeingBusinessStore.selectors.getShortestRouteOpenrouteservice(state),
@@ -67,7 +64,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (
   dispatch: any
-): ISightseeingStopsSelectContainerDispatchProps => ({
+): ISightseeingStopsContainerDispatchProps => ({
   shortestRouteOpenrouteserviceFetch: (
     shortestRoutePayload: IShortestRouteOpenrouteservicePayload
   ) =>
@@ -79,10 +76,10 @@ const mapDispatchToProps = (
 });
 
 export default connect<
-  ISightseeingStopsSelectContainerStateProps,
-  ISightseeingStopsSelectContainerDispatchProps,
-  ISightseeingStopsSelectContainerOwnProps
+  ISightseeingStopsContainerStateProps,
+  ISightseeingStopsContainerDispatchProps,
+  ISightseeingStopsContainerOwnProps
 >(
   mapStateToProps,
   mapDispatchToProps
-)(SightseeingStopsSelectContainer);
+)(SightseeingStopsContainer);

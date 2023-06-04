@@ -8,7 +8,9 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -46,7 +48,9 @@ public class Trip {
 	private User user;
 
 	@OneToOne(mappedBy = "trip", cascade = CascadeType.ALL)
-	@JsonBackReference
+	@JsonIdentityInfo(
+			  generator = ObjectIdGenerators.PropertyGenerator.class, 
+			  property = "id")
 	private PackingList packingList;
 
 	public Trip() {

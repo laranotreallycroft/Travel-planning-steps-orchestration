@@ -20,5 +20,6 @@ body, #root, html {
 @import 'common/input/_customCheckboxGroup.css';
 @import 'trip/_packingListCreateView.css';
 @import 'trip/_weatherView.css';
-@import 'trip/_sightseeingStopsSelectView.css';
+@import 'trip/_sightseeingStopsView.css';
 @import 'common/list/_dragAndDropTable.css';
+@import 'trip/_sightseeingView.css';

@@ -1,5 +1,7 @@
 import { IGeosearchPayload } from "../../../components/common/map/MapElement";
 
+export interface ISightseeing {}
+
 export interface ISightseeingRoutePayload {
   locations: IGeosearchPayload[];
 }

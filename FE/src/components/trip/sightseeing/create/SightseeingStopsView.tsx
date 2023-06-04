@@ -1,21 +1,21 @@
-import { Button, Col, Row, Tooltip } from "antd";
+import { Button, Col, Form, Row, Switch, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useEffect, useState } from "react";
-import DragAndDropTable from "../../common/list/DragAndDropTable";
-import notificationService from "../../../service/util/notificationService";
-import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
-import MapSearch from "../../common/map/MapSearch";
+import DragAndDropTable from "../../../common/list/DragAndDropTable";
+import notificationService from "../../../../service/util/notificationService";
+import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
+import MapSearch from "../../../common/map/MapSearch";
 import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
 
-export interface ISightseeingStopsSelectViewOwnProps {
+export interface ISightseeingStopsViewOwnProps {
   originLocation: IGeosearchPayload;
   onSightseeingStopsSelect: (value: IGeosearchPayload[]) => void;
 }
 
-type ISightseeingStopsSelectViewProps = ISightseeingStopsSelectViewOwnProps;
+type ISightseeingStopsViewProps = ISightseeingStopsViewOwnProps;
 
-const SightseeingStopsSelectView: React.FC<ISightseeingStopsSelectViewProps> = (
-  props: ISightseeingStopsSelectViewProps
+const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
+  props: ISightseeingStopsViewProps
 ) => {
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
     props.originLocation
@@ -105,19 +105,25 @@ const SightseeingStopsSelectView: React.FC<ISightseeingStopsSelectViewProps> = (
                 },
               ]}
               setLocations={setLocations}
-              className="sightseeingStopsSelectView__locationList"
+              className="sightseeingStopsView__locationList"
             />
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item name={"optimizeRoute"} label={"Optimize Route"}>
+                <Switch />
+              </Form.Item>
+            </Col>
           </Row>
         </Col>
         <Col span={16}>
           <MapElement
             selectedLocation={selectedLocation}
             locations={locations}
-            className="sightseeingStopsSelectView__mapContainer"
+            className="sightseeingStopsView__mapContainer"
           />
         </Col>
       </Row>
-
       <Button type="primary" onClick={handleNext}>
         Next
       </Button>
@@ -125,4 +131,4 @@ const SightseeingStopsSelectView: React.FC<ISightseeingStopsSelectViewProps> = (
   );
 };
 
-export default SightseeingStopsSelectView;
+export default SightseeingStopsView;
