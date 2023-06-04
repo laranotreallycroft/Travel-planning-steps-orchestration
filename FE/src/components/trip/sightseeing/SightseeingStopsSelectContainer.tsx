@@ -3,12 +3,11 @@ import { ITrip } from "../../../model/trip/Trip";
 import {
   IShortestRoute,
   IShortestRouteOpenrouteservicePayload,
-  ISightseeingRoutePayload,
 } from "../../../model/trip/sightseeing/Sightseeing";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import SightseeingStopsSelectView from "./SightseeingStopsSelectView";
 import { SightseeingBusinessStore } from "../../../service/business/sightseeing/SightseeingBusinessStore";
+import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { IGeosearchPayload } from "../../common/map/MapElement";
+import SightseeingStopsSelectView from "./SightseeingStopsSelectView";
 
 export interface ISightseeingStopsSelectContainerOwnProps {
   onNextStep: () => void;
@@ -50,10 +49,9 @@ const SightseeingStopsSelectContainer: React.FC<
     props.shortestRouteOpenrouteserviceFetch(payload);
     //   props.onNextStep();
   };
-
   return (
     <SightseeingStopsSelectView
-      selectedLocation={{ ...props.trip.location, label: props.trip.name }}
+      originLocation={{ ...props.trip.location, label: props.trip.name }}
       onSightseeingStopsSelect={handleSightseeingStopsSelect}
     />
   );
