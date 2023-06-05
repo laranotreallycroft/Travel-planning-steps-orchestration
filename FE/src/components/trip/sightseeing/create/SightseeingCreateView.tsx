@@ -1,9 +1,9 @@
-import { Col, Form, Modal, Row, Steps } from "antd";
+import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
 import { IGeosearchPayload } from "../../../common/map/MapElement";
+import SightseeingSettingsView from "./SightseeingSettingsView";
 import SightseeingStopsContainer from "./SightseeingStopsContainer";
-import WeatherContainer from "../../weather/WeatherContainer";
 
 export interface ISightseeingCreateViewOwnProps {
   trip: ITrip;
@@ -13,6 +13,10 @@ export interface ISightseeingCreateViewOwnProps {
 
 export interface ISightseeingCreateForm {
   locations: IGeosearchPayload[];
+  routeOptions: {
+    optimize: boolean;
+    carTravel: boolean;
+  };
 }
 
 type ISightseeingCreateViewProps = ISightseeingCreateViewOwnProps;
@@ -27,7 +31,7 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
     setCurrentStep(currentStep + 1);
   };
 
-  const handlePrevStep = () => {
+  const handlePreviousStep = () => {
     setCurrentStep(currentStep - 1);
   };
   //TODO other logic
@@ -48,15 +52,16 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
         content: <SightseeingStopsContainer onNextStep={handleNextStep} />,
       },
       {
-        title: "Select your stops",
-        content: <WeatherContainer />,
-      },
-      {
-        title: "Last",
-        content: "Last-content",
+        title: "Fine-tune your sightseeing plan",
+        content: (
+          <SightseeingSettingsView
+            onNextStep={handleNextStep}
+            onPreviousStep={handlePreviousStep}
+          />
+        ),
       },
     ],
-    []
+    [handleNextStep, handlePreviousStep]
   );
 
   const items = useMemo(
@@ -65,20 +70,19 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   );
 
   return (
-    <Modal
-      title="Create trip"
-      open={props.isSightseeingCreateModalOpen}
-      onCancel={handleModalClose}
-      onOk={form.submit}
-      className="sightseeingCreateView__modal"
-    >
-      <Form<ISightseeingCreateForm> form={form} onFinish={handleFinish}>
+    <Form<ISightseeingCreateForm> form={form} onFinish={handleFinish}>
+      <Modal
+        title="Create trip"
+        open={props.isSightseeingCreateModalOpen}
+        onCancel={handleModalClose}
+        footer={null}
+        width={1200}
+        bodyStyle={{ height: 600, display: "flex", flexDirection: "column" }}
+      >
         <Steps current={currentStep} items={items} />
-        <Row justify={"end"} className="fullHeight">
-          <Col span={24}>{steps[currentStep].content}</Col>
-        </Row>
-      </Form>
-    </Modal>
+        {steps[currentStep].content}
+      </Modal>
+    </Form>
   );
 };
 

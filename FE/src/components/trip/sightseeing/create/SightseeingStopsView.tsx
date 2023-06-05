@@ -67,75 +67,81 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
   };
 
   return (
-    <div className="fullSize">
-      <Row className="margin-bottom-l">
-        <Title level={4}>Select your stops</Title>
+    <Row justify={"space-between"} className="fullHeight">
+      <Row>
+        <Row className="margin-bottom-l">
+          <Title level={4}>Select your stops</Title>
+        </Row>
+        <Row gutter={[16, 16]} className="margin-bottom-l fullWidth">
+          <Col span={8}>
+            <Row className="margin-bottom-l">
+              <MapSearch onSelectLocation={handleSelectLocation} />
+            </Row>
+            <Row className="sightseeingStopsView__Listcontainer">
+              <Form.List name="locations">
+                {() => (
+                  <DragAndDropTable
+                    sortableContextItems={locations.map(
+                      (location) => location.label
+                    )}
+                    tableDataSource={locations.map((location) => {
+                      return { ...location, key: location.label };
+                    })}
+                    tableColumns={[
+                      {
+                        title: "Location",
+                        dataIndex: "label",
+                      },
+                      {
+                        title: "Action",
+                        key: "action",
+                        render: (_, location) => (
+                          <Row justify={"space-between"}>
+                            <Tooltip placement="bottom" title={"Remove stop"}>
+                              <Button
+                                icon={<DeleteOutlined />}
+                                onClick={(e) =>
+                                  handleRemoveLocation(e, location)
+                                }
+                                size="small"
+                              />
+                            </Tooltip>
+                            <Tooltip
+                              placement="bottom"
+                              title={"Zoom to location"}
+                            >
+                              <Button
+                                icon={<ZoomInOutlined />}
+                                onClick={() => setSelectedLocation(location)}
+                                size="small"
+                              />
+                            </Tooltip>
+                          </Row>
+                        ),
+                      },
+                    ]}
+                    setLocations={setLocations}
+                    className="fullHeight"
+                  />
+                )}
+              </Form.List>
+            </Row>
+          </Col>
+          <Col span={16}>
+            <MapElement
+              selectedLocation={selectedLocation}
+              locations={locations}
+              className="fullHeight"
+            />
+          </Col>
+        </Row>
       </Row>
-      <Row gutter={[16, 16]} className="margin-bottom-l">
-        <Col span={8}>
-          <Row className="margin-bottom-l">
-            <MapSearch onSelectLocation={handleSelectLocation} />
-          </Row>
-          <Row>
-            <Form.List name="locations">
-              {(fields, { add, remove }) => (
-                <DragAndDropTable
-                  sortableContextItems={locations.map(
-                    (location) => location.label
-                  )}
-                  tableDataSource={locations.map((location) => {
-                    return { ...location, key: location.label };
-                  })}
-                  tableColumns={[
-                    {
-                      title: "Location",
-                      dataIndex: "label",
-                    },
-                    {
-                      title: "Action",
-                      key: "action",
-                      render: (_, location) => (
-                        <Row justify={"space-between"}>
-                          <Tooltip placement="bottom" title={"Remove stop"}>
-                            <Button
-                              icon={<DeleteOutlined />}
-                              onClick={(e) => handleRemoveLocation(e, location)}
-                              size="small"
-                            />
-                          </Tooltip>
-                          <Tooltip
-                            placement="bottom"
-                            title={"Zoom to location"}
-                          >
-                            <Button
-                              icon={<ZoomInOutlined />}
-                              onClick={() => setSelectedLocation(location)}
-                              size="small"
-                            />
-                          </Tooltip>
-                        </Row>
-                      ),
-                    },
-                  ]}
-                  setLocations={setLocations}
-                  className="sightseeingStopsView__locationList"
-                />
-              )}
-            </Form.List>
-          </Row>
-        </Col>
-        <Col span={16}>
-          <MapElement
-            selectedLocation={selectedLocation}
-            locations={locations}
-            className="sightseeingStopsView__mapContainer"
-          />
-        </Col>
+      <Row justify={"end"} align={"bottom"} className="fullWidth">
+        <Button type="primary" onClick={handleNext}>
+          Next
+        </Button>
       </Row>
-      <Button type="primary" onClick={handleNext}>
-        Next
-      </Button>
-    </div>
+    </Row>
   );
 };
 

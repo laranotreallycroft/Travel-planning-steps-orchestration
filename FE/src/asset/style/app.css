@@ -23,4 +23,3 @@ body, #root, html {
 @import 'trip/_sightseeingStopsView.css';
 @import 'common/list/_dragAndDropTable.css';
 @import 'trip/_sightseeingView.css';
-@import 'trip/_sightseeingCreateView.css';
