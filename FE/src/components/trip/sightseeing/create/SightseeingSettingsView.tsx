@@ -21,12 +21,16 @@ const SightseeingSettingsView: React.FC<ISightseeingSettingsViewProps> = (
           <Form.Item
             label={"Optimize route"}
             name={["routeOptions", "optimize"]}
+            valuePropName="checked"
           >
             <Switch />
           </Form.Item>
           <Row>
             <DirectionsWalkIcon />
-            <Form.Item name={["routeOptions", "carTravel"]}>
+            <Form.Item
+              name={["routeOptions", "carTravel"]}
+              valuePropName="checked"
+            >
               <Switch />
             </Form.Item>
             <DirectionsCarIcon />

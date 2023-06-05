@@ -1,16 +1,14 @@
 import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Row, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-import { ISightseeingCreateForm } from "./SightseeingCreateView";
+import { ISightseeingRouteCreatePayload } from "../../../../service/business/sightseeing/SightseeingBusinessStore";
 
 export interface ISightseeingStopsViewOwnProps {
-  originLocation: IGeosearchPayload;
-  onSightseeingStopsSelect: (value: IGeosearchPayload[]) => void;
   onNextStep: () => void;
 }
 
@@ -19,26 +17,20 @@ type ISightseeingStopsViewProps = ISightseeingStopsViewOwnProps;
 const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
   props: ISightseeingStopsViewProps
 ) => {
-  const form = Form.useFormInstance<ISightseeingCreateForm>();
+  const form = Form.useFormInstance<ISightseeingRouteCreatePayload>();
+  const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
-    props.originLocation
+    form.getFieldValue("locations")[0]
   );
-  const [locations, setLocations] = useState<IGeosearchPayload[]>(
-    props.originLocation ? [props.originLocation] : []
-  );
+  const setLocations = useCallback((locations: IGeosearchPayload[]) => {
+    form.setFieldValue("locations", locations);
+  }, []);
 
-  useEffect(() => {
-    setSelectedLocation(props.originLocation);
-    setLocations([props.originLocation]);
-    form.setFieldValue("locations", [props.originLocation]);
-  }, [props.originLocation]);
-
-  const handleSelectLocation = useCallback(
+  const handleAddLocation = useCallback(
     (value: string) => {
       const parsedValue: IGeosearchPayload = JSON.parse(value);
       setSelectedLocation(parsedValue);
       setLocations([...locations, parsedValue]);
-      form.setFieldValue("locations", [...locations, parsedValue]);
     },
     [locations]
   );
@@ -52,7 +44,6 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
       );
       setSelectedLocation(newLocations[0]);
       setLocations(newLocations);
-      form.setFieldValue("locations", newLocations);
     },
     [locations]
   );
@@ -68,25 +59,39 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
 
   return (
     <Row justify={"space-between"} className="fullHeight">
-      <Row>
+      <Row className="fullWidth">
         <Row className="margin-bottom-l">
           <Title level={4}>Select your stops</Title>
         </Row>
         <Row gutter={[16, 16]} className="margin-bottom-l fullWidth">
           <Col span={8}>
             <Row className="margin-bottom-l">
-              <MapSearch onSelectLocation={handleSelectLocation} />
+              <MapSearch onSelectLocation={handleAddLocation} />
             </Row>
-            <Row className="sightseeingStopsView__Listcontainer">
+            <Row className="sightseeingStopsView__listcontainer">
               <Form.List name="locations">
                 {() => (
                   <DragAndDropTable
-                    sortableContextItems={locations.map(
-                      (location) => location.label
-                    )}
-                    tableDataSource={locations.map((location) => {
-                      return { ...location, key: location.label };
-                    })}
+                    sortableContextItems={
+                      locations
+                        ? locations.map((location) => location.label)
+                        : form
+                            .getFieldValue("locations")
+                            .map(
+                              (location: IGeosearchPayload) => location.label
+                            )
+                    }
+                    tableDataSource={
+                      locations
+                        ? locations.map((location) => {
+                            return { ...location, key: location.label };
+                          })
+                        : form
+                            .getFieldValue("locations")
+                            .map((location: IGeosearchPayload) => {
+                              return { ...location, key: location.label };
+                            })
+                    }
                     tableColumns={[
                       {
                         title: "Location",
@@ -121,7 +126,7 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
                       },
                     ]}
                     setLocations={setLocations}
-                    className="fullHeight"
+                    className="fullSize"
                   />
                 )}
               </Form.List>

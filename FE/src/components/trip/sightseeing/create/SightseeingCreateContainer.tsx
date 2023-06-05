@@ -2,6 +2,10 @@ import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import SightseeingCreateView from "./SightseeingCreateView";
+import {
+  ISightseeingRouteCreatePayload,
+  SightseeingBusinessStore,
+} from "../../../../service/business/sightseeing/SightseeingBusinessStore";
 
 export interface ISightseeingCreateContainerOwnProps {
   date: string;
@@ -12,7 +16,11 @@ export interface ISightseeingCreateContainerOwnProps {
 export interface ISightseeingCreateContainerStateProps {
   trip: ITrip;
 }
-export interface ISightseeingCreateContainerDispatchProps {}
+export interface ISightseeingCreateContainerDispatchProps {
+  sightseeingRouteCreate: (
+    sightseeingRoutePayload: ISightseeingRouteCreatePayload
+  ) => void;
+}
 type ISightseeingCreateContainerProps = ISightseeingCreateContainerOwnProps &
   ISightseeingCreateContainerStateProps &
   ISightseeingCreateContainerDispatchProps;
@@ -25,6 +33,7 @@ const SightseeingCreateContainer: React.FC<ISightseeingCreateContainerProps> = (
       trip={props.trip}
       onSightseeingCreateModalClose={props.onSightseeingCreateModalClose}
       isSightseeingCreateModalOpen={props.isSightseeingCreateModalOpen}
+      onSightseeingCreate={props.sightseeingRouteCreate}
     />
   );
 };
@@ -37,7 +46,16 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (
   dispatch: any
-): ISightseeingCreateContainerDispatchProps => ({});
+): ISightseeingCreateContainerDispatchProps => ({
+  sightseeingRouteCreate: (
+    sightseeingRoutePayload: ISightseeingRouteCreatePayload
+  ) =>
+    dispatch(
+      SightseeingBusinessStore.actions.sightseeingRouteCreate(
+        sightseeingRoutePayload
+      )
+    ),
+});
 
 export default connect<
   ISightseeingCreateContainerStateProps,

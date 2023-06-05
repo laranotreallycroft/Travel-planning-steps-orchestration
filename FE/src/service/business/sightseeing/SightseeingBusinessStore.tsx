@@ -1,147 +1,72 @@
 import axios from "axios";
 import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-import {
-  IShortestRoute,
-  IShortestRouteOpenrouteservicePayload,
-} from "../../../model/trip/sightseeing/Sightseeing";
+
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
 import { loginActions } from "../login/LoginBusinessStore";
 import { getTrip } from "../trip/TripBusinessStore";
+import { IGeosearchPayload } from "../../../components/common/map/MapElement";
+import { ISightseeing } from "../../../model/trip/sightseeing/Sightseeing";
 
+export interface ISightseeingRouteCreatePayload {
+  locations: IGeosearchPayload[];
+  routeOptions: {
+    optimize: boolean;
+    carTravel: boolean;
+  };
+}
 // -
 // -------------------- Selectors
-const getShortestRouteOpenrouteservice = (store: any): IShortestRoute =>
-  store.shortestRouteOpenrouteservice;
-const getShortestRoute = (store: any): IShortestRoute => store.shortestRoute;
+const getSightseeingRoute = (store: any): ISightseeing =>
+  store.sightseeingRoute;
 
 // -
 // -------------------- Actions
 const actions = {
-  SHORTEST_ROUTE_OPENROUTESERVICE_FETCH:
-    "SHORTEST_ROUTE_OPENROUTESERVICE_FETCH",
-  SHORTEST_ROUTE_OPENROUTESERVICE_STORE:
-    "SHORTEST_ROUTE_OPENROUTESERVICE_STORE",
-  SHORTEST_ROUTE_OPENROUTESERVICE_CLEAR:
-    "SHORTEST_ROUTE_OPENROUTESERVICE_CLEAR",
-  SHORTEST_ROUTE_CREATE: "SHORTEST_ROUTE_CREATE",
-  SHORTEST_ROUTE_FETCH: "SHORTEST_ROUTE_FETCH",
-  SHORTEST_ROUTE_UPDATE: "SHORTEST_ROUTE_UPDATE",
-  SHORTEST_ROUTE_STORE: "SHORTEST_ROUTE_STORE",
-  SHORTEST_ROUTE_CLEAR: "SHORTEST_ROUTE_CLEAR",
+  SIGHTSEEING_ROUTE_CREATE: "SIGHTSEEING_ROUTE_CREATE",
+  SIGHTSEEING_ROUTE_FETCH: "SIGHTSEEING_ROUTE_FETCH",
+  SIGHTSEEING_ROUTE_UPDATE: "SIGHTSEEING_ROUTE_UPDATE",
+  SIGHTSEEING_ROUTE_STORE: "SIGHTSEEING_ROUTE_STORE",
+  SIGHTSEEING_ROUTE_CLEAR: "SIGHTSEEING_ROUTE_CLEAR",
 };
 
-export const shortestRouteOpenrouteserviceFetch = (
-  payload: IShortestRouteOpenrouteservicePayload
-): IPayloadAction<IShortestRouteOpenrouteservicePayload> => {
-  return {
-    type: actions.SHORTEST_ROUTE_OPENROUTESERVICE_FETCH,
-    payload: payload,
-  };
+export const sightseeingRouteCreate = (
+  payload: ISightseeingRouteCreatePayload
+): IPayloadAction<ISightseeingRouteCreatePayload> => {
+  return { type: actions.SIGHTSEEING_ROUTE_CREATE, payload: payload };
 };
 
-export const shortestRouteOpenrouteserviceStore = (
-  payload: IShortestRoute
-): IPayloadAction<IShortestRoute> => {
-  return {
-    type: actions.SHORTEST_ROUTE_OPENROUTESERVICE_STORE,
-    payload: payload,
-  };
+export const sightseeingRouteFetch = (): IAction => {
+  return { type: actions.SIGHTSEEING_ROUTE_FETCH };
 };
 
-export const shortestRouteOpenrouteserviceClear = (): IAction => {
-  return { type: actions.SHORTEST_ROUTE_OPENROUTESERVICE_CLEAR };
+export const sightseeingRouteUpdate = (
+  payload: ISightseeing
+): IPayloadAction<ISightseeing> => {
+  return { type: actions.SIGHTSEEING_ROUTE_UPDATE, payload: payload };
 };
 
-export const shortestRouteCreate = (
-  payload: IShortestRoute
-): IPayloadAction<IShortestRoute> => {
-  return { type: actions.SHORTEST_ROUTE_CREATE, payload: payload };
+export const sightseeingRouteStore = (
+  payload: ISightseeing
+): IPayloadAction<ISightseeing> => {
+  return { type: actions.SIGHTSEEING_ROUTE_STORE, payload: payload };
 };
 
-export const shortestRouteFetch = (): IAction => {
-  return { type: actions.SHORTEST_ROUTE_FETCH };
-};
-
-export const shortestRouteUpdate = (
-  payload: IShortestRoute
-): IPayloadAction<IShortestRoute> => {
-  return { type: actions.SHORTEST_ROUTE_UPDATE, payload: payload };
-};
-
-export const shortestRouteStore = (
-  payload: IShortestRoute
-): IPayloadAction<IShortestRoute> => {
-  return { type: actions.SHORTEST_ROUTE_STORE, payload: payload };
-};
-
-export const shortestRouteClear = (): IAction => {
-  return { type: actions.SHORTEST_ROUTE_CLEAR };
+export const sightseeingRouteClear = (): IAction => {
+  return { type: actions.SIGHTSEEING_ROUTE_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const shortestRouteOpenrouteserviceFetchEffect = (
-  action$: Observable<IPayloadAction<IShortestRouteOpenrouteservicePayload>>,
+const sightseeingRouteCreateEffect = (
+  action$: Observable<IPayloadAction<ISightseeingRouteCreatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SHORTEST_ROUTE_OPENROUTESERVICE_FETCH;
-    }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const baseUrl = "https://api.openrouteservice.org/optimization";
-      return from(
-        axios({
-          method: "post",
-          baseURL: baseUrl,
-          headers: {
-            Authorization:
-              "5b3ce3597851110001cf624845f0c2fc3f004ad1bd965773236bfa15",
-          },
-          data: action.payload,
-        })
-          .then((response) => {
-            if (response.status === 200) {
-              notificationService.success(
-                "New trip packing list successfully created"
-              );
-              return response.data;
-            }
-          })
-          .catch((error) => {
-            notificationService.error(
-              "Unable to create trip packing list",
-              error.response.data
-            );
-          })
-      ).pipe(trackAction(action));
-    }),
-    filter((data) => data !== undefined),
-    map((data) =>
-      shortestRouteOpenrouteserviceStore(
-        data.routes[0].steps.slice(1, -1).map((obj: any) => {
-          return {
-            x: obj.location[0],
-            y: obj.location[1],
-            label: "AA",
-          };
-        })
-      )
-    )
-  );
-};
-
-const shortestRouteCreateEffect = (
-  action$: Observable<IPayloadAction<IShortestRoute>>,
-  state$: Observable<any>
-) => {
-  return action$.pipe(
-    filter((action) => {
-      return action.type === actions.SHORTEST_ROUTE_CREATE;
+      return action.type === actions.SIGHTSEEING_ROUTE_CREATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -152,7 +77,7 @@ const shortestRouteCreateEffect = (
           .then((response) => {
             if (response.status === 201) {
               notificationService.success(
-                "New trip packing list successfully created"
+                "New sightseeing route successfully created"
               );
               return response.data;
             }
@@ -166,17 +91,17 @@ const shortestRouteCreateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => shortestRouteStore(data))
+    map((data) => sightseeingRouteStore(data))
   );
 };
 
-const shortestRouteFetchEffect = (
+const sightseeingRouteFetchEffect = (
   action$: Observable<IPayloadAction<IIdPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SHORTEST_ROUTE_FETCH;
+      return action.type === actions.SIGHTSEEING_ROUTE_FETCH;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -197,17 +122,17 @@ const shortestRouteFetchEffect = (
           })
       ).pipe(trackAction(action));
     }),
-    map((data) => shortestRouteStore(data))
+    map((data) => sightseeingRouteStore(data))
   );
 };
 
-const shortestRouteUpdateffect = (
-  action$: Observable<IPayloadAction<IShortestRoute>>,
+const sightseeingRouteUpdateffect = (
+  action$: Observable<IPayloadAction<ISightseeing>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SHORTEST_ROUTE_UPDATE;
+      return action.type === actions.SIGHTSEEING_ROUTE_UPDATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -229,37 +154,22 @@ const shortestRouteUpdateffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => shortestRouteStore(data))
+    map((data) => sightseeingRouteStore(data))
   );
 };
 
 // -
 // -------------------- Reducers
 
-const shortestRouteOpenrouteservice = (
+const sightseeingRoute = (
   state: any = null,
-  action: IPayloadAction<IShortestRoute>
+  action: IPayloadAction<ISightseeing>
 ) => {
-  if (action.type === actions.SHORTEST_ROUTE_OPENROUTESERVICE_STORE) {
+  if (action.type === actions.SIGHTSEEING_ROUTE_STORE) {
     if (action.payload) return { ...action.payload };
     else return null;
   } else if (
-    action.type === actions.SHORTEST_ROUTE_OPENROUTESERVICE_CLEAR ||
-    action.type === loginActions.LOGOUT
-  ) {
-    return null;
-  }
-  return state;
-};
-const shortestRoute = (
-  state: any = null,
-  action: IPayloadAction<IShortestRoute>
-) => {
-  if (action.type === actions.SHORTEST_ROUTE_STORE) {
-    if (action.payload) return { ...action.payload };
-    else return null;
-  } else if (
-    action.type === actions.SHORTEST_ROUTE_CLEAR ||
+    action.type === actions.SIGHTSEEING_ROUTE_CLEAR ||
     action.type === loginActions.LOGOUT
   ) {
     return null;
@@ -268,22 +178,34 @@ const shortestRoute = (
 };
 
 export const SightseeingBusinessStore = {
-  selectors: { getShortestRouteOpenrouteservice, getShortestRoute },
+  selectors: { getSightseeingRoute },
   actions: {
-    shortestRouteOpenrouteserviceFetch,
-    shortestRouteOpenrouteserviceStore,
-    shortestRouteOpenrouteserviceClear,
-    shortestRouteCreate,
-    shortestRouteFetch,
-    shortestRouteUpdate,
-    shortestRouteStore,
-    shortestRouteClear,
+    sightseeingRouteCreate,
+    sightseeingRouteFetch,
+    sightseeingRouteUpdate,
+    sightseeingRouteStore,
+    sightseeingRouteClear,
   },
   effects: {
-    shortestRouteFetchEffect,
-    shortestRouteCreateEffect,
-    shortestRouteOpenrouteserviceFetchEffect,
-    shortestRouteUpdateffect,
+    sightseeingRouteFetchEffect,
+    sightseeingRouteCreateEffect,
+    sightseeingRouteUpdateffect,
   },
-  reducers: { shortestRouteOpenrouteservice, shortestRoute },
+  reducers: { sightseeingRoute },
 };
+
+/* const payload: IShortestRouteOpenrouteservicePayload = {
+      jobs: values.map((value, index) => {
+        return { id: index, location: [value.x, value.y], skills: [1] };
+      }),
+      vehicles: [
+        {
+          id: 1,
+          profile: "driving-car",
+          start: [values[0].x, values[0].y],
+          end: [values[0].x, values[0].y],
+          capacity: [4],
+          skills: [1, 14],
+        },
+      ],
+    };*/

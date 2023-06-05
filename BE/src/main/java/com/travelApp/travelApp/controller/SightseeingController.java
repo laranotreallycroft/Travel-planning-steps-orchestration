@@ -1,48 +1,29 @@
 package com.travelApp.travelApp.controller;
 
 import java.net.URISyntaxException;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.travelApp.travelApp.model.payload.SightseeingRoutePayload;
-import com.travelApp.travelApp.repository.PackingListRepository;
-import com.travelApp.travelApp.repository.TripRepository;
-import com.travelApp.travelApp.repository.UserRepository;
+import com.travelApp.travelApp.model.payload.TripPayload;
 
 @RestController
 @RequestMapping("/sightseeing")
 public class SightseeingController {
-	private final UserRepository userRepository;
-	private final TripRepository tripRepository;
-	private final PackingListRepository packingListRepository;
 
-	public SightseeingController(UserRepository userRepository, TripRepository tripRepository,
-			PackingListRepository packingListRepository) {
-		this.userRepository = userRepository;
-		this.tripRepository = tripRepository;
-		this.packingListRepository = packingListRepository;
+	public SightseeingController() {
+
 	}
 
-	@PostMapping
-	public ResponseEntity createSightseeingRoute(@RequestBody SightseeingRoutePayload sightseeingRoutePayload)
+
+	@PostMapping("/{tripId}")
+	public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId, @RequestBody TripPayload tripPayload)
 			throws URISyntaxException {
-		System.out.println("HERE");
-		/*
-		 * User user =
-		 * userRepository.findById(tripCreatePayload.getUserId()).orElse(null); if (user
-		 * != null) {
-		 * 
-		 * Trip trip = new Trip(tripCreatePayload.getName(),
-		 * tripCreatePayload.getDateFrom(), tripCreatePayload.getDateTo(),
-		 * tripCreatePayload.getLocation().toPoint(), user); tripRepository.save(trip);
-		 * return ResponseEntity.status(HttpStatus.CREATED).body(trip);
-		 * 
-		 * }
-		 */
+	System.out.println("HERE");
+
 		return ResponseEntity.badRequest().body("Something went wrong");
 	}
 

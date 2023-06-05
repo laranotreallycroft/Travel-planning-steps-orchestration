@@ -22,4 +22,3 @@ body, #root, html {
 @import 'trip/_weatherView.css';
 @import 'trip/_sightseeingStopsView.css';
 @import 'common/list/_dragAndDropTable.css';
-@import 'trip/_sightseeingView.css';

@@ -1,22 +1,17 @@
 import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
-import { IGeosearchPayload } from "../../../common/map/MapElement";
+import { ISightseeingRouteCreatePayload } from "../../../../service/business/sightseeing/SightseeingBusinessStore";
 import SightseeingSettingsView from "./SightseeingSettingsView";
-import SightseeingStopsContainer from "./SightseeingStopsContainer";
+import SightseeingStopsView from "./SightseeingStopsView";
 
 export interface ISightseeingCreateViewOwnProps {
   trip: ITrip;
   isSightseeingCreateModalOpen: boolean;
   onSightseeingCreateModalClose: () => void;
-}
-
-export interface ISightseeingCreateForm {
-  locations: IGeosearchPayload[];
-  routeOptions: {
-    optimize: boolean;
-    carTravel: boolean;
-  };
+  onSightseeingCreate: (
+    sightseeingRoutePayload: ISightseeingRouteCreatePayload
+  ) => void;
 }
 
 type ISightseeingCreateViewProps = ISightseeingCreateViewOwnProps;
@@ -24,7 +19,7 @@ type ISightseeingCreateViewProps = ISightseeingCreateViewOwnProps;
 const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   props: ISightseeingCreateViewProps
 ) => {
-  const [form] = Form.useForm<ISightseeingCreateForm>();
+  const [form] = Form.useForm<ISightseeingRouteCreatePayload>();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNextStep = () => {
@@ -34,9 +29,13 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   const handlePreviousStep = () => {
     setCurrentStep(currentStep - 1);
   };
+
+  const handleLastStep = () => {
+    form.submit();
+  };
   //TODO other logic
-  const handleFinish = (values: ISightseeingCreateForm) => {
-    console.log(form.getFieldsValue(true));
+  const handleFinish = (values: ISightseeingRouteCreatePayload) => {
+    props.onSightseeingCreate(form.getFieldsValue(true));
   };
 
   const handleModalClose = () => {
@@ -49,13 +48,13 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
     () => [
       {
         title: "Select your stops",
-        content: <SightseeingStopsContainer onNextStep={handleNextStep} />,
+        content: <SightseeingStopsView onNextStep={handleNextStep} />,
       },
       {
         title: "Fine-tune your sightseeing plan",
         content: (
           <SightseeingSettingsView
-            onNextStep={handleNextStep}
+            onNextStep={handleLastStep}
             onPreviousStep={handlePreviousStep}
           />
         ),
@@ -70,7 +69,14 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   );
 
   return (
-    <Form<ISightseeingCreateForm> form={form} onFinish={handleFinish}>
+    <Form<ISightseeingRouteCreatePayload>
+      form={form}
+      onFinish={handleFinish}
+      initialValues={{
+        locations: [{ ...props.trip.location, label: props.trip.name }],
+        routeOptions: { optimize: false, carTravel: false },
+      }}
+    >
       <Modal
         title="Create trip"
         open={props.isSightseeingCreateModalOpen}
