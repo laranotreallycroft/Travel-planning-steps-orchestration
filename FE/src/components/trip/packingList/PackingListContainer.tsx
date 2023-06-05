@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../model/trip/Trip";
 import { IPackingList } from "../../../model/trip/packingList/PackingList";
@@ -14,17 +14,14 @@ import PackingListView from "./PackingListView";
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {
-  packingList: IPackingList;
-  packingListChecked: IPackingList;
   trip: ITrip;
 }
 export interface IPackingListContainerDispatchProps {
   packingListCreate: (packingListCreatePayload: IPackingList) => void;
-  packingListFetch: () => void;
+
   packingListUpdate: (
     packingListUpdatePayload: IPackingList
   ) => ITrackableAction;
-  packingListCheckedFetch: () => void;
   packingListCheckedUpdate: (
     packingListCheckedUpdatePayload: IPackingList
   ) => ITrackableAction;
@@ -38,38 +35,33 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
 ) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  useEffect(() => {
-    props.packingListFetch();
-  }, [props.trip]);
+  const toggleEdit = useCallback(() => {
+    setIsEditing((prevState) => !prevState);
+  }, []);
 
-  useEffect(() => {
-    props.packingListCheckedFetch();
-  }, [props.trip, props.packingList]);
-
-  const handlePackingListUpdate = (values: IPackingList) => {
-    props
-      .packingListUpdate(values)
-      .track()
-      .subscribe(() => setIsEditing(false));
-  };
+  const handlePackingListUpdate = useCallback((values: IPackingList) => {
+    props.packingListUpdate(values).track().subscribe(toggleEdit);
+  }, []);
 
   return (
     <React.Fragment>
-      {props.packingList !== null && isEditing && (
+      {props.trip.packingList && isEditing && (
         <PackingListUpdateView
-          packingList={props.packingList}
+          packingList={props.trip.packingList}
           onPackingListUpdate={handlePackingListUpdate}
         />
       )}
-      {props.packingList !== null && !isEditing && (
-        <PackingListView
-          packingList={props.packingList}
-          packingListChecked={props.packingListChecked}
-          editPackingList={() => setIsEditing(true)}
-          onPackingListCheckedUpdate={props.packingListCheckedUpdate}
-        />
-      )}
-      {props.packingList === null && (
+      {props.trip.packingList &&
+        props.trip.packingListChecked &&
+        !isEditing && (
+          <PackingListView
+            packingList={props.trip.packingList}
+            packingListChecked={props.trip.packingListChecked}
+            editPackingList={toggleEdit}
+            onPackingListCheckedUpdate={props.packingListCheckedUpdate}
+          />
+        )}
+      {props.trip.packingList === null && (
         <PackingListCreateView onPackingListCreate={props.packingListCreate} />
       )}
     </React.Fragment>
@@ -77,9 +69,6 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
 };
 
 const mapStateToProps = (state: any): IPackingListContainerStateProps => ({
-  packingList: PackingListBusinessStore.selectors.getPackingList(state),
-  packingListChecked:
-    PackingListBusinessStore.selectors.getPackingListChecked(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
@@ -92,8 +81,7 @@ const mapDispatchToProps = (
         packingListCreatePayload
       )
     ),
-  packingListFetch: () =>
-    dispatch(PackingListBusinessStore.actions.packingListFetch()),
+
   packingListUpdate: (packingListUpdatePayload: IPackingList) =>
     dispatch(
       createTrackableAction(
@@ -102,8 +90,7 @@ const mapDispatchToProps = (
         )
       )
     ),
-  packingListCheckedFetch: () =>
-    dispatch(PackingListBusinessStore.actions.packingListCheckedFetch()),
+
   packingListCheckedUpdate: (packingListCheckedUpdatePayload: IPackingList) =>
     dispatch(
       createTrackableAction(

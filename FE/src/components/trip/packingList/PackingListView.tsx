@@ -1,12 +1,12 @@
 import { Button, Col, Form, Row } from "antd";
 import Title from "antd/es/typography/Title";
+import _ from "lodash";
 import { IPackingList } from "../../../model/trip/packingList/PackingList";
 import Basics from "./packingListGroups/Basics";
 import Clothes from "./packingListGroups/Clothes";
 import Hygiene from "./packingListGroups/Hygiene";
 import Miscellaneous from "./packingListGroups/Miscellaneous";
-import _ from "lodash";
-import { useEffect } from "react";
+import { useCallback } from "react";
 
 export interface IPackingListViewOwnProps {
   packingList: IPackingList;
@@ -20,15 +20,12 @@ const PackingListView: React.FC<IPackingListViewProps> = (
   props: IPackingListViewProps
 ) => {
   const [form] = Form.useForm<IPackingList>();
-  useEffect(() => {
-    form.setFieldsValue(props.packingListChecked);
-  }, [props.packingListChecked]);
 
-  const handleFormChange = (changedValues: any) => {
+  const handleFormChange = useCallback((changedValues: any) => {
     props.onPackingListCheckedUpdate(
       _.merge(props.packingListChecked, changedValues)
     );
-  };
+  }, []);
 
   return (
     <Form<IPackingList>

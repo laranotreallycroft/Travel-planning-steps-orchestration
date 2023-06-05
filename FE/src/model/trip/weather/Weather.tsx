@@ -6,4 +6,12 @@ export interface IWeatherPayload {
 }
 export interface IWeather {
   name: string;
+  current: IForecast;
+  forecast: IForecast[];
+}
+
+export interface IForecast {
+  date: string;
+  description: string;
+  icon: string;
 }

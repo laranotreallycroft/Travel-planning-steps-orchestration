@@ -17,14 +17,10 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
 ) => {
   const [form] = Form.useForm<IPackingList>();
 
-  const handleFinish = (values: IPackingList) => {
-    props.onPackingListUpdate(values);
-  };
-
   return (
     <Form<IPackingList>
       form={form}
-      onFinish={handleFinish}
+      onFinish={props.onPackingListUpdate}
       initialValues={props.packingList}
     >
       <Row justify={"space-between"}>

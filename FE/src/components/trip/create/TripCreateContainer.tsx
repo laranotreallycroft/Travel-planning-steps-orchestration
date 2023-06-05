@@ -14,8 +14,8 @@ import TripCreateView, { ITripCreateForm } from "./TripCreateView";
 const provider = new OpenStreetMapProvider();
 
 export interface ITripCreateContainerOwnProps {
+  isCreateTripModalOpen: boolean;
   onTripCreateModalClose: () => void;
-  createTripModalOpen: boolean;
 }
 
 export interface ITripCreateContainerStateProps {}
@@ -36,15 +36,14 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
         name: values.location.label,
-        dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD") ?? "",
-        dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD") ?? "",
+        dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
+        dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
         location: { x: values.location.x, y: values.location.y },
       };
       props
         .tripCreate(payload)
         .track()
         .subscribe(() => {
-          props.userTripsFetch();
           navigator("/settings");
         });
     },
@@ -52,7 +51,7 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   );
   return (
     <TripCreateView
-      createTripModalOpen={props.createTripModalOpen}
+      isCreateTripModalOpen={props.isCreateTripModalOpen}
       onTripCreate={handleTripCreate}
       onTripCreateModalClose={props.onTripCreateModalClose}
     />

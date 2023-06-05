@@ -8,7 +8,8 @@ export interface ITrip {
   dateFrom: string;
   dateTo: string;
   location: ICoordinates;
-  packingList: IPackingList;
+  packingList?: IPackingList;
+  packingListChecked?: IPackingList;
   sightseeing: ISightseeing[];
 }
 

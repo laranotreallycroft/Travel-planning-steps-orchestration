@@ -19,7 +19,6 @@ export interface IHomeLayoutContainerDispatchProps {
   userTripsFetch: () => void;
   userTripsClear: () => void;
   tripFetch: (payload: IIdPayload) => void;
-  tripUpdate: (payload: ITrip) => void;
   tripClear: () => void;
   logout: () => void;
 }
@@ -42,18 +41,12 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (
     props.tripFetch({ id: selectedTripId });
   }, []);
 
-  const handleTripUpdate = useCallback((trip: ITrip) => {
-    props.tripUpdate(trip);
-  }, []);
-
   return (
     <HomeLayoutView
       userTrips={props.userTrips}
-      selectedTrip={props.trip}
-      user={props.user}
+      trip={props.trip}
       isUserLoggedIn={props.isUserLoggedIn}
       onTripSelect={handleTripSelect}
-      onTripUpdate={handleTripUpdate}
       onLogout={props.logout}
     />
   );
@@ -73,8 +66,6 @@ const mapDispatchToProps = (
   userTripsClear: () => dispatch(UserBusinessStore.actions.userTripsClear()),
   tripFetch: (payload: IIdPayload) =>
     dispatch(TripBusinessStore.actions.tripFetch(payload)),
-  tripUpdate: (payload: ITrip) =>
-    dispatch(TripBusinessStore.actions.tripUpdate(payload)),
   tripClear: () => dispatch(TripBusinessStore.actions.tripClear()),
   logout: () => dispatch(LoginBusinessStore.actions.logout()),
 });

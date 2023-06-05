@@ -5,6 +5,8 @@ import {
   from,
   map,
   mergeMap,
+  of,
+  switchMap,
   tap,
   withLatestFrom,
 } from "rxjs";
@@ -12,7 +14,11 @@ import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
-import { getUser, userTripsFetch } from "../user/UserBusinessStore";
+import {
+  getUser,
+  userTripsFetch,
+  userTripsStore,
+} from "../user/UserBusinessStore";
 import { loginActions } from "../login/LoginBusinessStore";
 
 // -
@@ -25,7 +31,6 @@ const actions = {
   TRIP_CREATE: "TRIP_CREATE",
   TRIP_FETCH: "TRIP_FETCH",
   TRIP_UPDATE: "TRIP_UPDATE",
-  // TRIP_DELETE: "TRIP_DELETE",
   TRIP_STORE: "TRIP_STORE",
   TRIP_CLEAR: "TRIP_CLEAR",
 };
@@ -84,7 +89,9 @@ const tripCreateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => tripStore(data))
+    switchMap((data) =>
+      of(userTripsStore(data), tripStore(data[data.length - 1]))
+    )
   );
 };
 

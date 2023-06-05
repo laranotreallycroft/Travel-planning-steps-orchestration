@@ -13,6 +13,7 @@ import {
   travelPackingListsWarmValues,
 } from "../../../model/trip/const/packingList";
 import _ from "lodash";
+import { useCallback } from "react";
 
 export interface IPackingListCreateViewOwnProps {
   onPackingListCreate: (packingListCreatePayload: IPackingList) => void;
@@ -27,7 +28,7 @@ const PackingListCreateView: React.FC<IPackingListCreateViewProps> = (
 ) => {
   const [form] = Form.useForm<IPackingListCreateForm>();
 
-  const handleFinish = (values: IPackingListCreateForm) => {
+  const handleFinish = useCallback((values: IPackingListCreateForm) => {
     const initialPackingListValues =
       values.packingListType === IPackingListType.WARM
         ? _.merge(travelPackingListsDefaultValues, travelPackingListsWarmValues)
@@ -35,7 +36,7 @@ const PackingListCreateView: React.FC<IPackingListCreateViewProps> = (
         ? _.merge(travelPackingListsDefaultValues, travelPackingListsColdValues)
         : travelPackingListsDefaultValues;
     props.onPackingListCreate(initialPackingListValues);
-  };
+  }, []);
 
   return (
     <Form<IPackingListCreateForm>

@@ -16,9 +16,8 @@ type MenuItem = Required<MenuProps>["items"][number];
 function getItem(
   label: React.ReactNode,
   key: React.Key,
-  icon?: React.ReactNode,
-
-  className?: string
+  icon: React.ReactNode,
+  className: string
 ): MenuItem {
   return {
     key,
@@ -65,12 +64,13 @@ const HomeLayoutViewSider: React.FC<IHomeLayoutViewSiderProps> = (
     [location.pathname]
   );
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const handleMenuSelect: MenuProps["onClick"] = (e) => {
     navigator(e.key);
   };
+
   return (
     <Menu
-      onClick={onClick}
+      onClick={handleMenuSelect}
       style={{ width: 256 }}
       selectedKeys={[currentTab]}
       mode="inline"

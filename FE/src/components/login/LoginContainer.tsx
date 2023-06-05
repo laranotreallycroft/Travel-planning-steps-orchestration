@@ -31,21 +31,10 @@ const LoginContainer: React.FC<ILoginContainerProps> = (
         props.googleLogin(googleLoginPayload);
       }
     },
-    [props.googleLogin]
+    []
   );
 
-  const handleLogin = useCallback(
-    (loginValues: ILoginPayload) => {
-      props.login(loginValues);
-    },
-    [props.login]
-  );
-
-  return (
-    <React.Fragment>
-      <LoginView onGoogleLogin={handleGoogleLogin} onLogin={handleLogin} />
-    </React.Fragment>
-  );
+  return <LoginView onGoogleLogin={handleGoogleLogin} onLogin={props.login} />;
 };
 
 const mapStateToProps = (state: any): ILoginContainerStateProps => ({});

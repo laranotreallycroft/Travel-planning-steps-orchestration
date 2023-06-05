@@ -1,3 +1,8 @@
+.homeLayoutViewHeader__dropdownCol {
+  display: flex;
+  justify-content: flex-end
+}
+
 .homeLayoutViewHeader__dropdown {
   cursor: pointer;
 }

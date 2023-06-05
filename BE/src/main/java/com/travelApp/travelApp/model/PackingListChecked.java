@@ -8,16 +8,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import com.travelApp.travelApp.model.payload.Basics;
 import com.travelApp.travelApp.model.payload.Clothes;
 import com.travelApp.travelApp.model.payload.Hygiene;
 import com.travelApp.travelApp.model.payload.Miscellaneous;
 import com.travelApp.travelApp.model.payload.PackingListPayload;
+import com.travelApp.travelApp.utils.General;
 
 @Entity
-@Table(name = "packing_lists")
-public class PackingList {
+@Table(name = "packing_lists_checked")
+public class PackingListChecked {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -71,16 +73,30 @@ public class PackingList {
 	@Column(name = "miscellaneous_work")
 	private List<String> miscellaneousWork;
 
-	public PackingList() {
+	public PackingListChecked() {
 
 	}
 
-	public PackingList(Trip trip) {
+	public PackingListChecked(Trip trip) {
 		super();
-		this.trip = trip;
+		this.trip = trip;this.basicsTravelAids = new ArrayList<String>();
+		this.basicsFunds = new ArrayList<String>();
+		this.basicsTravelInfo = new ArrayList<String>();
+		this.clothesBasics = new ArrayList<String>();
+		this.clothesDressy = new ArrayList<String>();
+		this.clothesOuterwear = new ArrayList<String>();
+		this.clothesCasual = new ArrayList<String>();
+		this.clothesFootwear = new ArrayList<String>();
+		this.clothesAccessories = new ArrayList<String>();
+		this.hygieneHygiene = new ArrayList<String>();
+		this.miscellaneousDocuments = new ArrayList<String>();
+		this.miscellaneousBags = new ArrayList<String>();
+		this.miscellaneousMiscellaneous = new ArrayList<String>();
+		this.miscellaneousTechnology = new ArrayList<String>();
+		this.miscellaneousWork = new ArrayList<String>();
 	}
 
-	public PackingList(Trip trip, List<String> basicsTravelAids, List<String> basicsFunds,
+	public PackingListChecked(Trip trip, List<String> basicsTravelAids, List<String> basicsFunds,
 			List<String> basicsTravelInfo, List<String> clothesBasics, List<String> clothesDressy,
 			List<String> clothesOuterwear, List<String> clothesCasual, List<String> clothesFootwear,
 			List<String> clothesAccessories, List<String> hygieneHygiene, List<String> miscellaneousDocuments,
@@ -104,6 +120,38 @@ public class PackingList {
 		this.miscellaneousTechnology = miscellaneousTechnology;
 		this.miscellaneousWork = miscellaneousWork;
 
+	}
+
+	public void updateFromPayloadIntersection(PackingListPayload packingListPayload) {
+		// Basics
+		setBasicsFunds(General.getIntersection(getBasicsFunds(), packingListPayload.getBasics().getFunds()));
+		setBasicsTravelAids(
+				General.getIntersection(getBasicsTravelAids(), packingListPayload.getBasics().getTravelAids()));
+		setBasicsTravelInfo(
+				General.getIntersection(getBasicsTravelInfo(), packingListPayload.getBasics().getTravelInfo()));
+		// Clothes
+		setClothesBasics(General.getIntersection(getClothesBasics(), packingListPayload.getClothes().getBasics()));
+		setClothesDressy(General.getIntersection(getClothesDressy(), packingListPayload.getClothes().getDressy()));
+		setClothesOuterwear(
+				General.getIntersection(getClothesOuterwear(), packingListPayload.getClothes().getOuterwear()));
+		setClothesCasual(General.getIntersection(getClothesCasual(), packingListPayload.getClothes().getCasual()));
+		setClothesFootwear(
+				General.getIntersection(getClothesFootwear(), packingListPayload.getClothes().getFootwear()));
+		setClothesAccessories(
+				General.getIntersection(getClothesAccessories(), packingListPayload.getClothes().getAccessories()));
+		// Hygiene
+		setHygieneHygiene(General.getIntersection(getHygieneHygiene(), packingListPayload.getHygiene().getHygiene()));
+		// Miscellaneous
+		setMiscellaneousDocuments(General.getIntersection(getMiscellaneousDocuments(),
+				packingListPayload.getMiscellaneous().getDocuments()));
+		setMiscellaneousBags(
+				General.getIntersection(getMiscellaneousBags(), packingListPayload.getMiscellaneous().getBags()));
+		setMiscellaneousMiscellaneous(General.getIntersection(getMiscellaneousMiscellaneous(),
+				packingListPayload.getMiscellaneous().getMiscellaneous()));
+		setMiscellaneousTechnology(General.getIntersection(getMiscellaneousTechnology(),
+				packingListPayload.getMiscellaneous().getTechnology()));
+		setMiscellaneousWork(
+				General.getIntersection(getMiscellaneousWork(), packingListPayload.getMiscellaneous().getWork()));
 	}
 
 	public void updateFromPayload(PackingListPayload packingListPayload) {

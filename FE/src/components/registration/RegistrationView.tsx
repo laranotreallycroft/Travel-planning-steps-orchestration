@@ -9,17 +9,19 @@ import {
   Typography,
 } from "antd";
 import Title from "antd/es/typography/Title";
-import React from "react";
+import React, { useCallback } from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { RuleObject } from "antd/es/form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { IRegistrationPayload } from "../../service/business/registration/RegistrationBusinessStore";
+import notificationService from "../../service/util/notificationService";
 
 export interface IRegistrationForm {
   email: string;
   password: string;
   confirmPassword: string;
 }
+
 export interface IRegistrationViewOwnProps {
   onGoogleLogin: (googleCredential: CredentialResponse) => void;
   onRegistration: (registrationValues: IRegistrationPayload) => void;
@@ -32,7 +34,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
 ) => {
   const [form] = Form.useForm<IRegistrationForm>();
 
-  const validatePassword = (rule: RuleObject, value: string) => {
+  const validatePassword = useCallback((rule: RuleObject, value: string) => {
     if (
       value.length < 8 ||
       !/[A-Z]/.test(value) ||
@@ -43,20 +45,23 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
         "Your password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number"
       );
     return Promise.resolve();
-  };
+  }, []);
 
-  const validateConfirmPassword = (rule: RuleObject, value: string) => {
-    const password = form.getFieldValue("password");
-    if (password === value) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject("Make sure your passwords match.");
-    }
-  };
+  const validateConfirmPassword = useCallback(
+    (rule: RuleObject, value: string) => {
+      const password = form.getFieldValue("password");
+      if (password === value) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject("Make sure your passwords match.");
+      }
+    },
+    []
+  );
 
-  const handleFinish = (values: IRegistrationForm) => {
+  const handleFinish = useCallback((values: IRegistrationForm) => {
     props.onRegistration({ email: values.email, password: values.password });
-  };
+  }, []);
 
   return (
     <Row className="fullScreen">
@@ -83,18 +88,21 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
               {
                 required: true,
                 type: "email",
-                message: "The input is not valid E-mail.",
+                message: "The input is not a valid e-mail.",
               },
             ]}
           >
-            <Input placeholder="Input Email" />
+            <Input placeholder="Input email" />
           </Form.Item>
           <Form.Item
             name={"password"}
             label={"Password"}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true }, { validator: validatePassword }]}
+            rules={[
+              { required: true, message: "Please input a password." },
+              { validator: validatePassword },
+            ]}
           >
             <Input.Password
               placeholder="Input Password"
@@ -121,15 +129,23 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
             />
           </Form.Item>
           <Row justify={"center"}>
-            <Button className="loginView" type="primary" onClick={form.submit}>
-              Sign up
-            </Button>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Button
+                className="fullWidth"
+                type="primary"
+                onClick={form.submit}
+              >
+                Sign up
+              </Button>
+            </Col>
           </Row>
           <Divider>Or</Divider>
           <Row justify={"center"}>
             <GoogleLogin
               onSuccess={props.onGoogleLogin}
-              onError={() => console.log("A")}
+              onError={() =>
+                notificationService.error("Unable to sign up with Google")
+              }
             />
           </Row>
           <Row justify={"center"} align={"middle"} className="margin-top-md">

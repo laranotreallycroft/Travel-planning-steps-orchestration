@@ -2,7 +2,7 @@ import axios from "axios";
 import { Observable, filter, from, map, mergeMap } from "rxjs";
 import notificationService from "../../util/notificationService";
 import { IPayloadAction } from "../common/types";
-import { storeCurrentUser } from "../login/LoginBusinessStore";
+import { currentUserStore } from "../login/LoginBusinessStore";
 import trackAction from "../../util/trackAction";
 
 // -
@@ -55,7 +55,7 @@ const registrationEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data))
+    map((data) => currentUserStore(data))
   );
 };
 

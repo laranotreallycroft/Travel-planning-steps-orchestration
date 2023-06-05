@@ -1,5 +1,6 @@
 package com.travelApp.travelApp.model;
 
+import java.util.Comparator;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
@@ -101,7 +102,8 @@ public class User {
 	}
 
 	public List<Trip> getTrips() {
-		return trips;
+		 trips.sort(Comparator.comparing(Trip::getId));
+		 return trips;
 	}
 
 	public void setTrips(List<Trip> trips) {

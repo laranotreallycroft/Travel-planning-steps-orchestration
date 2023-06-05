@@ -12,6 +12,7 @@ export interface IWeatherViewOwnProps {
 type IWeatherViewProps = IWeatherViewOwnProps;
 
 const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
+  console.log(props.currentWeather);
   return (
     <Row gutter={[16, 16]}>
       <Col span={12}>

@@ -6,7 +6,7 @@ import MapSearch from "../../common/map/MapSearch";
 import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
 
 export interface ITripCreateViewOwnProps {
-  createTripModalOpen: boolean;
+  isCreateTripModalOpen: boolean;
   onTripCreate: (values: ITripCreateForm) => void;
   onTripCreateModalClose: () => void;
 }
@@ -44,7 +44,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
   return (
     <Modal
       title="Create trip"
-      open={props.createTripModalOpen}
+      open={props.isCreateTripModalOpen}
       onCancel={handleCancelButtonClick}
       onOk={form.submit}
       className="tripCreateView__modal"
@@ -73,7 +73,10 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
             },
           ]}
         >
-          <MapSearch onSelectLocation={handleSelectLocation} />
+          <MapSearch
+            onSelectLocation={handleSelectLocation}
+            showValueAfterSearch={true}
+          />
         </Form.Item>
         <MapElement
           selectedLocation={selectedLocation}

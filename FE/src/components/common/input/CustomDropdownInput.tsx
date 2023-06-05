@@ -2,7 +2,7 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Select } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 import { ITrip } from "../../../model/trip/Trip";
-import { ILabelValue } from "../../../model/trip/const/packingList";
+import { ILabelValue } from "../../../model/common/input";
 
 export interface ICustomDropdownInputOwnProps {
   group: string;

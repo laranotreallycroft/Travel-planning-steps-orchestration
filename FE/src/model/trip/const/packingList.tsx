@@ -1,10 +1,5 @@
 import { IPackingList } from "../packingList/PackingList";
 
-export interface ILabelValue {
-  label: string;
-  value: string;
-}
-
 export const travelPackingListsDefaultValues: IPackingList = {
   basics: {
     travelAids: [

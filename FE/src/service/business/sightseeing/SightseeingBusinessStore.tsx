@@ -105,7 +105,6 @@ const shortestRouteOpenrouteserviceFetchEffect = (
           data: action.payload,
         })
           .then((response) => {
-            console.log(response);
             if (response.status === 200) {
               notificationService.success(
                 "New trip packing list successfully created"
@@ -242,7 +241,6 @@ const shortestRouteOpenrouteservice = (
   action: IPayloadAction<IShortestRoute>
 ) => {
   if (action.type === actions.SHORTEST_ROUTE_OPENROUTESERVICE_STORE) {
-    console.log(action.payload);
     if (action.payload) return { ...action.payload };
     else return null;
   } else if (

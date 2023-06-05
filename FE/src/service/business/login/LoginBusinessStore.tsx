@@ -16,12 +16,12 @@ export const loginActions = {
   GOOGLE_LOGIN: "GOOGLE_LOGIN",
   LOGOUT: "LOGOUT",
   CURRENT_USER_STORE: "CURRENT_USER_STORE",
-  CURRENT_USER_CLEAR: "CURRENT_USER_CLEAR",
 };
 
 export interface IGoogleLoginPayload {
   credential: string;
 }
+
 export interface ILoginPayload {
   email: string;
   password: string;
@@ -43,15 +43,12 @@ const logout = (): IAction => {
   return { type: loginActions.LOGOUT };
 };
 
-export const storeCurrentUser = (
+export const currentUserStore = (
   payload: IIdPayload
 ): IPayloadAction<IIdPayload> => {
   return { type: loginActions.CURRENT_USER_STORE, payload: payload };
 };
 
-export const clearCurrentUser = (): IAction => {
-  return { type: loginActions.CURRENT_USER_CLEAR };
-};
 // -
 // -------------------- Side-effects
 
@@ -79,7 +76,7 @@ const loginEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data))
+    map((data) => currentUserStore(data))
   );
 };
 
@@ -107,7 +104,7 @@ const googleLoginEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => storeCurrentUser(data))
+    map((data) => currentUserStore(data))
   );
 };
 
@@ -117,10 +114,7 @@ const googleLoginEffect = (
 const user = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
   if (action.type === loginActions.CURRENT_USER_STORE) {
     return { ...action.payload };
-  } else if (
-    action.type === loginActions.LOGOUT ||
-    action.type === loginActions.CURRENT_USER_CLEAR
-  ) {
+  } else if (action.type === loginActions.LOGOUT) {
     return null;
   }
   return state;
@@ -132,7 +126,6 @@ export const LoginBusinessStore = {
     login,
     googleLogin,
     logout,
-    storeCurrentUser,
   },
   effects: { loginEffect, googleLoginEffect },
   reducers: { user },

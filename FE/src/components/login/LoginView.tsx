@@ -13,13 +13,15 @@ import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { ILoginPayload } from "../../service/business/login/LoginBusinessStore";
+import notificationService from "../../service/util/notificationService";
 
 export interface ILoginForm {
   email: string;
   password: string;
 }
+
 export interface ILoginViewOwnProps {
-  onGoogleLogin: (response: CredentialResponse) => void;
+  onGoogleLogin: (googleCredential: CredentialResponse) => void;
   onLogin: (loginValues: ILoginPayload) => void;
 }
 
@@ -28,13 +30,9 @@ type ILoginViewProps = ILoginViewOwnProps;
 const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   const [form] = Form.useForm<ILoginForm>();
 
-  const handleFinish = (values: ILoginForm) => {
-    props.onLogin(values);
-  };
-
   return (
     <Row className="fullScreen">
-      <Col span={12} className="loginView__form ">
+      <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form ">
         <Row justify={"center"}>
           <Title className="loginView__title">Travel app</Title>
         </Row>
@@ -45,7 +43,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
         </Row>
         <Form<ILoginForm>
           form={form}
-          onFinish={handleFinish}
+          onFinish={props.onLogin}
           requiredMark={false}
           className="fullWidth"
         >
@@ -78,19 +76,23 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             />
           </Form.Item>
           <Row justify={"center"}>
-            <Button
-              className="loginView__button"
-              type="primary"
-              onClick={form.submit}
-            >
-              Sign in
-            </Button>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Button
+                className="fullWidth"
+                type="primary"
+                onClick={form.submit}
+              >
+                Sign in
+              </Button>
+            </Col>
           </Row>
           <Divider>Or</Divider>
           <Row justify={"center"}>
             <GoogleLogin
               onSuccess={props.onGoogleLogin}
-              onError={() => console.log("A")}
+              onError={() =>
+                notificationService.error("Unable to log in with Google")
+              }
             />
           </Row>
           <Row justify={"center"} align={"middle"} className="margin-top-md">
@@ -101,7 +103,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
           </Row>
         </Form>
       </Col>
-      <Col span={12}>
+      <Col xs={24} sm={24} md={12} lg={12} xl={12}>
         <Carousel className="loginView__carousel">
           <div className="loginView__carouselImage">
             <Row justify={"center"}>

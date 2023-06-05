@@ -1,18 +1,16 @@
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Col, Dropdown, MenuProps, Row, Select } from "antd";
 import Avatar from "antd/es/avatar/avatar";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../asset/img/logo.png";
 import { ITrip } from "../../model/trip/Trip";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { IUserCredentials } from "../../model/user/User";
 
 export interface IHomeLayoutViewHeaderOwnProps {
   userTrips: ITrip[];
-  selectedTrip: ITrip;
+  trip: ITrip;
   isUserLoggedIn: boolean;
-  user: IUserCredentials;
-  onTripSelect: (selectedTrip: number) => void;
+  onTripSelect: (selectedTripId: number) => void;
   logout: () => void;
   openTripCreateModal: () => void;
 }
@@ -23,21 +21,6 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
   props: IHomeLayoutViewHeaderProps
 ) => {
   const navigate = useNavigate();
-  const [selectedTripId, setSelectedTripId] = useState<number>(
-    props.selectedTrip?.id
-  );
-
-  useEffect(() => {
-    if (
-      props.userTrips?.some((trip: ITrip) => trip.id === props.selectedTrip?.id)
-    )
-      setSelectedTripId(props.selectedTrip?.id);
-  }, [props.selectedTrip, props.userTrips]);
-
-  const handleTripSelect = useCallback((selectedTripId: number) => {
-    setSelectedTripId(selectedTripId);
-    props.onTripSelect(selectedTripId);
-  }, []);
 
   const userProfileItems: MenuProps["items"] = useMemo(
     () =>
@@ -61,14 +44,14 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
 
   return (
     <Row align={"middle"} gutter={[16, 16]}>
-      <Col span={3}>
+      <Col xs={0} sm={10} md={6} lg={6} xl={4}>
         <Avatar src={logo} shape="square" className="fullSize" />
       </Col>
-      <Col offset={1} span={4}>
+      <Col xs={12} sm={8} md={8} lg={8} xl={5}>
         <Select
           className="fullWidth"
-          onChange={handleTripSelect}
-          value={selectedTripId}
+          onChange={props.onTripSelect}
+          value={props.trip?.id}
           options={props.userTrips?.map((trip: ITrip) => {
             return {
               value: trip.id,
@@ -78,13 +61,20 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
         />
       </Col>
 
-      <Col span={1}>
+      <Col xs={2} sm={2} md={2} lg={2} xl={2}>
         <Button type="primary" onClick={props.openTripCreateModal}>
           Create
         </Button>
       </Col>
 
-      <Col offset={13}>
+      <Col
+        xs={10}
+        sm={4}
+        md={8}
+        lg={8}
+        xl={13}
+        className="homeLayoutViewHeader__dropdownCol"
+      >
         <Dropdown
           menu={{ items: userProfileItems }}
           trigger={["click"]}

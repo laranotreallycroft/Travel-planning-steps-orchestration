@@ -1,8 +1,7 @@
 package com.travelApp.travelApp.model.payload;
 
-
-
 import com.travelApp.travelApp.model.PackingList;
+import com.travelApp.travelApp.model.PackingListChecked;
 import com.travelApp.travelApp.model.Trip;
 
 public class PackingListPayload {
@@ -29,6 +28,15 @@ public class PackingListPayload {
 				getClothes().getCasual(), getClothes().getFootwear(), getClothes().getAccessories(),
 				getHygiene().getHygiene(), getMiscellaneous().getDocuments(), getMiscellaneous().getBags(),
 				getMiscellaneous().getMiscellaneous(), getMiscellaneous().getTechnology(),
+				getMiscellaneous().getWork());
+	}
+
+	public PackingListChecked payloadToModelChecked(Trip trip) {
+		return new PackingListChecked(trip, getBasics().getTravelAids(), getBasics().getFunds(),
+				getBasics().getTravelInfo(), getClothes().getBasics(), getClothes().getDressy(),
+				getClothes().getOuterwear(), getClothes().getCasual(), getClothes().getFootwear(),
+				getClothes().getAccessories(), getHygiene().getHygiene(), getMiscellaneous().getDocuments(),
+				getMiscellaneous().getBags(), getMiscellaneous().getMiscellaneous(), getMiscellaneous().getTechnology(),
 				getMiscellaneous().getWork());
 	}
 

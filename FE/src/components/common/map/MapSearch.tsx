@@ -7,6 +7,7 @@ import { IGeosearchPayload } from "./MapElement";
 
 export interface IMapSearchOwnProps {
   onSelectLocation: (value: string) => void;
+  showValueAfterSearch?: boolean;
 }
 type IMapSearchProps = IMapSearchOwnProps;
 
@@ -43,7 +44,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
       filterOption={false}
       showSearch={true}
       placeholder="Location"
-      value={null}
+      value={props.showValueAfterSearch ? undefined : null}
       onChange={handleLocationSelect}
       onSearch={handleLocationSearch}
       options={searchLocationArray?.map((location: IGeosearchPayload) => {

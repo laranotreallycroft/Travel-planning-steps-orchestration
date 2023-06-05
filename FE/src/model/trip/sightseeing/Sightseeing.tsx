@@ -2,13 +2,10 @@ import { IGeosearchPayload } from "../../../components/common/map/MapElement";
 
 export interface ISightseeing {}
 
-export interface ISightseeingRoutePayload {
-  locations: IGeosearchPayload[];
-}
-
 export interface IShortestRoute {
   locations: IGeosearchPayload[];
 }
+
 export interface IShortestRouteOpenrouteservicePayload {
   jobs: IShortestRouteOpenrouteservicePayloadJobs[];
   vehicles: IShortestRouteOpenrouteservicePayloadVehicles[];
