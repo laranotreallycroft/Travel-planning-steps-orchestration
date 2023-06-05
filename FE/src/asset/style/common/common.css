@@ -115,3 +115,12 @@
 .ant-typography {
     margin: 0.3rem !important;
 }
+
+.panel {
+    margin: 0.5vw;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+    display: none;
+}

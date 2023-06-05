@@ -14,7 +14,7 @@ import TripCreateView, { ITripCreateForm } from "./TripCreateView";
 const provider = new OpenStreetMapProvider();
 
 export interface ITripCreateContainerOwnProps {
-  isCreateTripModalOpen: boolean;
+  isTripCreateModalOpen: boolean;
   onTripCreateModalClose: () => void;
 }
 
@@ -51,7 +51,7 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   );
   return (
     <TripCreateView
-      isCreateTripModalOpen={props.isCreateTripModalOpen}
+      isTripCreateModalOpen={props.isTripCreateModalOpen}
       onTripCreate={handleTripCreate}
       onTripCreateModalClose={props.onTripCreateModalClose}
     />

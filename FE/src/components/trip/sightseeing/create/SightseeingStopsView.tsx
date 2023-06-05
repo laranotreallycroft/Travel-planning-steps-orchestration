@@ -1,15 +1,17 @@
-import { Button, Col, Form, Row, Switch, Tooltip } from "antd";
+import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
+import { Button, Col, Form, Row, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useEffect, useState } from "react";
-import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import notificationService from "../../../../service/util/notificationService";
+import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
+import { ISightseeingCreateForm } from "./SightseeingCreateView";
 
 export interface ISightseeingStopsViewOwnProps {
   originLocation: IGeosearchPayload;
   onSightseeingStopsSelect: (value: IGeosearchPayload[]) => void;
+  onNextStep: () => void;
 }
 
 type ISightseeingStopsViewProps = ISightseeingStopsViewOwnProps;
@@ -17,6 +19,7 @@ type ISightseeingStopsViewProps = ISightseeingStopsViewOwnProps;
 const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
   props: ISightseeingStopsViewProps
 ) => {
+  const form = Form.useFormInstance<ISightseeingCreateForm>();
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
     props.originLocation
   );
@@ -27,6 +30,7 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
   useEffect(() => {
     setSelectedLocation(props.originLocation);
     setLocations([props.originLocation]);
+    form.setFieldValue("locations", [props.originLocation]);
   }, [props.originLocation]);
 
   const handleSelectLocation = useCallback(
@@ -34,6 +38,7 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
       const parsedValue: IGeosearchPayload = JSON.parse(value);
       setSelectedLocation(parsedValue);
       setLocations([...locations, parsedValue]);
+      form.setFieldValue("locations", [...locations, parsedValue]);
     },
     [locations]
   );
@@ -45,14 +50,15 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
       const newLocations = locations.filter(
         (location) => location.label !== value.label
       );
-      setLocations(newLocations);
       setSelectedLocation(newLocations[0]);
+      setLocations(newLocations);
+      form.setFieldValue("locations", newLocations);
     },
     [locations]
   );
 
   const handleNext = () => {
-    if (locations.length >= 2) props.onSightseeingStopsSelect(locations);
+    if (locations.length >= 2) props.onNextStep();
     else
       notificationService.error(
         "Unable to generate route",
@@ -71,49 +77,51 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
             <MapSearch onSelectLocation={handleSelectLocation} />
           </Row>
           <Row>
-            <DragAndDropTable
-              sortableContextItems={locations.map((location) => location.label)}
-              tableDataSource={locations.map((location) => {
-                return { ...location, key: location.label };
-              })}
-              tableColumns={[
-                {
-                  title: "Location",
-                  dataIndex: "label",
-                },
-                {
-                  title: "Action",
-                  key: "action",
-                  render: (_, location) => (
-                    <Row justify={"space-between"}>
-                      <Tooltip placement="bottom" title={"Remove stop"}>
-                        <Button
-                          icon={<DeleteOutlined />}
-                          onClick={(e) => handleRemoveLocation(e, location)}
-                          size="small"
-                        />
-                      </Tooltip>
-                      <Tooltip placement="bottom" title={"Zoom to location"}>
-                        <Button
-                          icon={<ZoomInOutlined />}
-                          onClick={() => setSelectedLocation(location)}
-                          size="small"
-                        />
-                      </Tooltip>
-                    </Row>
-                  ),
-                },
-              ]}
-              setLocations={setLocations}
-              className="sightseeingStopsView__locationList"
-            />
-          </Row>
-          <Row>
-            <Col>
-              <Form.Item name={"optimizeRoute"} label={"Optimize Route"}>
-                <Switch />
-              </Form.Item>
-            </Col>
+            <Form.List name="locations">
+              {(fields, { add, remove }) => (
+                <DragAndDropTable
+                  sortableContextItems={locations.map(
+                    (location) => location.label
+                  )}
+                  tableDataSource={locations.map((location) => {
+                    return { ...location, key: location.label };
+                  })}
+                  tableColumns={[
+                    {
+                      title: "Location",
+                      dataIndex: "label",
+                    },
+                    {
+                      title: "Action",
+                      key: "action",
+                      render: (_, location) => (
+                        <Row justify={"space-between"}>
+                          <Tooltip placement="bottom" title={"Remove stop"}>
+                            <Button
+                              icon={<DeleteOutlined />}
+                              onClick={(e) => handleRemoveLocation(e, location)}
+                              size="small"
+                            />
+                          </Tooltip>
+                          <Tooltip
+                            placement="bottom"
+                            title={"Zoom to location"}
+                          >
+                            <Button
+                              icon={<ZoomInOutlined />}
+                              onClick={() => setSelectedLocation(location)}
+                              size="small"
+                            />
+                          </Tooltip>
+                        </Row>
+                      ),
+                    },
+                  ]}
+                  setLocations={setLocations}
+                  className="sightseeingStopsView__locationList"
+                />
+              )}
+            </Form.List>
           </Row>
         </Col>
         <Col span={16}>

@@ -55,7 +55,7 @@ const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (
 
       <TripCreateContainer
         onTripCreateModalClose={toggleTripCreateModal}
-        isCreateTripModalOpen={isTripCreateModalOpen}
+        isTripCreateModalOpen={isTripCreateModalOpen}
       />
     </Layout>
   );

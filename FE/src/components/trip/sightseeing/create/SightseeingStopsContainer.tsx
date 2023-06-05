@@ -46,12 +46,12 @@ const SightseeingStopsContainer: React.FC<ISightseeingStopsContainerProps> = (
       ],
     };
     props.shortestRouteOpenrouteserviceFetch(payload);
-    //   props.onNextStep();
   };
   return (
     <SightseeingStopsView
       originLocation={{ ...props.trip.location, label: props.trip.name }}
       onSightseeingStopsSelect={handleSightseeingStopsSelect}
+      onNextStep={props.onNextStep}
     />
   );
 };

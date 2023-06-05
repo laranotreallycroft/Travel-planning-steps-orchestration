@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
-import SightseeingDateView from "./SightseeingView";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { ITrip } from "../../../model/trip/Trip";
+import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import SightseeingView from "./SightseeingView";
 
 export interface ISightseeingContainerOwnProps {}
@@ -17,7 +16,12 @@ type ISightseeingContainerProps = ISightseeingContainerOwnProps &
 const SightseeingContainer: React.FC<ISightseeingContainerProps> = (
   props: ISightseeingContainerProps
 ) => {
-  return <SightseeingView sightseeingList={props.trip.sightseeing} />;
+  return (
+    <SightseeingView
+      trip={props.trip}
+      sightseeingList={props.trip.sightseeing}
+    />
+  );
 };
 
 const mapStateToProps = (state: any): ISightseeingContainerStateProps => ({

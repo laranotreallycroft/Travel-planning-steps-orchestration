@@ -3,7 +3,11 @@ import { ITrip } from "../../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import SightseeingCreateView from "./SightseeingCreateView";
 
-export interface ISightseeingCreateContainerOwnProps {}
+export interface ISightseeingCreateContainerOwnProps {
+  date: string;
+  isSightseeingCreateModalOpen: boolean;
+  onSightseeingCreateModalClose: () => void;
+}
 
 export interface ISightseeingCreateContainerStateProps {
   trip: ITrip;
@@ -16,7 +20,13 @@ type ISightseeingCreateContainerProps = ISightseeingCreateContainerOwnProps &
 const SightseeingCreateContainer: React.FC<ISightseeingCreateContainerProps> = (
   props: ISightseeingCreateContainerProps
 ) => {
-  return <SightseeingCreateView trip={props.trip} />;
+  return (
+    <SightseeingCreateView
+      trip={props.trip}
+      onSightseeingCreateModalClose={props.onSightseeingCreateModalClose}
+      isSightseeingCreateModalOpen={props.isSightseeingCreateModalOpen}
+    />
+  );
 };
 
 const mapStateToProps = (
