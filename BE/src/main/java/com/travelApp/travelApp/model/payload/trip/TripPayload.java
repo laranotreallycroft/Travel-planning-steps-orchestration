@@ -1,6 +1,8 @@
-package com.travelApp.travelApp.model.payload;
+package com.travelApp.travelApp.model.payload.trip;
 
 import java.time.LocalDate;
+
+import com.travelApp.travelApp.model.payload.common.PointPayload;
 
 public class TripPayload {
 

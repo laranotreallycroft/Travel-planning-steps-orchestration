@@ -10,11 +10,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import com.travelApp.travelApp.model.payload.Basics;
-import com.travelApp.travelApp.model.payload.Clothes;
-import com.travelApp.travelApp.model.payload.Hygiene;
-import com.travelApp.travelApp.model.payload.Miscellaneous;
-import com.travelApp.travelApp.model.payload.PackingListPayload;
+
+import com.travelApp.travelApp.model.payload.packingList.Basics;
+import com.travelApp.travelApp.model.payload.packingList.Clothes;
+import com.travelApp.travelApp.model.payload.packingList.Hygiene;
+import com.travelApp.travelApp.model.payload.packingList.Miscellaneous;
+import com.travelApp.travelApp.model.payload.packingList.PackingListPayload;
 import com.travelApp.travelApp.utils.General;
 
 @Entity

@@ -19,9 +19,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.travelApp.travelApp.model.User;
-import com.travelApp.travelApp.model.payload.GoogleLoginPayload;
-import com.travelApp.travelApp.model.payload.IdPayload;
-import com.travelApp.travelApp.model.payload.LoginPayload;
+import com.travelApp.travelApp.model.payload.common.IdPayload;
+import com.travelApp.travelApp.model.payload.login.GoogleLoginPayload;
+import com.travelApp.travelApp.model.payload.login.LoginPayload;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
 

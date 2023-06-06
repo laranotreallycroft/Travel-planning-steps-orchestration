@@ -1,4 +1,4 @@
-package com.travelApp.travelApp.model.payload;
+package com.travelApp.travelApp.model.payload.common;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

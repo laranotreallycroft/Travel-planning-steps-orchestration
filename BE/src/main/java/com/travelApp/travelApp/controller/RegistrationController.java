@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travelApp.travelApp.model.User;
-import com.travelApp.travelApp.model.payload.IdPayload;
-import com.travelApp.travelApp.model.payload.LoginPayload;
+import com.travelApp.travelApp.model.payload.common.IdPayload;
+import com.travelApp.travelApp.model.payload.login.LoginPayload;
 import com.travelApp.travelApp.repository.UserRepository;
 import com.travelApp.travelApp.utils.Security;
 

@@ -74,6 +74,7 @@ const itineraryRouteCreateEffect = (
         axios
           .post(`/itinerary/${trip.id}`, action.payload)
           .then((response) => {
+            console.log(response);
             if (response.status === 201) {
               notificationService.success(
                 "New itinerary route successfully created"
@@ -192,19 +193,3 @@ export const ItineraryBusinessStore = {
   },
   reducers: { itineraryRoute },
 };
-
-/* const payload: IShortestRouteOpenrouteservicePayload = {
-      jobs: values.map((value, index) => {
-        return { id: index, location: [value.x, value.y], skills: [1] };
-      }),
-      vehicles: [
-        {
-          id: 1,
-          profile: "driving-car",
-          start: [values[0].x, values[0].y],
-          end: [values[0].x, values[0].y],
-          capacity: [4],
-          skills: [1, 14],
-        },
-      ],
-    };*/

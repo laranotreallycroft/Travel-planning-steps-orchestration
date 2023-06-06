@@ -1,15 +1,17 @@
-package com.travelApp.travelApp.model.payload;
+package com.travelApp.travelApp.model.payload.itinerary;
 
-public class SightseeingRoutePayload {
+import com.travelApp.travelApp.model.payload.common.PointPayload;
+
+public class ItineraryPayload {
 
 	private PointPayload[] locations;
 	private RouteOptions routeOptions;
 
-	public SightseeingRoutePayload() {
+	public ItineraryPayload() {
 
 	}
 
-	public SightseeingRoutePayload(PointPayload[] locations, RouteOptions routeOptions) {
+	public ItineraryPayload(PointPayload[] locations, RouteOptions routeOptions) {
 		super();
 		this.locations = locations;
 		this.routeOptions = routeOptions;

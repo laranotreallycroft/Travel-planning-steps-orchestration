@@ -7,7 +7,7 @@ import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.travelApp.travelApp.model.payload.PackingListPayload;
+import com.travelApp.travelApp.model.payload.packingList.PackingListPayload;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

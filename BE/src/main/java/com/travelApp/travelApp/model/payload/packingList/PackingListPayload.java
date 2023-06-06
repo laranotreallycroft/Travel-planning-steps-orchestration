@@ -1,4 +1,4 @@
-package com.travelApp.travelApp.model.payload;
+package com.travelApp.travelApp.model.payload.packingList;
 
 import com.travelApp.travelApp.model.PackingList;
 import com.travelApp.travelApp.model.PackingListChecked;

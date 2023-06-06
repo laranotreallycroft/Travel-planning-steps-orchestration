@@ -1,4 +1,4 @@
-package com.travelApp.travelApp.model.payload;
+package com.travelApp.travelApp.model.payload.login;
 
 public class GoogleLoginPayload {
 	private String credential;
