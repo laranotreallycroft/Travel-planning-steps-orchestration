@@ -2,9 +2,12 @@ import { DatePicker, Form, Modal, Row } from "antd";
 import { Dayjs } from "dayjs";
 import { RangeValue } from "rc-picker/lib/interface";
 import React, { useCallback, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import MapElement, {
+  IGeosearchPayload,
+  IGeosearchPayloadWithUUId,
+} from "../../common/map/MapElement";
 import MapSearch from "../../common/map/MapSearch";
-import MapElement, { IGeosearchPayload } from "../../common/map/MapElement";
-
 export interface ITripCreateViewOwnProps {
   isTripCreateModalOpen: boolean;
   onTripCreate: (values: ITripCreateForm) => void;
@@ -22,10 +25,14 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
   props: ITripCreateViewProps
 ) => {
   const [form] = Form.useForm<ITripCreateForm>();
-  const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>();
+  const [selectedLocation, setSelectedLocation] =
+    useState<IGeosearchPayloadWithUUId>();
 
   const handleSelectLocation = useCallback((value: string) => {
-    const parsedValue: IGeosearchPayload = JSON.parse(value);
+    const parsedValue: IGeosearchPayloadWithUUId = {
+      ...JSON.parse(value),
+      id: uuidv4(),
+    };
     setSelectedLocation(parsedValue);
     form.setFieldValue("location", parsedValue);
   }, []);

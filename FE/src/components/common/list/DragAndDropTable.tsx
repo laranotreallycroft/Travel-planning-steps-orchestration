@@ -91,7 +91,6 @@ const DragAndDropTable: React.FC<IDragAndDropTableProps> = (
       },
     })
   );
-
   return (
     <DndContext
       onDragEnd={onDragEnd}
@@ -110,7 +109,7 @@ const DragAndDropTable: React.FC<IDragAndDropTableProps> = (
               row: Row,
             },
           }}
-          rowKey="label"
+          rowKey="id"
           columns={props.tableColumns}
           dataSource={props.tableDataSource}
           pagination={false}

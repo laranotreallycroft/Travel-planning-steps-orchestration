@@ -1,10 +1,11 @@
 import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
+import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import { IGeosearchPayloadWithUUId } from "../../../common/map/MapElement";
 import ItinerarySettingsView from "./ItinerarySettingsView";
 import ItineraryStopsView from "./ItineraryStopsView";
-import { IGeosearchPayload } from "../../../common/map/MapElement";
-import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import { v4 as uuidv4 } from "uuid";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
@@ -14,7 +15,7 @@ export interface IItineraryCreateViewOwnProps {
 }
 
 export interface IItineraryCreateForm {
-  locations: IGeosearchPayload[];
+  locations: IGeosearchPayloadWithUUId[];
   settings: IItinerarySettings;
 }
 
@@ -77,7 +78,9 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
       form={form}
       onFinish={handleFinish}
       initialValues={{
-        locations: [{ ...props.trip.location, label: props.trip.name }],
+        locations: [
+          { ...props.trip.location, label: props.trip.name, id: uuidv4() },
+        ],
         routeOptions: { optimize: false, vehicleProfile: "driving-car" },
       }}
     >

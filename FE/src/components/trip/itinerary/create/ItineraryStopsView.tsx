@@ -5,9 +5,12 @@ import React, { useCallback, useState } from "react";
 import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
-import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
+import MapElement, {
+  IGeosearchPayload,
+  IGeosearchPayloadWithUUId,
+} from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-
+import { v4 as uuidv4 } from "uuid";
 export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
 }
@@ -19,16 +22,18 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
 ) => {
   const form = Form.useFormInstance<IItineraryPayload>();
   const locations = Form.useWatch("locations", form);
-  const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
-    form.getFieldValue("locations")[0]
-  );
+  const [selectedLocation, setSelectedLocation] =
+    useState<IGeosearchPayloadWithUUId>(form.getFieldValue("locations")[0]);
   const setLocations = useCallback((locations: IGeosearchPayload[]) => {
     form.setFieldValue("locations", locations);
   }, []);
 
   const handleAddLocation = useCallback(
     (value: string) => {
-      const parsedValue: IGeosearchPayload = JSON.parse(value);
+      const parsedValue: IGeosearchPayloadWithUUId = {
+        ...JSON.parse(value),
+        id: uuidv4(),
+      };
       setSelectedLocation(parsedValue);
       setLocations([...locations, parsedValue]);
     },
@@ -56,7 +61,6 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
         "Please select at least two stops"
       );
   };
-
   return (
     <Row justify={"space-between"} className="fullHeight">
       <Row className="fullWidth">
@@ -74,22 +78,23 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
                   <DragAndDropTable
                     sortableContextItems={
                       locations
-                        ? locations.map((location) => location.label)
+                        ? locations.map((location) => location.id)
                         : form
                             .getFieldValue("locations")
                             .map(
-                              (location: IGeosearchPayload) => location.label
+                              (location: IGeosearchPayloadWithUUId) =>
+                                location.id
                             )
                     }
                     tableDataSource={
                       locations
                         ? locations.map((location) => {
-                            return { ...location, key: location.label };
+                            return { ...location, key: location.id };
                           })
                         : form
                             .getFieldValue("locations")
-                            .map((location: IGeosearchPayload) => {
-                              return { ...location, key: location.label };
+                            .map((location: IGeosearchPayloadWithUUId) => {
+                              return { ...location, key: location.id };
                             })
                     }
                     tableColumns={[

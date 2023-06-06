@@ -2,24 +2,23 @@ package com.travelApp.travelApp.model.payload.itinerary.openRouteService.directi
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Route {
 	private Summary summary;
 	private List<Segment> segments;
-	private double[] bbox;
 	private String geometry;
-	private int[] way_points;
 
 	public Route() {
 
 	}
 
-	public Route(Summary summary, List<Segment> segments, double[] bbox, String geometry, int[] way_points) {
+	public Route(Summary summary, List<Segment> segments, String geometry) {
 		super();
 		this.summary = summary;
 		this.segments = segments;
-		this.bbox = bbox;
 		this.geometry = geometry;
-		this.way_points = way_points;
 	}
 
 	public Summary getSummary() {
@@ -38,28 +37,12 @@ public class Route {
 		this.segments = segments;
 	}
 
-	public double[] getBbox() {
-		return bbox;
-	}
-
-	public void setBbox(double[] bbox) {
-		this.bbox = bbox;
-	}
-
 	public String getGeometry() {
 		return geometry;
 	}
 
 	public void setGeometry(String geometry) {
 		this.geometry = geometry;
-	}
-
-	public int[] getWay_points() {
-		return way_points;
-	}
-
-	public void setWay_points(int[] way_points) {
-		this.way_points = way_points;
 	}
 
 }

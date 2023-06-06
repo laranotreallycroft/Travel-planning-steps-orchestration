@@ -1,10 +1,11 @@
 package com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Step {
 	private double distance;
 	private double duration;
-	private int type;
-	private String instruction;
 	private String name;
 	private int[] way_points;
 
@@ -12,12 +13,10 @@ public class Step {
 
 	}
 
-	public Step(double distance, double duration, int type, String instruction, String name, int[] way_points) {
+	public Step(double distance, double duration, String name, int[] way_points) {
 		super();
 		this.distance = distance;
 		this.duration = duration;
-		this.type = type;
-		this.instruction = instruction;
 		this.name = name;
 		this.way_points = way_points;
 	}
@@ -36,22 +35,6 @@ public class Step {
 
 	public void setDuration(double duration) {
 		this.duration = duration;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public String getInstruction() {
-		return instruction;
-	}
-
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
 	}
 
 	public String getName() {

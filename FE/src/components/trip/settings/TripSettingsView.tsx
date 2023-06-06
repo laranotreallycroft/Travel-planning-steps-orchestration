@@ -12,9 +12,7 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
 ) => {
   const [form] = Form.useForm<ITripSettings>();
 
-  const handleFinish = (values: ITripSettings) => {
-    console.log(values);
-  };
+  const handleFinish = (values: ITripSettings) => {};
   return (
     <Form<ITripSettings> form={form} onFinish={handleFinish}>
       <Title level={4}>Trip settings</Title>

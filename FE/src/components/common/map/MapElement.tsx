@@ -1,6 +1,7 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 import { ChangeView, initMap } from "./utils";
+import { IUUIdPayload } from "../../../service/business/common/types";
 
 export interface IGeosearchPayload {
   x: number;
@@ -8,9 +9,11 @@ export interface IGeosearchPayload {
   label: string;
   raw?: { place_id: string };
 }
+
+export type IGeosearchPayloadWithUUId = IGeosearchPayload & IUUIdPayload;
 export interface IMapElementOwnProps {
-  selectedLocation?: IGeosearchPayload;
-  locations?: IGeosearchPayload[];
+  selectedLocation?: IGeosearchPayloadWithUUId;
+  locations?: IGeosearchPayloadWithUUId[];
   className?: string;
 }
 type IMapElementProps = IMapElementOwnProps;
@@ -40,7 +43,7 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
 
       {props.locations?.map((location) => (
         <Marker
-          key={`marker-${location.label}`}
+          key={`marker-${location.id}`}
           position={[location.y, location.x]}
         >
           <Popup>

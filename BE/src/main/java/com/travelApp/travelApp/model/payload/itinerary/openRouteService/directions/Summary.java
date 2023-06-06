@@ -1,4 +1,8 @@
 package com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Summary {
 		private double distance;
 		private double duration;

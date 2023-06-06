@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-import { IGeosearchPayload } from "../../../components/common/map/MapElement";
+import { IGeosearchPayloadWithUUId } from "../../../components/common/map/MapElement";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
@@ -10,7 +10,7 @@ import { getTrip } from "../trip/TripBusinessStore";
 
 export interface IItineraryPayload {
   date: string;
-  locations: IGeosearchPayload[];
+  locations: IGeosearchPayloadWithUUId[];
   settings: IItinerarySettings;
 }
 

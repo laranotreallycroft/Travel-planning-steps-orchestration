@@ -73,7 +73,7 @@ public class ItineraryController {
 				// pair new route with labels
 				// remove redundant origin and destination steps
 				List<Step> steps = openRouteServiceResponse.getRoutes().get(0).getSteps();
-				for (int i = 1; i < steps.size() - 1; i++) {
+				for (int i = 0; i < steps.size(); i++) {
 					for (GeosearchPayload location : itineraryPayload.getLocations()) {
 						if (location.getX().equals(steps.get(i).getX())
 								&& location.getY().equals(steps.get(i).getY())) {
@@ -81,6 +81,7 @@ public class ItineraryController {
 									location.getPointPayload().toPoint(), steps.get(i).getDuration() / 60, itinerary);
 
 							itinerary.addItineraryElement(itineraryElement);
+							break;
 						}
 					}
 				}

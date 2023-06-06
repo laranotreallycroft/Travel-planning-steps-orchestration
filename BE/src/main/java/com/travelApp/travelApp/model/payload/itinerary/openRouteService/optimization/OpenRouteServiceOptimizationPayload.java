@@ -26,7 +26,7 @@ public class OpenRouteServiceOptimizationPayload {
 		this.jobs = new ArrayList<Job>();
 		this.vehicles = new ArrayList<Vehicle>();
 		List<GeosearchPayload> locations = payload.getLocations();
-		for (int i = 0; i < locations.size(); i++) {
+		for (int i = 1; i < locations.size()-1; i++) {
 			PointPayload value = locations.get(i).getPointPayload();
 			Job job = new Job(i, new double[] { value.getX(), value.getY() }, new int[] { 1 });
 			jobs.add(job);
