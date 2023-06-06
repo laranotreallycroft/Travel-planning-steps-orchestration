@@ -111,4 +111,12 @@ public class Step {
 		this.duration = duration;
 	}
 
+	public Double getX() {
+		return location.get(0);
+	}
+
+	public Double getY() {
+		return location.get(1);
+	}
+
 }

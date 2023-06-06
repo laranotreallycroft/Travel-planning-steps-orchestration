@@ -23,21 +23,21 @@ public class PackingListPayload {
 	}
 
 	public PackingList payloadToModel(Trip trip) {
-		return new PackingList(trip, getBasics().getTravelAids(), getBasics().getFunds(), getBasics().getTravelInfo(),
-				getClothes().getBasics(), getClothes().getDressy(), getClothes().getOuterwear(),
-				getClothes().getCasual(), getClothes().getFootwear(), getClothes().getAccessories(),
-				getHygiene().getHygiene(), getMiscellaneous().getDocuments(), getMiscellaneous().getBags(),
-				getMiscellaneous().getMiscellaneous(), getMiscellaneous().getTechnology(),
-				getMiscellaneous().getWork());
+		return new PackingList(trip, this.basics.getTravelAids(), this.basics.getFunds(),
+				this.basics.getTravelInfo(), this.clothes.getBasics(), this.clothes.getDressy(),
+				this.clothes.getOuterwear(), this.clothes.getCasual(), this.clothes.getFootwear(),
+				this.clothes.getAccessories(), this.hygiene.getHygiene(), this.miscellaneous.getDocuments(),
+				this.miscellaneous.getBags(), this.miscellaneous.getMiscellaneous(), this.miscellaneous.getTechnology(),
+				this.miscellaneous.getWork());
 	}
 
 	public PackingListChecked payloadToModelChecked(Trip trip) {
-		return new PackingListChecked(trip, getBasics().getTravelAids(), getBasics().getFunds(),
-				getBasics().getTravelInfo(), getClothes().getBasics(), getClothes().getDressy(),
-				getClothes().getOuterwear(), getClothes().getCasual(), getClothes().getFootwear(),
-				getClothes().getAccessories(), getHygiene().getHygiene(), getMiscellaneous().getDocuments(),
-				getMiscellaneous().getBags(), getMiscellaneous().getMiscellaneous(), getMiscellaneous().getTechnology(),
-				getMiscellaneous().getWork());
+		return new PackingListChecked(trip, this.basics.getTravelAids(), this.basics.getFunds(),
+				this.basics.getTravelInfo(), this.clothes.getBasics(), this.clothes.getDressy(),
+				this.clothes.getOuterwear(), this.clothes.getCasual(), this.clothes.getFootwear(),
+				this.clothes.getAccessories(), this.hygiene.getHygiene(), this.miscellaneous.getDocuments(),
+				this.miscellaneous.getBags(), this.miscellaneous.getMiscellaneous(), this.miscellaneous.getTechnology(),
+				this.miscellaneous.getWork());
 	}
 
 	public Basics getBasics() {

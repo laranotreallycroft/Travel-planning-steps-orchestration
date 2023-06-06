@@ -3,6 +3,7 @@ package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.common.PointPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryPayload;
 
@@ -24,22 +25,18 @@ public class OpenRouteServicePayload {
 	public OpenRouteServicePayload(ItineraryPayload payload) {
 		this.jobs = new ArrayList<Job>();
 		this.vehicles = new ArrayList<Vehicle>();
-		PointPayload[] locations = payload.getLocations();
-		for (int i = 0; i < locations.length; i++) {
-			PointPayload value = locations[i];
+		List<GeosearchPayload> locations = payload.getLocations();
+		for (int i = 0; i < locations.size(); i++) {
+			PointPayload value = locations.get(i).getPointPayload();
 			Job job = new Job(i, new double[] { value.getX(), value.getY() }, new int[] { 1 });
 			jobs.add(job);
 		}
 
 		Vehicle vehicle = new Vehicle();
-		vehicle.setId(1);
-		vehicle.setProfile("driving-car");
-		PointPayload startLocation = locations[0];
-		PointPayload endLocation = locations[locations.length - 1];
+		PointPayload startLocation = locations.get(0).getPointPayload();
+		PointPayload endLocation = locations.get(locations.size() - 1).getPointPayload();
 		vehicle.setStart(new double[] { startLocation.getX(), startLocation.getY() });
 		vehicle.setEnd(new double[] { endLocation.getX(), endLocation.getY() });
-		vehicle.setCapacity(new int[] { 4 });
-		vehicle.setSkills(new int[] { 1, 14 });
 		vehicles.add(vehicle);
 
 	}

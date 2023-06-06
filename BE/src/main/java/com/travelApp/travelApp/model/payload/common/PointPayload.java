@@ -1,5 +1,7 @@
 package com.travelApp.travelApp.model.payload.common;
 
+import java.util.List;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -17,6 +19,11 @@ public class PointPayload {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+
+	public PointPayload(List<Double> location) {
+		this.x = location.get(0);
+		this.y = location.get(1);
 	}
 
 	public Double getX() {

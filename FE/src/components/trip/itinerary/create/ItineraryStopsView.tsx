@@ -2,11 +2,11 @@ import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Row, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
+import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-import { IItineraryRouteCreatePayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 
 export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
@@ -17,7 +17,7 @@ type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
 const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   props: IItineraryStopsViewProps
 ) => {
-  const form = Form.useFormInstance<IItineraryRouteCreatePayload>();
+  const form = Form.useFormInstance<IItineraryPayload>();
   const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
     form.getFieldValue("locations")[0]

@@ -9,7 +9,10 @@ public class Vehicle {
 	private int[] skills;
 
 	public Vehicle() {
-
+		this.capacity = new int[] { 4 };
+		this.skills = new int[] { 1, 14 };
+		this.id = 1;
+		this.profile = "driving-car";
 	}
 
 	public Vehicle(int id, String profile, double[] start, double[] end, int[] capacity, int[] skills) {

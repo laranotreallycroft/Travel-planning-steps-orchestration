@@ -1,16 +1,19 @@
 import axios from "axios";
 import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-
-import notificationService from "../../util/notificationService";
-import trackAction, { IAction } from "../../util/trackAction";
-import { IIdPayload, IPayloadAction } from "../common/types";
-import { loginActions } from "../login/LoginBusinessStore";
-import { getTrip } from "../trip/TripBusinessStore";
 import { IGeosearchPayload } from "../../../components/common/map/MapElement";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
+import notificationService from "../../util/notificationService";
+import trackAction, { IAction } from "../../util/trackAction";
+import { IPayloadAction } from "../common/types";
+import { loginActions } from "../login/LoginBusinessStore";
+import { getTrip } from "../trip/TripBusinessStore";
 
-export interface IItineraryRouteCreatePayload {
+export interface IItineraryPayload {
   locations: IGeosearchPayload[];
+  settings: IItinerarySettings;
+}
+
+export interface IItinerarySettings {
   routeOptions: {
     optimize: boolean;
     carTravel: boolean;
@@ -18,54 +21,54 @@ export interface IItineraryRouteCreatePayload {
 }
 // -
 // -------------------- Selectors
-const getItineraryRoute = (store: any): IItinerary => store.itineraryRoute;
+const getItinerary = (store: any): IItinerary => store.itinerary;
 
 // -
 // -------------------- Actions
 const actions = {
-  SIGHTSEEING_ROUTE_CREATE: "SIGHTSEEING_ROUTE_CREATE",
-  SIGHTSEEING_ROUTE_FETCH: "SIGHTSEEING_ROUTE_FETCH",
-  SIGHTSEEING_ROUTE_UPDATE: "SIGHTSEEING_ROUTE_UPDATE",
-  SIGHTSEEING_ROUTE_STORE: "SIGHTSEEING_ROUTE_STORE",
-  SIGHTSEEING_ROUTE_CLEAR: "SIGHTSEEING_ROUTE_CLEAR",
+  ITINERARY_CREATE: "ITINERARY_CREATE",
+  ITINERARY_FETCH: "ITINERARY_FETCH",
+  ITINERARY_UPDATE: "ITINERARY_UPDATE",
+  ITINERARY_STORE: "ITINERARY_STORE",
+  ITINERARY_CLEAR: "ITINERARY_CLEAR",
 };
 
-export const itineraryRouteCreate = (
-  payload: IItineraryRouteCreatePayload
-): IPayloadAction<IItineraryRouteCreatePayload> => {
-  return { type: actions.SIGHTSEEING_ROUTE_CREATE, payload: payload };
+export const itineraryCreate = (
+  payload: IItineraryPayload
+): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARY_CREATE, payload: payload };
 };
 
-export const itineraryRouteFetch = (): IAction => {
-  return { type: actions.SIGHTSEEING_ROUTE_FETCH };
+export const itineraryFetch = (): IAction => {
+  return { type: actions.ITINERARY_FETCH };
 };
 
-export const itineraryRouteUpdate = (
+export const itineraryUpdate = (
+  payload: IItineraryPayload
+): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARY_UPDATE, payload: payload };
+};
+
+export const itineraryStore = (
   payload: IItinerary
 ): IPayloadAction<IItinerary> => {
-  return { type: actions.SIGHTSEEING_ROUTE_UPDATE, payload: payload };
+  return { type: actions.ITINERARY_STORE, payload: payload };
 };
 
-export const itineraryRouteStore = (
-  payload: IItinerary
-): IPayloadAction<IItinerary> => {
-  return { type: actions.SIGHTSEEING_ROUTE_STORE, payload: payload };
-};
-
-export const itineraryRouteClear = (): IAction => {
-  return { type: actions.SIGHTSEEING_ROUTE_CLEAR };
+export const itineraryClear = (): IAction => {
+  return { type: actions.ITINERARY_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const itineraryRouteCreateEffect = (
-  action$: Observable<IPayloadAction<IItineraryRouteCreatePayload>>,
+const itineraryCreateEffect = (
+  action$: Observable<IPayloadAction<IItineraryPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SIGHTSEEING_ROUTE_CREATE;
+      return action.type === actions.ITINERARY_CREATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -76,32 +79,30 @@ const itineraryRouteCreateEffect = (
           .then((response) => {
             console.log(response);
             if (response.status === 201) {
-              notificationService.success(
-                "New itinerary route successfully created"
-              );
+              notificationService.success("New itinerary successfully created");
               return response.data;
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to create trip packing list",
+              "Unable to create itinerary",
               error.response.data
             );
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => itineraryRouteStore(data))
+    map((data) => itineraryStore(data))
   );
 };
-
-const itineraryRouteFetchEffect = (
+/*
+const itineraryFetchEffect = (
   action$: Observable<IPayloadAction<IIdPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SIGHTSEEING_ROUTE_FETCH;
+      return action.type === actions.ITINERARY_FETCH;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -122,17 +123,17 @@ const itineraryRouteFetchEffect = (
           })
       ).pipe(trackAction(action));
     }),
-    map((data) => itineraryRouteStore(data))
+    map((data) => itineraryStore(data))
   );
 };
 
-const itineraryRouteUpdateffect = (
+const itineraryUpdateffect = (
   action$: Observable<IPayloadAction<IItinerary>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.SIGHTSEEING_ROUTE_UPDATE;
+      return action.type === actions.ITINERARY_UPDATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -154,22 +155,19 @@ const itineraryRouteUpdateffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => itineraryRouteStore(data))
+    map((data) => itineraryStore(data))
   );
 };
-
+*/
 // -
 // -------------------- Reducers
 
-const itineraryRoute = (
-  state: any = null,
-  action: IPayloadAction<IItinerary>
-) => {
-  if (action.type === actions.SIGHTSEEING_ROUTE_STORE) {
+const itinerary = (state: any = null, action: IPayloadAction<IItinerary>) => {
+  if (action.type === actions.ITINERARY_STORE) {
     if (action.payload) return { ...action.payload };
     else return null;
   } else if (
-    action.type === actions.SIGHTSEEING_ROUTE_CLEAR ||
+    action.type === actions.ITINERARY_CLEAR ||
     action.type === loginActions.LOGOUT
   ) {
     return null;
@@ -178,18 +176,18 @@ const itineraryRoute = (
 };
 
 export const ItineraryBusinessStore = {
-  selectors: { getItineraryRoute },
+  selectors: { getItinerary },
   actions: {
-    itineraryRouteCreate,
-    itineraryRouteFetch,
-    itineraryRouteUpdate,
-    itineraryRouteStore,
-    itineraryRouteClear,
+    itineraryCreate,
+    itineraryFetch,
+    itineraryUpdate,
+    itineraryStore,
+    itineraryClear,
   },
   effects: {
-    itineraryRouteFetchEffect,
-    itineraryRouteCreateEffect,
-    itineraryRouteUpdateffect,
+    itineraryCreateEffect,
+    // itineraryFetchEffect,
+    // itineraryUpdateffect,
   },
-  reducers: { itineraryRoute },
+  reducers: { itinerary },
 };
