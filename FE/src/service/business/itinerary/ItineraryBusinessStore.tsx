@@ -9,6 +9,7 @@ import { loginActions } from "../login/LoginBusinessStore";
 import { getTrip } from "../trip/TripBusinessStore";
 
 export interface IItineraryPayload {
+  date: string;
   locations: IGeosearchPayload[];
   settings: IItinerarySettings;
 }
@@ -16,7 +17,7 @@ export interface IItineraryPayload {
 export interface IItinerarySettings {
   routeOptions: {
     optimize: boolean;
-    carTravel: boolean;
+    vehicleProfile: string;
   };
 }
 // -

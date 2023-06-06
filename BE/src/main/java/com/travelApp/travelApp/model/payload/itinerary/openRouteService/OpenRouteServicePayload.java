@@ -37,6 +37,7 @@ public class OpenRouteServicePayload {
 		PointPayload endLocation = locations.get(locations.size() - 1).getPointPayload();
 		vehicle.setStart(new double[] { startLocation.getX(), startLocation.getY() });
 		vehicle.setEnd(new double[] { endLocation.getX(), endLocation.getY() });
+		vehicle.setProfile(payload.getRouteOptions().getVehicleProfile());
 		vehicles.add(vehicle);
 
 	}

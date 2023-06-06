@@ -1,12 +1,14 @@
 package com.travelApp.travelApp.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.travelApp.travelApp.model.payload.packingList.PackingListPayload;
 
 import jakarta.persistence.CascadeType;
@@ -17,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -49,6 +52,10 @@ public class Trip {
 	@OneToOne(mappedBy = "trip", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("trip")
 	private PackingListChecked packingListChecked;
+
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("trip")
+	private List<Itinerary> itineraries;
 
 	public Trip() {
 
@@ -129,6 +136,14 @@ public class Trip {
 
 	public void setPackingListChecked(PackingListChecked packingListChecked) {
 		this.packingListChecked = packingListChecked;
+	}
+
+	public List<Itinerary> getItineraries() {
+		return itineraries;
+	}
+
+	public void setItineraries(List<Itinerary> itineraries) {
+		this.itineraries = itineraries;
 	}
 
 }

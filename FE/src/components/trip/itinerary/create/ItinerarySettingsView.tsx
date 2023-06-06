@@ -1,8 +1,71 @@
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
-import { Button, Col, Form, Row, Switch } from "antd";
+import {
+  Accessible,
+  DirectionsBike,
+  DirectionsCar,
+  DirectionsWalk,
+  Hiking,
+} from "@mui/icons-material";
+import SportsMotorsportsIcon from "@mui/icons-material/SportsMotorsports";
+import { Button, Col, Form, Row, Select, Switch } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
+
+const vehicleProfiles = [
+  {
+    label: (
+      <Row>
+        <DirectionsCar className="margin-right-sm" />
+        Car
+      </Row>
+    ),
+    value: "driving-car",
+  },
+  {
+    label: (
+      <Row>
+        <DirectionsBike className="margin-right-sm" />
+        Bicycle
+      </Row>
+    ),
+    value: "cycling-regular",
+  },
+  {
+    label: (
+      <Row>
+        <SportsMotorsportsIcon className="margin-right-sm" />
+        Mountain bicycle
+      </Row>
+    ),
+    value: "cycling-mountain",
+  },
+  {
+    label: (
+      <Row>
+        <DirectionsWalk className="margin-right-sm" />
+        Walking
+      </Row>
+    ),
+    value: "foot-walking",
+  },
+  {
+    label: (
+      <Row>
+        <Hiking className="margin-right-sm" />
+        Hiking
+      </Row>
+    ),
+    value: "foot-hiking",
+  },
+  {
+    label: (
+      <Row>
+        <Accessible className="margin-right-sm" />
+        Wheelchair
+      </Row>
+    ),
+    value: "wheelchair",
+  },
+];
 export interface IItinerarySettingsViewOwnProps {
   onNextStep: () => void;
   onPreviousStep: () => void;
@@ -16,7 +79,7 @@ const ItinerarySettingsView: React.FC<IItinerarySettingsViewProps> = (
   return (
     <Row justify={"space-between"} className="fullHeight">
       <Row className="margin-bottom-l fullWidth">
-        <Col>
+        <Col span={5}>
           <Title level={5}>Route options</Title>
           <Form.Item
             label={"Optimize route"}
@@ -25,15 +88,13 @@ const ItinerarySettingsView: React.FC<IItinerarySettingsViewProps> = (
           >
             <Switch />
           </Form.Item>
-          <Row>
-            <DirectionsWalkIcon />
+          <Row className="fullWidth">
             <Form.Item
-              name={["routeOptions", "carTravel"]}
-              valuePropName="checked"
+              name={["routeOptions", "vehicleProfile"]}
+              className="fullWidth"
             >
-              <Switch />
+              <Select options={vehicleProfiles} />
             </Form.Item>
-            <DirectionsCarIcon />
           </Row>
         </Col>
       </Row>

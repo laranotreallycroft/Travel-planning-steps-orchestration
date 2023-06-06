@@ -3,16 +3,16 @@ package com.travelApp.travelApp.model.payload.itinerary;
 public class RouteOptions {
 
 	private boolean optimize;
-	private boolean carTravel;
+	private String vehicleProfile;
 
 	public RouteOptions() {
 
 	}
 
-	public RouteOptions(boolean optimize, boolean carTravel) {
+	public RouteOptions(boolean optimize, String vehicleProfile) {
 		super();
 		this.optimize = optimize;
-		this.carTravel = carTravel;
+		this.vehicleProfile = vehicleProfile;
 	}
 
 	public boolean isOptimize() {
@@ -23,12 +23,12 @@ public class RouteOptions {
 		this.optimize = optimize;
 	}
 
-	public boolean isCarTravel() {
-		return carTravel;
+	public String getVehicleProfile() {
+		return vehicleProfile;
 	}
 
-	public void setCarTravel(boolean carTravel) {
-		this.carTravel = carTravel;
+	public void setVehicleProfile(String vehicleProfile) {
+		this.vehicleProfile = vehicleProfile;
 	}
 
 }

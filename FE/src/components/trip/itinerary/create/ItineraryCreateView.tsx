@@ -1,15 +1,21 @@
 import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
-import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import ItinerarySettingsView from "./ItinerarySettingsView";
 import ItineraryStopsView from "./ItineraryStopsView";
+import { IGeosearchPayload } from "../../../common/map/MapElement";
+import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
   isItineraryCreateModalOpen: boolean;
   onItineraryCreateModalClose: () => void;
-  onItineraryCreate: (itineraryRoutePayload: IItineraryPayload) => void;
+  onItineraryCreate: (itineraryRoutePayload: IItineraryCreateForm) => void;
+}
+
+export interface IItineraryCreateForm {
+  locations: IGeosearchPayload[];
+  settings: IItinerarySettings;
 }
 
 type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
@@ -17,7 +23,7 @@ type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
 const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   props: IItineraryCreateViewProps
 ) => {
-  const [form] = Form.useForm<IItineraryPayload>();
+  const [form] = Form.useForm<IItineraryCreateForm>();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNextStep = () => {
@@ -32,7 +38,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
     form.submit();
   };
   //TODO other logic
-  const handleFinish = (values: IItineraryPayload) => {
+  const handleFinish = (values: IItineraryCreateForm) => {
     props.onItineraryCreate(form.getFieldsValue(true));
   };
 
@@ -67,12 +73,12 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   );
 
   return (
-    <Form<IItineraryPayload>
+    <Form<IItineraryCreateForm>
       form={form}
       onFinish={handleFinish}
       initialValues={{
         locations: [{ ...props.trip.location, label: props.trip.name }],
-        routeOptions: { optimize: false, carTravel: false },
+        routeOptions: { optimize: false, vehicleProfile: "driving-car" },
       }}
     >
       <Modal
