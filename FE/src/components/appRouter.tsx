@@ -10,7 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import FallbackPage from "./pages/FallbackPage";
 import HomeLayout from "./pages/layout/HomeLayout";
 import PackingListPage from "./pages/PackingListPage";
-import SightseeingPage from "./pages/SightseeingPage";
+import ItineraryPage from "./pages/ItineraryPage";
 import TripSettingsPage from "./pages/TripSettingsPage";
 import WeatherPage from "./pages/WeatherPage";
 
@@ -30,7 +30,7 @@ const appRouter = createBrowserRouter(
           />
           <Route path="packinglist" element={<PackingListPage />} />
           <Route path="weather" element={<WeatherPage />} />
-          <Route path="sightseeing" element={<SightseeingPage />} />
+          <Route path="itinerary" element={<ItineraryPage />} />
           <Route path="settings" element={<TripSettingsPage />} />
         </Route>
       </Route>

@@ -6,18 +6,18 @@ import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, { IGeosearchPayload } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-import { ISightseeingRouteCreatePayload } from "../../../../service/business/sightseeing/SightseeingBusinessStore";
+import { IItineraryRouteCreatePayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 
-export interface ISightseeingStopsViewOwnProps {
+export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
 }
 
-type ISightseeingStopsViewProps = ISightseeingStopsViewOwnProps;
+type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
 
-const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
-  props: ISightseeingStopsViewProps
+const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
+  props: IItineraryStopsViewProps
 ) => {
-  const form = Form.useFormInstance<ISightseeingRouteCreatePayload>();
+  const form = Form.useFormInstance<IItineraryRouteCreatePayload>();
   const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayload>(
     form.getFieldValue("locations")[0]
@@ -68,7 +68,7 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
             <Row className="margin-bottom-l">
               <MapSearch onSelectLocation={handleAddLocation} />
             </Row>
-            <Row className="sightseeingStopsView__listcontainer">
+            <Row className="itineraryStopsView__listcontainer">
               <Form.List name="locations">
                 {() => (
                   <DragAndDropTable
@@ -150,4 +150,4 @@ const SightseeingStopsView: React.FC<ISightseeingStopsViewProps> = (
   );
 };
 
-export default SightseeingStopsView;
+export default ItineraryStopsView;

@@ -1,25 +1,25 @@
 import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
-import { ISightseeingRouteCreatePayload } from "../../../../service/business/sightseeing/SightseeingBusinessStore";
-import SightseeingSettingsView from "./SightseeingSettingsView";
-import SightseeingStopsView from "./SightseeingStopsView";
+import { IItineraryRouteCreatePayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import ItinerarySettingsView from "./ItinerarySettingsView";
+import ItineraryStopsView from "./ItineraryStopsView";
 
-export interface ISightseeingCreateViewOwnProps {
+export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
-  isSightseeingCreateModalOpen: boolean;
-  onSightseeingCreateModalClose: () => void;
-  onSightseeingCreate: (
-    sightseeingRoutePayload: ISightseeingRouteCreatePayload
+  isItineraryCreateModalOpen: boolean;
+  onItineraryCreateModalClose: () => void;
+  onItineraryCreate: (
+    itineraryRoutePayload: IItineraryRouteCreatePayload
   ) => void;
 }
 
-type ISightseeingCreateViewProps = ISightseeingCreateViewOwnProps;
+type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
 
-const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
-  props: ISightseeingCreateViewProps
+const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
+  props: IItineraryCreateViewProps
 ) => {
-  const [form] = Form.useForm<ISightseeingRouteCreatePayload>();
+  const [form] = Form.useForm<IItineraryRouteCreatePayload>();
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNextStep = () => {
@@ -34,26 +34,26 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
     form.submit();
   };
   //TODO other logic
-  const handleFinish = (values: ISightseeingRouteCreatePayload) => {
-    props.onSightseeingCreate(form.getFieldsValue(true));
+  const handleFinish = (values: IItineraryRouteCreatePayload) => {
+    props.onItineraryCreate(form.getFieldsValue(true));
   };
 
   const handleModalClose = () => {
     setCurrentStep(0);
     form.resetFields();
-    props.onSightseeingCreateModalClose();
+    props.onItineraryCreateModalClose();
   };
 
   const steps = useMemo(
     () => [
       {
         title: "Select your stops",
-        content: <SightseeingStopsView onNextStep={handleNextStep} />,
+        content: <ItineraryStopsView onNextStep={handleNextStep} />,
       },
       {
-        title: "Fine-tune your sightseeing plan",
+        title: "Fine-tune your itinerary plan",
         content: (
-          <SightseeingSettingsView
+          <ItinerarySettingsView
             onNextStep={handleLastStep}
             onPreviousStep={handlePreviousStep}
           />
@@ -69,7 +69,7 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   );
 
   return (
-    <Form<ISightseeingRouteCreatePayload>
+    <Form<IItineraryRouteCreatePayload>
       form={form}
       onFinish={handleFinish}
       initialValues={{
@@ -79,7 +79,7 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
     >
       <Modal
         title="Create trip"
-        open={props.isSightseeingCreateModalOpen}
+        open={props.isItineraryCreateModalOpen}
         onCancel={handleModalClose}
         footer={null}
         width={1200}
@@ -92,4 +92,4 @@ const SightseeingCreateView: React.FC<ISightseeingCreateViewProps> = (
   );
 };
 
-export default SightseeingCreateView;
+export default ItineraryCreateView;

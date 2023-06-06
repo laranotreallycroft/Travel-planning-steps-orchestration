@@ -34,8 +34,8 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
         <Switch />
       </Form.Item>
       <Form.Item
-        name={["reminders", "sightseeing"]}
-        label={"Get sightseeing reminder"}
+        name={["reminders", "itinerary"]}
+        label={"Get itinerary reminder"}
       >
         <Switch />
       </Form.Item>

@@ -7,9 +7,9 @@ import { IIdPayload, IPayloadAction } from "../common/types";
 import { loginActions } from "../login/LoginBusinessStore";
 import { getTrip } from "../trip/TripBusinessStore";
 import { IGeosearchPayload } from "../../../components/common/map/MapElement";
-import { ISightseeing } from "../../../model/trip/sightseeing/Sightseeing";
+import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 
-export interface ISightseeingRouteCreatePayload {
+export interface IItineraryRouteCreatePayload {
   locations: IGeosearchPayload[];
   routeOptions: {
     optimize: boolean;
@@ -18,8 +18,7 @@ export interface ISightseeingRouteCreatePayload {
 }
 // -
 // -------------------- Selectors
-const getSightseeingRoute = (store: any): ISightseeing =>
-  store.sightseeingRoute;
+const getItineraryRoute = (store: any): IItinerary => store.itineraryRoute;
 
 // -
 // -------------------- Actions
@@ -31,37 +30,37 @@ const actions = {
   SIGHTSEEING_ROUTE_CLEAR: "SIGHTSEEING_ROUTE_CLEAR",
 };
 
-export const sightseeingRouteCreate = (
-  payload: ISightseeingRouteCreatePayload
-): IPayloadAction<ISightseeingRouteCreatePayload> => {
+export const itineraryRouteCreate = (
+  payload: IItineraryRouteCreatePayload
+): IPayloadAction<IItineraryRouteCreatePayload> => {
   return { type: actions.SIGHTSEEING_ROUTE_CREATE, payload: payload };
 };
 
-export const sightseeingRouteFetch = (): IAction => {
+export const itineraryRouteFetch = (): IAction => {
   return { type: actions.SIGHTSEEING_ROUTE_FETCH };
 };
 
-export const sightseeingRouteUpdate = (
-  payload: ISightseeing
-): IPayloadAction<ISightseeing> => {
+export const itineraryRouteUpdate = (
+  payload: IItinerary
+): IPayloadAction<IItinerary> => {
   return { type: actions.SIGHTSEEING_ROUTE_UPDATE, payload: payload };
 };
 
-export const sightseeingRouteStore = (
-  payload: ISightseeing
-): IPayloadAction<ISightseeing> => {
+export const itineraryRouteStore = (
+  payload: IItinerary
+): IPayloadAction<IItinerary> => {
   return { type: actions.SIGHTSEEING_ROUTE_STORE, payload: payload };
 };
 
-export const sightseeingRouteClear = (): IAction => {
+export const itineraryRouteClear = (): IAction => {
   return { type: actions.SIGHTSEEING_ROUTE_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const sightseeingRouteCreateEffect = (
-  action$: Observable<IPayloadAction<ISightseeingRouteCreatePayload>>,
+const itineraryRouteCreateEffect = (
+  action$: Observable<IPayloadAction<IItineraryRouteCreatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -73,11 +72,11 @@ const sightseeingRouteCreateEffect = (
       const trip = getTrip(state);
       return from(
         axios
-          .post(`/sightseeing/${trip.id}`, action.payload)
+          .post(`/itinerary/${trip.id}`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success(
-                "New sightseeing route successfully created"
+                "New itinerary route successfully created"
               );
               return response.data;
             }
@@ -91,11 +90,11 @@ const sightseeingRouteCreateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => sightseeingRouteStore(data))
+    map((data) => itineraryRouteStore(data))
   );
 };
 
-const sightseeingRouteFetchEffect = (
+const itineraryRouteFetchEffect = (
   action$: Observable<IPayloadAction<IIdPayload>>,
   state$: Observable<any>
 ) => {
@@ -122,12 +121,12 @@ const sightseeingRouteFetchEffect = (
           })
       ).pipe(trackAction(action));
     }),
-    map((data) => sightseeingRouteStore(data))
+    map((data) => itineraryRouteStore(data))
   );
 };
 
-const sightseeingRouteUpdateffect = (
-  action$: Observable<IPayloadAction<ISightseeing>>,
+const itineraryRouteUpdateffect = (
+  action$: Observable<IPayloadAction<IItinerary>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -154,16 +153,16 @@ const sightseeingRouteUpdateffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => sightseeingRouteStore(data))
+    map((data) => itineraryRouteStore(data))
   );
 };
 
 // -
 // -------------------- Reducers
 
-const sightseeingRoute = (
+const itineraryRoute = (
   state: any = null,
-  action: IPayloadAction<ISightseeing>
+  action: IPayloadAction<IItinerary>
 ) => {
   if (action.type === actions.SIGHTSEEING_ROUTE_STORE) {
     if (action.payload) return { ...action.payload };
@@ -177,21 +176,21 @@ const sightseeingRoute = (
   return state;
 };
 
-export const SightseeingBusinessStore = {
-  selectors: { getSightseeingRoute },
+export const ItineraryBusinessStore = {
+  selectors: { getItineraryRoute },
   actions: {
-    sightseeingRouteCreate,
-    sightseeingRouteFetch,
-    sightseeingRouteUpdate,
-    sightseeingRouteStore,
-    sightseeingRouteClear,
+    itineraryRouteCreate,
+    itineraryRouteFetch,
+    itineraryRouteUpdate,
+    itineraryRouteStore,
+    itineraryRouteClear,
   },
   effects: {
-    sightseeingRouteFetchEffect,
-    sightseeingRouteCreateEffect,
-    sightseeingRouteUpdateffect,
+    itineraryRouteFetchEffect,
+    itineraryRouteCreateEffect,
+    itineraryRouteUpdateffect,
   },
-  reducers: { sightseeingRoute },
+  reducers: { itineraryRoute },
 };
 
 /* const payload: IShortestRouteOpenrouteservicePayload = {

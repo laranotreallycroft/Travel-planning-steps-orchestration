@@ -3,15 +3,15 @@ import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { Button, Col, Form, Row, Switch } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-export interface ISightseeingSettingsViewOwnProps {
+export interface IItinerarySettingsViewOwnProps {
   onNextStep: () => void;
   onPreviousStep: () => void;
 }
 
-type ISightseeingSettingsViewProps = ISightseeingSettingsViewOwnProps;
+type IItinerarySettingsViewProps = IItinerarySettingsViewOwnProps;
 
-const SightseeingSettingsView: React.FC<ISightseeingSettingsViewProps> = (
-  props: ISightseeingSettingsViewProps
+const ItinerarySettingsView: React.FC<IItinerarySettingsViewProps> = (
+  props: IItinerarySettingsViewProps
 ) => {
   return (
     <Row justify={"space-between"} className="fullHeight">
@@ -49,4 +49,4 @@ const SightseeingSettingsView: React.FC<ISightseeingSettingsViewProps> = (
   );
 };
 
-export default SightseeingSettingsView;
+export default ItinerarySettingsView;

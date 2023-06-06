@@ -5,5 +5,5 @@ export interface ITripSettings {
 export interface ITripSettingsNotifications {
   packingList: boolean;
   weather: boolean;
-  sightseeing: boolean;
+  itinerary: boolean;
 }

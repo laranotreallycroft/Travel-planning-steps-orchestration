@@ -1,6 +1,6 @@
 import { ICoordinates } from "../geometry/Coordinates";
 import { IPackingList } from "./packingList/PackingList";
-import { ISightseeing } from "./sightseeing/Sightseeing";
+import { IItinerary } from "./itinerary/Itinerary";
 
 export interface ITrip {
   id: number;
@@ -10,7 +10,7 @@ export interface ITrip {
   location: ICoordinates;
   packingList?: IPackingList;
   packingListChecked?: IPackingList;
-  sightseeing: ISightseeing[];
+  itinerary: IItinerary[];
 }
 
 export interface ITripCreatePayload {

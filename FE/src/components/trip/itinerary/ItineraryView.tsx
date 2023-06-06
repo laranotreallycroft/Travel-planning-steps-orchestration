@@ -2,31 +2,31 @@ import { Badge, Button, Calendar, Col, Row } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useCallback, useState } from "react";
 import { ITrip } from "../../../model/trip/Trip";
-import { ISightseeing } from "../../../model/trip/sightseeing/Sightseeing";
-import SightseeingCreateContainer from "./create/SightseeingCreateContainer";
+import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
+import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
 
-export interface ISightseeingViewOwnProps {
+export interface IItineraryViewOwnProps {
   trip: ITrip;
-  sightseeingList: ISightseeing[];
+  itineraryList: IItinerary[];
 }
 
-type ISightseeingViewProps = ISightseeingViewOwnProps;
-const SightseeingView: React.FC<ISightseeingViewProps> = (
-  props: ISightseeingViewProps
+type IItineraryViewProps = IItineraryViewOwnProps;
+const ItineraryView: React.FC<IItineraryViewProps> = (
+  props: IItineraryViewProps
 ) => {
   const [selectedDate, setselectedDate] = useState<Dayjs>(
     dayjs(props.trip.dateFrom)
   );
 
-  const [isSightseeingCreateModalOpen, setIsSightseeingCreateModalOpen] =
+  const [isItineraryCreateModalOpen, setIsItineraryCreateModalOpen] =
     useState<boolean>(false);
 
-  const toggleSightseeingCreateModal = useCallback(() => {
-    setIsSightseeingCreateModalOpen((prevState) => !prevState);
+  const toggleItineraryCreateModal = useCallback(() => {
+    setIsItineraryCreateModalOpen((prevState) => !prevState);
   }, []);
 
   const dateCellRender = (value: Dayjs) => {
-    //TODO add badge on each sightseeing on calendar
+    //TODO add badge on each itinerary on calendar
     return <Badge key={1} status={"success"} />;
   };
 
@@ -41,19 +41,19 @@ const SightseeingView: React.FC<ISightseeingViewProps> = (
           />
         </Col>
         <Col span={17} className="panel">
-          <Button type="primary" onClick={toggleSightseeingCreateModal}>
+          <Button type="primary" onClick={toggleItineraryCreateModal}>
             Create new
           </Button>
         </Col>
       </Row>
 
-      <SightseeingCreateContainer
-        onSightseeingCreateModalClose={toggleSightseeingCreateModal}
-        isSightseeingCreateModalOpen={isSightseeingCreateModalOpen}
+      <ItineraryCreateContainer
+        onItineraryCreateModalClose={toggleItineraryCreateModal}
+        isItineraryCreateModalOpen={isItineraryCreateModalOpen}
         date={selectedDate.format("YYYY-MM-DD")}
       />
     </div>
   );
 };
 
-export default SightseeingView;
+export default ItineraryView;

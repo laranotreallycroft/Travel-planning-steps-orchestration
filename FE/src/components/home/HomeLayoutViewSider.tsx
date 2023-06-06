@@ -40,8 +40,8 @@ const items: MenuProps["items"] = [
     "homeLayoutViewSider_menuItem"
   ),
   getItem(
-    "Sightseeing",
-    "sightseeing",
+    "Itinerary",
+    "itinerary",
     <MapOutlinedIcon />,
     "homeLayoutViewSider_menuItem"
   ),
