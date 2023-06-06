@@ -1,4 +1,4 @@
-package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
+package com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization;
 
 public class Vehicle {
 	private int id;

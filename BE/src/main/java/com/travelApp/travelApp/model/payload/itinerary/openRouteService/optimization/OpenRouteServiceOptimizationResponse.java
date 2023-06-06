@@ -1,18 +1,18 @@
-package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
+package com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization;
 
 import java.util.List;
 
-public class OpenRouteServiceResponse {
+public class OpenRouteServiceOptimizationResponse {
 	private int code;
 	private Summary summary;
 	private List<UnassignedJob> unassigned;
 	private List<Route> routes;
 
-	public OpenRouteServiceResponse() {
+	public OpenRouteServiceOptimizationResponse() {
 
 	}
 
-	public OpenRouteServiceResponse(int code, Summary summary, List<UnassignedJob> unassigned, List<Route> routes) {
+	public OpenRouteServiceOptimizationResponse(int code, Summary summary, List<UnassignedJob> unassigned, List<Route> routes) {
 		super();
 		this.code = code;
 		this.summary = summary;

@@ -1,6 +1,7 @@
 package com.travelApp.travelApp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -73,6 +74,11 @@ public class Itinerary {
 
 	public void setItineraryElements(List<ItineraryElement> itineraryElements) {
 		this.itineraryElements = itineraryElements;
+	}
+
+	public void addItineraryElement(ItineraryElement itineraryElement) {
+		if(this.itineraryElements==null) itineraryElements= new ArrayList<>();
+		this.itineraryElements.add(itineraryElement);
 	}
 
 }

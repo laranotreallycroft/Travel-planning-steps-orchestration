@@ -1,42 +1,34 @@
-package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
+package com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization;
 
 import java.util.List;
 
-public class Route {
-	private int vehicle;
+public class Summary {
 	private int cost;
+	private int unassigned;
 	private List<Integer> delivery;
 	private List<Integer> amount;
 	private List<Integer> pickup;
 	private int service;
 	private int duration;
 	private int waiting_time;
-	private List<Step> steps;
+	private ComputingTimes computing_times;
 
-	public Route() {
+	public Summary() {
 
 	}
 
-	public Route(int vehicle, int cost, List<Integer> delivery, List<Integer> amount, List<Integer> pickup, int service,
-			int duration, int waiting_time, List<Step> steps) {
+	public Summary(int cost, int unassigned, List<Integer> delivery, List<Integer> amount, List<Integer> pickup,
+			int service, int duration, int waiting_time, ComputingTimes computing_times) {
 		super();
-		this.vehicle = vehicle;
 		this.cost = cost;
+		this.unassigned = unassigned;
 		this.delivery = delivery;
 		this.amount = amount;
 		this.pickup = pickup;
 		this.service = service;
 		this.duration = duration;
 		this.waiting_time = waiting_time;
-		this.steps = steps;
-	}
-
-	public int getVehicle() {
-		return vehicle;
-	}
-
-	public void setVehicle(int vehicle) {
-		this.vehicle = vehicle;
+		this.computing_times = computing_times;
 	}
 
 	public int getCost() {
@@ -45,6 +37,14 @@ public class Route {
 
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+
+	public int getUnassigned() {
+		return unassigned;
+	}
+
+	public void setUnassigned(int unassigned) {
+		this.unassigned = unassigned;
 	}
 
 	public List<Integer> getDelivery() {
@@ -95,12 +95,12 @@ public class Route {
 		this.waiting_time = waiting_time;
 	}
 
-	public List<Step> getSteps() {
-		return steps;
+	public ComputingTimes getComputing_times() {
+		return computing_times;
 	}
 
-	public void setSteps(List<Step> steps) {
-		this.steps = steps;
+	public void setComputing_times(ComputingTimes computing_times) {
+		this.computing_times = computing_times;
 	}
 
 }

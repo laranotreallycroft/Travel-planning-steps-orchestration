@@ -76,7 +76,7 @@ const itineraryCreateEffect = (
       const trip = getTrip(state);
       return from(
         axios
-          .post(`/itinerary/${trip.id}`, action.payload)
+          .post(`/itinerary`, { ...action.payload, tripId: trip.id })
           .then((response) => {
             console.log(response);
             if (response.status === 201) {

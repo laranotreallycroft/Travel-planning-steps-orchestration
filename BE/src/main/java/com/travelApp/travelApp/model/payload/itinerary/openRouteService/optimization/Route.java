@@ -1,34 +1,42 @@
-package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
+package com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization;
 
 import java.util.List;
 
-public class Summary {
+public class Route {
+	private int vehicle;
 	private int cost;
-	private int unassigned;
 	private List<Integer> delivery;
 	private List<Integer> amount;
 	private List<Integer> pickup;
 	private int service;
 	private int duration;
 	private int waiting_time;
-	private ComputingTimes computing_times;
+	private List<Step> steps;
 
-	public Summary() {
+	public Route() {
 
 	}
 
-	public Summary(int cost, int unassigned, List<Integer> delivery, List<Integer> amount, List<Integer> pickup,
-			int service, int duration, int waiting_time, ComputingTimes computing_times) {
+	public Route(int vehicle, int cost, List<Integer> delivery, List<Integer> amount, List<Integer> pickup, int service,
+			int duration, int waiting_time, List<Step> steps) {
 		super();
+		this.vehicle = vehicle;
 		this.cost = cost;
-		this.unassigned = unassigned;
 		this.delivery = delivery;
 		this.amount = amount;
 		this.pickup = pickup;
 		this.service = service;
 		this.duration = duration;
 		this.waiting_time = waiting_time;
-		this.computing_times = computing_times;
+		this.steps = steps;
+	}
+
+	public int getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(int vehicle) {
+		this.vehicle = vehicle;
 	}
 
 	public int getCost() {
@@ -37,14 +45,6 @@ public class Summary {
 
 	public void setCost(int cost) {
 		this.cost = cost;
-	}
-
-	public int getUnassigned() {
-		return unassigned;
-	}
-
-	public void setUnassigned(int unassigned) {
-		this.unassigned = unassigned;
 	}
 
 	public List<Integer> getDelivery() {
@@ -95,12 +95,12 @@ public class Summary {
 		this.waiting_time = waiting_time;
 	}
 
-	public ComputingTimes getComputing_times() {
-		return computing_times;
+	public List<Step> getSteps() {
+		return steps;
 	}
 
-	public void setComputing_times(ComputingTimes computing_times) {
-		this.computing_times = computing_times;
+	public void setSteps(List<Step> steps) {
+		this.steps = steps;
 	}
 
 }

@@ -1,5 +1,9 @@
 import { IGeosearchPayload } from "../../../components/common/map/MapElement";
 
 export interface IItinerary {
-  locations: IGeosearchPayload[];
+  itineraryElements: IItineraryElement[];
+  date: String;
+}
+export interface IItineraryElement {
+  location: IGeosearchPayload;
 }

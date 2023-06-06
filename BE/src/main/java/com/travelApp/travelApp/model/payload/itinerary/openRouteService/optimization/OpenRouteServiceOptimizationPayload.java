@@ -1,4 +1,4 @@
-package com.travelApp.travelApp.model.payload.itinerary.openRouteService;
+package com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,22 +7,22 @@ import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.common.PointPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryPayload;
 
-public class OpenRouteServicePayload {
+public class OpenRouteServiceOptimizationPayload {
 	private List<Job> jobs;
 	private List<Vehicle> vehicles;
 
-	public OpenRouteServicePayload() {
+	public OpenRouteServiceOptimizationPayload() {
 		this.jobs = new ArrayList<Job>();
 		this.vehicles = new ArrayList<Vehicle>();
 	}
 
-	public OpenRouteServicePayload(List<Job> jobs, List<Vehicle> vehicles) {
+	public OpenRouteServiceOptimizationPayload(List<Job> jobs, List<Vehicle> vehicles) {
 		super();
 		this.jobs = jobs;
 		this.vehicles = vehicles;
 	}
 
-	public OpenRouteServicePayload(ItineraryPayload payload) {
+	public OpenRouteServiceOptimizationPayload(ItineraryPayload payload) {
 		this.jobs = new ArrayList<Job>();
 		this.vehicles = new ArrayList<Vehicle>();
 		List<GeosearchPayload> locations = payload.getLocations();
