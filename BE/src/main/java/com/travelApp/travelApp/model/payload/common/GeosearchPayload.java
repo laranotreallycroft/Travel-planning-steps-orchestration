@@ -2,6 +2,7 @@ package com.travelApp.travelApp.model.payload.common;
 
 public class GeosearchPayload {
 
+	private String id;
 	private Double x;
 	private Double y;
 	private String label;
@@ -15,6 +16,22 @@ public class GeosearchPayload {
 		this.x = x;
 		this.y = y;
 		this.label = label;
+	}
+
+	public GeosearchPayload(String id, Double x, Double y, String label) {
+		super();
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.label = label;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getLabel() {
