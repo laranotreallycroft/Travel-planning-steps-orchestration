@@ -26,9 +26,10 @@ public class ItineraryElement {
 	private Point location;
 	@Column(name = "travel_duration")
 	private Integer travelDuration;
+	
 	@ManyToOne
 	@JoinColumn(name = "itinerary_id")
-	@JsonIgnoreProperties("itinerary")
+	@JsonIgnoreProperties("itineraryElements")
 	private Itinerary itinerary;
 
 	public ItineraryElement() {

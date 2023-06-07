@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinates;
 import org.locationtech.jts.geom.LineString;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -84,8 +86,8 @@ public class Itinerary {
 		this.itineraryElements = itineraryElements;
 	}
 
-	public LineString getRouteGeometry() {
-		return routeGeometry;
+	public Coordinate[] getRouteGeometry() {
+		return routeGeometry.getCoordinates();
 	}
 
 	public void setRouteGeometry(LineString routeGeometry) {
