@@ -7,7 +7,7 @@ import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
 
 export interface IItineraryViewOwnProps {
   trip: ITrip;
-  itineraryList: IItinerary[];
+  itineraryList?: IItinerary[];
 }
 
 type IItineraryViewProps = IItineraryViewOwnProps;
@@ -26,8 +26,13 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
   }, []);
 
   const dateCellRender = (value: Dayjs) => {
-    //TODO add badge on each itinerary on calendar
-    return <Badge key={1} status={"success"} />;
+    if (
+      props.trip.itinerary?.some(
+        (itineraryElement: IItinerary) =>
+          itineraryElement.date === value.format("YYYY-MM-DD")
+      )
+    )
+      return <Badge key={1} status={"success"} />;
   };
 
   return (

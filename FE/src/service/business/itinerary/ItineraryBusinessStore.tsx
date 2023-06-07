@@ -86,7 +86,7 @@ const itineraryCreateEffect = (
         axios
           .post(`/itinerary`, { ...action.payload, tripId: trip.id })
           .then((response) => {
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
               notificationService.success("New itinerary successfully created");
               return response.data;
             }

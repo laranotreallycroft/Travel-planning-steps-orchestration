@@ -6,12 +6,15 @@ import { IGeosearchPayloadWithUUId } from "../../../common/map/MapElement";
 import ItinerarySettingsView from "./ItinerarySettingsView";
 import ItineraryStopsView from "./ItineraryStopsView";
 import { v4 as uuidv4 } from "uuid";
+import { ITrackableAction } from "../../../../service/util/trackAction";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
   isItineraryCreateModalOpen: boolean;
   onItineraryCreateModalClose: () => void;
-  onItineraryCreate: (itineraryRoutePayload: IItineraryCreateForm) => void;
+  onItineraryCreate: (
+    itineraryRoutePayload: IItineraryCreateForm
+  ) => ITrackableAction;
 }
 
 export interface IItineraryCreateForm {
@@ -38,15 +41,23 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   const handleLastStep = () => {
     form.submit();
   };
-  //TODO other logic
-  const handleFinish = (values: IItineraryCreateForm) => {
-    props.onItineraryCreate(form.getFieldsValue(true));
+
+  const handleFinish = () => {
+    props
+      .onItineraryCreate(form.getFieldsValue(true))
+      .track()
+      .subscribe({
+        next: () => {
+          handleModalClose();
+        },
+        error: () => {},
+      });
   };
 
   const handleModalClose = () => {
+    props.onItineraryCreateModalClose();
     setCurrentStep(0);
     form.resetFields();
-    props.onItineraryCreateModalClose();
   };
 
   const steps = useMemo(

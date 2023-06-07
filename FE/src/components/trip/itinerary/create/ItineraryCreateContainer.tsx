@@ -35,15 +35,7 @@ const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
   const handleItineraryCreate = (values: IItineraryCreateForm) => {
-    props
-      .itineraryCreate({ ...values, date: props.date })
-      .track()
-      .subscribe({
-        error: () => {},
-        complete: () => {
-          props.onItineraryCreateModalClose();
-        },
-      });
+    return props.itineraryCreate({ ...values, date: props.date });
   };
 
   return (
