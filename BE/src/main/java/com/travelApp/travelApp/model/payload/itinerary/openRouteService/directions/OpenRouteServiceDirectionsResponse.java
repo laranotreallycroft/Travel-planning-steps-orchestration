@@ -25,4 +25,16 @@ public class OpenRouteServiceDirectionsResponse {
 		this.routes = routes;
 	}
 
+	public boolean routeFound() {
+		return routes.get(0).getSegments() != null;
+	}
+
+	public List<Segment> getSegments() {
+		return routes.get(0).getSegments();
+	}
+
+	public String getGeometry() {
+		return routes.get(0).getGeometry();
+	}
+
 }

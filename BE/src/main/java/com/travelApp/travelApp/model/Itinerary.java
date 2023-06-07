@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.locationtech.jts.geom.LineString;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +28,10 @@ public class Itinerary {
 	private Long id;
 
 	private LocalDate date;
+
+	@Column(name = "route_geometry")
+	private LineString routeGeometry;
+
 	@ManyToOne
 	@JoinColumn(name = "trip_id")
 	@JsonIgnoreProperties("itinerary")
@@ -38,10 +45,11 @@ public class Itinerary {
 
 	}
 
-	public Itinerary(Trip trip, LocalDate date) {
+	public Itinerary(Trip trip, LocalDate date, LineString routeGeometry) {
 		super();
 		this.trip = trip;
 		this.date = date;
+		this.routeGeometry = routeGeometry;
 	}
 
 	public Long getId() {
@@ -76,8 +84,17 @@ public class Itinerary {
 		this.itineraryElements = itineraryElements;
 	}
 
+	public LineString getRouteGeometry() {
+		return routeGeometry;
+	}
+
+	public void setRouteGeometry(LineString routeGeometry) {
+		this.routeGeometry = routeGeometry;
+	}
+
 	public void addItineraryElement(ItineraryElement itineraryElement) {
-		if(this.itineraryElements==null) itineraryElements= new ArrayList<>();
+		if (this.itineraryElements == null)
+			itineraryElements = new ArrayList<>();
 		this.itineraryElements.add(itineraryElement);
 	}
 

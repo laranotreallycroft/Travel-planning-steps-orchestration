@@ -1,9 +1,11 @@
 package com.travelApp.travelApp.model.payload.itinerary;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
+import com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization.Step;
 
 public class ItineraryPayload {
 	private LocalDate date;
@@ -45,4 +47,17 @@ public class ItineraryPayload {
 		this.date = date;
 	}
 
+	public void sortLocations(List<Step> steps) {
+		List<GeosearchPayload> sortedLocations = new ArrayList<>();
+		for (Step step : steps) {
+			for (GeosearchPayload location : this.locations) {
+				if (location.equals(step)) {
+					sortedLocations.add(location);
+					break;
+				}
+			}
+		}
+		this.locations = sortedLocations;
+
+	}
 }

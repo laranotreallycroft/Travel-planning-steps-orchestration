@@ -1,6 +1,7 @@
 package com.travelApp.travelApp.model;
 
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,7 +26,6 @@ public class ItineraryElement {
 	private Point location;
 	@Column(name = "travel_duration")
 	private Integer travelDuration;
-
 	@ManyToOne
 	@JoinColumn(name = "itinerary_id")
 	@JsonIgnoreProperties("itinerary")

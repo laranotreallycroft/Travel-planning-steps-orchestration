@@ -41,13 +41,14 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
 
   const cellRender = useCallback(
     (value: Dayjs) => {
-      if (
-        props.itineraryList?.some(
-          (itineraryElement: IItinerary) =>
-            itineraryElement.date === value.format("YYYY-MM-DD")
-        )
-      )
-        return <Badge key={1} status={"success"} />;
+      const visible = props.itineraryList?.some(
+        (itineraryElement: IItinerary) =>
+          itineraryElement.date === value.format("YYYY-MM-DD")
+      );
+
+      return (
+        <Badge key={1} status={"success"} className={visible ? "" : "hidden"} />
+      );
     },
     [props.itineraryList]
   );
