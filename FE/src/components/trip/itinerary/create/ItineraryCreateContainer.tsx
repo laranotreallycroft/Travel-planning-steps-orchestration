@@ -8,6 +8,10 @@ import { TripBusinessStore } from "../../../../service/business/trip/TripBusines
 import ItineraryCreateView, {
   IItineraryCreateForm,
 } from "./ItineraryCreateView";
+import {
+  ITrackableAction,
+  createTrackableAction,
+} from "../../../../service/util/trackAction";
 
 export interface IItineraryCreateContainerOwnProps {
   date: string;
@@ -19,7 +23,9 @@ export interface IItineraryCreateContainerStateProps {
   trip: ITrip;
 }
 export interface IItineraryCreateContainerDispatchProps {
-  itineraryRouteCreate: (itineraryRoutePayload: IItineraryPayload) => void;
+  itineraryCreate: (
+    itineraryRoutePayload: IItineraryPayload
+  ) => ITrackableAction;
 }
 type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
   IItineraryCreateContainerStateProps &
@@ -29,8 +35,17 @@ const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
   const handleItineraryCreate = (values: IItineraryCreateForm) => {
-    props.itineraryRouteCreate({ ...values, date: props.date });
+    props
+      .itineraryCreate({ ...values, date: props.date })
+      .track()
+      .subscribe({
+        error: () => {},
+        complete: () => {
+          props.onItineraryCreateModalClose();
+        },
+      });
   };
+
   return (
     <ItineraryCreateView
       trip={props.trip}
@@ -48,9 +63,11 @@ const mapStateToProps = (state: any): IItineraryCreateContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryCreateContainerDispatchProps => ({
-  itineraryRouteCreate: (itineraryRoutePayload: IItineraryPayload) =>
+  itineraryCreate: (itineraryRoutePayload: IItineraryPayload) =>
     dispatch(
-      ItineraryBusinessStore.actions.itineraryCreate(itineraryRoutePayload)
+      createTrackableAction(
+        ItineraryBusinessStore.actions.itineraryCreate(itineraryRoutePayload)
+      )
     ),
 });
 

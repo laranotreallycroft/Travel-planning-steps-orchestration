@@ -1,5 +1,13 @@
 import axios from "axios";
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
+import {
+  Observable,
+  catchError,
+  filter,
+  from,
+  map,
+  mergeMap,
+  withLatestFrom,
+} from "rxjs";
 import { IGeosearchPayloadWithUUId } from "../../../components/common/map/MapElement";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import notificationService from "../../util/notificationService";
@@ -88,11 +96,15 @@ const itineraryCreateEffect = (
               "Unable to create itinerary",
               error.response.data
             );
+            throw error;
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => itineraryStore(data))
+    map((data) => itineraryStore(data)),
+    catchError((error: any, o: Observable<any>) => {
+      return o;
+    })
   );
 };
 /*
