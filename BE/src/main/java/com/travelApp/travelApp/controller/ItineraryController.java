@@ -1,6 +1,5 @@
 package com.travelApp.travelApp.controller;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -129,8 +128,9 @@ public class ItineraryController {
 						.body("Unable to find route between points. Try changing the method of transportation.");
 			}
 		}
-		itineraryRepository.save(itinerary);
-		return ResponseEntity.ok(itinerary);
+		trip.addItinerary(itinerary);
+		tripRepository.save(trip);
+		return ResponseEntity.ok(trip);
 
 	}
 

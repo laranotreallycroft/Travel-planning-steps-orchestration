@@ -4,8 +4,9 @@ import {
   catchError,
   filter,
   from,
-  map,
   mergeMap,
+  of,
+  switchMap,
   withLatestFrom,
 } from "rxjs";
 import { IGeosearchPayloadWithUUId } from "../../../components/common/map/MapElement";
@@ -14,7 +15,7 @@ import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IPayloadAction } from "../common/types";
 import { loginActions } from "../login/LoginBusinessStore";
-import { getTrip } from "../trip/TripBusinessStore";
+import { getTrip, tripStore } from "../trip/TripBusinessStore";
 
 export interface IItineraryPayload {
   date: string;
@@ -36,7 +37,6 @@ const getItinerary = (store: any): IItinerary => store.itinerary;
 // -------------------- Actions
 const actions = {
   ITINERARY_CREATE: "ITINERARY_CREATE",
-  ITINERARY_FETCH: "ITINERARY_FETCH",
   ITINERARY_UPDATE: "ITINERARY_UPDATE",
   ITINERARY_STORE: "ITINERARY_STORE",
   ITINERARY_CLEAR: "ITINERARY_CLEAR",
@@ -46,10 +46,6 @@ export const itineraryCreate = (
   payload: IItineraryPayload
 ): IPayloadAction<IItineraryPayload> => {
   return { type: actions.ITINERARY_CREATE, payload: payload };
-};
-
-export const itineraryFetch = (): IAction => {
-  return { type: actions.ITINERARY_FETCH };
 };
 
 export const itineraryUpdate = (
@@ -101,43 +97,20 @@ const itineraryCreateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => itineraryStore(data)),
+    switchMap((data) =>
+      of(
+        itineraryStore(data.itineraries?.[data.itineraries?.length - 1]),
+        tripStore(data)
+      )
+    ),
+
     catchError((error: any, o: Observable<any>) => {
       return o;
     })
   );
 };
 /*
-const itineraryFetchEffect = (
-  action$: Observable<IPayloadAction<IIdPayload>>,
-  state$: Observable<any>
-) => {
-  return action$.pipe(
-    filter((action) => {
-      return action.type === actions.ITINERARY_FETCH;
-    }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
-      return from(
-        axios
-          .get(`/trips/${trip.id}/packinglist`)
-          .then((response) => {
-            if (response.status === 200) {
-              return response.data;
-            } else if (response.status === 204) return undefined;
-          })
-          .catch((error) => {
-            notificationService.error(
-              "Unable to fetch trip data",
-              error.response.data
-            );
-          })
-      ).pipe(trackAction(action));
-    }),
-    map((data) => itineraryStore(data))
-  );
-};
+
 
 const itineraryUpdateffect = (
   action$: Observable<IPayloadAction<IItinerary>>,
@@ -191,14 +164,12 @@ export const ItineraryBusinessStore = {
   selectors: { getItinerary },
   actions: {
     itineraryCreate,
-    itineraryFetch,
     itineraryUpdate,
     itineraryStore,
     itineraryClear,
   },
   effects: {
     itineraryCreateEffect,
-    // itineraryFetchEffect,
     // itineraryUpdateffect,
   },
   reducers: { itinerary },

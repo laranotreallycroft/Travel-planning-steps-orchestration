@@ -1,6 +1,7 @@
 package com.travelApp.travelApp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -146,4 +147,9 @@ public class Trip {
 		this.itineraries = itineraries;
 	}
 
+	public void addItinerary(Itinerary itinerary) {
+		if (itineraries == null)
+			itineraries = new ArrayList<>();
+		itineraries.add(itinerary);
+	}
 }

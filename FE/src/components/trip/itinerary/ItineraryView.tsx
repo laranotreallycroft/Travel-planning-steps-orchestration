@@ -8,14 +8,28 @@ import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
 export interface IItineraryViewOwnProps {
   trip: ITrip;
   itineraryList?: IItinerary[];
+  itinerary?: IItinerary;
+  onItinerarySelect: (itinerary?: IItinerary) => void;
 }
 
 type IItineraryViewProps = IItineraryViewOwnProps;
 const ItineraryView: React.FC<IItineraryViewProps> = (
   props: IItineraryViewProps
 ) => {
-  const [selectedDate, setselectedDate] = useState<Dayjs>(
+  const [selectedDate, setSelectedDate] = useState<Dayjs>(
     dayjs(props.trip.dateFrom)
+  );
+
+  const handleSelectDate = useCallback(
+    (date: Dayjs) => {
+      setSelectedDate(date);
+      const selectedItinerary = props.itineraryList?.find(
+        (itineraryElement: IItinerary) =>
+          itineraryElement.date === date.format("YYYY-MM-DD")
+      );
+      props.onItinerarySelect(selectedItinerary);
+    },
+    [props.itineraryList]
   );
 
   const [isItineraryCreateModalOpen, setIsItineraryCreateModalOpen] =
@@ -25,15 +39,18 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
     setIsItineraryCreateModalOpen((prevState) => !prevState);
   }, []);
 
-  const dateCellRender = (value: Dayjs) => {
-    if (
-      props.trip.itinerary?.some(
-        (itineraryElement: IItinerary) =>
-          itineraryElement.date === value.format("YYYY-MM-DD")
+  const cellRender = useCallback(
+    (value: Dayjs) => {
+      if (
+        props.itineraryList?.some(
+          (itineraryElement: IItinerary) =>
+            itineraryElement.date === value.format("YYYY-MM-DD")
+        )
       )
-    )
-      return <Badge key={1} status={"success"} />;
-  };
+        return <Badge key={1} status={"success"} />;
+    },
+    [props.itineraryList]
+  );
 
   return (
     <div className="fullHeight">
@@ -41,14 +58,18 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
         <Col span={6} className="panel">
           <Calendar
             fullscreen={false}
-            cellRender={dateCellRender}
-            onSelect={setselectedDate}
+            cellRender={cellRender}
+            onSelect={handleSelectDate}
           />
         </Col>
         <Col span={17} className="panel">
-          <Button type="primary" onClick={toggleItineraryCreateModal}>
-            Create new
-          </Button>
+          {props.itinerary ? (
+            <div>aaa</div>
+          ) : (
+            <Button type="primary" onClick={toggleItineraryCreateModal}>
+              Create new
+            </Button>
+          )}
         </Col>
       </Row>
 
