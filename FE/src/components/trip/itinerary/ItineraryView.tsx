@@ -5,6 +5,7 @@ import { ITrip } from "../../../model/trip/Trip";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
 import MapElement from "../../common/map/MapElement";
+import Demo from "./schedule/Demo";
 
 export interface IItineraryViewOwnProps {
   trip: ITrip;
@@ -91,7 +92,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
           )}
         </Col>
       </Row>
-
+      <Demo />
       <ItineraryCreateContainer
         onItineraryCreateModalClose={toggleItineraryCreateModal}
         isItineraryCreateModalOpen={isItineraryCreateModalOpen}
