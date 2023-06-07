@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MapElement, {
   IGeosearchPayload,
-  IGeosearchPayloadWithUUId,
+  IGeosearchPayloadWithId,
 } from "../../common/map/MapElement";
 import MapSearch from "../../common/map/MapSearch";
 export interface ITripCreateViewOwnProps {
@@ -26,15 +26,15 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
 ) => {
   const [form] = Form.useForm<ITripCreateForm>();
   const [selectedLocation, setSelectedLocation] =
-    useState<IGeosearchPayloadWithUUId>();
+    useState<IGeosearchPayloadWithId>();
 
   const handleSelectLocation = useCallback((value: string) => {
-    const parsedValue: IGeosearchPayloadWithUUId = {
-      ...JSON.parse(value),
-      id: uuidv4(),
-    };
-    setSelectedLocation(parsedValue);
+    const parsedValue: IGeosearchPayload = JSON.parse(value);
     form.setFieldValue("location", parsedValue);
+    setSelectedLocation({
+      ...parsedValue,
+      id: uuidv4(),
+    });
   }, []);
 
   const handleCancelButtonClick = useCallback(() => {

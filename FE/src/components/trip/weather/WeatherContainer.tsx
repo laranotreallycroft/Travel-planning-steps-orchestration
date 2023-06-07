@@ -31,12 +31,27 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
       lat: props.trip.location.y,
       lon: props.trip.location.x,
     });
+
+    // same date, but one year ago
+    const currentDate = new Date();
+    const futureDateFrom = new Date(props.trip.dateFrom);
+    const futureDateTo = new Date(props.trip.dateTo);
+    const oneYearAgoDateFrom = new Date(
+      currentDate.getFullYear() - 1,
+      futureDateFrom.getMonth(),
+      futureDateFrom.getDate()
+    );
+    const oneYearAgoDateTo = new Date(
+      currentDate.getFullYear() - 1,
+      futureDateTo.getMonth(),
+      futureDateTo.getDate()
+    );
     props.predictedWeatherFetch({
       lat: props.trip.location.y,
       lon: props.trip.location.x,
-      // minus one year
-      timestampFrom: new Date(props.trip.dateFrom).getTime() / 1000 - 31536000,
-      timestampTo: new Date(props.trip.dateTo).getTime() / 1000 - 31536000,
+
+      timestampFrom: oneYearAgoDateFrom.getTime() / 1000,
+      timestampTo: oneYearAgoDateTo.getTime() / 1000,
     });
     return () => {
       props.currentWeatherClear();

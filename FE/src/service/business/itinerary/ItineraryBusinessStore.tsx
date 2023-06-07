@@ -9,7 +9,7 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs";
-import { IGeosearchPayloadWithUUId } from "../../../components/common/map/MapElement";
+import { IGeosearchPayloadWithId } from "../../../components/common/map/MapElement";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
@@ -19,7 +19,7 @@ import { getTrip, tripStore } from "../trip/TripBusinessStore";
 
 export interface IItineraryPayload {
   date: string;
-  locations: IGeosearchPayloadWithUUId[];
+  locations: IGeosearchPayloadWithId[];
   settings: IItinerarySettings;
 }
 

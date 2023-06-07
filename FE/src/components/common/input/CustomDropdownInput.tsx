@@ -1,8 +1,8 @@
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Select } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
-import { ITrip } from "../../../model/trip/Trip";
 import { ILabelValue } from "../../../model/common/input";
+import { ITrip } from "../../../model/trip/Trip";
 
 export interface ICustomDropdownInputOwnProps {
   group: string;
@@ -50,24 +50,6 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
     [dropdownItems]
   );
 
-  const handleDelete = useCallback(
-    (e: any, value: ILabelValue) => {
-      e.stopPropagation();
-      e.preventDefault();
-      const newDropdownItems = [...dropdownItems].filter(
-        (item) => item.value !== value.value
-      );
-      setDropdownItems(newDropdownItems);
-
-      const selectedItems = form.getFieldValue([props.group, props.subgroup]);
-      form.setFieldValue(
-        [props.group, props.subgroup],
-        [...(selectedItems ?? [])].filter((item) => item !== value.value)
-      );
-    },
-    [dropdownItems]
-  );
-
   const notFoundContentRender = useMemo(
     () => (
       <div className="customDropdownInput__notFoundContentRender">
@@ -80,28 +62,6 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
     [searchValue]
   );
 
-  const dropdownItemsRender = useMemo(() => {
-    return dropdownItems.map((item) => (
-      <Select.Option key={item.value}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div>{item.label}</div>
-          <Button
-            icon={<DeleteOutlined />}
-            onClick={(e) => handleDelete(e, item)}
-            size="small"
-            className="customDropdownInput__deleteButton"
-          />
-        </div>
-      </Select.Option>
-    ));
-  }, [dropdownItems]);
-
   return (
     <Form.Item name={[props.group, props.subgroup]}>
       <Select
@@ -112,9 +72,8 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
         searchValue={searchValue}
         onSearch={setSearchValue}
         notFoundContent={notFoundContentRender}
-      >
-        {dropdownItemsRender}
-      </Select>
+        options={dropdownItems}
+      ></Select>
     </Form.Item>
   );
 };

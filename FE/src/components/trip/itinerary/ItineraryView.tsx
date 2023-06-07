@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { ITrip } from "../../../model/trip/Trip";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
+import MapElement from "../../common/map/MapElement";
 
 export interface IItineraryViewOwnProps {
   trip: ITrip;
@@ -61,11 +62,28 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
             fullscreen={false}
             cellRender={cellRender}
             onSelect={handleSelectDate}
+            value={selectedDate}
           />
         </Col>
         <Col span={17} className="panel">
           {props.itinerary ? (
-            <div>aaa</div>
+            <MapElement
+              selectedLocation={{
+                ...props.itinerary.itineraryElements[0],
+                ...props.itinerary.itineraryElements[0].location,
+              }}
+              locations={props.itinerary.itineraryElements.map((element) => {
+                return {
+                  ...element,
+                  ...element.location,
+                };
+              })}
+              paths={props.itinerary.routeGeometry.map((coordinates) => [
+                coordinates.x,
+                coordinates.y,
+              ])}
+              className="fullHeight"
+            />
           ) : (
             <Button type="primary" onClick={toggleItineraryCreateModal}>
               Create new

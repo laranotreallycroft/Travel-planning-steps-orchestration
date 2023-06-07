@@ -2,15 +2,14 @@ import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Row, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, {
-  IGeosearchPayload,
-  IGeosearchPayloadWithUUId,
+  IGeosearchPayloadWithId,
 } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
-import { v4 as uuidv4 } from "uuid";
 export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
 }
@@ -23,14 +22,14 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   const form = Form.useFormInstance<IItineraryPayload>();
   const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] =
-    useState<IGeosearchPayloadWithUUId>(form.getFieldValue("locations")[0]);
-  const setLocations = useCallback((locations: IGeosearchPayload[]) => {
+    useState<IGeosearchPayloadWithId>(form.getFieldValue("locations")[0]);
+  const setLocations = useCallback((locations: IGeosearchPayloadWithId[]) => {
     form.setFieldValue("locations", locations);
   }, []);
 
   const handleAddLocation = useCallback(
     (value: string) => {
-      const parsedValue: IGeosearchPayloadWithUUId = {
+      const parsedValue: IGeosearchPayloadWithId = {
         ...JSON.parse(value),
         id: uuidv4(),
       };
@@ -41,11 +40,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   );
 
   const handleRemoveLocation = useCallback(
-    (e: any, value: IGeosearchPayload) => {
+    (e: any, value: IGeosearchPayloadWithId) => {
       e.stopPropagation();
       e.preventDefault();
       const newLocations = locations.filter(
-        (location) => location.label !== value.label
+        (location) => location.id !== value.id
       );
       setSelectedLocation(newLocations[0]);
       setLocations(newLocations);
@@ -82,8 +81,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
                         : form
                             .getFieldValue("locations")
                             .map(
-                              (location: IGeosearchPayloadWithUUId) =>
-                                location.id
+                              (location: IGeosearchPayloadWithId) => location.id
                             )
                     }
                     tableDataSource={
@@ -93,7 +91,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
                           })
                         : form
                             .getFieldValue("locations")
-                            .map((location: IGeosearchPayloadWithUUId) => {
+                            .map((location: IGeosearchPayloadWithId) => {
                               return { ...location, key: location.id };
                             })
                     }

@@ -2,7 +2,7 @@ import { Form, Modal, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
 import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
-import { IGeosearchPayloadWithUUId } from "../../../common/map/MapElement";
+import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
 import ItinerarySettingsView from "./ItinerarySettingsView";
 import ItineraryStopsView from "./ItineraryStopsView";
 import { v4 as uuidv4 } from "uuid";
@@ -18,7 +18,7 @@ export interface IItineraryCreateViewOwnProps {
 }
 
 export interface IItineraryCreateForm {
-  locations: IGeosearchPayloadWithUUId[];
+  locations: IGeosearchPayloadWithId[];
   settings: IItinerarySettings;
 }
 

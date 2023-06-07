@@ -5,8 +5,5 @@ export interface IPayloadAction<T> extends IAction {
 }
 
 export interface IIdPayload {
-  id: number;
-}
-export interface IUUIdPayload {
-  id: string;
+  id: string | number;
 }

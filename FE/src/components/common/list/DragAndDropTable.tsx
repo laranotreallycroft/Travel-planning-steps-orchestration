@@ -17,7 +17,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
-import { IGeosearchPayload } from "../map/MapElement";
+import { IGeosearchPayloadWithId } from "../map/MapElement";
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   "data-row-key": string;
@@ -62,7 +62,7 @@ export interface IDragAndDropTableOwnProps<T> {
   )[];
   tableDataSource: T[];
   tableColumns: ColumnsType<T>;
-  setLocations: (locations: IGeosearchPayload[]) => void;
+  setLocations: (locations: IGeosearchPayloadWithId[]) => void;
   className?: string;
 }
 

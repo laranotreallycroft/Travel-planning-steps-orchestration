@@ -1,19 +1,26 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Polyline,
+  Popup,
+  TileLayer,
+} from "react-leaflet";
 
+import { IIdPayload } from "../../../service/business/common/types";
 import { ChangeView, initMap } from "./utils";
-import { IUUIdPayload } from "../../../service/business/common/types";
+import { ICoordinates } from "../../../model/geometry/Coordinates";
+import { LatLngExpression } from "leaflet";
 
-export interface IGeosearchPayload {
-  x: number;
-  y: number;
+export interface IGeosearchPayload extends ICoordinates {
   label: string;
   raw?: { place_id: string };
 }
 
-export type IGeosearchPayloadWithUUId = IGeosearchPayload & IUUIdPayload;
+export type IGeosearchPayloadWithId = IGeosearchPayload & IIdPayload;
 export interface IMapElementOwnProps {
-  selectedLocation?: IGeosearchPayloadWithUUId;
-  locations?: IGeosearchPayloadWithUUId[];
+  selectedLocation?: IGeosearchPayloadWithId;
+  locations?: IGeosearchPayloadWithId[];
+  paths?: LatLngExpression[];
   className?: string;
 }
 type IMapElementProps = IMapElementOwnProps;
@@ -40,7 +47,7 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
+      {props.paths && <Polyline positions={props.paths} />}
       {props.locations?.map((location) => (
         <Marker
           key={`marker-${location.id}`}
