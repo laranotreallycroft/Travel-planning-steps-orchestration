@@ -1,5 +1,11 @@
 package com.travelApp.travelApp.model.payload.common;
 
+import java.util.List;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+
 public class GeosearchPayload {
 
 	private String id;
@@ -24,6 +30,11 @@ public class GeosearchPayload {
 		this.x = x;
 		this.y = y;
 		this.label = label;
+	}
+
+	public GeosearchPayload(List<Double> location) {
+		this.x = location.get(0);
+		this.y = location.get(1);
 	}
 
 	public String getId() {
@@ -58,8 +69,8 @@ public class GeosearchPayload {
 		this.y = y;
 	}
 
-	public PointPayload getPointPayload() {
-		return new PointPayload(this.x, this.y);
+	public Point toPoint() {
+		GeometryFactory gf = new GeometryFactory();
+		return gf.createPoint(new Coordinate(this.x, this.y));
 	}
-
 }

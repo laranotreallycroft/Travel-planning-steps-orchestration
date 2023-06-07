@@ -2,7 +2,7 @@ package com.travelApp.travelApp.model.payload.trip;
 
 import java.time.LocalDate;
 
-import com.travelApp.travelApp.model.payload.common.PointPayload;
+import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 
 public class TripPayload {
 
@@ -10,13 +10,13 @@ public class TripPayload {
 	private Long userId;
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
-	private PointPayload location;
+	private GeosearchPayload location;
 
 	public TripPayload() {
 
 	}
 
-	public TripPayload(String name, Long userId, LocalDate dateFrom, LocalDate dateTo, PointPayload location) {
+	public TripPayload(String name, Long userId, LocalDate dateFrom, LocalDate dateTo, GeosearchPayload location) {
 		super();
 		this.name = name;
 		this.userId = userId;
@@ -57,11 +57,11 @@ public class TripPayload {
 		this.dateTo = dateTo;
 	}
 
-	public PointPayload getLocation() {
+	public GeosearchPayload getLocation() {
 		return location;
 	}
 
-	public void setLocation(PointPayload location) {
+	public void setLocation(GeosearchPayload location) {
 		this.location = location;
 	}
 

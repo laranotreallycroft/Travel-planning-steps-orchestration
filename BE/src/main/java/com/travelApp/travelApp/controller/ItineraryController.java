@@ -78,7 +78,7 @@ public class ItineraryController {
 						if (location.getX().equals(steps.get(i).getX())
 								&& location.getY().equals(steps.get(i).getY())) {
 							ItineraryElement itineraryElement = new ItineraryElement(location.getLabel(),
-									location.getPointPayload().toPoint(), steps.get(i).getDuration() / 60, itinerary);
+									location.toPoint(), steps.get(i).getDuration() / 60, itinerary);
 
 							itinerary.addItineraryElement(itineraryElement);
 							break;
@@ -86,7 +86,7 @@ public class ItineraryController {
 					}
 				}
 
-			} catch (IOException | InterruptedException e) {
+			} catch (Exception e) {
 				return ResponseEntity.badRequest()
 						.body("Unable to find route between points. Try changing the method of transportation.");
 			}
@@ -111,7 +111,7 @@ public class ItineraryController {
 
 				// origin is not returned in payload so create it separately
 				ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-						locations.get(0).getPointPayload().toPoint(), 0, itinerary);
+						locations.get(0).toPoint(), 0, itinerary);
 				itinerary.addItineraryElement(firstItineraryElement);
 
 				// pair travel durations with labels
@@ -119,13 +119,12 @@ public class ItineraryController {
 					// origin is not returned in payload so payload is i+1
 					GeosearchPayload payloadLocation = locations.get(i + 1);
 					ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-							payloadLocation.getPointPayload().toPoint(), (int) (segments.get(i).getDuration() / 60),
+							payloadLocation.toPoint(), (int) (segments.get(i).getDuration() / 60),
 							itinerary);
 					itinerary.addItineraryElement(itineraryElement);
 				}
 
-			} catch (IOException | InterruptedException e) {
-				System.out.println(e);
+			} catch (Exception e) {
 				return ResponseEntity.badRequest()
 						.body("Unable to find route between points. Try changing the method of transportation.");
 			}
