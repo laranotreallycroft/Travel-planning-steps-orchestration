@@ -13,7 +13,7 @@ export const formatDate = (dte: number | null, lang: string): string => {
 
 export const mapCurrent = (day: any, lang: string): any => {
   return {
-    date: formatDate(day.dt, lang),
+    date: () => formatDate(day.dt, lang),
     description: day.weather[0] ? day.weather[0].description : null,
     icon: day.weather[0] && getIcon(day.weather[0].icon),
     temperature: {
@@ -30,7 +30,7 @@ export const mapForecast = (forecast: any[], lang: string): any[] => {
   const mappedForecast: any[] = [];
   for (let i = 0; i < forecast.length; i += 1) {
     mappedForecast.push({
-      date: formatDate(forecast[i].dt, lang),
+      date: () => formatDate(forecast[i].dt, lang),
       description: forecast[i].weather[0]
         ? forecast[i].weather[0].description
         : null,

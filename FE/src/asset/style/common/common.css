@@ -116,6 +116,10 @@
     margin: 0.3rem !important;
 }
 
+.noPadding {
+    padding: 0 !important;
+}
+
 .panel {
     margin: 0.5vw;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
@@ -127,4 +131,8 @@
 
 .hidden {
     visibility: hidden;
+}
+
+.bold {
+    font-weight: bold;
 }

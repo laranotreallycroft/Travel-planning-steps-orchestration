@@ -1,7 +1,19 @@
+.schedule__dragContainer {
+    transform: none !important;
+}
+
+.schedule__labelContainer {
+    padding: 4px 8px;
+}
+
 .schedule__appointmentCommute {
+    position: relative !important;
     background-color: #6096ba !important;
+    color: white !important;
 }
 
 .schedule__appointmentDestination {
+    position: relative !important;
     background-color: #274c77 !important;
+    color: white !important;
 }
