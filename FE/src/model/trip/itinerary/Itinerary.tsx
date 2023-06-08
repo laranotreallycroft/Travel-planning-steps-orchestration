@@ -3,7 +3,7 @@ import { ICoordinates } from "../../geometry/Coordinates";
 
 export interface IItinerary {
   id: number;
-  date: String;
+  date: string;
   routeGeometry: ICoordinates[];
   itineraryElements: IItineraryElement[];
 }
