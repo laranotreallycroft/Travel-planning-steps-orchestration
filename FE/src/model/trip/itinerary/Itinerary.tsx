@@ -12,5 +12,8 @@ export interface IItineraryElement {
   label: string;
   location: IGeosearchPayload;
   travelDuration: number;
-  dateTime: string;
+  commuteStartDate: Date;
+  commuteEndDate: Date;
+  startDate: Date;
+  endDate: Date;
 }

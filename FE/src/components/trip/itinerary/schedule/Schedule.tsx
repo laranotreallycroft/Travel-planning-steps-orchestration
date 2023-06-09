@@ -16,23 +16,32 @@ import { Button } from "antd";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
-import { mapInitalDataToScheduler, moveRecursively } from "./utils";
+import { mapDataToScheduler, moveRecursively } from "./utils";
+import { connect } from "react-redux";
+import { ItineraryBusinessStore } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
+import dayjs from "dayjs";
+
 export interface IScheduleOwnProps {
   itinerary: IItinerary;
   isEditing: boolean;
 }
 
-type IScheduleProps = IScheduleOwnProps;
+export interface IScheduleStateProps {}
+export interface IScheduleDispatchProps {
+  itineraryScheduleUpdate: (
+    itineraryScheduleUpdatePayload: AppointmentModel[]
+  ) => void;
+}
+type IScheduleProps = IScheduleOwnProps &
+  IScheduleStateProps &
+  IScheduleDispatchProps;
 
 const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
   const [schedulerData, setSchedulerData] = useState(
-    mapInitalDataToScheduler(props.itinerary, props.isEditing)
+    mapDataToScheduler(props.itinerary, props.isEditing)
   );
-
   useEffect(() => {
-    setSchedulerData(
-      mapInitalDataToScheduler(props.itinerary, props.isEditing)
-    );
+    setSchedulerData(mapDataToScheduler(props.itinerary, props.isEditing));
   }, [props.itinerary, props.isEditing]);
 
   const handleCommitChanges = useCallback(
@@ -55,7 +64,14 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
   );
 
   const handleSave = () => {
-    console.log(schedulerData);
+    const mappedPayload = schedulerData.map((element) => {
+      return {
+        ...element,
+        startDate: dayjs(element.startDate).toISOString(),
+        endDate: dayjs(element.endDate).toISOString(),
+      };
+    });
+    props.itineraryScheduleUpdate(mappedPayload);
   };
 
   return (
@@ -95,4 +111,24 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
   );
 };
 
-export default Schedule;
+const mapStateToProps = (state: any): IScheduleStateProps => ({});
+
+const mapDispatchToProps = (dispatch: any): IScheduleDispatchProps => ({
+  itineraryScheduleUpdate: (
+    itineraryScheduleUpdatePayload: AppointmentModel[]
+  ) =>
+    dispatch(
+      ItineraryBusinessStore.actions.itineraryScheduleUpdate(
+        itineraryScheduleUpdatePayload
+      )
+    ),
+});
+
+export default connect<
+  IScheduleStateProps,
+  IScheduleDispatchProps,
+  IScheduleOwnProps
+>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Schedule);
