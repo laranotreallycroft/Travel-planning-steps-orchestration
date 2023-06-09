@@ -1,13 +1,14 @@
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Radio, Row } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import MapElement from "../../common/map/MapElement";
 import Schedule from "./schedule/Schedule";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
+import SaveIcon from "@mui/icons-material/Save";
 export interface IItineraryViewOwnProps {
   itinerary: IItinerary;
 }
@@ -24,9 +25,6 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
     setIsEditing(false);
   }, [props.itinerary]);
 
-  const toggleScheduleView = useCallback(() => {
-    setScheduleView((prevState) => !prevState);
-  }, []);
   const toggleIsScheduleEditing = useCallback(() => {
     setIsEditing((prevState) => !prevState);
   }, []);
@@ -34,15 +32,30 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
   return (
     <Col span={18}>
       <Row className="itinerarySider__siderButtonsContainer">
+        <Radio.Group
+          value={scheduleView}
+          onChange={(e) => setScheduleView(e.target.value)}
+        >
+          <Radio.Button value={false}>
+            <LocationOnIcon />
+          </Radio.Button>
+          <Radio.Button value={true}>
+            <CalendarTodayIcon />
+          </Radio.Button>
+        </Radio.Group>
+
         <Button
-          className="margin-sm itinerarySider__siderButtons"
-          onClick={toggleScheduleView}
-          icon={scheduleView ? <LocationOnIcon /> : <CalendarTodayIcon />}
+          onClick={toggleIsScheduleEditing}
+          icon={isEditing ? <CloseIcon /> : <EditIcon />}
+          className="margin-left-sm"
         />
         <Button
-          className="margin-sm itinerarySider__siderButtons"
-          onClick={toggleIsScheduleEditing}
-          icon={scheduleView ? <EditCalendarIcon /> : <AddLocationAltIcon />}
+          onClick={() => console.log("SAVE")}
+          icon={<SaveIcon />}
+          className={
+            "margin-left-xs margin-right-sm" +
+            (!(isEditing && scheduleView) ? " hidden" : "")
+          }
         />
       </Row>
       <Row className="itinerarySider__sider">

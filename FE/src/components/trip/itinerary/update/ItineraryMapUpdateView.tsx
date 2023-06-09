@@ -88,7 +88,7 @@ const ItineraryMapUpdateView: React.FC<IItineraryMapUpdateViewProps> = (
         }),
         routeOptions: { optimize: false, vehicleProfile: "driving-car" },
       }}
-      className="fullWidth"
+      className="fullWidth itineraryMapUpdateView__form"
     >
       <Steps
         current={currentStep}

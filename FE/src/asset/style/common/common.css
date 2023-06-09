@@ -1,3 +1,8 @@
+.margin-left-xs {
+    margin-left: 0.25vw !important;
+}
+
+
 .margin-top-sm {
     margin-top: 0.5vh !important;
 }
@@ -40,6 +45,8 @@
     margin-right: 1vw !important;
 
 }
+
+
 
 
 
