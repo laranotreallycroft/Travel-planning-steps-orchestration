@@ -24,13 +24,10 @@ const appRouter = createBrowserRouter(
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>
         <Route element={<HomeLayout />}>
-          <Route
-            path="/"
-            element={<Navigate to="/packinglist" replace={true} />}
-          />
-          <Route path="packinglist" element={<PackingListPage />} />
+          <Route path="/" element={<Navigate to="/weather" replace={true} />} />
           <Route path="weather" element={<WeatherPage />} />
           <Route path="itinerary" element={<ItineraryPage />} />
+          <Route path="packinglist" element={<PackingListPage />} />
           <Route path="settings" element={<TripSettingsPage />} />
         </Route>
       </Route>

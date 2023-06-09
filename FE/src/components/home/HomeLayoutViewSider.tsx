@@ -28,12 +28,6 @@ function getItem(
 }
 const items: MenuProps["items"] = [
   getItem(
-    "Packing list",
-    "packinglist",
-    <UnorderedListOutlined />,
-    "homeLayoutViewSider_menuItem"
-  ),
-  getItem(
     "Weather",
     "weather",
     <CloudOutlined />,
@@ -43,6 +37,12 @@ const items: MenuProps["items"] = [
     "Itinerary",
     "itinerary",
     <MapOutlinedIcon />,
+    "homeLayoutViewSider_menuItem"
+  ),
+  getItem(
+    "Packing list",
+    "packinglist",
+    <UnorderedListOutlined />,
     "homeLayoutViewSider_menuItem"
   ),
   getItem(
