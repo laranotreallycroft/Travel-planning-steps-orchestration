@@ -98,12 +98,16 @@ const ItinerarySettingsView: React.FC<IItinerarySettingsViewProps> = (
           </Row>
         </Col>
       </Row>
-      <Row justify={"space-between"} align={"bottom"} className="fullWidth">
+      <Row
+        justify={"space-between"}
+        align={"bottom"}
+        className="fullWidth margin-bottom-l"
+      >
         <Button type="primary" onClick={props.onPreviousStep}>
           Back
         </Button>
         <Button type="primary" onClick={props.onNextStep}>
-          Create
+          Submit
         </Button>
       </Row>
     </Row>

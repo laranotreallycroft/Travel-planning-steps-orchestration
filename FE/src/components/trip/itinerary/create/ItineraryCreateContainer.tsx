@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import {
@@ -5,18 +6,16 @@ import {
   ItineraryBusinessStore,
 } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
-import ItineraryCreateView, {
-  IItineraryCreateForm,
-} from "./ItineraryCreateView";
 import {
   ITrackableAction,
   createTrackableAction,
 } from "../../../../service/util/trackAction";
+import ItineraryCreateView, {
+  IItineraryRoutingForm,
+} from "./ItineraryCreateView";
 
 export interface IItineraryCreateContainerOwnProps {
   date: string;
-  isItineraryCreateModalOpen: boolean;
-  onItineraryCreateModalClose: () => void;
 }
 
 export interface IItineraryCreateContainerStateProps {
@@ -34,15 +33,13 @@ type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
 const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
-  const handleItineraryCreate = (values: IItineraryCreateForm) => {
+  const handleItineraryCreate = useCallback((values: IItineraryRoutingForm) => {
     return props.itineraryCreate({ ...values, date: props.date });
-  };
+  }, []);
 
   return (
     <ItineraryCreateView
       trip={props.trip}
-      onItineraryCreateModalClose={props.onItineraryCreateModalClose}
-      isItineraryCreateModalOpen={props.isItineraryCreateModalOpen}
       onItineraryCreate={handleItineraryCreate}
     />
   );

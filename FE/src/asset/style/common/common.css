@@ -16,6 +16,11 @@
 
 }
 
+.margin-sm {
+    margin: 0.5vh !important;
+
+}
+
 .margin-top-md {
     margin-top: 1vh !important;
 
@@ -35,6 +40,8 @@
     margin-right: 1vw !important;
 
 }
+
+
 
 
 .margin-top-l {

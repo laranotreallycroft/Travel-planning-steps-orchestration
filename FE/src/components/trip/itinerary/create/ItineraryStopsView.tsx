@@ -3,13 +3,13 @@ import { Button, Col, Form, Row, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import notificationService from "../../../../service/util/notificationService";
 import DragAndDropTable from "../../../common/list/DragAndDropTable";
 import MapElement, {
   IGeosearchPayloadWithId,
 } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
+import { IItineraryRoutingForm } from "./ItineraryCreateView";
 export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
 }
@@ -19,7 +19,7 @@ type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
 const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   props: IItineraryStopsViewProps
 ) => {
-  const form = Form.useFormInstance<IItineraryPayload>();
+  const form = Form.useFormInstance<IItineraryRoutingForm>();
   const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] =
     useState<IGeosearchPayloadWithId>(form.getFieldValue("locations")[0]);
@@ -144,7 +144,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
           </Col>
         </Row>
       </Row>
-      <Row justify={"end"} align={"bottom"} className="fullWidth">
+      <Row
+        justify={"end"}
+        align={"bottom"}
+        className="fullWidth margin-bottom-l"
+      >
         <Button type="primary" onClick={handleNext}>
           Next
         </Button>

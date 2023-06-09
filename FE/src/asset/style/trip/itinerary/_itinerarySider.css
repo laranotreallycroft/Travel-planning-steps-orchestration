@@ -1,0 +1,22 @@
+.itinerarySider__sider {
+    height: 90%
+}
+
+.itinerarySider__siderButtonsContainer {
+    position: absolute;
+    right: 16px;
+    z-index: 1000;
+    top: 8px;
+    background-color: #274C77;
+    border: 2px solid #274C77;
+    border-radius: 8px;
+
+}
+
+.itinerarySider__siderButtons {
+    color: #274C77;
+}
+
+.itinerarySider__siderButtons:hover {
+    color: #274C77 !important;
+}

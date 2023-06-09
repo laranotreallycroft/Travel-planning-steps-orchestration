@@ -1,29 +1,21 @@
 import { Form, Steps } from "antd";
 import { useMemo, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { ITrip } from "../../../../model/trip/Trip";
-import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
+import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import { ITrackableAction } from "../../../../service/util/trackAction";
-import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
-import ItinerarySettingsView from "./ItinerarySettingsView";
-import ItineraryStopsView from "./ItineraryStopsView";
+import { IItineraryRoutingForm } from "../create/ItineraryCreateView";
+import ItinerarySettingsView from "../create/ItinerarySettingsView";
+import ItineraryStopsView from "../create/ItineraryStopsView";
 
-export interface IItineraryCreateViewOwnProps {
-  trip: ITrip;
-  onItineraryCreate: (
-    itineraryRoutePayload: IItineraryRoutingForm
-  ) => ITrackableAction;
+export interface IItineraryMapUpdateViewOwnProps {
+  itinerary: IItinerary;
+  onItineraryUpdate: (values: IItineraryPayload) => ITrackableAction;
 }
 
-export interface IItineraryRoutingForm {
-  locations: IGeosearchPayloadWithId[];
-  settings: IItinerarySettings;
-}
+type IItineraryMapUpdateViewProps = IItineraryMapUpdateViewOwnProps;
 
-type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
-
-const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
-  props: IItineraryCreateViewProps
+const ItineraryMapUpdateView: React.FC<IItineraryMapUpdateViewProps> = (
+  props: IItineraryMapUpdateViewProps
 ) => {
   const [form] = Form.useForm<IItineraryRoutingForm>();
   const [currentStep, setCurrentStep] = useState(0);
@@ -42,15 +34,19 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
 
   const handleFinish = () => {
     props
-      .onItineraryCreate(form.getFieldsValue(true))
+      .onItineraryUpdate(form.getFieldsValue(true))
       .track()
       .subscribe({
         next: () => {
-          setCurrentStep(0);
-          form.resetFields();
+          handleModalClose();
         },
         error: () => {},
       });
+  };
+
+  const handleModalClose = () => {
+    setCurrentStep(0);
+    form.resetFields();
   };
 
   const steps = useMemo(
@@ -82,17 +78,26 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
       form={form}
       onFinish={handleFinish}
       initialValues={{
-        locations: [
-          { ...props.trip.location, label: props.trip.name, id: uuidv4() },
-        ],
+        locations: props.itinerary.itineraryElements.map((element) => {
+          return {
+            id: element.id,
+            label: element.label,
+            x: element.location.x,
+            y: element.location.y,
+          };
+        }),
         routeOptions: { optimize: false, vehicleProfile: "driving-car" },
       }}
-      className="fullSize"
+      className="fullWidth"
     >
-      <Steps current={currentStep} items={items} />
+      <Steps
+        current={currentStep}
+        items={items}
+        className="itineraryMapUpdateView__steps"
+      />
       {steps[currentStep].content}
     </Form>
   );
 };
 
-export default ItineraryCreateView;
+export default ItineraryMapUpdateView;

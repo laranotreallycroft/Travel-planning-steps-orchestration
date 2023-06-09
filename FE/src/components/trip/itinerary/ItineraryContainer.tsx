@@ -1,10 +1,10 @@
+import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../model/trip/Trip";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import ItineraryView from "./ItineraryView";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import { ItineraryBusinessStore } from "../../../service/business/itinerary/ItineraryBusinessStore";
-import { useCallback } from "react";
+import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
+import ItineraryView from "./ItineraryView";
 
 export interface IItineraryContainerOwnProps {}
 
