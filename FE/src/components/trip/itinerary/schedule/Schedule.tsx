@@ -15,7 +15,8 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import { mapInitalDataToScheduler, moveRecursively } from "./utils";
-
+import { Button } from "antd";
+import SaveIcon from "@mui/icons-material/Save";
 export interface IScheduleOwnProps {
   itinerary: IItinerary;
   isEditing: boolean;
@@ -55,6 +56,13 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
 
   return (
     <Paper>
+      {props.isEditing && (
+        <Button
+          onClick={() => console.log("SAVE")}
+          icon={<SaveIcon />}
+          className={"schedule__saveButton"}
+        />
+      )}
       {/* @ts-ignore */}
       <Scheduler data={schedulerData}>
         <ViewState currentDate={props.itinerary.date} />

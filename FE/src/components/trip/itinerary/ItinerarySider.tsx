@@ -8,7 +8,7 @@ import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import MapElement from "../../common/map/MapElement";
 import Schedule from "./schedule/Schedule";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
-import SaveIcon from "@mui/icons-material/Save";
+
 export interface IItineraryViewOwnProps {
   itinerary: IItinerary;
 }
@@ -47,15 +47,7 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
         <Button
           onClick={toggleIsScheduleEditing}
           icon={isEditing ? <CloseIcon /> : <EditIcon />}
-          className="margin-left-sm"
-        />
-        <Button
-          onClick={() => console.log("SAVE")}
-          icon={<SaveIcon />}
-          className={
-            "margin-left-xs margin-right-sm" +
-            (!(isEditing && scheduleView) ? " hidden" : "")
-          }
+          className="margin-left-sm margin-right-l"
         />
       </Row>
       <Row className="itinerarySider__sider">
