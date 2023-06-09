@@ -14,7 +14,7 @@ import { TripBusinessStore } from "./trip/TripBusinessStore";
 import { UserBusinessStore } from "./user/UserBusinessStore";
 import { PackingListBusinessStore } from "./trip/packingList/PackingListBusinessStore";
 import { WeatherBusinessStore } from "./weather/WeatherBusinessStore";
-import { ItineraryBusinessStore } from "./itinerary/ItineraryBusinessStore";
+import { ItineraryBusinessStore } from "./trip/itinerary/ItineraryBusinessStore";
 
 const storeMiddleware = [];
 const epicMiddleware = createEpicMiddleware();

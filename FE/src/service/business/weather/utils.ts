@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { getIcon } from "./iconsMap";
+import { v4 as uuidv4 } from "uuid";
 
 export const formatDate = (dte: number | null, lang: string): string => {
   if (lang && lang !== "en") {
@@ -43,6 +44,7 @@ export const mapForecast = (forecast: any[], lang: string): any[] => {
       },
       wind: forecast[i].wind_speed.toFixed(0),
       humidity: forecast[i].humidity,
+      key: uuidv4(),
     });
   }
   return mappedForecast;

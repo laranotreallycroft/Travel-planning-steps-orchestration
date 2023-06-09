@@ -9,13 +9,13 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs";
-import { IGeosearchPayloadWithId } from "../../../components/common/map/MapElement";
-import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
-import notificationService from "../../util/notificationService";
-import trackAction, { IAction } from "../../util/trackAction";
-import { IPayloadAction } from "../common/types";
-import { loginActions } from "../login/LoginBusinessStore";
-import { getTrip, tripStore } from "../trip/TripBusinessStore";
+import { IGeosearchPayloadWithId } from "../../../../components/common/map/MapElement";
+import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
+import notificationService from "../../../util/notificationService";
+import trackAction, { IAction } from "../../../util/trackAction";
+import { IPayloadAction } from "../../common/types";
+import { loginActions } from "../../login/LoginBusinessStore";
+import { getTrip, tripStore } from "../TripBusinessStore";
 
 export interface IItineraryCreatePayload {
   date: string;

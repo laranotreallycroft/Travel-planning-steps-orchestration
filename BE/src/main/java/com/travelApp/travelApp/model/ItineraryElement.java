@@ -1,7 +1,8 @@
 package com.travelApp.travelApp.model;
 
+import java.time.LocalDateTime;
+
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,9 +25,13 @@ public class ItineraryElement {
 	private Long id;
 	private String label;
 	private Point location;
+	
 	@Column(name = "travel_duration")
 	private Integer travelDuration;
-	
+
+	@Column(name = "date_time")
+	private LocalDateTime dateTime;
+
 	@ManyToOne
 	@JoinColumn(name = "itinerary_id")
 	@JsonIgnoreProperties("itineraryElements")
@@ -36,12 +41,22 @@ public class ItineraryElement {
 
 	}
 
-	public ItineraryElement(String label, Point location, Integer travelDuration, Itinerary itinerary) {
+	public ItineraryElement(String label, Point location, Integer travelDuration, LocalDateTime dateTime,
+			Itinerary itinerary) {
 		super();
 		this.label = label;
 		this.location = location;
 		this.travelDuration = travelDuration;
+		this.dateTime = dateTime;
 		this.itinerary = itinerary;
+	}
+
+	public LocalDateTime getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public Long getId() {

@@ -4,7 +4,7 @@ import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import {
   IItineraryUpdatePayload,
   ItineraryBusinessStore,
-} from "../../../../service/business/itinerary/ItineraryBusinessStore";
+} from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,

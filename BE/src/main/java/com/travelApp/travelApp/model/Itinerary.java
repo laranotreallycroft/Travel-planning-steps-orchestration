@@ -38,7 +38,7 @@ public class Itinerary {
 	@JsonIgnoreProperties("itinerary")
 	private Trip trip;
 
-	@OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL,orphanRemoval = true)
 	@JsonIgnoreProperties("itinerary")
 	private List<ItineraryElement> itineraryElements;
 

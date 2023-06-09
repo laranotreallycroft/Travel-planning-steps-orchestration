@@ -2,7 +2,7 @@ import { Form, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ITrip } from "../../../../model/trip/Trip";
-import { IItinerarySettings } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import { IItinerarySettings } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { ITrackableAction } from "../../../../service/util/trackAction";
 import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
 import ItinerarySettingsView from "./ItinerarySettingsView";

@@ -5,7 +5,7 @@ import { ITrackableAction } from "../../../../service/util/trackAction";
 import { IItineraryRoutingForm } from "../create/ItineraryCreateView";
 import ItinerarySettingsView from "../create/ItinerarySettingsView";
 import ItineraryStopsView from "../create/ItineraryStopsView";
-import { IItineraryUpdatePayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
+import { IItineraryUpdatePayload } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 
 export interface IItineraryMapUpdateViewOwnProps {
   itinerary: IItinerary;

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelApp.travelApp.model.Itinerary;
@@ -127,20 +129,26 @@ public class ItineraryController {
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
 		Itinerary itinerary = new Itinerary(trip, itineraryPayload.getDate(), linestring);
 
+		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
+		LocalDateTime dateTime = itinerary.getDate().atTime(time);
 		List<Segment> segments = response.getSegments();
 		List<GeosearchPayload> locations = itineraryPayload.getLocations();
 		// origin time is 0 so create it separately
 		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-				locations.get(0).toPoint(), 0, itinerary);
-		itinerary.addItineraryElement(firstItineraryElement);
+				locations.get(0).toPoint(), 0, dateTime, itinerary);
 
+		itinerary.addItineraryElement(firstItineraryElement);
+	
 		// pair travel durations with labels
 		for (int i = 0; i < segments.size(); i++) {
 			// origin is not returned as segment so payload is i+1
 			GeosearchPayload payloadLocation = locations.get(i + 1);
+			int durationMinutes = (int) segments.get(i).getDuration() / 60;
 			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), (int) (segments.get(i).getDuration() / 60), itinerary);
+					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
 			itinerary.addItineraryElement(itineraryElement);
+			// TODO REAL TIME
+			dateTime = dateTime.plusMinutes(durationMinutes+60);
 		}
 
 		trip.addItinerary(itinerary);
@@ -171,25 +179,29 @@ public class ItineraryController {
 		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
 		itinerary.setRouteGeometry(linestring);
-
-		List<ItineraryElement> newItineraryElements = new ArrayList<>();
+		itinerary.getItineraryElements().clear();
+	
+		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
+		LocalDateTime dateTime = itinerary.getDate().atTime(time);
 		List<Segment> segments = response.getSegments();
 		List<GeosearchPayload> locations = itineraryPayload.getLocations();
 		// origin time is 0 so create it separately
 		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-				locations.get(0).toPoint(), 0, itinerary);
-		newItineraryElements.add(firstItineraryElement);
-
+				locations.get(0).toPoint(), 0, dateTime, itinerary);
+		itinerary.addItineraryElement(firstItineraryElement);
+	
 		// pair travel durations with labels
 		for (int i = 0; i < segments.size(); i++) {
 			// origin is not returned as segment so payload is i+1
 			GeosearchPayload payloadLocation = locations.get(i + 1);
+			int durationMinutes = (int) segments.get(i).getDuration() / 60;
 			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), (int) (segments.get(i).getDuration() / 60), itinerary);
-			newItineraryElements.add(itineraryElement);
-		}
+					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
+			itinerary.addItineraryElement(itineraryElement);
 
-		itinerary.setItineraryElements(newItineraryElements);
+			// TODO REAL TIME
+			dateTime = dateTime.plusMinutes(durationMinutes+60);
+		}
 		itineraryRepository.save(itinerary);
 		return ResponseEntity.ok(itinerary.getTrip());
 

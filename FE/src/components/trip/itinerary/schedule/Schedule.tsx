@@ -10,13 +10,13 @@ import {
   EditRecurrenceMenu,
   Scheduler,
 } from "@devexpress/dx-react-scheduler-material-ui";
+import SaveIcon from "@mui/icons-material/Save";
 import { Paper } from "@mui/material";
+import { Button } from "antd";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import { mapInitalDataToScheduler, moveRecursively } from "./utils";
-import { Button } from "antd";
-import SaveIcon from "@mui/icons-material/Save";
 export interface IScheduleOwnProps {
   itinerary: IItinerary;
   isEditing: boolean;
@@ -35,7 +35,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
     );
   }, [props.itinerary, props.isEditing]);
 
-  const handleCommitChanges = React.useCallback(
+  const handleCommitChanges = useCallback(
     ({ added, changed, deleted }: any) => {
       if (changed) {
         const data = [...schedulerData];
@@ -54,11 +54,15 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
     [schedulerData]
   );
 
+  const handleSave = () => {
+    console.log(schedulerData);
+  };
+
   return (
     <Paper>
       {props.isEditing && (
         <Button
-          onClick={() => console.log("SAVE")}
+          onClick={handleSave}
           icon={<SaveIcon />}
           className={"schedule__saveButton"}
         />
