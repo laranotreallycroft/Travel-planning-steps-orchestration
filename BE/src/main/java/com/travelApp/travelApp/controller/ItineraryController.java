@@ -157,8 +157,57 @@ public class ItineraryController {
 
 	}
 
-	@PutMapping("/{itineraryId}")
-	public ResponseEntity updateItinerary(@PathVariable(value = "itineraryId") Long itineraryId,
+	@PutMapping("/{itineraryId}/route")
+	public ResponseEntity updateItineraryRoute(@PathVariable(value = "itineraryId") Long itineraryId,
+			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
+		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+
+		if (itineraryPayload.getRouteOptions().isOptimize()) {
+			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload);
+			if (steps == null)
+				return ResponseEntity.badRequest()
+						.body("Unable to find route between points. Try changing the method of transportation.");
+			itineraryPayload.sortLocations(steps);
+
+		}
+
+		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload);
+		if (!response.routeFound())
+			return ResponseEntity.badRequest()
+					.body("Unable to find route between points. Try changing the method of transportation.");
+
+		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
+		LineString linestring = GeometryDecoder.convert(decodedGeometry);
+		itinerary.setRouteGeometry(linestring);
+		itinerary.getItineraryElements().clear();
+	
+		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
+		LocalDateTime dateTime = itinerary.getDate().atTime(time);
+		List<Segment> segments = response.getSegments();
+		List<GeosearchPayload> locations = itineraryPayload.getLocations();
+		// origin time is 0 so create it separately
+		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
+				locations.get(0).toPoint(), 0, dateTime, itinerary);
+		itinerary.addItineraryElement(firstItineraryElement);
+	
+		// pair travel durations with labels
+		for (int i = 0; i < segments.size(); i++) {
+			// origin is not returned as segment so payload is i+1
+			GeosearchPayload payloadLocation = locations.get(i + 1);
+			int durationMinutes = (int) segments.get(i).getDuration() / 60;
+			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
+					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
+			itinerary.addItineraryElement(itineraryElement);
+
+			// TODO REAL TIME
+			dateTime = dateTime.plusMinutes(durationMinutes+60);
+		}
+		itineraryRepository.save(itinerary);
+		return ResponseEntity.ok(itinerary.getTrip());
+
+	}
+	@PutMapping("/{itineraryId}/schedule")
+	public ResponseEntity updateItinerarySchedule(@PathVariable(value = "itineraryId") Long itineraryId,
 			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
 		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
 

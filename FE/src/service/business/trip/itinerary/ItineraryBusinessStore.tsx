@@ -43,7 +43,7 @@ const getItinerary = (store: any): IItinerary => store.itinerary;
 // -------------------- Actions
 const actions = {
   ITINERARY_CREATE: "ITINERARY_CREATE",
-  ITINERARY_MAP_UPDATE: "ITINERARY_MAP_UPDATE",
+  ITINERARY_ROUTE_UPDATE: "ITINERARY_ROUTE_UPDATE",
   ITINERARY_STORE: "ITINERARY_STORE",
   ITINERARY_CLEAR: "ITINERARY_CLEAR",
 };
@@ -54,10 +54,10 @@ export const itineraryCreate = (
   return { type: actions.ITINERARY_CREATE, payload: payload };
 };
 
-export const itineraryMapUpdate = (
+export const itineraryRouteUpdate = (
   payload: IItineraryUpdatePayload
 ): IPayloadAction<IItineraryUpdatePayload> => {
-  return { type: actions.ITINERARY_MAP_UPDATE, payload: payload };
+  return { type: actions.ITINERARY_ROUTE_UPDATE, payload: payload };
 };
 
 export const itineraryStore = (
@@ -115,20 +115,20 @@ const itineraryCreateEffect = (
     })
   );
 };
-const itineraryMapUpdateEffect = (
+const itineraryRouteUpdateEffect = (
   action$: Observable<IPayloadAction<IItineraryUpdatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARY_MAP_UPDATE;
+      return action.type === actions.ITINERARY_ROUTE_UPDATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
       const itinerary = getItinerary(state);
       return from(
         axios
-          .put(`/itinerary/${itinerary.id}`, { ...action.payload })
+          .put(`/itinerary/${itinerary.id}/route`, { ...action.payload })
           .then((response) => {
             if (response.status === 201 || response.status === 200) {
               notificationService.success("Itinerary successfully updated");
@@ -177,13 +177,13 @@ export const ItineraryBusinessStore = {
   selectors: { getItinerary },
   actions: {
     itineraryCreate,
-    itineraryMapUpdate,
+    itineraryRouteUpdate,
     itineraryStore,
     itineraryClear,
   },
   effects: {
     itineraryCreateEffect,
-    itineraryMapUpdateEffect,
+    itineraryRouteUpdateEffect,
   },
   reducers: { itinerary },
 };

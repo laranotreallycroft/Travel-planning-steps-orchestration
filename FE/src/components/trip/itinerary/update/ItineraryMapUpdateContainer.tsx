@@ -18,7 +18,7 @@ export interface IItineraryMapUpdateContainerStateProps {
   itinerary: IItinerary;
 }
 export interface IItineraryMapUpdateContainerDispatchProps {
-  itineraryMapUpdate: (
+  itineraryRouteUpdate: (
     itineraryRoutePayload: IItineraryUpdatePayload
   ) => ITrackableAction;
 }
@@ -30,7 +30,7 @@ const ItineraryMapUpdateContainer: React.FC<
   IItineraryMapUpdateContainerProps
 > = (props: IItineraryMapUpdateContainerProps) => {
   const handleItineraryUpdate = useCallback((values: IItineraryRoutingForm) => {
-    return props.itineraryMapUpdate({ ...values, id: props.itinerary.id });
+    return props.itineraryRouteUpdate({ ...values, id: props.itinerary.id });
   }, []);
 
   return (
@@ -50,10 +50,12 @@ const mapStateToProps = (
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryMapUpdateContainerDispatchProps => ({
-  itineraryMapUpdate: (itineraryRoutePayload: IItineraryUpdatePayload) =>
+  itineraryRouteUpdate: (itineraryRoutePayload: IItineraryUpdatePayload) =>
     dispatch(
       createTrackableAction(
-        ItineraryBusinessStore.actions.itineraryMapUpdate(itineraryRoutePayload)
+        ItineraryBusinessStore.actions.itineraryRouteUpdate(
+          itineraryRoutePayload
+        )
       )
     ),
 });
