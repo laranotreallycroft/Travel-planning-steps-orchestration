@@ -17,8 +17,14 @@ import { IPayloadAction } from "../common/types";
 import { loginActions } from "../login/LoginBusinessStore";
 import { getTrip, tripStore } from "../trip/TripBusinessStore";
 
-export interface IItineraryPayload {
+export interface IItineraryCreatePayload {
   date: string;
+  locations: IGeosearchPayloadWithId[];
+  settings: IItinerarySettings;
+}
+
+export interface IItineraryUpdatePayload {
+  id: number;
   locations: IGeosearchPayloadWithId[];
   settings: IItinerarySettings;
 }
@@ -37,21 +43,21 @@ const getItinerary = (store: any): IItinerary => store.itinerary;
 // -------------------- Actions
 const actions = {
   ITINERARY_CREATE: "ITINERARY_CREATE",
-  ITINERARY_UPDATE: "ITINERARY_UPDATE",
+  ITINERARY_MAP_UPDATE: "ITINERARY_MAP_UPDATE",
   ITINERARY_STORE: "ITINERARY_STORE",
   ITINERARY_CLEAR: "ITINERARY_CLEAR",
 };
 
 export const itineraryCreate = (
-  payload: IItineraryPayload
-): IPayloadAction<IItineraryPayload> => {
+  payload: IItineraryCreatePayload
+): IPayloadAction<IItineraryCreatePayload> => {
   return { type: actions.ITINERARY_CREATE, payload: payload };
 };
 
-export const itineraryUpdate = (
-  payload: IItineraryPayload
-): IPayloadAction<IItineraryPayload> => {
-  return { type: actions.ITINERARY_UPDATE, payload: payload };
+export const itineraryMapUpdate = (
+  payload: IItineraryUpdatePayload
+): IPayloadAction<IItineraryUpdatePayload> => {
+  return { type: actions.ITINERARY_MAP_UPDATE, payload: payload };
 };
 
 export const itineraryStore = (
@@ -68,7 +74,7 @@ export const itineraryClear = (): IAction => {
 // -------------------- Side-effects
 
 const itineraryCreateEffect = (
-  action$: Observable<IPayloadAction<IItineraryPayload>>,
+  action$: Observable<IPayloadAction<IItineraryCreatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -109,41 +115,48 @@ const itineraryCreateEffect = (
     })
   );
 };
-/*
-
-
-const itineraryUpdateffect = (
-  action$: Observable<IPayloadAction<IItinerary>>,
+const itineraryMapUpdateEffect = (
+  action$: Observable<IPayloadAction<IItineraryUpdatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARY_UPDATE;
+      return action.type === actions.ITINERARY_MAP_UPDATE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+      const itinerary = getItinerary(state);
       return from(
         axios
-          .put(`/trips/${trip.id}/packinglist`, action.payload)
+          .put(`/itinerary/${itinerary.id}`, { ...action.payload })
           .then((response) => {
-            if (response.status === 200) {
+            if (response.status === 201 || response.status === 200) {
+              notificationService.success("Itinerary successfully updated");
               return response.data;
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to update trip",
+              "Unable to update itinerary",
               error.response.data
             );
+            throw error;
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => itineraryStore(data))
+    switchMap((data) =>
+      of(
+        itineraryStore(data.itineraries?.[data.itineraries?.length - 1]),
+        tripStore(data)
+      )
+    ),
+
+    catchError((error: any, o: Observable<any>) => {
+      return o;
+    })
   );
 };
-*/
 // -
 // -------------------- Reducers
 
@@ -164,13 +177,13 @@ export const ItineraryBusinessStore = {
   selectors: { getItinerary },
   actions: {
     itineraryCreate,
-    itineraryUpdate,
+    itineraryMapUpdate,
     itineraryStore,
     itineraryClear,
   },
   effects: {
     itineraryCreateEffect,
-    // itineraryUpdateffect,
+    itineraryMapUpdateEffect,
   },
   reducers: { itinerary },
 };

@@ -1,6 +1,6 @@
 package com.travelApp.travelApp.model.payload.itinerary;
 
-public class ItineraryCreatePayload extends ItineraryPayload {
+public class ItineraryRoutingPayload extends ItineraryPayload {
 	private Long tripId;
 
 	public Long getTripId() {

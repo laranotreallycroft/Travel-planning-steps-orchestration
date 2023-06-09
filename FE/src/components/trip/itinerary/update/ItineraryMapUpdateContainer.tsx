@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { connect } from "react-redux";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import {
-  IItineraryPayload,
+  IItineraryUpdatePayload,
   ItineraryBusinessStore,
 } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import {
@@ -18,8 +18,8 @@ export interface IItineraryMapUpdateContainerStateProps {
   itinerary: IItinerary;
 }
 export interface IItineraryMapUpdateContainerDispatchProps {
-  itineraryUpdate: (
-    itineraryRoutePayload: IItineraryPayload
+  itineraryMapUpdate: (
+    itineraryRoutePayload: IItineraryUpdatePayload
   ) => ITrackableAction;
 }
 type IItineraryMapUpdateContainerProps = IItineraryMapUpdateContainerOwnProps &
@@ -30,8 +30,7 @@ const ItineraryMapUpdateContainer: React.FC<
   IItineraryMapUpdateContainerProps
 > = (props: IItineraryMapUpdateContainerProps) => {
   const handleItineraryUpdate = useCallback((values: IItineraryRoutingForm) => {
-    //TODO
-    return props.itineraryUpdate({ ...values, date: "" });
+    return props.itineraryMapUpdate({ ...values, id: props.itinerary.id });
   }, []);
 
   return (
@@ -51,10 +50,10 @@ const mapStateToProps = (
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryMapUpdateContainerDispatchProps => ({
-  itineraryUpdate: (itineraryRoutePayload: IItineraryPayload) =>
+  itineraryMapUpdate: (itineraryRoutePayload: IItineraryUpdatePayload) =>
     dispatch(
       createTrackableAction(
-        ItineraryBusinessStore.actions.itineraryUpdate(itineraryRoutePayload)
+        ItineraryBusinessStore.actions.itineraryMapUpdate(itineraryRoutePayload)
       )
     ),
 });

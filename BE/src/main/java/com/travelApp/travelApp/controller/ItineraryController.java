@@ -8,12 +8,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.locationtech.jts.geom.LineString;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +26,7 @@ import com.travelApp.travelApp.model.Itinerary;
 import com.travelApp.travelApp.model.ItineraryElement;
 import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryRoutingPayload;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsPayload;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsResponse;
@@ -50,7 +53,7 @@ public class ItineraryController {
 		this.itineraryElementRepository = itineraryElementRepository;
 	}
 
-	public List<Step> getOpenRouteServiceOptimization(ItineraryCreatePayload itineraryPayload) {
+	public List<Step> getOpenRouteServiceOptimization(ItineraryRoutingPayload itineraryPayload) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			var client = HttpClient.newHttpClient();
@@ -77,7 +80,7 @@ public class ItineraryController {
 
 	}
 
-	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryCreatePayload itineraryPayload) {
+	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryRoutingPayload itineraryPayload) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			var client = HttpClient.newHttpClient();
@@ -102,7 +105,7 @@ public class ItineraryController {
 	}
 
 	@PostMapping
-	public ResponseEntity createItinerary(@RequestBody ItineraryCreatePayload itineraryPayload)
+	public ResponseEntity createItinerary(@RequestBody ItineraryRoutingPayload itineraryPayload)
 			throws URISyntaxException {
 		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
 
@@ -143,6 +146,52 @@ public class ItineraryController {
 		trip.addItinerary(itinerary);
 		tripRepository.save(trip);
 		return ResponseEntity.ok(trip);
+
+	}
+
+	@PutMapping("/{itineraryId}")
+	public ResponseEntity updateItinerary(@PathVariable(value = "itineraryId") Long itineraryId,
+			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
+		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+
+		if (itineraryPayload.getRouteOptions().isOptimize()) {
+			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload);
+			if (steps == null)
+				return ResponseEntity.badRequest()
+						.body("Unable to find route between points. Try changing the method of transportation.");
+			itineraryPayload.sortLocations(steps);
+
+		}
+
+		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload);
+		if (!response.routeFound())
+			return ResponseEntity.badRequest()
+					.body("Unable to find route between points. Try changing the method of transportation.");
+
+		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
+		LineString linestring = GeometryDecoder.convert(decodedGeometry);
+		itinerary.setRouteGeometry(linestring);
+
+		List<ItineraryElement> newItineraryElements = new ArrayList<>();
+		List<Segment> segments = response.getSegments();
+		List<GeosearchPayload> locations = itineraryPayload.getLocations();
+		// origin time is 0 so create it separately
+		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
+				locations.get(0).toPoint(), 0, itinerary);
+		newItineraryElements.add(firstItineraryElement);
+
+		// pair travel durations with labels
+		for (int i = 0; i < segments.size(); i++) {
+			// origin is not returned as segment so payload is i+1
+			GeosearchPayload payloadLocation = locations.get(i + 1);
+			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
+					payloadLocation.toPoint(), (int) (segments.get(i).getDuration() / 60), itinerary);
+			newItineraryElements.add(itineraryElement);
+		}
+
+		itinerary.setItineraryElements(newItineraryElements);
+		itineraryRepository.save(itinerary);
+		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
 

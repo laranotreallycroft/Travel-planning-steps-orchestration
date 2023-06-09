@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryRoutingPayload;
 
 public class OpenRouteServiceDirectionsPayload {
 	private List<List<Double>> coordinates;
@@ -18,7 +18,7 @@ public class OpenRouteServiceDirectionsPayload {
 		this.coordinates = coordinates;
 	}
 
-	public OpenRouteServiceDirectionsPayload(ItineraryCreatePayload itineraryPayload) {
+	public OpenRouteServiceDirectionsPayload(ItineraryRoutingPayload itineraryPayload) {
 		this.coordinates = new ArrayList<>();
 		for (GeosearchPayload coordinates : itineraryPayload.getLocations()) {
 			ArrayList<Double> coordinatesList = new ArrayList<>();

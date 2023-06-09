@@ -1,15 +1,15 @@
 import { Form, Steps } from "antd";
 import { useMemo, useState } from "react";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
-import { IItineraryPayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import { ITrackableAction } from "../../../../service/util/trackAction";
 import { IItineraryRoutingForm } from "../create/ItineraryCreateView";
 import ItinerarySettingsView from "../create/ItinerarySettingsView";
 import ItineraryStopsView from "../create/ItineraryStopsView";
+import { IItineraryUpdatePayload } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 
 export interface IItineraryMapUpdateViewOwnProps {
   itinerary: IItinerary;
-  onItineraryUpdate: (values: IItineraryPayload) => ITrackableAction;
+  onItineraryUpdate: (values: IItineraryUpdatePayload) => ITrackableAction;
 }
 
 type IItineraryMapUpdateViewProps = IItineraryMapUpdateViewOwnProps;

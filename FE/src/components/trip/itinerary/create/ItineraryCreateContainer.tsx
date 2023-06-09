@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import {
-  IItineraryPayload,
+  IItineraryCreatePayload,
   ItineraryBusinessStore,
 } from "../../../../service/business/itinerary/ItineraryBusinessStore";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
@@ -23,7 +23,7 @@ export interface IItineraryCreateContainerStateProps {
 }
 export interface IItineraryCreateContainerDispatchProps {
   itineraryCreate: (
-    itineraryRoutePayload: IItineraryPayload
+    itineraryRoutePayload: IItineraryCreatePayload
   ) => ITrackableAction;
 }
 type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
@@ -52,7 +52,7 @@ const mapStateToProps = (state: any): IItineraryCreateContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryCreateContainerDispatchProps => ({
-  itineraryCreate: (itineraryRoutePayload: IItineraryPayload) =>
+  itineraryCreate: (itineraryRoutePayload: IItineraryCreatePayload) =>
     dispatch(
       createTrackableAction(
         ItineraryBusinessStore.actions.itineraryCreate(itineraryRoutePayload)
