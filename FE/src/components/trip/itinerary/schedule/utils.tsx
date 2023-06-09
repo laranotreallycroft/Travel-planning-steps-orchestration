@@ -9,7 +9,10 @@ export const formatMinutes = (minutes: number) => {
     .padStart(2, "0")}`;
 };
 
-export const mapInitalDataToScheduler = (itinerary: IItinerary) => {
+export const mapInitalDataToScheduler = (
+  itinerary: IItinerary,
+  isEditing: boolean
+) => {
   let currentTime = 480;
   const commuteData: AppointmentModel[] = [];
   const destinationData: AppointmentModel[] = [];
@@ -25,7 +28,6 @@ export const mapInitalDataToScheduler = (itinerary: IItinerary) => {
       ),
       title: "Commute to " + element.label,
       type: "commute",
-      allowDrag: false,
     };
     currentTime += element.travelDuration;
 
@@ -40,7 +42,6 @@ export const mapInitalDataToScheduler = (itinerary: IItinerary) => {
       ),
       title: element.label,
       type: "destination",
-      allowDrag: true,
     };
 
     currentTime += 60;
@@ -51,7 +52,8 @@ export const mapInitalDataToScheduler = (itinerary: IItinerary) => {
   commuteData.shift();
   destinationData.shift();
   destinationData.pop();
-  return [...destinationData, ...commuteData];
+  if (!isEditing) return [...destinationData, ...commuteData];
+  else return destinationData;
 };
 
 export const moveRecursively = (
@@ -71,7 +73,7 @@ export const _moveRecursively = (
   const startDate = changed.startDate!;
   const endDate = changed.endDate!;
   data.forEach((appointment) => {
-    if (changed.id !== appointment.id)
+    if (changed.id !== appointment.id && String(appointment.id).endsWith("D"))
       if (endDate > appointment.startDate && endDate < appointment.endDate!) {
         //@ts-ignore
         const offset = new Date(endDate - appointment.startDate);

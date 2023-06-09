@@ -22,8 +22,12 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
     dayjs(props.trip.dateFrom)
   );
   const [scheduleVisible, setScheduleVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const toggleScheduleVisible = useCallback(() => {
     setScheduleVisible((prevState) => !prevState);
+  }, []);
+  const toggleIsEditing = useCallback(() => {
+    setIsEditing((prevState) => !prevState);
   }, []);
   const handleSelectDate = useCallback(
     (date: Dayjs) => {
@@ -62,6 +66,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
     <div className="fullHeight">
       <Row justify={"end"}>
         <Button onClick={toggleScheduleVisible}> changeView</Button>
+        <Button onClick={toggleIsEditing}> Edit route</Button>
       </Row>
       <Row gutter={[16, 16]}>
         <Col span={6} className="panel fullHeight">
@@ -76,7 +81,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
         <Col span={17} className="panel noPadding">
           {props.itinerary ? (
             scheduleVisible ? (
-              <Schedule itinerary={props.itinerary} />
+              <Schedule itinerary={props.itinerary} isEditing={isEditing} />
             ) : (
               <MapElement
                 selectedLocation={{
