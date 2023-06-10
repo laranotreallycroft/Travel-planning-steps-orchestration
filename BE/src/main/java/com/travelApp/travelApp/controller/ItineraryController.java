@@ -75,10 +75,9 @@ public class ItineraryController {
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 			OpenRouteServiceOptimizationResponse openRouteServiceResponse = mapper.readValue(response.body(),
 					OpenRouteServiceOptimizationResponse.class);
-
-			return openRouteServiceResponse.getRoutes().get(0).getSteps();
-		} catch (IOException | URISyntaxException | InterruptedException e) {
-			// TODO Auto-generated catch block
+			if (openRouteServiceResponse.getRoutes() != null)
+				return openRouteServiceResponse.getRoutes().get(0).getSteps();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -103,8 +102,8 @@ public class ItineraryController {
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 			return mapper.readValue(response.body(), OpenRouteServiceDirectionsResponse.class);
 
-		} catch (IOException | URISyntaxException | InterruptedException e) {
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return null;
@@ -118,6 +117,7 @@ public class ItineraryController {
 
 		if (itineraryPayload.getRouteOptions().isOptimize()) {
 			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, trip.getLocation());
+
 			if (steps == null)
 				return ResponseEntity.badRequest()
 						.body("Unable to find route between points. Try changing the method of transportation.");
@@ -155,9 +155,8 @@ public class ItineraryController {
 			// TODO REAL TIME
 			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
 		}
-		if(dateTime.toLocalDate()!=itinerary.getDate()) {
-			return ResponseEntity.badRequest()
-					.body("This route would take more than a day. Try removing some stops.");
+		if (dateTime.toLocalDate() != itinerary.getDate()) {
+			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
 
 		}
 		trip.addItinerary(itinerary);
@@ -212,9 +211,8 @@ public class ItineraryController {
 			// TODO REAL TIME
 			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
 		}
-		if(dateTime.toLocalDate()!=itinerary.getDate()) {
-			return ResponseEntity.badRequest()
-					.body("This route would take more than a day. Try removing some stops.");
+		if (dateTime.toLocalDate() != itinerary.getDate()) {
+			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
 
 		}
 		itineraryRepository.save(itinerary);
@@ -245,18 +243,18 @@ public class ItineraryController {
 			itineraryElementRepository.save(itineraryElement);
 
 		}
-		
+
 		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
-	
+
 	@DeleteMapping("/{itineraryId}")
-	public ResponseEntity deleteItinerary(@PathVariable(value = "itineraryId") Long itineraryId
-			) throws URISyntaxException {
+	public ResponseEntity deleteItinerary(@PathVariable(value = "itineraryId") Long itineraryId)
+			throws URISyntaxException {
 
 		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
 		if (itinerary != null) {
-			Trip trip=itinerary.getTrip();
+			Trip trip = itinerary.getTrip();
 			itineraryRepository.delete(itinerary);
 			return ResponseEntity.ok(trip);
 

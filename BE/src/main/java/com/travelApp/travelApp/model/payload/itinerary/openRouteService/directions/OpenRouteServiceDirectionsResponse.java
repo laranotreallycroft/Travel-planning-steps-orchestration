@@ -26,7 +26,7 @@ public class OpenRouteServiceDirectionsResponse {
 	}
 
 	public boolean routeFound() {
-		return routes.get(0).getSegments() != null;
+		return routes != null && routes.get(0).getSegments() != null;
 	}
 
 	public List<Segment> getSegments() {

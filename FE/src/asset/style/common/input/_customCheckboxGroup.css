@@ -14,6 +14,10 @@
     margin-inline-start: 0;
 }
 
+.ant-checkbox-wrapper.css-dev-only-do-not-override-1x6cogk.ant-checkbox-wrapper-in-form-item.ant-checkbox-group-item+.ant-checkbox-wrapper {
+    margin-inline-start: 0px !important;
+}
+
 .ant-checkbox-wrapper-checked {
     text-decoration: line-through;
     color: #82acc8
