@@ -4,9 +4,10 @@ import { IItinerary } from "./itinerary/Itinerary";
 
 export interface ITrip {
   id: number;
-  name: string;
+  label: string;
   dateFrom: Date;
   dateTo: Date;
+  locationLabel: string;
   location: ICoordinates;
   packingList?: IPackingList;
   packingListChecked?: IPackingList;
@@ -14,8 +15,9 @@ export interface ITrip {
 }
 
 export interface ITripPayload {
-  name: string;
+  label: string;
   dateFrom: string;
   dateTo: string;
   location: ICoordinates;
+  locationLabel: string;
 }

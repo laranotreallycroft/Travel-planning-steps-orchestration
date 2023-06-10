@@ -28,7 +28,8 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
 ) => {
   const handleTripCreate = useCallback((values: ITripCreateForm) => {
     const payload: ITripPayload = {
-      name: values.location.label,
+      label: values.location.label,
+      locationLabel: values.location.label,
       dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
       dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
       location: { x: values.location.x, y: values.location.y },

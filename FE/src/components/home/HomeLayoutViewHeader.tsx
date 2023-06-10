@@ -54,7 +54,7 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
           options={props.userTrips?.map((trip: ITrip) => {
             return {
               value: trip.id,
-              label: trip.name,
+              label: trip.label,
             };
           })}
         />

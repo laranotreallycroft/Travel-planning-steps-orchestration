@@ -22,10 +22,14 @@ const TripSettingsContainer: React.FC<ITripSettingsContainerProps> = (
 ) => {
   const handleTripUpdate = useCallback((values: ITripSettingsForm) => {
     const payload: ITripPayload = {
-      name: values.name,
+      label: values.label,
       dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
       dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
-      location: { x: 1, y: 1 },
+      location: {
+        x: values.location?.x ?? props.trip.location.x,
+        y: values.location?.y ?? props.trip.location.y,
+      },
+      locationLabel: values.location?.label ?? props.trip.locationLabel,
     };
 
     props.tripUpdate(payload);

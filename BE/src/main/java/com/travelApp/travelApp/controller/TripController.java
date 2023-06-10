@@ -46,8 +46,9 @@ public class TripController {
 		User user = userRepository.findById(tripCreatePayload.getUserId()).orElse(null);
 		if (user != null) {
 
-			Trip trip = new Trip(tripCreatePayload.getName(), tripCreatePayload.getDateFrom(),
-					tripCreatePayload.getDateTo(), tripCreatePayload.getLocation().toPoint(), user);
+			Trip trip = new Trip(tripCreatePayload.getLabel(), tripCreatePayload.getDateFrom(),
+					tripCreatePayload.getDateTo(), tripCreatePayload.getLocationLabel(),
+					tripCreatePayload.getLocation().toPoint(), user);
 			tripRepository.save(trip);
 			return ResponseEntity.status(HttpStatus.CREATED).body(user.getTrips());
 
@@ -66,13 +67,17 @@ public class TripController {
 	}
 
 	@PutMapping("/{tripId}")
-	public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId, @RequestBody TripSettingsPayload tripPayload)
-			throws URISyntaxException {
+	public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId,
+			@RequestBody TripSettingsPayload tripPayload) throws URISyntaxException {
 		Trip trip = tripRepository.findById(tripId).orElse(null);
 		if (trip != null) {
-			trip.setName(tripPayload.getName());
+			trip.setLabel(tripPayload.getLabel());
 			trip.setDateFrom(tripPayload.getDateFrom());
 			trip.setDateTo(tripPayload.getDateTo());
+
+			trip.setLocation(tripPayload.getLocation().toPoint());
+			trip.setLocationLabel(tripPayload.getLocationLabel());
+
 			tripRepository.save(trip);
 			return ResponseEntity.ok(trip.getUser().getTrips());
 
@@ -80,13 +85,12 @@ public class TripController {
 
 		return ResponseEntity.badRequest().body("Something went wrong");
 	}
-	
+
 	@DeleteMapping("/{tripId}")
-	public ResponseEntity deleteTrip(@PathVariable(value = "tripId") Long tripId)
-			throws URISyntaxException {
+	public ResponseEntity deleteTrip(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
 		Trip trip = tripRepository.findById(tripId).orElse(null);
 		if (trip != null) {
-			User user=trip.getUser();
+			User user = trip.getUser();
 			tripRepository.delete(trip);
 			return ResponseEntity.ok(user.getTrips());
 

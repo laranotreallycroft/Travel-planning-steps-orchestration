@@ -1,9 +1,11 @@
 import { Button, DatePicker, Form, Input, Popconfirm, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import dayjs, { Dayjs } from "dayjs";
-import { RangeValue } from "rc-picker/lib/interface";
-import React, { useEffect } from "react";
+import dayjs from "dayjs";
+import React, { useCallback, useEffect } from "react";
 import { ITrip } from "../../../model/trip/Trip";
+import { ITripCreateForm } from "../create/TripCreateView";
+import MapSearch from "../../common/map/MapSearch";
+import { IGeosearchPayload } from "../../common/map/MapElement";
 
 export interface ITripSettingsViewOwnProps {
   trip: ITrip;
@@ -13,9 +15,8 @@ export interface ITripSettingsViewOwnProps {
 
 type ITripSettingsViewProps = ITripSettingsViewOwnProps;
 
-export interface ITripSettingsForm {
-  name: string;
-  dateRange: RangeValue<Dayjs>;
+export interface ITripSettingsForm extends ITripCreateForm {
+  label: string;
 }
 const TripSettingsView: React.FC<ITripSettingsViewProps> = (
   props: ITripSettingsViewProps
@@ -23,20 +24,20 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
   const [form] = Form.useForm<ITripSettingsForm>();
   useEffect(() => {
     form.setFieldsValue({
-      name: props.trip.name,
+      label: props.trip.label,
       dateRange: [dayjs(props.trip.dateFrom), dayjs(props.trip.dateTo)],
     });
   }, [props.trip]);
-
-  const handleFinish = (values: ITripSettingsForm) => {
-    props.onTripUpdate(values);
-  };
+  const handleSelectLocation = useCallback((value: string) => {
+    const parsedValue: IGeosearchPayload = JSON.parse(value);
+    form.setFieldValue("location", parsedValue);
+  }, []);
   return (
     <Form<ITripSettingsForm>
       form={form}
-      onFinish={handleFinish}
+      onFinish={props.onTripUpdate}
       initialValues={{
-        name: props.trip.name,
+        label: props.trip.label,
         dateRange: [dayjs(props.trip.dateFrom), dayjs(props.trip.dateTo)],
       }}
     >
@@ -59,7 +60,7 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
       </Row>
 
       <Form.Item
-        name={"name"}
+        name={"label"}
         label={"Trip name"}
         className="tripSettingsView__formItem"
       >
@@ -67,6 +68,17 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
       </Form.Item>
       <Form.Item name={"dateRange"} label={"Travel dates"}>
         <DatePicker.RangePicker allowClear={false} />
+      </Form.Item>
+      <Form.Item
+        name={"location"}
+        label={"Travel destination"}
+        className="fullWidth"
+      >
+        <MapSearch
+          onSelectLocation={handleSelectLocation}
+          showValueAfterSearch={true}
+          initialValue={props.trip.locationLabel}
+        />
       </Form.Item>
     </Form>
   );

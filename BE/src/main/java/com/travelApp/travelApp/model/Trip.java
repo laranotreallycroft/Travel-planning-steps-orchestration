@@ -32,13 +32,15 @@ public class Trip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	private String label;
 
 	@Column(name = "date_from")
 	private LocalDate dateFrom;
 	@Column(name = "date_to")
 	private LocalDate dateTo;
 
+	@Column(name = "location_label")
+	private String locationLabel;
 	private Point location;
 
 	@ManyToOne
@@ -62,14 +64,28 @@ public class Trip {
 
 	}
 
-	public Trip(String name, LocalDate dateFrom, LocalDate dateTo, Point location, User user) {
+	
+	public Trip( String label, LocalDate dateFrom, LocalDate dateTo, String locationLabel, Point location,
+			User user) {
 		super();
-		this.name = name;
+		this.label = label;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
+		this.locationLabel = locationLabel;
 		this.location = location;
 		this.user = user;
 	}
+
+
+	public String getLocationLabel() {
+		return locationLabel;
+	}
+
+
+	public void setLocationLabel(String locationLabel) {
+		this.locationLabel = locationLabel;
+	}
+
 
 	public Long getId() {
 		return id;
@@ -79,12 +95,12 @@ public class Trip {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getLabel() {
+		return label;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public LocalDate getDateFrom() {

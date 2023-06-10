@@ -6,31 +6,46 @@ import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 
 public class TripPayload {
 
-	private String name;
+	private String label;
 	private Long userId;
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
+	private String locationLabel;
 	private GeosearchPayload location;
 
 	public TripPayload() {
 
 	}
 
-	public TripPayload(String name, Long userId, LocalDate dateFrom, LocalDate dateTo, GeosearchPayload location) {
+
+	public TripPayload(String label, Long userId, LocalDate dateFrom, LocalDate dateTo, String locationLabel,
+			GeosearchPayload location) {
 		super();
-		this.name = name;
+		this.label = label;
 		this.userId = userId;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
+		this.locationLabel = locationLabel;
 		this.location = location;
 	}
 
-	public String getName() {
-		return name;
+
+	public String getLocationLabel() {
+		return locationLabel;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+
+	public void setLocationLabel(String locationLabel) {
+		this.locationLabel = locationLabel;
+	}
+
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public Long getUserId() {
