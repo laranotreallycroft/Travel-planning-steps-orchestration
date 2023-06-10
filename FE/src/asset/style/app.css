@@ -23,4 +23,5 @@ body, #root, html {
 @import 'trip/itinerary/update/_itineraryMapUpdateView.css';
 @import 'trip/itinerary/schedule/_schedule.css';
 @import 'trip/itinerary/_itinerarySider.css';
+@import 'trip/_tripSettingsView.css';
 @import 'common/list/_dragAndDropTable.css';

@@ -113,8 +113,8 @@ const itineraryCreateEffect = (
     filter((data) => data !== undefined),
     switchMap((data) =>
       of(
-        itineraryStore(data.itineraries?.[data.itineraries?.length - 1]),
-        tripStore(data)
+        tripStore(data),
+        itineraryStore(data.itineraries?.[data.itineraries?.length - 1])
       )
     ),
 
@@ -140,7 +140,13 @@ const itineraryRouteUpdateEffect = (
           .then((response) => {
             if (response.status === 201 || response.status === 200) {
               notificationService.success("Itinerary successfully updated");
-              return response.data;
+              return {
+                trip: response.data,
+                itinerary: response.data.find(
+                  (itineraryPayload: IItinerary) =>
+                    itineraryPayload.id === itinerary.id
+                ),
+              };
             }
           })
           .catch((error) => {
@@ -154,10 +160,7 @@ const itineraryRouteUpdateEffect = (
     }),
     filter((data) => data !== undefined),
     switchMap((data) =>
-      of(
-        itineraryStore(data.itineraries?.[data.itineraries?.length - 1]),
-        tripStore(data)
-      )
+      of(tripStore(data?.trip), itineraryStore(data?.itinerary))
     ),
 
     catchError((error: any, o: Observable<any>) => {
@@ -182,7 +185,13 @@ const itineraryScheduleUpdateEffect = (
           .then((response) => {
             if (response.status === 201 || response.status === 200) {
               notificationService.success("Itinerary successfully updated");
-              return response.data;
+              return {
+                trip: response.data,
+                itinerary: response.data.find(
+                  (itineraryPayload: IItinerary) =>
+                    itineraryPayload.id === itinerary.id
+                ),
+              };
             }
           })
           .catch((error) => {
@@ -196,10 +205,7 @@ const itineraryScheduleUpdateEffect = (
     }),
     filter((data) => data !== undefined),
     switchMap((data) =>
-      of(
-        itineraryStore(data.itineraries?.[data.itineraries?.length - 1]),
-        tripStore(data)
-      )
+      of(tripStore(data?.trip), itineraryStore(data?.itinerary))
     ),
 
     catchError((error: any, o: Observable<any>) => {

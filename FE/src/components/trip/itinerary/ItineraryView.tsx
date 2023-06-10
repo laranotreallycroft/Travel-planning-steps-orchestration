@@ -19,9 +19,10 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
   const [selectedDate, setSelectedDate] = useState<Dayjs>(
     dayjs(props.trip.dateFrom)
   );
+
   useEffect(() => {
     handleSelectDate(dayjs(props.trip.dateFrom));
-  }, [props.trip.dateFrom]);
+  }, [props.trip.id]);
 
   const handleSelectDate = useCallback(
     (date: Dayjs) => {
@@ -66,9 +67,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
           <ItinerarySider itinerary={props.itinerary} />
         ) : (
           <Col span={18}>
-            <ItineraryCreateContainer
-              date={selectedDate.format("YYYY-MM-DD")}
-            />
+            <ItineraryCreateContainer date={selectedDate} />
           </Col>
         )}
       </Row>

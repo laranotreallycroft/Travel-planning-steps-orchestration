@@ -1,11 +1,12 @@
+import { Dayjs } from "dayjs";
 import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
+import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import {
   IItineraryCreatePayload,
   ItineraryBusinessStore,
 } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
@@ -15,7 +16,7 @@ import ItineraryCreateView, {
 } from "./ItineraryCreateView";
 
 export interface IItineraryCreateContainerOwnProps {
-  date: string;
+  date: Dayjs;
 }
 
 export interface IItineraryCreateContainerStateProps {
@@ -33,9 +34,15 @@ type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
 const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
-  const handleItineraryCreate = useCallback((values: IItineraryRoutingForm) => {
-    return props.itineraryCreate({ ...values, date: props.date });
-  }, []);
+  const handleItineraryCreate = useCallback(
+    (values: IItineraryRoutingForm) => {
+      return props.itineraryCreate({
+        ...values,
+        date: props.date.format("YYYY-MM-DD"),
+      });
+    },
+    [props.date]
+  );
 
   return (
     <ItineraryCreateView

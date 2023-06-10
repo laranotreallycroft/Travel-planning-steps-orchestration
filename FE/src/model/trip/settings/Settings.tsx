@@ -1,9 +1,8 @@
-export interface ITripSettings {
-  notifications: ITripSettingsNotifications;
-}
+import { ICoordinates } from "../../geometry/Coordinates";
 
-export interface ITripSettingsNotifications {
-  packingList: boolean;
-  weather: boolean;
-  itinerary: boolean;
+export interface ITripUpdatePayload {
+  name: string;
+  dateFrom: string;
+  dateTo: string;
+  location: ICoordinates;
 }

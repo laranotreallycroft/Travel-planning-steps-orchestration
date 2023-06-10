@@ -1,42 +1,48 @@
-import { Button, Form, Row, Switch } from "antd";
+import { Button, Form, Input, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import React from "react";
-import { ITripSettings } from "../../../model/trip/settings/Settings";
+import React, { useEffect } from "react";
+import { ITrip } from "../../../model/trip/Trip";
+import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
 
-export interface ITripSettingsViewOwnProps {}
+export interface ITripSettingsViewOwnProps {
+  trip: ITrip;
+  onTripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+}
 
 type ITripSettingsViewProps = ITripSettingsViewOwnProps;
 
 const TripSettingsView: React.FC<ITripSettingsViewProps> = (
   props: ITripSettingsViewProps
 ) => {
-  const [form] = Form.useForm<ITripSettings>();
+  const [form] = Form.useForm<ITripUpdatePayload>();
+  useEffect(() => {
+    form.setFieldsValue(props.trip);
+  }, [props.trip]);
 
-  const handleFinish = (values: ITripSettings) => {};
+  const handleFinish = (values: ITripUpdatePayload) => {
+    props.onTripUpdate(values);
+  };
   return (
-    <Form<ITripSettings> form={form} onFinish={handleFinish}>
+    <Form<ITripUpdatePayload>
+      form={form}
+      onFinish={handleFinish}
+      initialValues={props.trip}
+    >
       <Title level={4}>Trip settings</Title>
       <Row justify={"end"}>
         <Button type="primary" onClick={form.submit}>
           Save
         </Button>
       </Row>
-      <Title level={5}>Reminders</Title>
+
       <Form.Item
-        name={["reminders", "packingList"]}
-        label={"Get packing list reminder"}
+        name={"name"}
+        label={"Trip name"}
+        className="tripSettingsView__formItem"
       >
-        <Switch />
+        <Input />
       </Form.Item>
-      <Form.Item name={["reminders", "weather"]} label={"Get weather reminder"}>
-        <Switch />
-      </Form.Item>
-      <Form.Item
-        name={["reminders", "itinerary"]}
-        label={"Get itinerary reminder"}
-      >
-        <Switch />
-      </Form.Item>
+
       <Row justify={"end"}>
         <Button type="primary" onClick={form.submit}>
           Save

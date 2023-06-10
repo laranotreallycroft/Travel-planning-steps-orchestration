@@ -7,19 +7,15 @@ import {
   mergeMap,
   of,
   switchMap,
-  tap,
   withLatestFrom,
 } from "rxjs";
 import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
+import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
-import {
-  getUser,
-  userTripsFetch,
-  userTripsStore,
-} from "../user/UserBusinessStore";
 import { loginActions } from "../login/LoginBusinessStore";
+import { getUser, userTripsStore } from "../user/UserBusinessStore";
 
 // -
 // -------------------- Selectors
@@ -45,7 +41,9 @@ export const tripFetch = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
   return { type: actions.TRIP_FETCH, payload: payload };
 };
 
-export const tripUpdate = (payload: ITrip): IPayloadAction<ITrip> => {
+export const tripUpdate = (
+  payload: ITripUpdatePayload
+): IPayloadAction<ITripUpdatePayload> => {
   return { type: actions.TRIP_UPDATE, payload: payload };
 };
 
@@ -126,20 +124,27 @@ const tripFetchEffect = (
 };
 
 const tripUpdateffect = (
-  action$: Observable<IPayloadAction<ITrip>>,
+  action$: Observable<IPayloadAction<ITripUpdatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.TRIP_UPDATE;
     }),
-    mergeMap((action) => {
+    withLatestFrom(state$),
+    mergeMap(([action, state]) => {
+      const trip = getTrip(state);
       return from(
         axios
-          .put("/trips/" + action.payload.id, action.payload)
+          .put("/trips/" + trip.id, action.payload)
           .then((response) => {
-            if (response.status === 204) {
-              return response.data;
+            if (response.status === 200) {
+              return {
+                userTrips: response.data,
+                trip: response.data.find(
+                  (tripPayload: ITrip) => tripPayload.id === trip.id
+                ),
+              };
             }
           })
           .catch((error) => {
@@ -151,8 +156,9 @@ const tripUpdateffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => tripStore(data)),
-    tap(() => userTripsFetch())
+    switchMap((data) =>
+      of(userTripsStore(data?.userTrips), tripStore(data?.trip))
+    )
   );
 };
 

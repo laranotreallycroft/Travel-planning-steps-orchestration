@@ -1,10 +1,17 @@
 import { connect } from "react-redux";
 import TripSettingsView from "./TripSettingsView";
+import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
+import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
+import { ITrip } from "../../../model/trip/Trip";
 
 export interface ITripSettingsContainerOwnProps {}
 
-export interface ITripSettingsContainerStateProps {}
-export interface ITripSettingsContainerDispatchProps {}
+export interface ITripSettingsContainerStateProps {
+  trip: ITrip;
+}
+export interface ITripSettingsContainerDispatchProps {
+  tripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+}
 type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
   ITripSettingsContainerStateProps &
   ITripSettingsContainerDispatchProps;
@@ -12,14 +19,19 @@ type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
 const TripSettingsContainer: React.FC<ITripSettingsContainerProps> = (
   props: ITripSettingsContainerProps
 ) => {
-  return <TripSettingsView />;
+  return <TripSettingsView trip={props.trip} onTripUpdate={props.tripUpdate} />;
 };
 
-const mapStateToProps = (state: any): ITripSettingsContainerStateProps => ({});
+const mapStateToProps = (state: any): ITripSettingsContainerStateProps => ({
+  trip: TripBusinessStore.selectors.getTrip(state),
+});
 
 const mapDispatchToProps = (
   dispatch: any
-): ITripSettingsContainerDispatchProps => ({});
+): ITripSettingsContainerDispatchProps => ({
+  tripUpdate: (tripUpdatePayload: ITripUpdatePayload) =>
+    dispatch(TripBusinessStore.actions.tripUpdate(tripUpdatePayload)),
+});
 
 export default connect<
   ITripSettingsContainerStateProps,

@@ -41,7 +41,6 @@ const HomeLayoutViewHeader: React.FC<IHomeLayoutViewHeaderProps> = (
           ],
     [props.isUserLoggedIn]
   );
-
   return (
     <Row align={"middle"} gutter={[16, 16]}>
       <Col xs={0} sm={10} md={6} lg={6} xl={4}>
