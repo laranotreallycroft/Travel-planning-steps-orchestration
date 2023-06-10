@@ -153,7 +153,11 @@ public class ItineraryController {
 			// TODO REAL TIME
 			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
 		}
+		if(dateTime.toLocalDate()!=itinerary.getDate()) {
+			return ResponseEntity.badRequest()
+					.body("This route would take more than a day. Try removing some stops.");
 
+		}
 		trip.addItinerary(itinerary);
 		tripRepository.save(trip);
 		return ResponseEntity.ok(trip);
@@ -205,6 +209,11 @@ public class ItineraryController {
 
 			// TODO REAL TIME
 			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
+		}
+		if(dateTime.toLocalDate()!=itinerary.getDate()) {
+			return ResponseEntity.badRequest()
+					.body("This route would take more than a day. Try removing some stops.");
+
 		}
 		itineraryRepository.save(itinerary);
 		return ResponseEntity.ok(itinerary.getTrip());

@@ -1,3 +1,4 @@
 .dragAndDropTable__table {
     overflow: auto;
+    z-index: 10
 }

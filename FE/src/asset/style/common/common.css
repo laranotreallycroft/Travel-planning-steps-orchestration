@@ -100,7 +100,6 @@
 
 }
 
-
 .font-neutral {
     font-family: "ArcherBold";
     margin: 0;
@@ -149,4 +148,9 @@
 
 .bold {
     font-weight: bold;
+}
+
+.z-index-10000 {
+    z-index: 10000 !important;
+    background-color: aqua;
 }

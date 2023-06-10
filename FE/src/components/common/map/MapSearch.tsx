@@ -1,10 +1,10 @@
-import { Select } from "antd";
+import { Row, Select } from "antd";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { useCallback, useState } from "react";
-import { initMap } from "./utils";
 import { debounce } from "lodash";
+import { useCallback, useState } from "react";
 import { IGeosearchPayload } from "./MapElement";
-
+import { initMap } from "./utils";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 export interface IMapSearchOwnProps {
   onSelectLocation: (value: string) => void;
   showValueAfterSearch?: boolean;
@@ -54,6 +54,12 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
           key: location.raw?.place_id,
         };
       })}
+      notFoundContent={
+        <Row justify={"center"}>
+          <SentimentVeryDissatisfiedIcon />
+          No location found
+        </Row>
+      }
       className="fullWidth"
     />
   );
