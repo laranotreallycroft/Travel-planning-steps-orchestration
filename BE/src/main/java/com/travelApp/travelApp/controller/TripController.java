@@ -17,6 +17,7 @@ import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.packingList.PackingListPayload;
 import com.travelApp.travelApp.model.payload.trip.TripPayload;
+import com.travelApp.travelApp.model.payload.trip.TripSettingsPayload;
 import com.travelApp.travelApp.repository.PackingListCheckedRepository;
 import com.travelApp.travelApp.repository.PackingListRepository;
 import com.travelApp.travelApp.repository.TripRepository;
@@ -64,16 +65,13 @@ public class TripController {
 	}
 
 	@PutMapping("/{tripId}")
-	public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId, @RequestBody TripPayload tripPayload)
+	public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId, @RequestBody TripSettingsPayload tripPayload)
 			throws URISyntaxException {
 		Trip trip = tripRepository.findById(tripId).orElse(null);
 		if (trip != null) {
 			trip.setName(tripPayload.getName());
-			trip.setDateFrom(tripPayload.getDateFrom());
-			trip.setDateTo(tripPayload.getDateTo());
-			trip.setLocation(tripPayload.getLocation().toPoint());
 			tripRepository.save(trip);
-			return ResponseEntity.ok(trip);
+			return ResponseEntity.ok(trip.getUser().getTrips());
 
 		}
 

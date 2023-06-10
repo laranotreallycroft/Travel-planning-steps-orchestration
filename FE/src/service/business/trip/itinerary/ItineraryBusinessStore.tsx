@@ -187,7 +187,7 @@ const itineraryScheduleUpdateEffect = (
               notificationService.success("Itinerary successfully updated");
               return {
                 trip: response.data,
-                itinerary: response.data.find(
+                itinerary: response.data.itineraries.find(
                   (itineraryPayload: IItinerary) =>
                     itineraryPayload.id === itinerary.id
                 ),

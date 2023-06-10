@@ -63,7 +63,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
     [schedulerData]
   );
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const mappedPayload = schedulerData.map((element) => {
       return {
         ...element,
@@ -73,7 +73,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
     });
 
     props.itineraryScheduleUpdate(mappedPayload);
-  };
+  }, [schedulerData]);
 
   return (
     <Paper>
