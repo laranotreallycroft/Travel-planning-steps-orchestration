@@ -1,11 +1,12 @@
 package com.travelApp.travelApp.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,19 +19,22 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "itinerary_elements")
-public class ItineraryElement {
+public class ItineraryElement implements Comparable<ItineraryElement> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String label;
 	private Point location;
-	
-	@Column(name = "travel_duration")
-	private Integer travelDuration;
 
-	@Column(name = "date_time")
-	private LocalDateTime dateTime;
+	@Column(name = "start_date")
+	private Timestamp startDate;
+	@Column(name = "end_date")
+	private Timestamp endDate;
+	@Column(name = "commute_start_date")
+	private Timestamp commuteStartDate;
+	@Column(name = "commute_end_date")
+	private Timestamp commuteEndDate;
 
 	@ManyToOne
 	@JoinColumn(name = "itinerary_id")
@@ -41,22 +45,48 @@ public class ItineraryElement {
 
 	}
 
-	public ItineraryElement(String label, Point location, Integer travelDuration, LocalDateTime dateTime,
-			Itinerary itinerary) {
+	public ItineraryElement(String label, Point location, Timestamp commuteStartDate, Timestamp commuteEndDate,
+			Timestamp startDate, Timestamp endDate, Itinerary itinerary) {
 		super();
 		this.label = label;
 		this.location = location;
-		this.travelDuration = travelDuration;
-		this.dateTime = dateTime;
+		this.commuteStartDate = commuteStartDate;
+		this.commuteEndDate = commuteEndDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.itinerary = itinerary;
 	}
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
+	public Timestamp getStartDate() {
+		return startDate;
 	}
 
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
+	public void setStartDate(Timestamp startDate) {
+		this.startDate = startDate;
+	}
+
+	public Timestamp getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Timestamp endDate) {
+		this.endDate = endDate;
+	}
+
+	public Timestamp getCommuteStartDate() {
+		return commuteStartDate;
+	}
+
+	public void setCommuteStartDate(Timestamp commuteStartDate) {
+		this.commuteStartDate = commuteStartDate;
+	}
+
+	public Timestamp getCommuteEndDate() {
+		return commuteEndDate;
+	}
+
+	public void setCommuteEndDate(Timestamp commuteEndDate) {
+		this.commuteEndDate = commuteEndDate;
 	}
 
 	public Long getId() {
@@ -83,20 +113,17 @@ public class ItineraryElement {
 		this.label = label;
 	}
 
-	public Integer getTravelDuration() {
-		return travelDuration;
-	}
-
-	public void setTravelDuration(Integer tripTime) {
-		this.travelDuration = tripTime;
-	}
-
 	public Itinerary getItinerary() {
 		return itinerary;
 	}
 
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
+	}
+
+	@Override
+	public int compareTo(ItineraryElement o) {
+		return this.startDate.compareTo(getStartDate());
 	}
 
 }

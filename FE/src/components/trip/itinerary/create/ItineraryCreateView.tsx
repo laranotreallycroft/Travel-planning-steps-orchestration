@@ -1,6 +1,5 @@
 import { Form, Steps } from "antd";
 import { useMemo, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { ITrip } from "../../../../model/trip/Trip";
 import { IItinerarySettings } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { ITrackableAction } from "../../../../service/util/trackAction";
@@ -82,9 +81,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
       form={form}
       onFinish={handleFinish}
       initialValues={{
-        locations: [
-          { ...props.trip.location, label: props.trip.name, id: uuidv4() },
-        ],
+        locations: [],
         routeOptions: { optimize: false, vehicleProfile: "driving-car" },
       }}
       className="fullSize"

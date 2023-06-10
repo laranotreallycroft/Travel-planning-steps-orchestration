@@ -71,6 +71,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
         endDate: dayjs(element.endDate).toISOString(),
       };
     });
+
     props.itineraryScheduleUpdate(mappedPayload);
   };
 
@@ -103,7 +104,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
         />
 
         <DragDropProvider
-          allowDrag={() => props.isEditing}
+          allowDrag={() => false}
           allowResize={() => props.isEditing}
         />
       </Scheduler>

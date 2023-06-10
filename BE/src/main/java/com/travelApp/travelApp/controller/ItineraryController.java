@@ -8,11 +8,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,7 @@ import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryRoutingPayload;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
+import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsPayload;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsResponse;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.Segment;
@@ -55,12 +59,12 @@ public class ItineraryController {
 		this.itineraryElementRepository = itineraryElementRepository;
 	}
 
-	public List<Step> getOpenRouteServiceOptimization(ItineraryRoutingPayload itineraryPayload) {
+	public List<Step> getOpenRouteServiceOptimization(ItineraryRoutingPayload itineraryPayload, Coordinate origin) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			var client = HttpClient.newHttpClient();
 			OpenRouteServiceOptimizationPayload openRouteServiceOptimizationPayload = new OpenRouteServiceOptimizationPayload(
-					itineraryPayload);
+					itineraryPayload, origin);
 			var request = HttpRequest.newBuilder().uri(new URI("https://api.openrouteservice.org/optimization"))
 					.headers("Authorization", "5b3ce3597851110001cf624845f0c2fc3f004ad1bd965773236bfa15", "accept",
 							"application/json", "Content-Type", "application/json")
@@ -70,8 +74,6 @@ public class ItineraryController {
 			OpenRouteServiceOptimizationResponse openRouteServiceResponse = mapper.readValue(response.body(),
 					OpenRouteServiceOptimizationResponse.class);
 
-			// pair new route with labels
-			// remove redundant origin and destination steps
 			return openRouteServiceResponse.getRoutes().get(0).getSteps();
 		} catch (IOException | URISyntaxException | InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -82,12 +84,13 @@ public class ItineraryController {
 
 	}
 
-	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryRoutingPayload itineraryPayload) {
+	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryRoutingPayload itineraryPayload,
+			Coordinate origin) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			var client = HttpClient.newHttpClient();
 			OpenRouteServiceDirectionsPayload openRouteServiceDirectionsPayload = new OpenRouteServiceDirectionsPayload(
-					itineraryPayload);
+					itineraryPayload, origin);
 			RouteOptions routeOptions = itineraryPayload.getRouteOptions();
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(new URI("https://api.openrouteservice.org/v2/directions/" + routeOptions.getVehicleProfile()))
@@ -112,7 +115,7 @@ public class ItineraryController {
 		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
 
 		if (itineraryPayload.getRouteOptions().isOptimize()) {
-			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload);
+			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, trip.getLocation());
 			if (steps == null)
 				return ResponseEntity.badRequest()
 						.body("Unable to find route between points. Try changing the method of transportation.");
@@ -120,7 +123,8 @@ public class ItineraryController {
 
 		}
 
-		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload);
+		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload,
+				trip.getLocation());
 		if (!response.routeFound())
 			return ResponseEntity.badRequest()
 					.body("Unable to find route between points. Try changing the method of transportation.");
@@ -129,26 +133,25 @@ public class ItineraryController {
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
 		Itinerary itinerary = new Itinerary(trip, itineraryPayload.getDate(), linestring);
 
+		Integer timeAtLocation = 60;
 		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
 		LocalDateTime dateTime = itinerary.getDate().atTime(time);
 		List<Segment> segments = response.getSegments();
 		List<GeosearchPayload> locations = itineraryPayload.getLocations();
-		// origin time is 0 so create it separately
-		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-				locations.get(0).toPoint(), 0, dateTime, itinerary);
 
-		itinerary.addItineraryElement(firstItineraryElement);
-	
 		// pair travel durations with labels
-		for (int i = 0; i < segments.size(); i++) {
-			// origin is not returned as segment so payload is i+1
-			GeosearchPayload payloadLocation = locations.get(i + 1);
+		for (int i = 0; i < segments.size() - 1; i++) {
+			GeosearchPayload payloadLocation = locations.get(i);
 			int durationMinutes = (int) segments.get(i).getDuration() / 60;
+
 			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
+					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
 			itinerary.addItineraryElement(itineraryElement);
 			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes+60);
+			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
 		}
 
 		trip.addItinerary(itinerary);
@@ -163,7 +166,7 @@ public class ItineraryController {
 		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
 
 		if (itineraryPayload.getRouteOptions().isOptimize()) {
-			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload);
+			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, itinerary.getTrip().getLocation());
 			if (steps == null)
 				return ResponseEntity.badRequest()
 						.body("Unable to find route between points. Try changing the method of transportation.");
@@ -171,7 +174,8 @@ public class ItineraryController {
 
 		}
 
-		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload);
+		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload,
+				itinerary.getTrip().getLocation());
 		if (!response.routeFound())
 			return ResponseEntity.badRequest()
 					.body("Unable to find route between points. Try changing the method of transportation.");
@@ -180,78 +184,58 @@ public class ItineraryController {
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
 		itinerary.setRouteGeometry(linestring);
 		itinerary.getItineraryElements().clear();
-	
+
+		Integer timeAtLocation = 60;
 		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
 		LocalDateTime dateTime = itinerary.getDate().atTime(time);
+
 		List<Segment> segments = response.getSegments();
 		List<GeosearchPayload> locations = itineraryPayload.getLocations();
-		// origin time is 0 so create it separately
-		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-				locations.get(0).toPoint(), 0, dateTime, itinerary);
-		itinerary.addItineraryElement(firstItineraryElement);
-	
+
 		// pair travel durations with labels
-		for (int i = 0; i < segments.size(); i++) {
-			// origin is not returned as segment so payload is i+1
-			GeosearchPayload payloadLocation = locations.get(i + 1);
+		for (int i = 0; i < segments.size() - 1; i++) {
+			GeosearchPayload payloadLocation = locations.get(i);
 			int durationMinutes = (int) segments.get(i).getDuration() / 60;
 			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
+					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
 			itinerary.addItineraryElement(itineraryElement);
 
 			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes+60);
+			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
 		}
 		itineraryRepository.save(itinerary);
 		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
+
 	@PutMapping("/{itineraryId}/schedule")
 	public ResponseEntity updateItinerarySchedule(@PathVariable(value = "itineraryId") Long itineraryId,
-			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
+			@RequestBody List<ScheduleElement> scheduleElements) throws URISyntaxException {
+
 		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+		for (ScheduleElement scheduleElement : scheduleElements) {
 
-		if (itineraryPayload.getRouteOptions().isOptimize()) {
-			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload);
-			if (steps == null)
-				return ResponseEntity.badRequest()
-						.body("Unable to find route between points. Try changing the method of transportation.");
-			itineraryPayload.sortLocations(steps);
+			ItineraryElement itineraryElement = itineraryElementRepository
+					.findById(
+							Long.parseLong(scheduleElement.getId().substring(0, scheduleElement.getId().length() - 1)))
+					.orElse(null);
+
+			Long previousCommuteLength = itineraryElement.getCommuteEndDate().getTime()
+					- itineraryElement.getCommuteStartDate().getTime();
+
+			itineraryElement.setCommuteStartDate(
+					new Timestamp(scheduleElement.getStartDate().getTime() - previousCommuteLength));
+			itineraryElement.setCommuteEndDate(scheduleElement.getStartDate());
+			itineraryElement.setStartDate(scheduleElement.getStartDate());
+			itineraryElement.setEndDate(scheduleElement.getEndDate());
+			itineraryElementRepository.save(itineraryElement);
 
 		}
+		itinerary.getItineraryElements().sort(Comparator.comparing(ItineraryElement::getStartDate));
 
-		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload);
-		if (!response.routeFound())
-			return ResponseEntity.badRequest()
-					.body("Unable to find route between points. Try changing the method of transportation.");
-
-		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
-		LineString linestring = GeometryDecoder.convert(decodedGeometry);
-		itinerary.setRouteGeometry(linestring);
-		itinerary.getItineraryElements().clear();
-	
-		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
-		LocalDateTime dateTime = itinerary.getDate().atTime(time);
-		List<Segment> segments = response.getSegments();
-		List<GeosearchPayload> locations = itineraryPayload.getLocations();
-		// origin time is 0 so create it separately
-		ItineraryElement firstItineraryElement = new ItineraryElement(locations.get(0).getLabel(),
-				locations.get(0).toPoint(), 0, dateTime, itinerary);
-		itinerary.addItineraryElement(firstItineraryElement);
-	
-		// pair travel durations with labels
-		for (int i = 0; i < segments.size(); i++) {
-			// origin is not returned as segment so payload is i+1
-			GeosearchPayload payloadLocation = locations.get(i + 1);
-			int durationMinutes = (int) segments.get(i).getDuration() / 60;
-			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), durationMinutes, dateTime.plusMinutes(durationMinutes), itinerary);
-			itinerary.addItineraryElement(itineraryElement);
-
-			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes+60);
-		}
-		itineraryRepository.save(itinerary);
 		return ResponseEntity.ok(itinerary.getTrip());
 
 	}

@@ -53,11 +53,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   );
 
   const handleNext = () => {
-    if (locations.length >= 2) props.onNextStep();
+    if (locations.length > 0) props.onNextStep();
     else
       notificationService.error(
         "Unable to generate route",
-        "Please select at least two stops"
+        "Please select at least one stop"
       );
   };
   return (

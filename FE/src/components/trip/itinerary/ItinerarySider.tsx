@@ -21,7 +21,6 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
   const [isEditing, setIsEditing] = useState<boolean>(true);
 
   useEffect(() => {
-    setScheduleView(false);
     setIsEditing(false);
   }, [props.itinerary]);
 

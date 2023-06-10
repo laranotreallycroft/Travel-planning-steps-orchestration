@@ -38,9 +38,6 @@ export const mapDataToScheduler = (
     destinationData[index] = destination;
   });
 
-  commuteData.shift();
-  destinationData.shift();
-  destinationData.pop();
   if (!isEditing) return [...destinationData, ...commuteData];
   else return destinationData;
 };
@@ -62,36 +59,39 @@ export const _moveRecursively = (
   const startDate = changed.startDate!;
   const endDate = changed.endDate!;
   data.forEach((appointment) => {
-    if (changed.id !== appointment.id && String(appointment.id).endsWith("D"))
-      if (endDate > appointment.startDate && endDate < appointment.endDate!) {
-        const offset = dayjs(endDate).diff(appointment.startDate);
+    const appointmentStartDate = dayjs(appointment.startDate).toDate();
+    const appointmentEndDate = dayjs(appointment.endDate!).toDate();
 
-        appointment.endDate = dayjs(appointment.endDate).add(offset).toDate();
-        appointment.startDate = dayjs(appointment.startDate)
+    if (changed.id !== appointment.id)
+      if (endDate > appointmentStartDate && endDate < appointmentEndDate) {
+        const offset = dayjs(endDate).diff(appointmentStartDate);
+
+        appointment.endDate = dayjs(appointmentEndDate).add(offset).toDate();
+        appointment.startDate = dayjs(appointmentStartDate)
           .add(offset)
           .toDate();
         _moveRecursively(appointment, data);
       } else if (
-        startDate >= appointment.startDate &&
-        startDate < appointment.endDate!
+        startDate >= appointmentStartDate &&
+        startDate < appointmentEndDate
       ) {
-        const offset = dayjs(appointment.endDate).diff(startDate);
+        const offset = dayjs(appointmentEndDate).diff(startDate);
 
-        appointment.endDate = dayjs(appointment.endDate)
+        appointment.endDate = dayjs(appointmentEndDate)
           .subtract(offset)
           .toDate();
-        appointment.startDate = dayjs(appointment.startDate)
+        appointment.startDate = dayjs(appointmentStartDate)
           .subtract(offset)
           .toDate();
         _moveRecursively(appointment, data);
       } else if (
-        startDate <= appointment.startDate &&
-        endDate >= appointment.endDate!
+        startDate <= appointmentStartDate &&
+        endDate >= appointmentEndDate
       ) {
-        const offset = dayjs(endDate).diff(appointment.startDate);
+        const offset = dayjs(endDate).diff(appointmentStartDate);
 
-        appointment.endDate = dayjs(appointment.endDate).add(offset).toDate();
-        appointment.startDate = dayjs(appointment.startDate)
+        appointment.endDate = dayjs(appointmentEndDate).add(offset).toDate();
+        appointment.startDate = dayjs(appointmentStartDate)
           .add(offset)
           .toDate();
         _moveRecursively(appointment, data);
