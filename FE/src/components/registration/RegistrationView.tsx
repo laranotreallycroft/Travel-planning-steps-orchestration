@@ -67,11 +67,11 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
     <Row className="fullScreen">
       <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form">
         <Row justify={"center"}>
-          <Title className="loginView__title">Travel app</Title>
+          <Title className="loginView__title">forget-me-not</Title>
         </Row>
         <Row justify={"center"}>
           <Title level={3} className="loginView__title">
-            Welcome to Travel app
+            Welcome to forget-me-not
           </Title>
         </Row>
         <Form<IRegistrationForm>
