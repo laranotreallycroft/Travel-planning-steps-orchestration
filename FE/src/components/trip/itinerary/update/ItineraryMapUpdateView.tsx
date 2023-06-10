@@ -40,15 +40,11 @@ const ItineraryMapUpdateView: React.FC<IItineraryMapUpdateViewProps> = (
       .track()
       .subscribe({
         next: () => {
-          handleModalClose();
+          setCurrentStep(0);
+          form.resetFields();
         },
         error: () => {},
       });
-  };
-
-  const handleModalClose = () => {
-    setCurrentStep(0);
-    form.resetFields();
   };
 
   const steps = useMemo(
