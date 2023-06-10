@@ -1,49 +1,46 @@
-import { Button, Form, Input, Popconfirm, Row } from "antd";
+import { Button, DatePicker, Form, Input, Popconfirm, Row } from "antd";
 import Title from "antd/es/typography/Title";
+import dayjs, { Dayjs } from "dayjs";
+import { RangeValue } from "rc-picker/lib/interface";
 import React, { useEffect } from "react";
 import { ITrip } from "../../../model/trip/Trip";
-import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
 
 export interface ITripSettingsViewOwnProps {
   trip: ITrip;
-  onTripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  onTripUpdate: (tripUpdatePayload: ITripSettingsForm) => void;
   onTripDelete: () => void;
 }
 
 type ITripSettingsViewProps = ITripSettingsViewOwnProps;
 
+export interface ITripSettingsForm {
+  name: string;
+  dateRange: RangeValue<Dayjs>;
+}
 const TripSettingsView: React.FC<ITripSettingsViewProps> = (
   props: ITripSettingsViewProps
 ) => {
-  const [form] = Form.useForm<ITripUpdatePayload>();
+  const [form] = Form.useForm<ITripSettingsForm>();
   useEffect(() => {
-    form.setFieldsValue(props.trip);
+    form.setFieldsValue({
+      name: props.trip.name,
+      dateRange: [dayjs(props.trip.dateFrom), dayjs(props.trip.dateTo)],
+    });
   }, [props.trip]);
 
-  const handleFinish = (values: ITripUpdatePayload) => {
+  const handleFinish = (values: ITripSettingsForm) => {
     props.onTripUpdate(values);
   };
   return (
-    <Form<ITripUpdatePayload>
+    <Form<ITripSettingsForm>
       form={form}
       onFinish={handleFinish}
-      initialValues={props.trip}
+      initialValues={{
+        name: props.trip.name,
+        dateRange: [dayjs(props.trip.dateFrom), dayjs(props.trip.dateTo)],
+      }}
     >
       <Title level={4}>Trip settings</Title>
-      <Row justify={"end"}>
-        <Button type="primary" onClick={form.submit}>
-          Save
-        </Button>
-      </Row>
-
-      <Form.Item
-        name={"name"}
-        label={"Trip name"}
-        className="tripSettingsView__formItem"
-      >
-        <Input />
-      </Form.Item>
-
       <Row justify={"end"}>
         <Popconfirm
           title="Delete trip"
@@ -60,6 +57,17 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
           Save
         </Button>
       </Row>
+
+      <Form.Item
+        name={"name"}
+        label={"Trip name"}
+        className="tripSettingsView__formItem"
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item name={"dateRange"} label={"Travel dates"}>
+        <DatePicker.RangePicker allowClear={false} />
+      </Form.Item>
     </Form>
   );
 };

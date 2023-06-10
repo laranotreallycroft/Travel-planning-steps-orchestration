@@ -5,15 +5,15 @@ import { IItinerary } from "./itinerary/Itinerary";
 export interface ITrip {
   id: number;
   name: string;
-  dateFrom: string;
-  dateTo: string;
+  dateFrom: Date;
+  dateTo: Date;
   location: ICoordinates;
   packingList?: IPackingList;
   packingListChecked?: IPackingList;
   itineraries?: IItinerary[];
 }
 
-export interface ITripCreatePayload {
+export interface ITripPayload {
   name: string;
   dateFrom: string;
   dateTo: string;

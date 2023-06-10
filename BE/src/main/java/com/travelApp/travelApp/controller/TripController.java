@@ -71,6 +71,8 @@ public class TripController {
 		Trip trip = tripRepository.findById(tripId).orElse(null);
 		if (trip != null) {
 			trip.setName(tripPayload.getName());
+			trip.setDateFrom(tripPayload.getDateFrom());
+			trip.setDateTo(tripPayload.getDateTo());
 			tripRepository.save(trip);
 			return ResponseEntity.ok(trip.getUser().getTrips());
 

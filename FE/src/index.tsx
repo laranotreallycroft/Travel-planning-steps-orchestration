@@ -29,6 +29,8 @@ root.render(
             colorPrimary: "#6096BA",
             colorText: "#274C77",
             colorInfo: "#A3CEF1",
+            colorWarning: "#f8d410",
+            colorError: "#c9424d",
             fontFamily: "Verdana",
             fontSize: 16,
           },

@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
-import TripSettingsView from "./TripSettingsView";
-import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
+import TripSettingsView, { ITripSettingsForm } from "./TripSettingsView";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { ITrip } from "../../../model/trip/Trip";
+import { ITrip, ITripPayload } from "../../../model/trip/Trip";
+import { useCallback } from "react";
 
 export interface ITripSettingsContainerOwnProps {}
 
@@ -10,7 +10,7 @@ export interface ITripSettingsContainerStateProps {
   trip: ITrip;
 }
 export interface ITripSettingsContainerDispatchProps {
-  tripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  tripUpdate: (tripUpdatePayload: ITripPayload) => void;
   tripDelete: () => void;
 }
 type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
@@ -20,10 +20,20 @@ type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
 const TripSettingsContainer: React.FC<ITripSettingsContainerProps> = (
   props: ITripSettingsContainerProps
 ) => {
+  const handleTripUpdate = useCallback((values: ITripSettingsForm) => {
+    const payload: ITripPayload = {
+      name: values.name,
+      dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
+      dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
+      location: { x: 1, y: 1 },
+    };
+
+    props.tripUpdate(payload);
+  }, []);
   return (
     <TripSettingsView
       trip={props.trip}
-      onTripUpdate={props.tripUpdate}
+      onTripUpdate={handleTripUpdate}
       onTripDelete={props.tripDelete}
     />
   );
@@ -36,7 +46,7 @@ const mapStateToProps = (state: any): ITripSettingsContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): ITripSettingsContainerDispatchProps => ({
-  tripUpdate: (tripUpdatePayload: ITripUpdatePayload) =>
+  tripUpdate: (tripUpdatePayload: ITripPayload) =>
     dispatch(TripBusinessStore.actions.tripUpdate(tripUpdatePayload)),
   tripDelete: () => dispatch(TripBusinessStore.actions.tripDelete()),
 });

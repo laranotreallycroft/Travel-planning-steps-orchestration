@@ -9,8 +9,7 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs";
-import { ITrip, ITripCreatePayload } from "../../../model/trip/Trip";
-import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
+import { ITrip, ITripPayload } from "../../../model/trip/Trip";
 import notificationService from "../../util/notificationService";
 import trackAction, { IAction } from "../../util/trackAction";
 import { IIdPayload, IPayloadAction } from "../common/types";
@@ -33,8 +32,8 @@ const actions = {
 };
 
 export const tripCreate = (
-  payload: ITripCreatePayload
-): IPayloadAction<ITripCreatePayload> => {
+  payload: ITripPayload
+): IPayloadAction<ITripPayload> => {
   return { type: actions.TRIP_CREATE, payload: payload };
 };
 
@@ -43,8 +42,8 @@ export const tripFetch = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
 };
 
 export const tripUpdate = (
-  payload: ITripUpdatePayload
-): IPayloadAction<ITripUpdatePayload> => {
+  payload: ITripPayload
+): IPayloadAction<ITripPayload> => {
   return { type: actions.TRIP_UPDATE, payload: payload };
 };
 
@@ -64,7 +63,7 @@ export const tripClear = (): IAction => {
 // -------------------- Side-effects
 
 const tripCreateEffect = (
-  action$: Observable<IPayloadAction<ITripCreatePayload>>,
+  action$: Observable<IPayloadAction<ITripPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -129,7 +128,7 @@ const tripFetchEffect = (
 };
 
 const tripUpdateffect = (
-  action$: Observable<IPayloadAction<ITripUpdatePayload>>,
+  action$: Observable<IPayloadAction<ITripPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -144,6 +143,7 @@ const tripUpdateffect = (
           .put("/trips/" + trip.id, action.payload)
           .then((response) => {
             if (response.status === 200) {
+              notificationService.success("Trip successfully changed");
               return {
                 userTrips: response.data,
                 trip: response.data.find(
