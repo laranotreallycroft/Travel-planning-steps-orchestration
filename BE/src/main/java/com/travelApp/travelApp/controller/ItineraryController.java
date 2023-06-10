@@ -234,8 +234,7 @@ public class ItineraryController {
 			itineraryElementRepository.save(itineraryElement);
 
 		}
-		itinerary.getItineraryElements().sort(Comparator.comparing(ItineraryElement::getStartDate));
-
+		
 		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
