@@ -15,6 +15,7 @@ export interface IItineraryContainerStateProps {
 export interface IItineraryContainerDispatchProps {
   itineraryStore: (itineraryRoutePayload: IItinerary) => void;
   itineraryClear: () => void;
+  itineraryDelete: () => void;
 }
 type IItineraryContainerProps = IItineraryContainerOwnProps &
   IItineraryContainerStateProps &
@@ -32,6 +33,7 @@ const ItineraryContainer: React.FC<IItineraryContainerProps> = (
       itineraryList={props.trip.itineraries}
       itinerary={props.itinerary}
       onItinerarySelect={handleItinerarySelect}
+      onItineraryDelete={props.itineraryDelete}
     />
   );
 };
@@ -48,6 +50,8 @@ const mapDispatchToProps = (
     dispatch(ItineraryBusinessStore.actions.itineraryStore(itineraryPayload)),
   itineraryClear: () =>
     dispatch(ItineraryBusinessStore.actions.itineraryClear()),
+  itineraryDelete: () =>
+    dispatch(ItineraryBusinessStore.actions.itineraryDelete()),
 });
 
 export default connect<

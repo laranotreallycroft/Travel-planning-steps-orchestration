@@ -46,6 +46,7 @@ const actions = {
   ITINERARY_CREATE: "ITINERARY_CREATE",
   ITINERARY_ROUTE_UPDATE: "ITINERARY_ROUTE_UPDATE",
   ITINERARY_SCHEDULE_UPDATE: "ITINERARY_SCHEDULE_UPDATE",
+  ITINERARY_DELETE: "ITINERARY_DELETE",
   ITINERARY_STORE: "ITINERARY_STORE",
   ITINERARY_CLEAR: "ITINERARY_CLEAR",
 };
@@ -67,7 +68,9 @@ export const itineraryScheduleUpdate = (
 ): IPayloadAction<AppointmentModel[]> => {
   return { type: actions.ITINERARY_SCHEDULE_UPDATE, payload: payload };
 };
-
+export const itineraryDelete = (): IAction => {
+  return { type: actions.ITINERARY_DELETE };
+};
 export const itineraryStore = (
   payload: IItinerary
 ): IPayloadAction<IItinerary> => {
@@ -213,6 +216,44 @@ const itineraryScheduleUpdateEffect = (
     })
   );
 };
+
+const itineraryDeleteEffect = (
+  action$: Observable<IAction>,
+  state$: Observable<any>
+) => {
+  return action$.pipe(
+    filter((action) => {
+      return action.type === actions.ITINERARY_DELETE;
+    }),
+    withLatestFrom(state$),
+    mergeMap(([action, state]) => {
+      const itinerary = getItinerary(state);
+      return from(
+        axios
+          .delete(`/itinerary/${itinerary.id}`)
+          .then((response) => {
+            if (response.status === 200) {
+              notificationService.success("Itinerary successfully deleted");
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to delete itinerary",
+              error.response.data
+            );
+            throw error;
+          })
+      ).pipe(trackAction(action));
+    }),
+    filter((data) => data !== undefined),
+    switchMap((data) => of(tripStore(data), itineraryClear())),
+
+    catchError((error: any, o: Observable<any>) => {
+      return o;
+    })
+  );
+};
 // -
 // -------------------- Reducers
 
@@ -235,6 +276,7 @@ export const ItineraryBusinessStore = {
     itineraryCreate,
     itineraryRouteUpdate,
     itineraryScheduleUpdate,
+    itineraryDelete,
     itineraryStore,
     itineraryClear,
   },
@@ -242,6 +284,7 @@ export const ItineraryBusinessStore = {
     itineraryCreateEffect,
     itineraryRouteUpdateEffect,
     itineraryScheduleUpdateEffect,
+    itineraryDeleteEffect,
   },
   reducers: { itinerary },
 };

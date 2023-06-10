@@ -17,6 +17,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelApp.travelApp.model.Itinerary;
 import com.travelApp.travelApp.model.ItineraryElement;
 import com.travelApp.travelApp.model.Trip;
+import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryRoutingPayload;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
@@ -247,5 +249,20 @@ public class ItineraryController {
 		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
+	
+	@DeleteMapping("/{itineraryId}")
+	public ResponseEntity deleteItinerary(@PathVariable(value = "itineraryId") Long itineraryId
+			) throws URISyntaxException {
 
+		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+		if (itinerary != null) {
+			Trip trip=itinerary.getTrip();
+			itineraryRepository.delete(itinerary);
+			return ResponseEntity.ok(trip);
+
+		}
+
+		return ResponseEntity.badRequest().body("Something went wrong");
+
+	}
 }

@@ -10,6 +10,7 @@ export interface IItineraryViewOwnProps {
   itineraryList?: IItinerary[];
   itinerary?: IItinerary;
   onItinerarySelect: (itinerary?: IItinerary) => void;
+  onItineraryDelete: () => void;
 }
 
 type IItineraryViewProps = IItineraryViewOwnProps;
@@ -64,7 +65,10 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
         </Col>
 
         {props.itinerary ? (
-          <ItinerarySider itinerary={props.itinerary} />
+          <ItinerarySider
+            itinerary={props.itinerary}
+            onItineraryDelete={props.onItineraryDelete}
+          />
         ) : (
           <Col span={18}>
             <ItineraryCreateContainer date={selectedDate} />

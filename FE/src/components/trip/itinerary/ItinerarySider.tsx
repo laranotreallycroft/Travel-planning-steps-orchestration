@@ -2,15 +2,16 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Button, Col, Radio, Row } from "antd";
+import { Button, Col, Popconfirm, Radio, Row } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import MapElement from "../../common/map/MapElement";
 import Schedule from "./schedule/Schedule";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 export interface IItineraryViewOwnProps {
   itinerary: IItinerary;
+  onItineraryDelete: () => void;
 }
 
 type IItineraryViewProps = IItineraryViewOwnProps;
@@ -48,6 +49,21 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
           icon={isEditing ? <CloseIcon /> : <EditIcon />}
           className="margin-left-sm margin-right-l"
         />
+        {!isEditing && (
+          <Popconfirm
+            title="Delete itinerary"
+            description="Are you sure to delete this itinerary?"
+            onConfirm={props.onItineraryDelete}
+            okText="Yes"
+            cancelText="No"
+            placement="topRight"
+          >
+            <Button
+              icon={<DeleteIcon />}
+              className={"itinerarySider__deleteButton"}
+            />
+          </Popconfirm>
+        )}
       </Row>
       <Row className="itinerarySider__sider">
         {scheduleView ? (
