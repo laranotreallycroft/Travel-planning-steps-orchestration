@@ -10,7 +10,9 @@ import MapElement, {
 } from "../../../common/map/MapElement";
 import MapSearch from "../../../common/map/MapSearch";
 import { IItineraryRoutingForm } from "./ItineraryCreateView";
+import { ITrip } from "../../../../model/trip/Trip";
 export interface IItineraryStopsViewOwnProps {
+  trip: ITrip;
   onNextStep: () => void;
 }
 
@@ -53,12 +55,24 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   );
 
   const handleNext = () => {
-    if (locations.length > 0) props.onNextStep();
-    else
+    if (locations.length === 0)
       notificationService.error(
         "Unable to generate route",
         "Please select at least one stop"
       );
+    else if (
+      locations.every((element) => {
+        return (
+          element.x === props.trip.location.x &&
+          element.y === props.trip.location.y
+        );
+      })
+    )
+      notificationService.error(
+        "Unable to generate route",
+        "All stops are the same as trip origin"
+      );
+    else props.onNextStep();
   };
   return (
     <Row justify={"space-between"} className="fullHeight">

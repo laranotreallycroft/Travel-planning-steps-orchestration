@@ -13,13 +13,13 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import { Paper } from "@mui/material";
 import { Button } from "antd";
+import dayjs from "dayjs";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
-import { mapDataToScheduler, moveRecursively } from "./utils";
 import { connect } from "react-redux";
+import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import { ItineraryBusinessStore } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import dayjs from "dayjs";
+import { mapDataToScheduler, moveRecursively } from "./utils";
 
 export interface IScheduleOwnProps {
   itinerary: IItinerary;

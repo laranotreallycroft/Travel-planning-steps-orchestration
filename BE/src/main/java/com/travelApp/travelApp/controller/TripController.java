@@ -3,6 +3,7 @@ package com.travelApp.travelApp.controller;
 import java.net.URISyntaxException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,6 +73,20 @@ public class TripController {
 			trip.setName(tripPayload.getName());
 			tripRepository.save(trip);
 			return ResponseEntity.ok(trip.getUser().getTrips());
+
+		}
+
+		return ResponseEntity.badRequest().body("Something went wrong");
+	}
+	
+	@DeleteMapping("/{tripId}")
+	public ResponseEntity deleteTrip(@PathVariable(value = "tripId") Long tripId)
+			throws URISyntaxException {
+		Trip trip = tripRepository.findById(tripId).orElse(null);
+		if (trip != null) {
+			User user=trip.getUser();
+			tripRepository.delete(trip);
+			return ResponseEntity.ok(user.getTrips());
 
 		}
 

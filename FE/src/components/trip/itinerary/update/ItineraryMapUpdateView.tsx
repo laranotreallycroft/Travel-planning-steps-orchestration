@@ -6,8 +6,10 @@ import { IItineraryRoutingForm } from "../create/ItineraryCreateView";
 import ItinerarySettingsView from "../create/ItinerarySettingsView";
 import ItineraryStopsView from "../create/ItineraryStopsView";
 import { IItineraryUpdatePayload } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
+import { ITrip } from "../../../../model/trip/Trip";
 
 export interface IItineraryMapUpdateViewOwnProps {
+  trip: ITrip;
   itinerary: IItinerary;
   onItineraryUpdate: (values: IItineraryUpdatePayload) => ITrackableAction;
 }
@@ -53,7 +55,9 @@ const ItineraryMapUpdateView: React.FC<IItineraryMapUpdateViewProps> = (
     () => [
       {
         title: "Select your stops",
-        content: <ItineraryStopsView onNextStep={handleNextStep} />,
+        content: (
+          <ItineraryStopsView onNextStep={handleNextStep} trip={props.trip} />
+        ),
       },
       {
         title: "Fine-tune your itinerary plan",

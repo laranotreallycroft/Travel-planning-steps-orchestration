@@ -27,6 +27,7 @@ const actions = {
   TRIP_CREATE: "TRIP_CREATE",
   TRIP_FETCH: "TRIP_FETCH",
   TRIP_UPDATE: "TRIP_UPDATE",
+  TRIP_DELETE: "TRIP_DELETE",
   TRIP_STORE: "TRIP_STORE",
   TRIP_CLEAR: "TRIP_CLEAR",
 };
@@ -45,6 +46,10 @@ export const tripUpdate = (
   payload: ITripUpdatePayload
 ): IPayloadAction<ITripUpdatePayload> => {
   return { type: actions.TRIP_UPDATE, payload: payload };
+};
+
+export const tripDelete = (): IAction => {
+  return { type: actions.TRIP_DELETE };
 };
 
 export const tripStore = (payload: ITrip): IPayloadAction<ITrip> => {
@@ -161,7 +166,37 @@ const tripUpdateffect = (
     )
   );
 };
-
+const tripDeleteffect = (
+  action$: Observable<IAction>,
+  state$: Observable<any>
+) => {
+  return action$.pipe(
+    filter((action) => {
+      return action.type === actions.TRIP_DELETE;
+    }),
+    withLatestFrom(state$),
+    mergeMap(([action, state]) => {
+      const trip = getTrip(state);
+      return from(
+        axios
+          .delete("/trips/" + trip.id)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to update trip",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
+    }),
+    filter((data) => data !== undefined),
+    switchMap((data) => of(userTripsStore(data), tripClear()))
+  );
+};
 // -
 // -------------------- Reducers
 
@@ -183,9 +218,15 @@ export const TripBusinessStore = {
     tripCreate,
     tripFetch,
     tripUpdate,
+    tripDelete,
     tripStore,
     tripClear,
   },
-  effects: { tripCreateEffect, tripFetchEffect, tripUpdateffect },
+  effects: {
+    tripCreateEffect,
+    tripFetchEffect,
+    tripUpdateffect,
+    tripDeleteffect,
+  },
   reducers: { trip },
 };

@@ -11,6 +11,7 @@ export interface ITripSettingsContainerStateProps {
 }
 export interface ITripSettingsContainerDispatchProps {
   tripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  tripDelete: () => void;
 }
 type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
   ITripSettingsContainerStateProps &
@@ -19,7 +20,13 @@ type ITripSettingsContainerProps = ITripSettingsContainerOwnProps &
 const TripSettingsContainer: React.FC<ITripSettingsContainerProps> = (
   props: ITripSettingsContainerProps
 ) => {
-  return <TripSettingsView trip={props.trip} onTripUpdate={props.tripUpdate} />;
+  return (
+    <TripSettingsView
+      trip={props.trip}
+      onTripUpdate={props.tripUpdate}
+      onTripDelete={props.tripDelete}
+    />
+  );
 };
 
 const mapStateToProps = (state: any): ITripSettingsContainerStateProps => ({
@@ -31,6 +38,7 @@ const mapDispatchToProps = (
 ): ITripSettingsContainerDispatchProps => ({
   tripUpdate: (tripUpdatePayload: ITripUpdatePayload) =>
     dispatch(TripBusinessStore.actions.tripUpdate(tripUpdatePayload)),
+  tripDelete: () => dispatch(TripBusinessStore.actions.tripDelete()),
 });
 
 export default connect<

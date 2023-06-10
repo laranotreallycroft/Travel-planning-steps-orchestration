@@ -11,10 +11,13 @@ import {
 } from "../../../../service/util/trackAction";
 import { IItineraryRoutingForm } from "../create/ItineraryCreateView";
 import ItineraryMapUpdateView from "./ItineraryMapUpdateView";
+import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
+import { ITrip } from "../../../../model/trip/Trip";
 
 export interface IItineraryMapUpdateContainerOwnProps {}
 
 export interface IItineraryMapUpdateContainerStateProps {
+  trip: ITrip;
   itinerary: IItinerary;
 }
 export interface IItineraryMapUpdateContainerDispatchProps {
@@ -35,6 +38,7 @@ const ItineraryMapUpdateContainer: React.FC<
 
   return (
     <ItineraryMapUpdateView
+      trip={props.trip}
       itinerary={props.itinerary}
       onItineraryUpdate={handleItineraryUpdate}
     />
@@ -45,6 +49,7 @@ const mapStateToProps = (
   state: any
 ): IItineraryMapUpdateContainerStateProps => ({
   itinerary: ItineraryBusinessStore.selectors.getItinerary(state),
+  trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Row } from "antd";
+import { Button, Form, Input, Popconfirm, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useEffect } from "react";
 import { ITrip } from "../../../model/trip/Trip";
@@ -7,6 +7,7 @@ import { ITripUpdatePayload } from "../../../model/trip/settings/Settings";
 export interface ITripSettingsViewOwnProps {
   trip: ITrip;
   onTripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  onTripDelete: () => void;
 }
 
 type ITripSettingsViewProps = ITripSettingsViewOwnProps;
@@ -44,7 +45,18 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (
       </Form.Item>
 
       <Row justify={"end"}>
-        <Button type="primary" onClick={form.submit}>
+        <Popconfirm
+          title="Delete trip"
+          description="Are you sure to delete this trip?"
+          onConfirm={props.onTripDelete}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="primary" danger>
+            Delete
+          </Button>
+        </Popconfirm>
+        <Button type="primary" onClick={form.submit} className="margin-left-sm">
           Save
         </Button>
       </Row>

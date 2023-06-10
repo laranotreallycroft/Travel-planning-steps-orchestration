@@ -56,7 +56,9 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
     () => [
       {
         title: "Select your stops",
-        content: <ItineraryStopsView onNextStep={handleNextStep} />,
+        content: (
+          <ItineraryStopsView onNextStep={handleNextStep} trip={props.trip} />
+        ),
       },
       {
         title: "Fine-tune your itinerary plan",
