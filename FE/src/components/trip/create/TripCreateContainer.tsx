@@ -1,7 +1,5 @@
-import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { useCallback } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { ITripCreatePayload } from "../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
@@ -10,8 +8,6 @@ import {
   createTrackableAction,
 } from "../../../service/util/trackAction";
 import TripCreateView, { ITripCreateForm } from "./TripCreateView";
-
-const provider = new OpenStreetMapProvider();
 
 export interface ITripCreateContainerOwnProps {
   isTripCreateModalOpen: boolean;
@@ -30,25 +26,15 @@ type ITripCreateContainerProps = ITripCreateContainerOwnProps &
 const TripCreateContainer: React.FC<ITripCreateContainerProps> = (
   props: ITripCreateContainerProps
 ) => {
-  const navigator = useNavigate();
-
-  const handleTripCreate = useCallback(
-    (values: ITripCreateForm) => {
-      const payload: ITripCreatePayload = {
-        name: values.location.label,
-        dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
-        dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
-        location: { x: values.location.x, y: values.location.y },
-      };
-      props
-        .tripCreate(payload)
-        .track()
-        .subscribe(() => {
-          navigator("/settings");
-        });
-    },
-    [provider.search]
-  );
+  const handleTripCreate = useCallback((values: ITripCreateForm) => {
+    const payload: ITripCreatePayload = {
+      name: values.location.label,
+      dateFrom: values.dateRange?.[0]?.format("YYYY-MM-DD")!,
+      dateTo: values.dateRange?.[1]?.format("YYYY-MM-DD")!,
+      location: { x: values.location.x, y: values.location.y },
+    };
+    return props.tripCreate(payload);
+  }, []);
   return (
     <TripCreateView
       isTripCreateModalOpen={props.isTripCreateModalOpen}

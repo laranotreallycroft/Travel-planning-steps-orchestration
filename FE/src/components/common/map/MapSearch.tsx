@@ -55,8 +55,8 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
         };
       })}
       notFoundContent={
-        <Row justify={"center"}>
-          <SentimentVeryDissatisfiedIcon />
+        <Row>
+          <SentimentVeryDissatisfiedIcon className="margin-left-xs" />
           No location found
         </Row>
       }
