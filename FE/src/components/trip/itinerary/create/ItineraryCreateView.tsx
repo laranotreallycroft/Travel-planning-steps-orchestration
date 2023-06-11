@@ -1,5 +1,5 @@
 import { Form, Steps } from "antd";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
 import { IItinerarySettings } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { ITrackableAction } from "../../../../service/util/trackAction";
@@ -27,30 +27,34 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   const [form] = Form.useForm<IItineraryRoutingForm>();
   const [currentStep, setCurrentStep] = useState(0);
 
-  const handleNextStep = () => {
-    setCurrentStep(currentStep + 1);
-  };
+  useEffect(() => {
+    resetFields();
+  }, [props.trip]);
 
-  const handlePreviousStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
+  const handleNextStep = useCallback(() => {
+    setCurrentStep((currentStep) => currentStep + 1);
+  }, []);
 
-  const handleLastStep = () => {
-    form.submit();
-  };
+  const handlePreviousStep = useCallback(() => {
+    setCurrentStep((currentStep) => currentStep - 1);
+  }, []);
 
-  const handleFinish = () => {
+  const handleFinish = useCallback(() => {
     props
       .onItineraryCreate(form.getFieldsValue(true))
       .track()
       .subscribe({
         next: () => {
-          setCurrentStep(0);
-          form.resetFields();
+          resetFields();
         },
         error: () => {},
       });
-  };
+  }, []);
+
+  const resetFields = useCallback(() => {
+    setCurrentStep(0);
+    form.resetFields();
+  }, []);
 
   const steps = useMemo(
     () => [
@@ -64,7 +68,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
         title: "Fine-tune your itinerary plan",
         content: (
           <ItinerarySettingsView
-            onNextStep={handleLastStep}
+            onNextStep={form.submit}
             onPreviousStep={handlePreviousStep}
           />
         ),

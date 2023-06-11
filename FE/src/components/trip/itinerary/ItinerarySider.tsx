@@ -9,6 +9,7 @@ import MapElement from "../../common/map/MapElement";
 import Schedule from "./schedule/Schedule";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ITrip } from "../../../model/trip/Trip";
 export interface IItineraryViewOwnProps {
   itinerary: IItinerary;
   onItineraryDelete: () => void;
@@ -25,7 +26,7 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
     setIsEditing(false);
   }, [props.itinerary]);
 
-  const toggleIsScheduleEditing = useCallback(() => {
+  const toggleIsEditing = useCallback(() => {
     setIsEditing((prevState) => !prevState);
   }, []);
 
@@ -45,7 +46,7 @@ const ItinerarySider: React.FC<IItineraryViewProps> = (
         </Radio.Group>
 
         <Button
-          onClick={toggleIsScheduleEditing}
+          onClick={toggleIsEditing}
           icon={isEditing ? <CloseIcon /> : <EditIcon />}
           className="margin-left-sm margin-right-l"
         />
