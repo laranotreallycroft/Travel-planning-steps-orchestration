@@ -110,6 +110,33 @@ public class ItineraryController {
 
 	}
 
+	public void createNewItineraryWithPayload(Itinerary itinerary, OpenRouteServiceDirectionsResponse response,
+			ItineraryRoutingPayload itineraryPayload) throws Exception {
+		Integer timeAtLocation = 60;
+		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
+		LocalDateTime dateTime = itinerary.getDate().atTime(time);
+		List<Segment> segments = response.getSegments();
+		List<GeosearchPayload> locations = itineraryPayload.getLocations();
+
+		// pair travel durations with labels
+		for (int i = 0; i < segments.size() - 1; i++) {
+			GeosearchPayload payloadLocation = locations.get(i);
+			int durationMinutes = (int) segments.get(i).getDuration() / 60;
+
+			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
+					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
+					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
+			itinerary.addItineraryElement(itineraryElement);
+			// TODO REAL TIME
+			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
+		}
+		if (dateTime.toLocalDate() != itinerary.getDate()) {
+			throw new Exception();
+		}
+	}
+
 	@PostMapping
 	public ResponseEntity createItinerary(@RequestBody ItineraryRoutingPayload itineraryPayload)
 			throws URISyntaxException {
@@ -134,31 +161,13 @@ public class ItineraryController {
 		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
 		Itinerary itinerary = new Itinerary(trip, itineraryPayload.getDate(), linestring);
-
-		Integer timeAtLocation = 60;
-		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
-		LocalDateTime dateTime = itinerary.getDate().atTime(time);
-		List<Segment> segments = response.getSegments();
-		List<GeosearchPayload> locations = itineraryPayload.getLocations();
-
-		// pair travel durations with labels
-		for (int i = 0; i < segments.size() - 1; i++) {
-			GeosearchPayload payloadLocation = locations.get(i);
-			int durationMinutes = (int) segments.get(i).getDuration() / 60;
-
-			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
-			itinerary.addItineraryElement(itineraryElement);
-			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
-		}
-		if (dateTime.toLocalDate() != itinerary.getDate()) {
+		try {
+			createNewItineraryWithPayload(itinerary, response, itineraryPayload);
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
 
 		}
+
 		trip.addItinerary(itinerary);
 		tripRepository.save(trip);
 		return ResponseEntity.ok(trip);
@@ -190,28 +199,9 @@ public class ItineraryController {
 		itinerary.setRouteGeometry(linestring);
 		itinerary.getItineraryElements().clear();
 
-		Integer timeAtLocation = 60;
-		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
-		LocalDateTime dateTime = itinerary.getDate().atTime(time);
-
-		List<Segment> segments = response.getSegments();
-		List<GeosearchPayload> locations = itineraryPayload.getLocations();
-
-		// pair travel durations with labels
-		for (int i = 0; i < segments.size() - 1; i++) {
-			GeosearchPayload payloadLocation = locations.get(i);
-			int durationMinutes = (int) segments.get(i).getDuration() / 60;
-			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
-			itinerary.addItineraryElement(itineraryElement);
-
-			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
-		}
-		if (dateTime.toLocalDate() != itinerary.getDate()) {
+		try {
+			createNewItineraryWithPayload(itinerary, response, itineraryPayload);
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
 
 		}
