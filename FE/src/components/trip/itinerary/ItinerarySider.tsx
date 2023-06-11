@@ -1,5 +1,6 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Button, Col, Popconfirm, Radio, Row } from "antd";
@@ -8,8 +9,6 @@ import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
 import MapElement from "../../common/map/MapElement";
 import Schedule from "./schedule/Schedule";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { ITrip } from "../../../model/trip/Trip";
 export interface IItineraryViewOwnProps {
   itinerary: IItinerary;
   onItineraryDelete: () => void;
