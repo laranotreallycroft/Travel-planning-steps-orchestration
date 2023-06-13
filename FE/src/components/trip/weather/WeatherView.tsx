@@ -37,7 +37,6 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
           <Title level={4}>Past year's weather on your travel dates</Title>
           <Select
             value={props.selectedYear}
-            style={{ width: 120 }}
             onChange={props.setSelectedYear}
             options={[
               { value: 2022, label: "2022" },
@@ -45,6 +44,7 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
               { value: 2020, label: "2020" },
               { value: 2019, label: "2019" },
             ]}
+            className="weatherView__select"
           />
         </Row>
         {props.predictedWeather == null ? (

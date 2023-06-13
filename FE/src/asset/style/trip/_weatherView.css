@@ -2,6 +2,10 @@
     height: 20vh;
 }
 
+.weatherView__select {
+    width: 6rem;
+}
+
 .weatherView__spin {
     background-color: #0492d9;
     height: 50vh;
