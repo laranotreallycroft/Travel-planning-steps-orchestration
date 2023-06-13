@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { IWeather, IWeatherPayload } from "../../../model/trip/weather/Weather";
 import { WeatherBusinessStore } from "../../../service/business/weather/WeatherBusinessStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
 import { ITrip } from "../../../model/trip/Trip";
 import React from "react";
@@ -26,23 +26,28 @@ type IWeatherContainerProps = IWeatherContainerOwnProps &
 const WeatherContainer: React.FC<IWeatherContainerProps> = (
   props: IWeatherContainerProps
 ) => {
+  const [selectedYear, setselectedYear] = useState<number>(2022);
+
   useEffect(() => {
     props.currentWeatherFetch({
       lat: props.trip.location.y,
       lon: props.trip.location.x,
     });
+    return () => {
+      props.currentWeatherClear();
+    };
+  }, [props.trip]);
 
-    // same date, but one year ago
-    const currentDate = new Date();
+  useEffect(() => {
     const futureDateFrom = new Date(props.trip.dateFrom);
     const futureDateTo = new Date(props.trip.dateTo);
     const oneYearAgoDateFrom = new Date(
-      currentDate.getFullYear() - 1,
+      selectedYear,
       futureDateFrom.getMonth(),
       futureDateFrom.getDate()
     );
     const oneYearAgoDateTo = new Date(
-      currentDate.getFullYear() - 1,
+      selectedYear,
       futureDateTo.getMonth(),
       futureDateTo.getDate()
     );
@@ -54,15 +59,15 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
       timestampTo: oneYearAgoDateTo.getTime() / 1000,
     });
     return () => {
-      props.currentWeatherClear();
       props.predictedWeatherClear();
     };
-  }, [props.trip]);
-
+  }, [props.trip, selectedYear]);
   return (
     <WeatherView
       currentWeather={props.currentWeather}
       predictedWeather={props.predictedWeather}
+      selectedYear={selectedYear}
+      setSelectedYear={setselectedYear}
     />
   );
 };
