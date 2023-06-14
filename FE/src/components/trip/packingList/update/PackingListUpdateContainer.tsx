@@ -50,15 +50,17 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
       };
       payloadArray.push(payload);
     });
-    props
-      .packingListUpdate(payloadArray)
-      .track()
-      .subscribe({
-        next: () => {
-          props.toggleEdit();
-        },
-        error: () => {},
-      });
+    if (payloadArray.length > 0)
+      props
+        .packingListUpdate(payloadArray)
+        .track()
+        .subscribe({
+          next: () => {
+            props.toggleEdit();
+          },
+          error: () => {},
+        });
+    else props.toggleEdit();
   }, [changedPackingLists]);
   return (
     <React.Fragment>

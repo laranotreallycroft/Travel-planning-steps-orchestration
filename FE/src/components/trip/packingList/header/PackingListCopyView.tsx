@@ -117,6 +117,10 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
             <Select
               placeholder={"Trip packing list"}
               mode="multiple"
+              allowClear
+              filterOption={(input, option) =>
+                option?.label.toLowerCase().indexOf(input.toLowerCase())! >= 0
+              }
               options={
                 isPresetView
                   ? packingListsPresets?.find(

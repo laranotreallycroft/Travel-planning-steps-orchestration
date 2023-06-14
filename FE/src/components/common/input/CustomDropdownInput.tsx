@@ -65,14 +65,14 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
   return (
     <Form.Item name={props.formItemName} label={props.label}>
       <Select
+        placeholder="Packing list items"
         mode="multiple"
         allowClear
-        placeholder="Packing list items"
+        options={props.dropdownItems}
         className="customDropdownInput"
         searchValue={searchValue}
         onSearch={setSearchValue}
         notFoundContent={notFoundContentRender}
-        options={props.dropdownItems}
       ></Select>
     </Form.Item>
   );
