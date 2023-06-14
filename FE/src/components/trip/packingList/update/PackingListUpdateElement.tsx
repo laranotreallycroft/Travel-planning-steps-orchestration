@@ -41,7 +41,7 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (
         {props.packingList.label}
         <Button
           icon={<CloseOutlined />}
-          className="margin-left-sm"
+          className="margin-left-sm packingListUpdateElement__deleteListButton"
           onClick={() => props.onPackingListDelete(props.packingList.id)}
         />
       </Title>
