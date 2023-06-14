@@ -28,6 +28,12 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (
     <Form<IPackingListUpdatePayload>
       form={form}
       initialValues={{ items: props.packingList.items }}
+      onValuesChange={(values: IPackingListUpdatePayload) =>
+        props.onPackingListChange({
+          packingListId: props.packingList.id,
+          items: values.items,
+        })
+      }
     >
       <Title level={5}>{props.packingList.label}</Title>
       <CustomDropdownInput
