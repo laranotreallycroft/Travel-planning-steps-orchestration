@@ -14,6 +14,7 @@ import com.travelApp.travelApp.model.PackingList;
 import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.payload.packingList.PackingListCopyPayload;
 import com.travelApp.travelApp.model.payload.packingList.PackingListCreatePayload;
+import com.travelApp.travelApp.model.payload.packingList.PackingListUpdateDeletePayload;
 import com.travelApp.travelApp.model.payload.packingList.PackingListUpdatePayload;
 import com.travelApp.travelApp.repository.PackingListRepository;
 import com.travelApp.travelApp.repository.TripRepository;
@@ -79,17 +80,28 @@ public class PackingListController {
 	}
 
 	@PutMapping
-	public ResponseEntity updatePackingLists(@RequestBody List<PackingListUpdatePayload> packingListUpdatePayloadList) {
-		for (PackingListUpdatePayload packingListUpdatePayload : packingListUpdatePayloadList) {
-			PackingList packingList = packingListRepository.findById(packingListUpdatePayload.getPackingListId())
-					.orElse(null);
+	public ResponseEntity updatePackingLists(
+			@RequestBody PackingListUpdateDeletePayload packingListUpdateDeletePayload) {
+
+		PackingList packingList = null;
+		for (Long id : packingListUpdateDeletePayload.getDelete()) {
+			packingList = packingListRepository.findById(id).orElse(null);
+			if (packingList != null) {
+				packingListRepository.delete(packingList);
+			}
+		}
+
+		for (PackingListUpdatePayload packingListUpdatePayload : packingListUpdateDeletePayload.getUpdate()) {
+			packingList = packingListRepository.findById(packingListUpdatePayload.getPackingListId()).orElse(null);
 			if (packingList != null) {
 				packingList.setItems(packingListUpdatePayload.getItems());
 				packingList.filterAndSetCheckedItems(packingListUpdatePayload.getItems());
 				packingListRepository.save(packingList);
-				return ResponseEntity.ok(packingList.getTrip());
 			}
 		}
-		return ResponseEntity.badRequest().body("Something went wrong");
+		if (packingList != null)
+			return ResponseEntity.ok(packingList.getTrip());
+		else
+			return ResponseEntity.badRequest().body("Something went wrong");
 	}
 }

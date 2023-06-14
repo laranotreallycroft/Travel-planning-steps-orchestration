@@ -26,6 +26,11 @@ export interface IPackingListUpdatePayload {
   items: string[];
 }
 
+export interface IPackingListUpdateCombinedPayload {
+  update: IPackingListUpdatePayload[];
+  delete: number[];
+}
+
 export interface IPackingListCopyPayload {
   tripId: number;
   packingListIds: number[];
@@ -54,8 +59,8 @@ export const packingListCopy = (
 };
 
 export const packingListUpdate = (
-  payload: IPackingListUpdatePayload[]
-): IPayloadAction<IPackingListUpdatePayload[]> => {
+  payload: IPackingListUpdateCombinedPayload
+): IPayloadAction<IPackingListUpdateCombinedPayload> => {
   return { type: actions.PACKING_LIST_UPDATE, payload: payload };
 };
 
@@ -154,7 +159,7 @@ const packingListCopyEffect = (
 };
 
 const packingListUpdateffect = (
-  action$: Observable<IPayloadAction<IPackingListUpdatePayload[]>>,
+  action$: Observable<IPayloadAction<IPackingListUpdateCombinedPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(

@@ -1,8 +1,11 @@
+import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
+import { Button, Row } from "antd";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import {
+  IPackingListUpdateCombinedPayload,
   IPackingListUpdatePayload,
   PackingListBusinessStore,
 } from "../../../../service/business/trip/packingList/PackingListBusinessStore";
@@ -11,8 +14,6 @@ import {
   createTrackableAction,
 } from "../../../../service/util/trackAction";
 import PackingListUpdateView from "./PackingListUpdateView";
-import { Button, Row } from "antd";
-import { SaveOutlined } from "@ant-design/icons";
 
 export interface IPackingListUpdateContainerOwnProps {
   toggleEdit: () => void;
@@ -22,7 +23,7 @@ export interface IPackingListUpdateContainerStateProps {
 }
 export interface IPackingListUpdateContainerDispatchProps {
   packingListUpdate: (
-    packingListUpdatePayload: IPackingListUpdatePayload[]
+    packingListUpdatePayload: IPackingListUpdateCombinedPayload
   ) => ITrackableAction;
 }
 type IPackingListUpdateContainerProps = IPackingListUpdateContainerOwnProps &
@@ -33,7 +34,7 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
   props: IPackingListUpdateContainerProps
 ) => {
   let changedPackingLists: Map<number, string[]> = new Map();
-
+  let deletedPackingLists: number[] = [];
   const handlePackingListChange = useCallback(
     (payload: IPackingListUpdatePayload) => {
       changedPackingLists.set(payload.packingListId, payload.items);
@@ -41,18 +42,28 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
     [changedPackingLists]
   );
 
+  const handlePackingListDelete = useCallback(
+    (packingListId: number) => {
+      deletedPackingLists.push(packingListId);
+    },
+    [deletedPackingLists]
+  );
+
   const handlePackingListUpdate = useCallback(() => {
-    let payloadArray: IPackingListUpdatePayload[] = [];
+    let updatePayloadArray: IPackingListUpdatePayload[] = [];
     changedPackingLists.forEach((items: string[], packingListId: number) => {
       const payload: IPackingListUpdatePayload = {
         packingListId,
         items,
       };
-      payloadArray.push(payload);
+      updatePayloadArray.push(payload);
     });
-    if (payloadArray.length > 0)
+    if (updatePayloadArray.length > 0 || deletedPackingLists.length > 0)
       props
-        .packingListUpdate(payloadArray)
+        .packingListUpdate({
+          update: updatePayloadArray,
+          delete: deletedPackingLists,
+        })
         .track()
         .subscribe({
           next: () => {
@@ -60,15 +71,22 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
           },
           error: () => {},
         });
-    else props.toggleEdit();
   }, [changedPackingLists]);
+
+  const handleCancel = () => {
+    props.toggleEdit();
+  };
   return (
     <React.Fragment>
-      <Row justify={"end"} gutter={16}>
+      <Row justify={"end"}>
+        <Button type="primary" onClick={handleCancel} icon={<CloseOutlined />}>
+          {"Cancel"}
+        </Button>
         <Button
           type="primary"
           onClick={handlePackingListUpdate}
           icon={<SaveOutlined />}
+          className="margin-left-sm"
         >
           {"Save"}
         </Button>
@@ -76,6 +94,7 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
       <PackingListUpdateView
         packingLists={props.trip.packingLists}
         onPackingListChange={handlePackingListChange}
+        onPackingListDelete={handlePackingListDelete}
       />
     </React.Fragment>
   );
@@ -90,7 +109,9 @@ const mapStateToProps = (
 const mapDispatchToProps = (
   dispatch: any
 ): IPackingListUpdateContainerDispatchProps => ({
-  packingListUpdate: (packingListUpdatePayload: IPackingListUpdatePayload[]) =>
+  packingListUpdate: (
+    packingListUpdatePayload: IPackingListUpdateCombinedPayload
+  ) =>
     dispatch(
       createTrackableAction(
         PackingListBusinessStore.actions.packingListUpdate(

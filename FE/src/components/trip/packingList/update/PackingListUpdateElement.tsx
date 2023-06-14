@@ -1,16 +1,18 @@
-import { Form } from "antd";
+import { Button, Form } from "antd";
 import Title from "antd/es/typography/Title";
 import { useState } from "react";
 import { ILabelValue } from "../../../../model/common/input";
 import { IPackingList } from "../../../../model/trip/packingList/PackingList";
 import { IPackingListUpdatePayload } from "../../../../service/business/trip/packingList/PackingListBusinessStore";
 import CustomDropdownInput from "../../../common/input/CustomDropdownInput";
+import { CloseOutlined } from "@ant-design/icons";
 
 export interface IPackingListUpdateElementOwnProps {
   packingList: IPackingList;
   onPackingListChange: (
     packingListUpdatePayload: IPackingListUpdatePayload
   ) => void;
+  onPackingListDelete: (packingListId: number) => void;
 }
 type IPackingListUpdateElementProps = IPackingListUpdateElementOwnProps;
 
@@ -35,7 +37,14 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (
         })
       }
     >
-      <Title level={5}>{props.packingList.label}</Title>
+      <Title level={5}>
+        {props.packingList.label}
+        <Button
+          icon={<CloseOutlined />}
+          className="margin-left-sm"
+          onClick={() => props.onPackingListDelete(props.packingList.id)}
+        />
+      </Title>
       <CustomDropdownInput
         formItemName="items"
         dropdownItems={dropdownItems}
