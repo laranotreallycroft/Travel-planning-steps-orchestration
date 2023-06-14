@@ -2,6 +2,7 @@ package com.travelApp.travelApp.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -9,8 +10,6 @@ import org.locationtech.jts.geom.Point;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.travelApp.travelApp.model.payload.packingList.PackingListPayload;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,7 +20,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -48,13 +46,9 @@ public class Trip {
 	@JsonBackReference
 	private User user;
 
-	@OneToOne(mappedBy = "trip", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("trip")
-	private PackingList packingList;
-
-	@OneToOne(mappedBy = "trip", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("trip")
-	private PackingListChecked packingListChecked;
+	private List<PackingList> packingLists;
 
 	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("trip")
@@ -64,9 +58,7 @@ public class Trip {
 
 	}
 
-	
-	public Trip( String label, LocalDate dateFrom, LocalDate dateTo, String locationLabel, Point location,
-			User user) {
+	public Trip(String label, LocalDate dateFrom, LocalDate dateTo, String locationLabel, Point location, User user) {
 		super();
 		this.label = label;
 		this.dateFrom = dateFrom;
@@ -76,16 +68,13 @@ public class Trip {
 		this.user = user;
 	}
 
-
 	public String getLocationLabel() {
 		return locationLabel;
 	}
 
-
 	public void setLocationLabel(String locationLabel) {
 		this.locationLabel = locationLabel;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -135,24 +124,13 @@ public class Trip {
 		this.user = user;
 	}
 
-	public PackingListPayload getPackingList() {
-		if (packingList == null)
-			return null;
-		return packingList.modelToPayload();
+	public List<PackingList> getPackingLists() {
+		 packingLists.sort(Comparator.comparing(PackingList::getId));
+		 return packingLists;
 	}
 
-	public void setPackingList(PackingList packingList) {
-		this.packingList = packingList;
-	}
-
-	public PackingListPayload getPackingListChecked() {
-		if (packingListChecked == null)
-			return null;
-		return packingListChecked.modelToPayload();
-	}
-
-	public void setPackingListChecked(PackingListChecked packingListChecked) {
-		this.packingListChecked = packingListChecked;
+	public void setPackingLists(List<PackingList> packingLists) {
+		this.packingLists = packingLists;
 	}
 
 	public List<Itinerary> getItineraries() {

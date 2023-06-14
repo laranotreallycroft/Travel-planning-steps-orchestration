@@ -9,8 +9,7 @@ export interface ITrip {
   dateTo: Date;
   locationLabel: string;
   location: ICoordinates;
-  packingList?: IPackingList;
-  packingListChecked?: IPackingList;
+  packingLists: IPackingList[];
   itineraries?: IItinerary[];
 }
 

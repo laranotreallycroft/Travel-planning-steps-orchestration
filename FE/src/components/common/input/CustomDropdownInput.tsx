@@ -2,27 +2,21 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Select } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 import { ILabelValue } from "../../../model/common/input";
-import { ITrip } from "../../../model/trip/Trip";
 
 export interface ICustomDropdownInputOwnProps {
-  group: string;
-  subgroup: string;
-  initialItems: string[];
+  formItemName: string;
+  label?: string;
+  dropdownItems: ILabelValue[];
+  setDropdownItems?: (items: ILabelValue[]) => void;
+  additionalElementAddFunction?: (items: string[]) => void;
 }
 type ICustomDropdownInputProps = ICustomDropdownInputOwnProps;
 
 const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
   props: ICustomDropdownInputProps
 ) => {
-  const form = Form.useFormInstance<ITrip>();
+  const form = Form.useFormInstance();
 
-  const [dropdownItems, setDropdownItems] = useState<ILabelValue[]>(
-    props.initialItems
-      ? props.initialItems.map((item) => {
-          return { label: item, value: item };
-        })
-      : []
-  );
   const [searchValue, setSearchValue] = useState("");
 
   const handleAdd = useCallback(
@@ -32,22 +26,28 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
         label: value,
         value: value.replace(/\s+/g, ""),
       };
+
       if (
         newDropdownItem.value.length > 0 &&
-        !dropdownItems.find((item) => item.label === value)
+        !props.dropdownItems.find((item) => item.label === value)
       ) {
-        const newDropdownItems = [...dropdownItems, newDropdownItem];
-        setDropdownItems(newDropdownItems);
+        const newDropdownItems = [...props.dropdownItems, newDropdownItem];
+        props.setDropdownItems?.(newDropdownItems);
 
-        const selectedItems = form.getFieldValue([props.group, props.subgroup]);
-        form.setFieldValue(
-          [props.group, props.subgroup],
-          [...(selectedItems ?? []), newDropdownItem.value]
-        );
+        const selectedItems = form.getFieldValue(props.formItemName);
+        form.setFieldValue(props.formItemName, [
+          ...(selectedItems ?? []),
+          newDropdownItem.value,
+        ]);
+        props.additionalElementAddFunction?.([
+          ...(selectedItems ?? []),
+          newDropdownItem.value,
+        ]);
+
         setSearchValue("");
       }
     },
-    [dropdownItems]
+    [props.dropdownItems]
   );
 
   const notFoundContentRender = useMemo(
@@ -63,16 +63,16 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
   );
 
   return (
-    <Form.Item name={[props.group, props.subgroup]}>
+    <Form.Item name={props.formItemName} label={props.label}>
       <Select
         mode="multiple"
         allowClear
-        placeholder="Please select"
+        placeholder="Packing list items"
         className="customDropdownInput"
         searchValue={searchValue}
         onSearch={setSearchValue}
         notFoundContent={notFoundContentRender}
-        options={dropdownItems}
+        options={props.dropdownItems}
       ></Select>
     </Form.Item>
   );

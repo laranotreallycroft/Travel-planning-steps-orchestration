@@ -1,29 +1,37 @@
 import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../model/trip/Trip";
-import { IPackingList } from "../../../model/trip/packingList/PackingList";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { PackingListBusinessStore } from "../../../service/business/trip/packingList/PackingListBusinessStore";
+import {
+  IPackingListCopyPayload,
+  IPackingListCreatePayload,
+  IPackingListUpdatePayload,
+  PackingListBusinessStore,
+} from "../../../service/business/trip/packingList/PackingListBusinessStore";
+import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
 } from "../../../service/util/trackAction";
-import PackingListCreateView from "./PackingListCreateView";
-import PackingListUpdateView from "./PackingListUpdateView";
 import PackingListView from "./PackingListView";
+import { IPackingListCopyForm } from "./header/PackingListCopyView";
+import { IPackingListCreateForm } from "./header/PackingListCreateView";
+import PackingListHeader from "./header/PackingListHeader";
+import PackingListUpdateContainer from "./update/PackingListUpdateContainer";
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {
+  userTrips: ITrip[];
   trip: ITrip;
 }
 export interface IPackingListContainerDispatchProps {
-  packingListCreate: (packingListCreatePayload: IPackingList) => void;
+  packingListCreate: (
+    packingListCreatePayload: IPackingListCreatePayload
+  ) => void;
+  packingListCopy: (packingListCopyPayload: IPackingListCopyPayload) => void;
 
-  packingListUpdate: (
-    packingListUpdatePayload: IPackingList
-  ) => ITrackableAction;
-  packingListCheckedUpdate: (
-    packingListCheckedUpdatePayload: IPackingList
+  packingListChecked: (
+    packingListUpdatePayload: IPackingListUpdatePayload
   ) => ITrackableAction;
 }
 type IPackingListContainerProps = IPackingListContainerOwnProps &
@@ -39,63 +47,74 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (
     setIsEditing((prevState) => !prevState);
   }, []);
 
-  const handlePackingListUpdate = useCallback((values: IPackingList) => {
-    props.packingListUpdate(values).track().subscribe(toggleEdit);
-  }, []);
+  const handlePackingListCreate = useCallback(
+    (values: IPackingListCreateForm) => {
+      const payload: IPackingListCreatePayload = {
+        ...values,
+        tripId: props.trip.id,
+      };
+      props.packingListCreate(payload);
+    },
+    [props.trip.id]
+  );
+  const handlePackingListCopy = useCallback(
+    (values: IPackingListCopyForm) => {
+      const payload: IPackingListCopyPayload = {
+        ...values,
+        tripId: props.trip.id,
+      };
+
+      props.packingListCopy(payload);
+    },
+    [props.trip.id]
+  );
 
   return (
     <React.Fragment>
-      {props.trip.packingList && isEditing && (
-        <PackingListUpdateView
-          packingList={props.trip.packingList}
-          onPackingListUpdate={handlePackingListUpdate}
-        />
-      )}
-      {props.trip.packingList &&
-        props.trip.packingListChecked &&
-        !isEditing && (
-          <PackingListView
-            packingList={props.trip.packingList}
-            packingListChecked={props.trip.packingListChecked}
-            editPackingList={toggleEdit}
-            onPackingListCheckedUpdate={props.packingListCheckedUpdate}
+      {!isEditing && (
+        <React.Fragment>
+          <PackingListHeader
+            trip={props.trip}
+            userTrips={props.userTrips}
+            onPackingListCreate={handlePackingListCreate}
+            onPackingListCopy={handlePackingListCopy}
+            toggleEdit={toggleEdit}
           />
-        )}
-      {props.trip.packingList === null && (
-        <PackingListCreateView onPackingListCreate={props.packingListCreate} />
+          <PackingListView
+            packingLists={props.trip.packingLists}
+            onPackingListChecked={props.packingListChecked}
+          />
+        </React.Fragment>
       )}
+      {isEditing && <PackingListUpdateContainer toggleEdit={toggleEdit} />}
     </React.Fragment>
   );
 };
 
 const mapStateToProps = (state: any): IPackingListContainerStateProps => ({
+  userTrips: UserBusinessStore.selectors.getUserTrips(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (
   dispatch: any
 ): IPackingListContainerDispatchProps => ({
-  packingListCreate: (packingListCreatePayload: IPackingList) =>
+  packingListCreate: (packingListCreatePayload: IPackingListCreatePayload) =>
     dispatch(
       PackingListBusinessStore.actions.packingListCreate(
         packingListCreatePayload
       )
     ),
-
-  packingListUpdate: (packingListUpdatePayload: IPackingList) =>
+  packingListCopy: (packingListCopyPayload: IPackingListCopyPayload) =>
     dispatch(
-      createTrackableAction(
-        PackingListBusinessStore.actions.packingListUpdate(
-          packingListUpdatePayload
-        )
-      )
+      PackingListBusinessStore.actions.packingListCopy(packingListCopyPayload)
     ),
 
-  packingListCheckedUpdate: (packingListCheckedUpdatePayload: IPackingList) =>
+  packingListChecked: (packingListUpdatePayload: IPackingListUpdatePayload) =>
     dispatch(
       createTrackableAction(
-        PackingListBusinessStore.actions.packingListCheckedUpdate(
-          packingListCheckedUpdatePayload
+        PackingListBusinessStore.actions.packingListChecked(
+          packingListUpdatePayload
         )
       )
     ),

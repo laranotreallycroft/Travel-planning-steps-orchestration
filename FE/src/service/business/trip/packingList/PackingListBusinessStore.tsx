@@ -1,11 +1,35 @@
 import axios from "axios";
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-import { IPackingList } from "../../../../model/trip/packingList/PackingList";
+import {
+  Observable,
+  filter,
+  from,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  withLatestFrom,
+} from "rxjs";
 import notificationService from "../../../util/notificationService";
 import trackAction from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
+import { userTripsStore } from "../../user/UserBusinessStore";
 import { getTrip, tripStore } from "../TripBusinessStore";
+import { ITrip } from "../../../../model/trip/Trip";
 
+export interface IPackingListCreatePayload {
+  tripId: number;
+  label: string;
+  items: string[];
+}
+export interface IPackingListUpdatePayload {
+  packingListId: number;
+  items: string[];
+}
+
+export interface IPackingListCopyPayload {
+  tripId: number;
+  packingListIds: number[];
+}
 // -
 // -------------------- Selectors
 
@@ -13,33 +37,39 @@ import { getTrip, tripStore } from "../TripBusinessStore";
 // -------------------- Actions
 const actions = {
   PACKING_LIST_CREATE: "PACKING_LIST_CREATE",
+  PACKING_LIST_COPY: "PACKING_LIST_COPY",
   PACKING_LIST_UPDATE: "PACKING_LIST_UPDATE",
-  PACKING_LIST_CHECKED_UPDATE: "PACKING_LIST_CHECKED_UPDATE",
+  PACKING_LIST_CHECKED: "PACKING_LIST_CHECKED",
 };
 
 export const packingListCreate = (
-  payload: IPackingList
-): IPayloadAction<IPackingList> => {
+  payload: IPackingListCreatePayload
+): IPayloadAction<IPackingListCreatePayload> => {
   return { type: actions.PACKING_LIST_CREATE, payload: payload };
+};
+export const packingListCopy = (
+  payload: IPackingListCopyPayload
+): IPayloadAction<IPackingListCopyPayload> => {
+  return { type: actions.PACKING_LIST_COPY, payload: payload };
 };
 
 export const packingListUpdate = (
-  payload: IPackingList
-): IPayloadAction<IPackingList> => {
+  payload: IPackingListUpdatePayload[]
+): IPayloadAction<IPackingListUpdatePayload[]> => {
   return { type: actions.PACKING_LIST_UPDATE, payload: payload };
 };
 
-export const packingListCheckedUpdate = (
-  payload: IPackingList
-): IPayloadAction<IPackingList> => {
-  return { type: actions.PACKING_LIST_CHECKED_UPDATE, payload: payload };
+export const packingListChecked = (
+  payload: IPackingListUpdatePayload
+): IPayloadAction<IPackingListUpdatePayload> => {
+  return { type: actions.PACKING_LIST_CHECKED, payload: payload };
 };
 
 // -
 // -------------------- Side-effects
 
 const packingListCreateEffect = (
-  action$: Observable<IPayloadAction<IPackingList>>,
+  action$: Observable<IPayloadAction<IPackingListCreatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
@@ -51,42 +81,90 @@ const packingListCreateEffect = (
       const trip = getTrip(state);
       return from(
         axios
-          .post(`/trips/${trip.id}/packinglist`, action.payload)
+          .post(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success(
-                "New trip packing list successfully created"
+                "New packing list successfully created"
               );
-              return response.data;
+
+              return {
+                userTrips: response.data,
+                trip: response.data.find(
+                  (value: ITrip) => value.id === trip.id
+                ),
+              };
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to create trip packing list",
+              "Unable to create packing list",
               error.response.data
             );
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    map((data) => tripStore(data))
+    switchMap((data) =>
+      of(userTripsStore(data?.userTrips), tripStore(data?.trip))
+    )
   );
 };
 
-const packingListUpdateffect = (
-  action$: Observable<IPayloadAction<IPackingList>>,
+const packingListCopyEffect = (
+  action$: Observable<IPayloadAction<IPackingListCopyPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.PACKING_LIST_UPDATE;
+      return action.type === actions.PACKING_LIST_COPY;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
         axios
-          .put(`/trips/${trip.id}/packinglist`, action.payload)
+          .post(`/packinglists/copy`, action.payload)
+          .then((response) => {
+            if (response.status === 201) {
+              notificationService.success(
+                "New packing lists successfully created"
+              );
+              return {
+                userTrips: response.data,
+                trip: response.data.find(
+                  (value: ITrip) => value.id === trip.id
+                ),
+              };
+            }
+          })
+          .catch((error) => {
+            notificationService.error(
+              "Unable to create packing lists",
+              error.response.data
+            );
+          })
+      ).pipe(trackAction(action));
+    }),
+    filter((data) => data !== undefined),
+    switchMap((data) =>
+      of(userTripsStore(data?.userTrips), tripStore(data?.trip))
+    )
+  );
+};
+
+const packingListUpdateffect = (
+  action$: Observable<IPayloadAction<IPackingListUpdatePayload[]>>,
+  state$: Observable<any>
+) => {
+  return action$.pipe(
+    filter((action) => {
+      return action.type === actions.PACKING_LIST_UPDATE;
+    }),
+    mergeMap((action) => {
+      return from(
+        axios
+          .put(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -105,20 +183,18 @@ const packingListUpdateffect = (
   );
 };
 
-const packingListCheckedUpdateffect = (
-  action$: Observable<IPayloadAction<IPackingList>>,
+const packingListCheckedffect = (
+  action$: Observable<IPayloadAction<IPackingListUpdatePayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.PACKING_LIST_CHECKED_UPDATE;
+      return action.type === actions.PACKING_LIST_CHECKED;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+    mergeMap((action) => {
       return from(
         axios
-          .put(`/trips/${trip.id}/packinglist/checked`, action.payload)
+          .put(`/packinglists/checked`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -144,13 +220,15 @@ export const PackingListBusinessStore = {
   selectors: {},
   actions: {
     packingListCreate,
+    packingListCopy,
     packingListUpdate,
-    packingListCheckedUpdate,
+    packingListChecked,
   },
   effects: {
     packingListCreateEffect,
+    packingListCopyEffect,
     packingListUpdateffect,
-    packingListCheckedUpdateffect,
+    packingListCheckedffect,
   },
   reducers: {},
 };

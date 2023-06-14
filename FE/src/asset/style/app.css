@@ -18,6 +18,7 @@ body, #root, html {
 @import 'common/input/_customDropdownInput.css';
 @import 'common/input/_customCheckboxGroup.css';
 @import 'trip/_packingListCreateView.css';
+@import 'trip/_packingListCopyView.css';
 @import 'trip/_weatherView.css';
 @import 'trip/itinerary/create/_itineraryStopsView.css';
 @import 'trip/itinerary/update/_itineraryMapUpdateView.css';
