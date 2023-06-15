@@ -1,4 +1,9 @@
+.itineraryStopsView__container {
+    height: 70%;
+    width: 100%;
+}
+
 .itineraryStopsView__listcontainer {
-    height: 400px;
+    height: 100%;
     overflow: auto;
 }

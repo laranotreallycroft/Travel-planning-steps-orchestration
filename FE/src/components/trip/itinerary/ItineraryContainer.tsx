@@ -1,9 +1,8 @@
-import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../model/trip/Trip";
 import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
-import { ItineraryBusinessStore } from "../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
+import { ItineraryBusinessStore } from "../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import ItineraryView from "./ItineraryView";
 
 export interface IItineraryContainerOwnProps {}
@@ -24,18 +23,7 @@ type IItineraryContainerProps = IItineraryContainerOwnProps &
 const ItineraryContainer: React.FC<IItineraryContainerProps> = (
   props: IItineraryContainerProps
 ) => {
-  const handleItinerarySelect = useCallback((itinerary?: IItinerary) => {
-    itinerary ? props.itineraryStore(itinerary) : props.itineraryClear();
-  }, []);
-  return (
-    <ItineraryView
-      trip={props.trip}
-      itineraryList={props.trip.itineraries}
-      itinerary={props.itinerary}
-      onItinerarySelect={handleItinerarySelect}
-      onItineraryDelete={props.itineraryDelete}
-    />
-  );
+  return <ItineraryView />;
 };
 
 const mapStateToProps = (state: any): IItineraryContainerStateProps => ({

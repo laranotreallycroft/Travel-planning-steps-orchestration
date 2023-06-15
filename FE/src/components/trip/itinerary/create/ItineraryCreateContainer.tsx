@@ -1,5 +1,3 @@
-import { Dayjs } from "dayjs";
-import { useCallback } from "react";
 import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
@@ -11,13 +9,9 @@ import {
   ITrackableAction,
   createTrackableAction,
 } from "../../../../service/util/trackAction";
-import ItineraryCreateView, {
-  IItineraryRoutingForm,
-} from "./ItineraryCreateView";
+import ItineraryCreateView from "./ItineraryCreateView";
 
-export interface IItineraryCreateContainerOwnProps {
-  date: Dayjs;
-}
+export interface IItineraryCreateContainerOwnProps {}
 
 export interface IItineraryCreateContainerStateProps {
   trip: ITrip;
@@ -34,15 +28,9 @@ type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
 const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
-  const handleItineraryCreate = useCallback(
-    (values: IItineraryRoutingForm) => {
-      return props.itineraryCreate({
-        ...values,
-        date: props.date.format("YYYY-MM-DD"),
-      });
-    },
-    [props.date]
-  );
+  const handleItineraryCreate = (values: IItineraryCreatePayload) => {
+    props.itineraryCreate(values);
+  };
 
   return (
     <ItineraryCreateView
@@ -59,10 +47,10 @@ const mapStateToProps = (state: any): IItineraryCreateContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryCreateContainerDispatchProps => ({
-  itineraryCreate: (itineraryRoutePayload: IItineraryCreatePayload) =>
+  itineraryCreate: (itineraryCreatePayload: IItineraryCreatePayload) =>
     dispatch(
       createTrackableAction(
-        ItineraryBusinessStore.actions.itineraryCreate(itineraryRoutePayload)
+        ItineraryBusinessStore.actions.itineraryCreate(itineraryCreatePayload)
       )
     ),
 });

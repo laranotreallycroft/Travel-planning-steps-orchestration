@@ -7,6 +7,7 @@ import org.locationtech.jts.geom.Coordinate;
 
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryPayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 
 public class OpenRouteServiceOptimizationPayload {
 	private List<Job> jobs;
@@ -26,7 +27,7 @@ public class OpenRouteServiceOptimizationPayload {
 	public OpenRouteServiceOptimizationPayload(ItineraryPayload payload, Coordinate origin) {
 		this.jobs = new ArrayList<Job>();
 		this.vehicles = new ArrayList<Vehicle>();
-		List<GeosearchPayload> locations = payload.getLocations();
+		List<ItineraryLocation> locations = payload.getLocations();
 		for (int i = 0; i < locations.size(); i++) {
 			GeosearchPayload value = locations.get(i);
 			Job job = new Job(i, new double[] { value.getX(), value.getY() }, new int[] { 1 });

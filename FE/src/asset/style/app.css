@@ -5,6 +5,7 @@ body, #root, html {
     width: 100%;
 }
 
+
 @import "../../../node_modules/leaflet/dist/leaflet.css";
 @import "../../../node_modules/leaflet-geosearch/dist/geosearch.css";
 @import '../fonts/font.css';
@@ -21,6 +22,7 @@ body, #root, html {
 @import 'trip/_packingListUpdateElement.css';
 @import 'trip/_weatherView.css';
 @import 'trip/itinerary/create/_itineraryStopsView.css';
+@import 'trip/itinerary/create/_itineraryDurationView.css';
 @import 'trip/itinerary/update/_itineraryMapUpdateView.css';
 @import 'trip/itinerary/schedule/_schedule.css';
 @import 'trip/itinerary/_itinerarySider.css';

@@ -72,6 +72,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
         </Row>
       }
       className="fullWidth"
+      dropdownStyle={{ zIndex: 10000 }}
     />
   );
 };

@@ -33,7 +33,8 @@ import com.travelApp.travelApp.model.ItineraryElement;
 import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryRoutingPayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
 import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsPayload;
@@ -61,7 +62,7 @@ public class ItineraryController {
 		this.itineraryElementRepository = itineraryElementRepository;
 	}
 
-	public List<Step> getOpenRouteServiceOptimization(ItineraryRoutingPayload itineraryPayload, Coordinate origin) {
+	public List<Step> getOpenRouteServiceOptimization(ItineraryCreatePayload itineraryPayload, Coordinate origin) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			var client = HttpClient.newHttpClient();
@@ -85,7 +86,7 @@ public class ItineraryController {
 
 	}
 
-	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryRoutingPayload itineraryPayload,
+	public OpenRouteServiceDirectionsResponse getOpenRouteServiceDirections(ItineraryCreatePayload itineraryPayload,
 			Coordinate origin) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -111,12 +112,12 @@ public class ItineraryController {
 	}
 
 	public void createNewItineraryWithPayload(Itinerary itinerary, OpenRouteServiceDirectionsResponse response,
-			ItineraryRoutingPayload itineraryPayload) throws Exception {
+			ItineraryCreatePayload itineraryPayload) throws Exception {
 		Integer timeAtLocation = 60;
 		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
 		LocalDateTime dateTime = itinerary.getDate().atTime(time);
 		List<Segment> segments = response.getSegments();
-		List<GeosearchPayload> locations = itineraryPayload.getLocations();
+		List<ItineraryLocation> locations = itineraryPayload.getLocations();
 
 		// pair travel durations with labels
 		for (int i = 0; i < segments.size() - 1; i++) {
@@ -138,9 +139,10 @@ public class ItineraryController {
 	}
 
 	@PostMapping
-	public ResponseEntity createItinerary(@RequestBody ItineraryRoutingPayload itineraryPayload)
+	public ResponseEntity createItinerary(@RequestBody ItineraryCreatePayload itineraryPayload)
 			throws URISyntaxException {
-		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
+		return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
+		/*Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
 
 		if (itineraryPayload.getRouteOptions().isOptimize()) {
 			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, trip.getLocation());
@@ -171,9 +173,9 @@ public class ItineraryController {
 		trip.addItinerary(itinerary);
 		tripRepository.save(trip);
 		return ResponseEntity.ok(trip);
-
+*/
 	}
-
+/*
 	@PutMapping("/{itineraryId}/route")
 	public ResponseEntity updateItineraryRoute(@PathVariable(value = "itineraryId") Long itineraryId,
 			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
@@ -252,5 +254,5 @@ public class ItineraryController {
 
 		return ResponseEntity.badRequest().body("Something went wrong");
 
-	}
+	}*/
 }

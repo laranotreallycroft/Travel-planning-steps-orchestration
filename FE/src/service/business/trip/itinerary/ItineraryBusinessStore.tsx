@@ -18,9 +18,11 @@ import { loginActions } from "../../login/LoginBusinessStore";
 import { getTrip, tripStore } from "../TripBusinessStore";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 
+export interface IItineraryElementPayload extends IGeosearchPayloadWithId {
+  duration: number;
+}
 export interface IItineraryCreatePayload {
-  date: string;
-  locations: IGeosearchPayloadWithId[];
+  locations: IItineraryElementPayload[];
   settings: IItinerarySettings;
 }
 
@@ -126,6 +128,7 @@ const itineraryCreateEffect = (
     })
   );
 };
+/*
 const itineraryRouteUpdateEffect = (
   action$: Observable<IPayloadAction<IItineraryUpdatePayload>>,
   state$: Observable<any>
@@ -253,7 +256,7 @@ const itineraryDeleteEffect = (
       return o;
     })
   );
-};
+};*/
 // -
 // -------------------- Reducers
 
@@ -282,9 +285,9 @@ export const ItineraryBusinessStore = {
   },
   effects: {
     itineraryCreateEffect,
-    itineraryRouteUpdateEffect,
-    itineraryScheduleUpdateEffect,
-    itineraryDeleteEffect,
+    // itineraryRouteUpdateEffect,
+    // itineraryScheduleUpdateEffect,
+    //  itineraryDeleteEffect,
   },
   reducers: { itinerary },
 };

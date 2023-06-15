@@ -1,22 +1,13 @@
 import { Form, Steps } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
-import { IItinerarySettings } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import { ITrackableAction } from "../../../../service/util/trackAction";
-import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
-import ItinerarySettingsView from "./ItinerarySettingsView";
+import { IItineraryCreatePayload } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import ItineraryStopsView from "./ItineraryStopsView";
+import ItineraryDurationView from "./ItineraryDurationView";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
-  onItineraryCreate: (
-    itineraryRoutePayload: IItineraryRoutingForm
-  ) => ITrackableAction;
-}
-
-export interface IItineraryRoutingForm {
-  locations: IGeosearchPayloadWithId[];
-  settings: IItinerarySettings;
+  onItineraryCreate: (itineraryRoutePayload: IItineraryCreatePayload) => void;
 }
 
 type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
@@ -24,7 +15,7 @@ type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
 const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   props: IItineraryCreateViewProps
 ) => {
-  const [form] = Form.useForm<IItineraryRoutingForm>();
+  const [form] = Form.useForm<IItineraryCreatePayload>();
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
@@ -40,15 +31,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   }, []);
 
   const handleFinish = useCallback(() => {
-    props
-      .onItineraryCreate(form.getFieldsValue(true))
-      .track()
-      .subscribe({
-        next: () => {
-          resetFields();
-        },
-        error: () => {},
-      });
+    props.onItineraryCreate(form.getFieldsValue(true));
   }, []);
 
   const resetFields = useCallback(() => {
@@ -65,11 +48,11 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
         ),
       },
       {
-        title: "Fine-tune your itinerary plan",
+        title: "Decide your visit duration",
         content: (
-          <ItinerarySettingsView
-            onNextStep={form.submit}
+          <ItineraryDurationView
             onPreviousStep={handlePreviousStep}
+            onNextStep={handleFinish}
           />
         ),
       },
@@ -83,7 +66,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   );
 
   return (
-    <Form<IItineraryRoutingForm>
+    <Form<IItineraryCreatePayload>
       form={form}
       onFinish={handleFinish}
       initialValues={{

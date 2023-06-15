@@ -17,6 +17,7 @@ export interface IGeosearchPayload extends ICoordinates {
 }
 
 export type IGeosearchPayloadWithId = IGeosearchPayload & IIdPayload;
+
 export interface IMapElementOwnProps {
   selectedLocation?: IGeosearchPayloadWithId;
   locations?: IGeosearchPayloadWithId[];
