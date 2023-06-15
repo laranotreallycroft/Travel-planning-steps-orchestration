@@ -53,13 +53,13 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
                   <InputNumber
                     defaultValue={location.duration}
                     min={1}
-                    max={10}
+                    max={600}
                     onChange={(value) =>
                       handleDurationChange(value ?? 1, location.id)
                     }
                     className="itineraryDurationView__input"
                   />
-                  <Col>hours</Col>
+                  <Col>minutes</Col>
                 </Row>
               ),
               width: 180,

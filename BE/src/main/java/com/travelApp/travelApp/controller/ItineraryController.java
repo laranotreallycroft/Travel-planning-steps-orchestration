@@ -9,6 +9,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -111,38 +112,52 @@ public class ItineraryController {
 
 	}
 
-	public void createNewItineraryWithPayload(Itinerary itinerary, OpenRouteServiceDirectionsResponse response,
-			ItineraryCreatePayload itineraryPayload) throws Exception {
-		Integer timeAtLocation = 60;
-		LocalTime time = LocalTime.of(8, 0); // Set the desired time to 8 AM
-		LocalDateTime dateTime = itinerary.getDate().atTime(time);
-		List<Segment> segments = response.getSegments();
-		List<ItineraryLocation> locations = itineraryPayload.getLocations();
+	public List<Itinerary> createItinerariesFromPayload(Trip trip, List<Segment> segments,
+			List<ItineraryLocation> locations, LineString linestring) {
 
-		// pair travel durations with labels
+		List<Itinerary> itineraries = new ArrayList<>();
+		itineraries.add(new Itinerary(trip, trip.getDateFrom(), linestring));
+
 		for (int i = 0; i < segments.size() - 1; i++) {
-			GeosearchPayload payloadLocation = locations.get(i);
-			int durationMinutes = (int) segments.get(i).getDuration() / 60;
+			Itinerary lastItinerary = itineraries.get(itineraries.size() - 1);
+			LocalDateTime lastItineraryElementDateTime;
+			if (lastItinerary.getItineraryElements() != null)
+				lastItineraryElementDateTime = lastItinerary.getItineraryElements()
+						.get(lastItinerary.getItineraryElements().size() - 1).getEndDate().toLocalDateTime();
+			else
+				lastItineraryElementDateTime = lastItinerary.getDate().atTime(LocalTime.of(8, 0));
+
+			ItineraryLocation payloadLocation = locations.get(i);
+			int commuteDuration = (int) segments.get(i).getDuration() / 60;
+
+			if (lastItineraryElementDateTime.getHour() > 20
+					|| lastItineraryElementDateTime.plusMinutes(commuteDuration + payloadLocation.getDuration())
+							.isAfter(lastItinerary.getDate().atTime(LocalTime.of(20, 0)))) {
+				lastItinerary = new Itinerary(trip, lastItinerary.getDate().plusDays(1), linestring);
+				itineraries.add(lastItinerary);
+				lastItineraryElementDateTime = lastItinerary.getDate().atTime(LocalTime.of(8, 0));
+
+			}
 
 			ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-					payloadLocation.toPoint(), Timestamp.valueOf(dateTime),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes)),
-					Timestamp.valueOf(dateTime.plusMinutes(durationMinutes + timeAtLocation)), itinerary);
-			itinerary.addItineraryElement(itineraryElement);
-			// TODO REAL TIME
-			dateTime = dateTime.plusMinutes(durationMinutes + timeAtLocation);
+					payloadLocation.toPoint(), Timestamp.valueOf(lastItineraryElementDateTime),
+					Timestamp.valueOf(lastItineraryElementDateTime.plusMinutes(commuteDuration)),
+					Timestamp.valueOf(lastItineraryElementDateTime.plusMinutes(commuteDuration)),
+					Timestamp.valueOf(
+							lastItineraryElementDateTime.plusMinutes(commuteDuration + payloadLocation.getDuration())),
+					lastItinerary);
+			lastItinerary.addItineraryElement(itineraryElement);
+
 		}
-		if (dateTime.toLocalDate() != itinerary.getDate()) {
-			throw new Exception();
-		}
+		return itineraries;
+
 	}
 
 	@PostMapping
 	public ResponseEntity createItinerary(@RequestBody ItineraryCreatePayload itineraryPayload)
 			throws URISyntaxException {
-		return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
-		/*Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
+
+		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
 
 		if (itineraryPayload.getRouteOptions().isOptimize()) {
 			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, trip.getLocation());
@@ -162,97 +177,98 @@ public class ItineraryController {
 
 		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
 		LineString linestring = GeometryDecoder.convert(decodedGeometry);
-		Itinerary itinerary = new Itinerary(trip, itineraryPayload.getDate(), linestring);
-		try {
-			createNewItineraryWithPayload(itinerary, response, itineraryPayload);
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
 
+		List<Itinerary> itineraries = createItinerariesFromPayload(trip, response.getSegments(),
+				itineraryPayload.getLocations(), linestring);
+		for (Itinerary itinerary : itineraries) {
+			trip.addItinerary(itinerary);
 		}
 
-		trip.addItinerary(itinerary);
 		tripRepository.save(trip);
 		return ResponseEntity.ok(trip);
-*/
-	}
-/*
-	@PutMapping("/{itineraryId}/route")
-	public ResponseEntity updateItineraryRoute(@PathVariable(value = "itineraryId") Long itineraryId,
-			@RequestBody ItineraryRoutingPayload itineraryPayload) throws URISyntaxException {
-		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
-
-		if (itineraryPayload.getRouteOptions().isOptimize()) {
-			List<Step> steps = getOpenRouteServiceOptimization(itineraryPayload, itinerary.getTrip().getLocation());
-			if (steps == null)
-				return ResponseEntity.badRequest()
-						.body("Unable to find route between points. Try changing the method of transportation.");
-			itineraryPayload.sortLocations(steps);
-
-		}
-
-		OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryPayload,
-				itinerary.getTrip().getLocation());
-		if (!response.routeFound())
-			return ResponseEntity.badRequest()
-					.body("Unable to find route between points. Try changing the method of transportation.");
-
-		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
-		LineString linestring = GeometryDecoder.convert(decodedGeometry);
-		itinerary.setRouteGeometry(linestring);
-		itinerary.getItineraryElements().clear();
-
-		try {
-			createNewItineraryWithPayload(itinerary, response, itineraryPayload);
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("This route would take more than a day. Try removing some stops.");
-
-		}
-		itineraryRepository.save(itinerary);
-		return ResponseEntity.ok(itinerary.getTrip());
 
 	}
-
-	@PutMapping("/{itineraryId}/schedule")
-	public ResponseEntity updateItinerarySchedule(@PathVariable(value = "itineraryId") Long itineraryId,
-			@RequestBody List<ScheduleElement> scheduleElements) throws URISyntaxException {
-
-		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
-		for (ScheduleElement scheduleElement : scheduleElements) {
-
-			ItineraryElement itineraryElement = itineraryElementRepository
-					.findById(
-							Long.parseLong(scheduleElement.getId().substring(0, scheduleElement.getId().length() - 1)))
-					.orElse(null);
-
-			Long previousCommuteLength = itineraryElement.getCommuteEndDate().getTime()
-					- itineraryElement.getCommuteStartDate().getTime();
-
-			itineraryElement.setCommuteStartDate(
-					new Timestamp(scheduleElement.getStartDate().getTime() - previousCommuteLength));
-			itineraryElement.setCommuteEndDate(scheduleElement.getStartDate());
-			itineraryElement.setStartDate(scheduleElement.getStartDate());
-			itineraryElement.setEndDate(scheduleElement.getEndDate());
-			itineraryElementRepository.save(itineraryElement);
-
-		}
-
-		return ResponseEntity.ok(itinerary.getTrip());
-
-	}
-
-	@DeleteMapping("/{itineraryId}")
-	public ResponseEntity deleteItinerary(@PathVariable(value = "itineraryId") Long itineraryId)
-			throws URISyntaxException {
-
-		Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
-		if (itinerary != null) {
-			Trip trip = itinerary.getTrip();
-			itineraryRepository.delete(itinerary);
-			return ResponseEntity.ok(trip);
-
-		}
-
-		return ResponseEntity.badRequest().body("Something went wrong");
-
-	}*/
+	/*
+	 * @PutMapping("/{itineraryId}/route") public ResponseEntity
+	 * updateItineraryRoute(@PathVariable(value = "itineraryId") Long itineraryId,
+	 * 
+	 * @RequestBody ItineraryRoutingPayload itineraryPayload) throws
+	 * URISyntaxException { Itinerary itinerary =
+	 * itineraryRepository.findById(itineraryId).orElse(null);
+	 * 
+	 * if (itineraryPayload.getRouteOptions().isOptimize()) { List<Step> steps =
+	 * getOpenRouteServiceOptimization(itineraryPayload,
+	 * itinerary.getTrip().getLocation()); if (steps == null) return
+	 * ResponseEntity.badRequest()
+	 * .body("Unable to find route between points. Try changing the method of transportation."
+	 * ); itineraryPayload.sortLocations(steps);
+	 * 
+	 * }
+	 * 
+	 * OpenRouteServiceDirectionsResponse response =
+	 * getOpenRouteServiceDirections(itineraryPayload,
+	 * itinerary.getTrip().getLocation()); if (!response.routeFound()) return
+	 * ResponseEntity.badRequest()
+	 * .body("Unable to find route between points. Try changing the method of transportation."
+	 * );
+	 * 
+	 * JSONArray decodedGeometry =
+	 * GeometryDecoder.decodeGeometry(response.getGeometry(), false); LineString
+	 * linestring = GeometryDecoder.convert(decodedGeometry);
+	 * itinerary.setRouteGeometry(linestring);
+	 * itinerary.getItineraryElements().clear();
+	 * 
+	 * try { createNewItineraryWithPayload(itinerary, response, itineraryPayload); }
+	 * catch (Exception e) { return ResponseEntity.badRequest().
+	 * body("This route would take more than a day. Try removing some stops.");
+	 * 
+	 * } itineraryRepository.save(itinerary); return
+	 * ResponseEntity.ok(itinerary.getTrip());
+	 * 
+	 * }
+	 * 
+	 * @PutMapping("/{itineraryId}/schedule") public ResponseEntity
+	 * updateItinerarySchedule(@PathVariable(value = "itineraryId") Long
+	 * itineraryId,
+	 * 
+	 * @RequestBody List<ScheduleElement> scheduleElements) throws
+	 * URISyntaxException {
+	 * 
+	 * Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+	 * for (ScheduleElement scheduleElement : scheduleElements) {
+	 * 
+	 * ItineraryElement itineraryElement = itineraryElementRepository .findById(
+	 * Long.parseLong(scheduleElement.getId().substring(0,
+	 * scheduleElement.getId().length() - 1))) .orElse(null);
+	 * 
+	 * Long previousCommuteLength = itineraryElement.getCommuteEndDate().getTime() -
+	 * itineraryElement.getCommuteStartDate().getTime();
+	 * 
+	 * itineraryElement.setCommuteStartDate( new
+	 * Timestamp(scheduleElement.getStartDate().getTime() - previousCommuteLength));
+	 * itineraryElement.setCommuteEndDate(scheduleElement.getStartDate());
+	 * itineraryElement.setStartDate(scheduleElement.getStartDate());
+	 * itineraryElement.setEndDate(scheduleElement.getEndDate());
+	 * itineraryElementRepository.save(itineraryElement);
+	 * 
+	 * }
+	 * 
+	 * return ResponseEntity.ok(itinerary.getTrip());
+	 * 
+	 * }
+	 * 
+	 * @DeleteMapping("/{itineraryId}") public ResponseEntity
+	 * deleteItinerary(@PathVariable(value = "itineraryId") Long itineraryId) throws
+	 * URISyntaxException {
+	 * 
+	 * Itinerary itinerary = itineraryRepository.findById(itineraryId).orElse(null);
+	 * if (itinerary != null) { Trip trip = itinerary.getTrip();
+	 * itineraryRepository.delete(itinerary); return ResponseEntity.ok(trip);
+	 * 
+	 * }
+	 * 
+	 * return ResponseEntity.badRequest().body("Something went wrong");
+	 * 
+	 * }
+	 */
 }

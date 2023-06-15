@@ -102,7 +102,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
       const parsedValue: IItineraryElementPayload = {
         ...JSON.parse(value),
         id: uuidv4(),
-        duration: 1,
+        duration: 60,
       };
       setSelectedLocation(parsedValue);
       setLocations([...locations, parsedValue]);
