@@ -46,6 +46,12 @@ public class Itinerary {
 
 	}
 
+	public Itinerary(Trip trip, LocalDate date) {
+		super();
+		this.trip = trip;
+		this.date = date;
+	}
+
 	public Itinerary(Trip trip, LocalDate date, LineString routeGeometry) {
 		super();
 		this.trip = trip;

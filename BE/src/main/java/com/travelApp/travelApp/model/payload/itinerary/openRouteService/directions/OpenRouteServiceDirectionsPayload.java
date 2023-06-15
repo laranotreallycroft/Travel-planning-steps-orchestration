@@ -7,6 +7,7 @@ import org.locationtech.jts.geom.Coordinate;
 
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 
 public class OpenRouteServiceDirectionsPayload {
 	private List<List<Double>> coordinates;
@@ -20,13 +21,13 @@ public class OpenRouteServiceDirectionsPayload {
 		this.coordinates = coordinates;
 	}
 
-	public OpenRouteServiceDirectionsPayload(ItineraryCreatePayload itineraryPayload,Coordinate origin) {
+	public OpenRouteServiceDirectionsPayload(List<ItineraryLocation> itineraryLocations, Coordinate origin) {
 		this.coordinates = new ArrayList<>();
 		ArrayList<Double> start = new ArrayList<>();
 		start.add(origin.getX());
 		start.add(origin.getY());
 		this.coordinates.add(start);
-		for (GeosearchPayload coordinates : itineraryPayload.getLocations()) {
+		for (GeosearchPayload coordinates : itineraryLocations) {
 			ArrayList<Double> coordinatesList = new ArrayList<>();
 			coordinatesList.add(coordinates.getX());
 			coordinatesList.add(coordinates.getY());

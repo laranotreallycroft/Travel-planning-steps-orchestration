@@ -1,9 +1,6 @@
 package com.travelApp.travelApp.model.payload.itinerary;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization.Step;
 
 public class ItineraryPayload {
 	private List<ItineraryLocation> locations;
@@ -35,19 +32,4 @@ public class ItineraryPayload {
 		this.routeOptions = routeOptions;
 	}
 
-
-
-	public void sortLocations(List<Step> steps) {
-		List<ItineraryLocation> sortedLocations = new ArrayList<>();
-		for (Step step : steps) {
-			for (ItineraryLocation location : this.locations) {
-				if (location.equals(step)) {
-					sortedLocations.add(location);
-					break;
-				}
-			}
-		}
-		this.locations = sortedLocations;
-
-	}
 }

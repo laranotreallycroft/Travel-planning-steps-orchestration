@@ -6,8 +6,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-import com.travelApp.travelApp.model.payload.itinerary.openRouteService.optimization.Step;
-
 public class GeosearchPayload {
 
 	private String id;
@@ -76,7 +74,4 @@ public class GeosearchPayload {
 		return gf.createPoint(new Coordinate(this.x, this.y));
 	}
 
-	public boolean equals(Step step) {
-		return this.x.equals(step.getX()) && this.y.equals(step.getY());
-	}
 }

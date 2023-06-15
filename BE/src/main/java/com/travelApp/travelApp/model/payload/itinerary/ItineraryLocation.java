@@ -23,5 +23,6 @@ public class ItineraryLocation extends GeosearchPayload{
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
+	
 
 }

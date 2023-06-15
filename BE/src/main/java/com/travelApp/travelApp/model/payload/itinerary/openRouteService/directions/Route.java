@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Route {
-	private Summary summary;
 	private List<Segment> segments;
 	private String geometry;
 
@@ -14,19 +13,10 @@ public class Route {
 
 	}
 
-	public Route(Summary summary, List<Segment> segments, String geometry) {
+	public Route(List<Segment> segments, String geometry) {
 		super();
-		this.summary = summary;
 		this.segments = segments;
 		this.geometry = geometry;
-	}
-
-	public Summary getSummary() {
-		return summary;
-	}
-
-	public void setSummary(Summary summary) {
-		this.summary = summary;
 	}
 
 	public List<Segment> getSegments() {
