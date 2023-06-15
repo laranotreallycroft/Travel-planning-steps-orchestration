@@ -51,7 +51,7 @@ public class Trip {
 	@JsonIgnoreProperties("trip")
 	private List<PackingList> packingLists;
 
-	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("trip")
 	private List<Itinerary> itineraries;
 

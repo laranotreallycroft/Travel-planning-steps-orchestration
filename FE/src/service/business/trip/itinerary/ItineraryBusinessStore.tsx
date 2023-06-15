@@ -17,7 +17,7 @@ import notificationService from "../../../util/notificationService";
 import trackAction, { IAction } from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
 import { loginActions } from "../../login/LoginBusinessStore";
-import { tripStore } from "../TripBusinessStore";
+import { getTrip, tripStore } from "../TripBusinessStore";
 
 export interface IItineraryElementPayload extends IGeosearchPayloadWithId {
   duration: number;
@@ -214,7 +214,7 @@ const itinerariesDeleteEffect = (
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const trip = getItinerary(state);
+      const trip = getTrip(state);
       return from(
         axios
           .delete(`/itineraries/${trip.id}`)

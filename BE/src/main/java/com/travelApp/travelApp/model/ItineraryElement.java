@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.Point;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
