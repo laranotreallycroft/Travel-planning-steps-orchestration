@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelApp.travelApp.model.Itinerary;
 import com.travelApp.travelApp.model.ItineraryElement;
 import com.travelApp.travelApp.model.Trip;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
+import com.travelApp.travelApp.model.payload.itinerary.ItineraryPayload;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsPayload;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsResponse;
@@ -50,7 +51,7 @@ import com.travelApp.travelApp.utils.DistanceMatrix;
 import com.travelApp.travelApp.utils.GeometryDecoder;
 
 @RestController
-@RequestMapping("/itinerary")
+@RequestMapping("/itineraries")
 public class ItineraryController {
 	private final TripRepository tripRepository;
 	private final ItineraryRepository itineraryRepository;
@@ -135,8 +136,9 @@ public class ItineraryController {
 			if (lastItineraryElementEndDateTime.getHour() > 20
 					|| lastItineraryElementEndDateTime.plusMinutes(commuteDuration + payloadLocation.getDuration())
 							.isAfter(itinerary.getDate().atTime(LocalTime.of(20, 0)))) {
-				if (commuteDuration + payloadLocation.getDuration() > 12)
-					throw new Exception("Commute and stay duration for "+ payloadLocation.getLabel()+" would be longer than 12 hours.");
+				if (commuteDuration/60 + payloadLocation.getDuration() / 60 > 12)
+					throw new Exception("Commute and stay duration for " + payloadLocation.getLabel()
+							+ " would be longer than 12 hours.");
 				response = getOpenRouteServiceDirections(itineraryLocations.subList(0, i), trip.getLocation(),
 						routeOptions);
 				createItinerariesFromPayload(trip, itineraryLocations.subList(i, itineraryLocations.size()),
@@ -150,7 +152,7 @@ public class ItineraryController {
 					Timestamp.valueOf(lastItineraryElementEndDateTime.plusMinutes(commuteDuration)),
 					Timestamp.valueOf(lastItineraryElementEndDateTime
 							.plusMinutes(commuteDuration + payloadLocation.getDuration())),
-					itinerary);
+					itinerary, payloadLocation.getDuration());
 			itinerary.addItineraryElement(itineraryElement);
 		}
 		JSONArray decodedGeometry = GeometryDecoder.decodeGeometry(response.getGeometry(), false);
@@ -161,8 +163,7 @@ public class ItineraryController {
 	}
 
 	@PostMapping
-	public ResponseEntity createItineraries(@RequestBody ItineraryCreatePayload itineraryPayload)
-			throws URISyntaxException {
+	public ResponseEntity createItineraries(@RequestBody ItineraryPayload itineraryPayload) throws URISyntaxException {
 
 		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
 		Integer tripDay = 0;
@@ -188,14 +189,59 @@ public class ItineraryController {
 				createItinerariesFromPayload(trip, itineraryPayload.getLocations(), itineraryPayload.getRouteOptions(),
 						tripDay);
 			} catch (Exception e) {
-				return ResponseEntity.badRequest().body(
-						e.getMessage());
+				return ResponseEntity.badRequest().body(e.getMessage());
 
 			}
 		}
 		tripRepository.save(trip);
-	return ResponseEntity.ok(trip);
+		return ResponseEntity.status(HttpStatus.CREATED).body(trip);
 
 	}
 
+	@PutMapping
+	public ResponseEntity updateItineraries(@RequestBody ItineraryPayload itineraryPayload) throws URISyntaxException {
+
+		Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
+		trip.getItineraries().clear();
+		Integer tripDay = 0;
+		if (itineraryPayload.getRouteOptions().isOptimize()) {
+			try {
+				OpenRouteServiceDistanceMatrixResponse response = getOpenRouteServiceDistanceMatrix(
+						itineraryPayload.getLocations(), itineraryPayload.getRouteOptions());
+
+				List<List<Integer>> clusters = DistanceMatrix.getClusters(response.getDurations(), null);
+				for (List<Integer> cluster : clusters) {
+					List<ItineraryLocation> clusterLocations = IntStream
+							.range(0, itineraryPayload.getLocations().size()).filter(i -> cluster.contains(i))
+							.mapToObj(itineraryPayload.getLocations()::get).collect(Collectors.toList());
+					createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay);
+
+				}
+			} catch (Exception e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+			}
+
+		} else {
+			try {
+				createItinerariesFromPayload(trip, itineraryPayload.getLocations(), itineraryPayload.getRouteOptions(),
+						tripDay);
+			} catch (Exception e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+
+			}
+		}
+		tripRepository.save(trip);
+		return ResponseEntity.ok(trip);
+
+	}
+
+	@DeleteMapping("/{tripId}")
+	public ResponseEntity deleteItinenaries(@PathVariable(value="tripId") Long tripId) throws URISyntaxException {
+
+		Trip trip = tripRepository.findById(tripId).orElse(null);
+		trip.getItineraries().clear();
+		tripRepository.save(trip);
+		return ResponseEntity.ok(trip);
+
+	}
 }

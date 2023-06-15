@@ -11,7 +11,7 @@ import MapElement, {
 import MapSearch from "../../../common/map/MapSearch";
 import { ITrip } from "../../../../model/trip/Trip";
 import {
-  IItineraryCreatePayload,
+  IItineraryForm,
   IItineraryElementPayload,
 } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import {
@@ -89,7 +89,7 @@ type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
 const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   props: IItineraryStopsViewProps
 ) => {
-  const form = Form.useFormInstance<IItineraryCreatePayload>();
+  const form = Form.useFormInstance<IItineraryForm>();
   const locations = Form.useWatch("locations", form);
   const [selectedLocation, setSelectedLocation] =
     useState<IItineraryElementPayload>(form.getFieldValue("locations")[0]);
@@ -241,7 +241,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
           </Row>
           <MapElement
             selectedLocation={selectedLocation}
-            locations={locations}
+            locations={[locations]}
             className="fullHeight"
           />
         </Col>

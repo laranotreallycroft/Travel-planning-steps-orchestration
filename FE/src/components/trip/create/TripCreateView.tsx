@@ -98,7 +98,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (
         </Form.Item>
         <MapElement
           selectedLocation={selectedLocation}
-          locations={selectedLocation ? [selectedLocation] : undefined}
+          locations={selectedLocation ? [[selectedLocation]] : undefined}
         />
       </Form>
     </Modal>

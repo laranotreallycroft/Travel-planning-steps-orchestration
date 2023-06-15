@@ -1,13 +1,13 @@
 import { Form, Steps } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ITrip } from "../../../../model/trip/Trip";
-import { IItineraryCreatePayload } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import ItineraryStopsView from "./ItineraryStopsView";
+import { IItineraryForm } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import ItineraryDurationView from "./ItineraryDurationView";
+import ItineraryStopsView from "./ItineraryStopsView";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;
-  onItineraryCreate: (itineraryRoutePayload: IItineraryCreatePayload) => void;
+  onSubmit: (itineraryRoutePayload: IItineraryForm) => void;
 }
 
 type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
@@ -15,7 +15,7 @@ type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
 const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   props: IItineraryCreateViewProps
 ) => {
-  const [form] = Form.useForm<IItineraryCreatePayload>();
+  const [form] = Form.useForm<IItineraryForm>();
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   }, []);
 
   const handleFinish = useCallback(() => {
-    props.onItineraryCreate(form.getFieldsValue(true));
+    props.onSubmit(form.getFieldsValue(true));
   }, []);
 
   const resetFields = useCallback(() => {
@@ -66,13 +66,30 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
   );
 
   return (
-    <Form<IItineraryCreatePayload>
+    <Form<IItineraryForm>
       form={form}
       onFinish={handleFinish}
-      initialValues={{
-        locations: [],
-        routeOptions: { optimize: false, vehicleProfile: "driving-car" },
-      }}
+      initialValues={
+        props.trip.itineraries
+          ? {
+              locations: props.trip.itineraries.flatMap((itinerary) =>
+                itinerary.itineraryElements.map((itineraryElement) => {
+                  return {
+                    id: itineraryElement.id,
+                    label: itineraryElement.label,
+                    x: itineraryElement.location.x,
+                    y: itineraryElement.location.y,
+                    duration: itineraryElement.duration,
+                  };
+                })
+              ),
+              routeOptions: { optimize: false, vehicleProfile: "driving-car" },
+            }
+          : {
+              locations: [],
+              routeOptions: { optimize: false, vehicleProfile: "driving-car" },
+            }
+      }
       className="fullSize"
     >
       <Steps current={currentStep} items={items} />

@@ -1,18 +1,3 @@
-.itinerarySider__deleteButton {
-    position: absolute;
-    right: 4px;
-    z-index: 1000;
-
-}
-
-
 .itinerarySider__sider {
     height: 90%
-}
-
-.itinerarySider__siderButtonsContainer {
-    position: absolute;
-    right: 16px;
-    z-index: 1000;
-    top: 12px;
 }

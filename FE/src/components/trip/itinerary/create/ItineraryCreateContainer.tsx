@@ -2,7 +2,8 @@ import { connect } from "react-redux";
 import { ITrip } from "../../../../model/trip/Trip";
 import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
 import {
-  IItineraryCreatePayload,
+  IItineraryForm,
+  IItineraryPayload,
   ItineraryBusinessStore,
 } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import {
@@ -17,8 +18,8 @@ export interface IItineraryCreateContainerStateProps {
   trip: ITrip;
 }
 export interface IItineraryCreateContainerDispatchProps {
-  itineraryCreate: (
-    itineraryRoutePayload: IItineraryCreatePayload
+  itinerariesCreate: (
+    itineraryRoutePayload: IItineraryPayload
   ) => ITrackableAction;
 }
 type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
@@ -28,15 +29,12 @@ type IItineraryCreateContainerProps = IItineraryCreateContainerOwnProps &
 const ItineraryCreateContainer: React.FC<IItineraryCreateContainerProps> = (
   props: IItineraryCreateContainerProps
 ) => {
-  const handleItineraryCreate = (values: IItineraryCreatePayload) => {
-    props.itineraryCreate(values);
+  const handleItinerariesCreate = (values: IItineraryForm) => {
+    props.itinerariesCreate({ ...values, tripId: props.trip.id });
   };
 
   return (
-    <ItineraryCreateView
-      trip={props.trip}
-      onItineraryCreate={handleItineraryCreate}
-    />
+    <ItineraryCreateView trip={props.trip} onSubmit={handleItinerariesCreate} />
   );
 };
 
@@ -47,10 +45,10 @@ const mapStateToProps = (state: any): IItineraryCreateContainerStateProps => ({
 const mapDispatchToProps = (
   dispatch: any
 ): IItineraryCreateContainerDispatchProps => ({
-  itineraryCreate: (itineraryCreatePayload: IItineraryCreatePayload) =>
+  itinerariesCreate: (itineraryCreatePayload: IItineraryPayload) =>
     dispatch(
       createTrackableAction(
-        ItineraryBusinessStore.actions.itineraryCreate(itineraryCreatePayload)
+        ItineraryBusinessStore.actions.itinerariesCreate(itineraryCreatePayload)
       )
     ),
 });

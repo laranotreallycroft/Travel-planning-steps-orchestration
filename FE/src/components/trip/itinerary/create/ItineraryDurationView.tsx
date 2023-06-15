@@ -2,7 +2,7 @@ import { Button, Col, Form, InputNumber, Row, Table } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
 import {
-  IItineraryCreatePayload,
+  IItineraryForm,
   IItineraryElementPayload,
 } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
@@ -16,7 +16,7 @@ type IItineraryDurationViewProps = IItineraryDurationViewOwnProps;
 const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
   props: IItineraryDurationViewProps
 ) => {
-  const form = Form.useFormInstance<IItineraryCreatePayload>();
+  const form = Form.useFormInstance<IItineraryForm>();
 
   const handleDurationChange = (value: number, locationId: string) => {
     const locations = form.getFieldsValue(true).locations;
@@ -28,10 +28,10 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
   };
   return (
     <Row className="fullHeight">
-      <Row className="fullWidth">
+      <Row className="itineraryDurationView__content margin-bottom-l">
         <Title level={4}>Decide your visit duration</Title>
         <Table
-          className="fullSize"
+          className="itineraryDurationView__tableContainer"
           bordered
           dataSource={form
             .getFieldValue("locations")

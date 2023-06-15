@@ -1,9 +1,11 @@
+import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 import axios from "axios";
 import {
   Observable,
   catchError,
   filter,
   from,
+  map,
   mergeMap,
   of,
   switchMap,
@@ -15,21 +17,18 @@ import notificationService from "../../../util/notificationService";
 import trackAction, { IAction } from "../../../util/trackAction";
 import { IPayloadAction } from "../../common/types";
 import { loginActions } from "../../login/LoginBusinessStore";
-import { getTrip, tripStore } from "../TripBusinessStore";
-import { AppointmentModel } from "@devexpress/dx-react-scheduler";
+import { tripStore } from "../TripBusinessStore";
 
 export interface IItineraryElementPayload extends IGeosearchPayloadWithId {
   duration: number;
 }
-export interface IItineraryCreatePayload {
+
+export interface IItineraryForm {
   locations: IItineraryElementPayload[];
   settings: IItinerarySettings;
 }
-
-export interface IItineraryUpdatePayload {
-  id: number;
-  locations: IGeosearchPayloadWithId[];
-  settings: IItinerarySettings;
+export interface IItineraryPayload extends IItineraryForm {
+  tripId: number;
 }
 
 export interface IItinerarySettings {
@@ -45,24 +44,24 @@ const getItinerary = (store: any): IItinerary => store.itinerary;
 // -
 // -------------------- Actions
 const actions = {
-  ITINERARY_CREATE: "ITINERARY_CREATE",
-  ITINERARY_ROUTE_UPDATE: "ITINERARY_ROUTE_UPDATE",
+  ITINERARIES_CREATE: "ITINERARIES_CREATE",
+  ITINERARIES_UPDATE: "ITINERARIES_UPDATE",
   ITINERARY_SCHEDULE_UPDATE: "ITINERARY_SCHEDULE_UPDATE",
-  ITINERARY_DELETE: "ITINERARY_DELETE",
+  ITINERARIES_DELETE: "ITINERARIES_DELETE",
   ITINERARY_STORE: "ITINERARY_STORE",
   ITINERARY_CLEAR: "ITINERARY_CLEAR",
 };
 
-export const itineraryCreate = (
-  payload: IItineraryCreatePayload
-): IPayloadAction<IItineraryCreatePayload> => {
-  return { type: actions.ITINERARY_CREATE, payload: payload };
+export const itinerariesCreate = (
+  payload: IItineraryPayload
+): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARIES_CREATE, payload: payload };
 };
 
-export const itineraryRouteUpdate = (
-  payload: IItineraryUpdatePayload
-): IPayloadAction<IItineraryUpdatePayload> => {
-  return { type: actions.ITINERARY_ROUTE_UPDATE, payload: payload };
+export const itinerariesUpdate = (
+  payload: IItineraryPayload
+): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARIES_UPDATE, payload: payload };
 };
 
 export const itineraryScheduleUpdate = (
@@ -70,8 +69,8 @@ export const itineraryScheduleUpdate = (
 ): IPayloadAction<AppointmentModel[]> => {
   return { type: actions.ITINERARY_SCHEDULE_UPDATE, payload: payload };
 };
-export const itineraryDelete = (): IAction => {
-  return { type: actions.ITINERARY_DELETE };
+export const itinerariesDelete = (): IAction => {
+  return { type: actions.ITINERARIES_DELETE };
 };
 export const itineraryStore = (
   payload: IItinerary
@@ -86,29 +85,29 @@ export const itineraryClear = (): IAction => {
 // -
 // -------------------- Side-effects
 
-const itineraryCreateEffect = (
-  action$: Observable<IPayloadAction<IItineraryCreatePayload>>,
+const itinerariesCreateEffect = (
+  action$: Observable<IPayloadAction<IItineraryPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARY_CREATE;
+      return action.type === actions.ITINERARIES_CREATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+    mergeMap((action) => {
       return from(
         axios
-          .post(`/itinerary`, { ...action.payload, tripId: trip.id })
+          .post(`/itineraries`, action.payload)
           .then((response) => {
-            if (response.status === 201 || response.status === 200) {
-              notificationService.success("New itinerary successfully created");
+            if (response.status === 201) {
+              notificationService.success(
+                "New itineraries successfully created"
+              );
               return response.data;
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to create itinerary",
+              "Unable to create itineraries",
               error.response.data
             );
             throw error;
@@ -116,48 +115,35 @@ const itineraryCreateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) =>
-      of(
-        tripStore(data),
-        itineraryStore(data.itineraries?.[data.itineraries?.length - 1])
-      )
-    ),
+    map((data) => tripStore(data)),
 
     catchError((error: any, o: Observable<any>) => {
       return o;
     })
   );
 };
-/*
-const itineraryRouteUpdateEffect = (
-  action$: Observable<IPayloadAction<IItineraryUpdatePayload>>,
+
+const itinerariesUpdateEffect = (
+  action$: Observable<IPayloadAction<IItineraryPayload>>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARY_ROUTE_UPDATE;
+      return action.type === actions.ITINERARIES_UPDATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const itinerary = getItinerary(state);
+    mergeMap((action) => {
       return from(
         axios
-          .put(`/itinerary/${itinerary.id}/route`, action.payload)
+          .put(`/itineraries`, action.payload)
           .then((response) => {
-            if (response.status === 201 || response.status === 200) {
-              notificationService.success("Itinerary successfully updated");
-              return {
-                trip: response.data,
-                itinerary: response.data.itineraries.find(
-                  (itineraryPayload: IItinerary) =>
-                    itineraryPayload.id === itinerary.id
-                ),
-              };
+            if (response.status === 200) {
+              notificationService.success("Itineraries successfully updated");
+              return response.data;
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to update itinerary",
+              "Unable to update itineraries",
               error.response.data
             );
             throw error;
@@ -165,15 +151,13 @@ const itineraryRouteUpdateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) =>
-      of(tripStore(data?.trip), itineraryStore(data?.itinerary))
-    ),
+    map((data) => tripStore(data)),
 
     catchError((error: any, o: Observable<any>) => {
       return o;
     })
   );
-};
+}; /*
 const itineraryScheduleUpdateEffect = (
   action$: Observable<IPayloadAction<AppointmentModel[]>>,
   state$: Observable<any>
@@ -219,24 +203,24 @@ const itineraryScheduleUpdateEffect = (
     })
   );
 };
-
-const itineraryDeleteEffect = (
+*/
+const itinerariesDeleteEffect = (
   action$: Observable<IAction>,
   state$: Observable<any>
 ) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARY_DELETE;
+      return action.type === actions.ITINERARIES_DELETE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const itinerary = getItinerary(state);
+      const trip = getItinerary(state);
       return from(
         axios
-          .delete(`/itinerary/${itinerary.id}`)
+          .delete(`/itineraries/${trip.id}`)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success("Itinerary successfully deleted");
+              notificationService.success("Itineraries successfully deleted");
               return response.data;
             }
           })
@@ -256,7 +240,7 @@ const itineraryDeleteEffect = (
       return o;
     })
   );
-};*/
+};
 // -
 // -------------------- Reducers
 
@@ -276,18 +260,18 @@ const itinerary = (state: any = null, action: IPayloadAction<IItinerary>) => {
 export const ItineraryBusinessStore = {
   selectors: { getItinerary },
   actions: {
-    itineraryCreate,
-    itineraryRouteUpdate,
+    itinerariesCreate,
+    itinerariesUpdate,
     itineraryScheduleUpdate,
-    itineraryDelete,
+    itinerariesDelete,
     itineraryStore,
     itineraryClear,
   },
   effects: {
-    itineraryCreateEffect,
-    // itineraryRouteUpdateEffect,
+    itinerariesCreateEffect,
+    itinerariesUpdateEffect,
     // itineraryScheduleUpdateEffect,
-    //  itineraryDeleteEffect,
+    itinerariesDeleteEffect,
   },
   reducers: { itinerary },
 };

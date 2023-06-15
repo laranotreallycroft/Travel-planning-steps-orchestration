@@ -41,12 +41,14 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 	@JsonIgnoreProperties("itineraryElements")
 	private Itinerary itinerary;
 
+	private Integer duration;
+
 	public ItineraryElement() {
 
 	}
 
 	public ItineraryElement(String label, Point location, Timestamp commuteStartDate, Timestamp commuteEndDate,
-			Timestamp startDate, Timestamp endDate, Itinerary itinerary) {
+			Timestamp startDate, Timestamp endDate, Itinerary itinerary, Integer duration) {
 		super();
 		this.label = label;
 		this.location = location;
@@ -55,6 +57,7 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.itinerary = itinerary;
+		this.duration = duration;
 	}
 
 	public Timestamp getStartDate() {
@@ -119,6 +122,14 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 
 	public void setItinerary(Itinerary itinerary) {
 		this.itinerary = itinerary;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 
 	@Override

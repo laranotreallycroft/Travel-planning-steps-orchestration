@@ -10,7 +10,7 @@ export interface ITrip {
   locationLabel: string;
   location: ICoordinates;
   packingLists: IPackingList[];
-  itineraries?: IItinerary[];
+  itineraries: IItinerary[];
 }
 
 export interface ITripPayload {

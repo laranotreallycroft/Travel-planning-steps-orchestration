@@ -6,7 +6,6 @@ import java.util.List;
 import org.locationtech.jts.geom.Coordinate;
 
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 
 public class OpenRouteServiceDirectionsPayload {

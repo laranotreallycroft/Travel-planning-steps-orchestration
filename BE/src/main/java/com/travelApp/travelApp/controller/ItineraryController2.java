@@ -34,7 +34,6 @@ import com.travelApp.travelApp.model.ItineraryElement;
 import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.User;
 import com.travelApp.travelApp.model.payload.common.GeosearchPayload;
-import com.travelApp.travelApp.model.payload.itinerary.ItineraryCreatePayload;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
 import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
@@ -60,48 +59,11 @@ public class ItineraryController2 {
 		this.itineraryRepository = itineraryRepository;
 		this.itineraryElementRepository = itineraryElementRepository;
 	}
-/*
 
 
-	
-	  @PutMapping("/{itineraryId}/route") public ResponseEntity
-	  updateItineraryRoute(@PathVariable(value = "itineraryId") Long itineraryId,
-	  
-	  @RequestBody ItineraryRoutingPayload itineraryPayload) throws
-	  URISyntaxException { Itinerary itinerary =
-	  itineraryRepository.findById(itineraryId).orElse(null);
-	  
-	  if (itineraryPayload.getRouteOptions().isOptimize()) { List<Step> steps =
-	  getOpenRouteServiceOptimization(itineraryPayload,
-	  itinerary.getTrip().getLocation()); if (steps == null) return
-	  ResponseEntity.badRequest()
-	  .body("Unable to find route between points. Try changing the method of transportation."
-	  ); itineraryPayload.sortLocations(steps);
-	  
-	  }
-	  
-	  OpenRouteServiceDirectionsResponse response =
-	  getOpenRouteServiceDirections(itineraryPayload,
-	  itinerary.getTrip().getLocation()); if (!response.routeFound()) return
-	  ResponseEntity.badRequest()
-	  .body("Unable to find route between points. Try changing the method of transportation."
-	  );
-	  
-	  JSONArray decodedGeometry =
-	  GeometryDecoder.decodeGeometry(response.getGeometry(), false); LineString
-	  linestring = GeometryDecoder.convert(decodedGeometry);
-	  itinerary.setRouteGeometry(linestring);
-	  itinerary.getItineraryElements().clear();
-	  
-	  try { createNewItineraryWithPayload(itinerary, response, itineraryPayload); }
-	  catch (Exception e) { return ResponseEntity.badRequest().
-	  body("This route would take more than a day. Try removing some stops.");
-	  
-	  } itineraryRepository.save(itinerary); return
-	  ResponseEntity.ok(itinerary.getTrip());
-	  
-	  }
-	  
+
+
+	  /*
 	  @PutMapping("/{itineraryId}/schedule") public ResponseEntity
 	  updateItinerarySchedule(@PathVariable(value = "itineraryId") Long
 	  itineraryId,
