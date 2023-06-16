@@ -63,7 +63,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
           </Popconfirm>
         )}
       </Row>
-      <Row className="itineraryView__content">
+      <React.Fragment>
         {scheduleView ? (
           <Schedule
             itineraries={props.trip.itineraries!}
@@ -91,7 +91,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
             className="fullHeight"
           />
         )}
-      </Row>
+      </React.Fragment>
     </React.Fragment>
   );
 };

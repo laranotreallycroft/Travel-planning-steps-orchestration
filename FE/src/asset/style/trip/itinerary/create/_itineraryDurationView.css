@@ -2,9 +2,6 @@
     width: 4vw;
 }
 
-.itineraryDurationView__content {
-    height: 80%;
-}
 
 .itineraryDurationView__tableContainer {
     overflow: auto;

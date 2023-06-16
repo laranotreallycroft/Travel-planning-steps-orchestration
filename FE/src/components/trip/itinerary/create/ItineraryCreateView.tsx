@@ -90,7 +90,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
               routeOptions: { optimize: false, vehicleProfile: "driving-car" },
             }
       }
-      className="fullSize"
+      className="flex-container"
     >
       <Steps
         current={currentStep}

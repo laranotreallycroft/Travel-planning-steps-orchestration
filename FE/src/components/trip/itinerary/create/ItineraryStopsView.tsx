@@ -144,101 +144,94 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
     else props.onNextStep();
   };
   return (
-    <Row className="fullHeight">
-      <Title level={4}>Select your stops</Title>
+    <React.Fragment>
+      <Row>
+        <Title level={4}>Select your stops</Title>
+      </Row>
 
-      <Row
-        gutter={[16, 16]}
-        className="margin-bottom-l itineraryStopsView__container"
-      >
+      <Row gutter={16}>
+        <Col span={12}>
+          <MapSearch onSelectLocation={handleAddLocation} />
+        </Col>
+        <Col span={8}>
+          <Form.Item name={["routeOptions", "optimize"]}>
+            <Radio.Group>
+              <Radio.Button value={false}>
+                Keep original route order
+              </Radio.Button>
+              <Radio.Button value={true}>Optimize route</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+
+        <Col span={4}>
+          <Form.Item
+            name={["routeOptions", "vehicleProfile"]}
+            className="fullWidth"
+          >
+            <Select options={vehicleProfiles} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16} className="itineraryStopsView__container">
         <Col span={12} className="fullHeight">
-          <Row className="margin-bottom-l">
-            <MapSearch onSelectLocation={handleAddLocation} />
-          </Row>
-          <div className="itineraryStopsView__listcontainer">
-            <Form.List name="locations">
-              {() => (
-                <DragAndDropTable
-                  sortableContextItems={
-                    locations
-                      ? locations.map((location) => location.id)
-                      : form
-                          .getFieldValue("locations")
-                          .map(
-                            (location: IGeosearchPayloadWithId) => location.id
-                          )
-                  }
-                  tableDataSource={
-                    locations
-                      ? locations.map((location) => {
+          <Form.List name="locations">
+            {() => (
+              <DragAndDropTable
+                sortableContextItems={
+                  locations
+                    ? locations.map((location) => location.id)
+                    : form
+                        .getFieldValue("locations")
+                        .map((location: IGeosearchPayloadWithId) => location.id)
+                }
+                tableDataSource={
+                  locations
+                    ? locations.map((location) => {
+                        return { ...location, key: location.id };
+                      })
+                    : form
+                        .getFieldValue("locations")
+                        .map((location: IGeosearchPayloadWithId) => {
                           return { ...location, key: location.id };
                         })
-                      : form
-                          .getFieldValue("locations")
-                          .map((location: IGeosearchPayloadWithId) => {
-                            return { ...location, key: location.id };
-                          })
-                  }
-                  tableColumns={[
-                    {
-                      title: "Location",
-                      dataIndex: "label",
-                    },
-                    {
-                      title: "Action",
-                      key: "action",
-                      width: 100,
-                      render: (_, location) => (
-                        <Row justify={"space-between"}>
-                          <Tooltip placement="bottom" title={"Remove stop"}>
-                            <Button
-                              icon={<DeleteOutlined />}
-                              onClick={(e) => handleRemoveLocation(e, location)}
-                              size="small"
-                            />
-                          </Tooltip>
-                          <Tooltip
-                            placement="bottom"
-                            title={"Zoom to location"}
-                          >
-                            <Button
-                              icon={<ZoomInOutlined />}
-                              onClick={() => setSelectedLocation(location)}
-                              size="small"
-                            />
-                          </Tooltip>
-                        </Row>
-                      ),
-                    },
-                  ]}
-                  setLocations={setLocations}
-                  className="fullSize"
-                />
-              )}
-            </Form.List>
-          </div>
+                }
+                tableColumns={[
+                  {
+                    title: "Location",
+                    dataIndex: "label",
+                  },
+                  {
+                    title: "Action",
+                    key: "action",
+                    width: 100,
+                    render: (_, location) => (
+                      <Row justify={"space-between"}>
+                        <Tooltip placement="bottom" title={"Remove stop"}>
+                          <Button
+                            icon={<DeleteOutlined />}
+                            onClick={(e) => handleRemoveLocation(e, location)}
+                            size="small"
+                          />
+                        </Tooltip>
+                        <Tooltip placement="bottom" title={"Zoom to location"}>
+                          <Button
+                            icon={<ZoomInOutlined />}
+                            onClick={() => setSelectedLocation(location)}
+                            size="small"
+                          />
+                        </Tooltip>
+                      </Row>
+                    ),
+                  },
+                ]}
+                setLocations={setLocations}
+              />
+            )}
+          </Form.List>
         </Col>
         <Col span={12}>
-          <Row>
-            <Col span={16}>
-              <Form.Item name={["routeOptions", "optimize"]}>
-                <Radio.Group>
-                  <Radio.Button value={false}>
-                    Keep original route order
-                  </Radio.Button>
-                  <Radio.Button value={true}>Optimize route</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name={["routeOptions", "vehicleProfile"]}
-                className="fullWidth"
-              >
-                <Select options={vehicleProfiles} />
-              </Form.Item>
-            </Col>
-          </Row>
           <MapElement
             selectedLocation={selectedLocation}
             locations={[locations]}
@@ -246,16 +239,13 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
           />
         </Col>
       </Row>
-      <Row
-        justify={"end"}
-        align={"bottom"}
-        className="fullWidth margin-bottom-l"
-      >
+
+      <Row justify={"end"} align={"bottom"} className="margin-top-md">
         <Button type="primary" onClick={handleNext}>
           Next
         </Button>
       </Row>
-    </Row>
+    </React.Fragment>
   );
 };
 

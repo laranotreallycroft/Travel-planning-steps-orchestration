@@ -1,6 +1,6 @@
 .schedule__saveButton {
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 16px;
     right: 8vw;
     z-index: 1000;
 }

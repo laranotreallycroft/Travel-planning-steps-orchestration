@@ -153,3 +153,9 @@
 .z-index-10000 {
     z-index: 10000 !important;
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

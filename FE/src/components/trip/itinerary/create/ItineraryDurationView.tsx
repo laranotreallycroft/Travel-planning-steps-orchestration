@@ -27,11 +27,13 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
     form.setFieldValue("locations", newLocations);
   };
   return (
-    <Row className="fullHeight">
-      <Row className="itineraryDurationView__content margin-bottom-l">
+    <React.Fragment>
+      <Row>
         <Title level={4}>Decide your visit duration</Title>
+      </Row>
+      <Row className="itineraryDurationView__tableContainer">
         <Table
-          className="itineraryDurationView__tableContainer"
+          className="fullWidth"
           bordered
           dataSource={form
             .getFieldValue("locations")
@@ -68,11 +70,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
           pagination={false}
         />
       </Row>
-      <Row
-        justify={"space-between"}
-        align={"bottom"}
-        className="fullWidth margin-bottom-l"
-      >
+      <Row justify={"space-between"} align={"bottom"} className="margin-top-md">
         <Button type="primary" onClick={props.onPreviousStep}>
           Back
         </Button>
@@ -80,7 +78,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
           Submit
         </Button>
       </Row>
-    </Row>
+    </React.Fragment>
   );
 };
 

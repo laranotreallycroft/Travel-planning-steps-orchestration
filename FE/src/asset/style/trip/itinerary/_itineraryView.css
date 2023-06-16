@@ -1,6 +1,6 @@
 .itineraryView__header {
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 16px;
     left: 81vw;
     z-index: 1000;
 }
