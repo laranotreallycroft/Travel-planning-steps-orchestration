@@ -37,7 +37,6 @@ export const mapDataToScheduler = (
     commuteData[index] = commute;
     destinationData[index] = destination;
   });
-
   if (!isEditing) return [...destinationData, ...commuteData];
   else return destinationData;
 };

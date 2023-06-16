@@ -1,0 +1,10 @@
+.itineraryView__header {
+    position: absolute;
+    margin-top: 2vh;
+    left: 81vw;
+    z-index: 1000;
+}
+
+.itineraryView__content {
+    height: 100%
+}

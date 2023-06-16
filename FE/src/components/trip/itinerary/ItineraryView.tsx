@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { ITrip } from "../../../model/trip/Trip";
 import MapElement from "../../common/map/MapElement";
 import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
+import Schedule from "./schedule/Schedule";
 export interface IItineraryViewOwnProps {
   trip: ITrip;
   onItinerariesDelete: () => void;
@@ -19,7 +20,6 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
 ) => {
   const [scheduleView, setScheduleView] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(true);
-
   useEffect(() => {
     setIsEditing(false);
   }, [props.trip]);
@@ -30,7 +30,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
 
   return (
     <React.Fragment>
-      <Row justify={"end"}>
+      <Row className="itineraryView__header">
         <Radio.Group
           value={scheduleView}
           onChange={(e) => setScheduleView(e.target.value)}
@@ -46,26 +46,30 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
         <Button
           onClick={toggleIsEditing}
           icon={isEditing ? <CloseIcon /> : <EditIcon />}
-          className="margin-left-sm margin-right-l"
+          className="margin-left-sm"
         />
 
-        <Popconfirm
-          title="Delete itinerary"
-          description="Are you sure to delete this itinerary?"
-          onConfirm={props.onItinerariesDelete}
-          okText="Yes"
-          cancelText="No"
-          placement="topRight"
-          className={isEditing ? "" : "hidden"}
-        >
-          <Button icon={<DeleteIcon />} />
-        </Popconfirm>
+        {isEditing && (
+          <Popconfirm
+            title="Delete itinerary"
+            description="Are you sure to delete this itinerary?"
+            onConfirm={props.onItinerariesDelete}
+            okText="Yes"
+            cancelText="No"
+            placement="topRight"
+            className="margin-left-xl"
+          >
+            <Button icon={<DeleteIcon />} />
+          </Popconfirm>
+        )}
       </Row>
-      <Row className="itinerarySider__sider">
+      <Row className="itineraryView__content">
         {scheduleView ? (
-          <div />
-        ) : //   <Schedule itineraries={props.itineraries} isEditing={isEditing} />
-        isEditing ? (
+          <Schedule
+            itineraries={props.trip.itineraries!}
+            isEditing={isEditing}
+          />
+        ) : isEditing ? (
           <ItineraryMapUpdateContainer />
         ) : (
           <MapElement
@@ -84,7 +88,7 @@ const ItineraryView: React.FC<IItineraryViewProps> = (
                 coordinates.y,
               ])
             )}
-            className="fullHeight panel"
+            className="fullHeight"
           />
         )}
       </Row>

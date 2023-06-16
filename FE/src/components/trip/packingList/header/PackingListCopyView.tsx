@@ -128,7 +128,7 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
                     )?.packingLists
                   : props.userTrips
                       ?.find((trip) => trip.id === selectedTripId)
-                      ?.packingLists.map((packingList) => {
+                      ?.packingLists?.map((packingList) => {
                         return {
                           key: packingList.id,
                           value: packingList.id,

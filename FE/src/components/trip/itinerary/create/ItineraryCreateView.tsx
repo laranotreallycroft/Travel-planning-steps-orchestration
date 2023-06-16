@@ -92,7 +92,15 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
       }
       className="fullSize"
     >
-      <Steps current={currentStep} items={items} />
+      <Steps
+        current={currentStep}
+        items={items}
+        className={
+          props.trip.itineraries && props.trip.itineraries.length > 0
+            ? "itineraryCreateView__steps"
+            : ""
+        }
+      />
       {steps[currentStep].content}
     </Form>
   );

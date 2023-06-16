@@ -24,7 +24,7 @@ type IItineraryContainerProps = IItineraryContainerOwnProps &
 const ItineraryContainer: React.FC<IItineraryContainerProps> = (
   props: IItineraryContainerProps
 ) => {
-  return props.trip.itineraries.length > 0 ? (
+  return props.trip.itineraries && props.trip.itineraries.length > 0 ? (
     <ItineraryView
       trip={props.trip}
       onItinerariesDelete={props.itinerariesDelete}

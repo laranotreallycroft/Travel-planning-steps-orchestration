@@ -4,25 +4,28 @@ import {
   ViewState,
 } from "@devexpress/dx-react-scheduler";
 import {
+  AppointmentTooltip,
   Appointments,
-  DayView,
+  DateNavigator,
   DragDropProvider,
   EditRecurrenceMenu,
   Scheduler,
+  Toolbar,
+  WeekView,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import SaveIcon from "@mui/icons-material/Save";
 import { Paper } from "@mui/material";
 import { Button } from "antd";
-import dayjs from "dayjs";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
 import { ItineraryBusinessStore } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
 import { mapDataToScheduler, moveRecursively } from "./utils";
+import dayjs from "dayjs";
 
 export interface IScheduleOwnProps {
-  itinerary: IItinerary;
+  itineraries: IItinerary[];
   isEditing: boolean;
 }
 
@@ -38,11 +41,17 @@ type IScheduleProps = IScheduleOwnProps &
 
 const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
   const [schedulerData, setSchedulerData] = useState(
-    mapDataToScheduler(props.itinerary, props.isEditing)
+    props.itineraries.flatMap((itinerary) =>
+      mapDataToScheduler(itinerary, props.isEditing)
+    )
   );
   useEffect(() => {
-    setSchedulerData(mapDataToScheduler(props.itinerary, props.isEditing));
-  }, [props.itinerary, props.isEditing]);
+    setSchedulerData(
+      props.itineraries.flatMap((itinerary) =>
+        mapDataToScheduler(itinerary, props.isEditing)
+      )
+    );
+  }, [props.itineraries, props.isEditing]);
 
   const handleCommitChanges = useCallback(
     ({ added, changed, deleted }: any) => {
@@ -62,53 +71,55 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
     },
     [schedulerData]
   );
-
   const handleSave = useCallback(() => {
-    const mappedPayload = schedulerData.map((element) => {
+    const mappedPayload: AppointmentModel[] = schedulerData.map((element) => {
       return {
         ...element,
         startDate: dayjs(element.startDate).toISOString(),
         endDate: dayjs(element.endDate).toISOString(),
       };
     });
-
     props.itineraryScheduleUpdate(mappedPayload);
   }, [schedulerData]);
 
   return (
-    <Paper>
-      {props.isEditing && (
-        <Button
-          onClick={handleSave}
-          icon={<SaveIcon />}
-          className={"schedule__saveButton"}
-        />
-      )}
-      {/* @ts-ignore */}
-      <Scheduler data={schedulerData}>
-        <ViewState currentDate={props.itinerary.date} />
-        <EditingState onCommitChanges={handleCommitChanges} />
-        <DayView startDayHour={8} endDayHour={20} />
-        <EditRecurrenceMenu />
-        <Appointments
-          appointmentComponent={(appointmentProps: any) => (
-            <Appointments.Appointment
-              {...appointmentProps}
-              className={
-                appointmentProps.data.type === "commute"
-                  ? "schedule__appointmentCommute"
-                  : "schedule__appointmentDestination"
-              }
-            />
-          )}
-        />
-
-        <DragDropProvider
-          allowDrag={() => false}
-          allowResize={() => props.isEditing}
-        />
-      </Scheduler>
-    </Paper>
+    <React.Fragment>
+      <Paper className="schedule__container">
+        {props.isEditing && (
+          <Button
+            onClick={handleSave}
+            icon={<SaveIcon />}
+            className="schedule__saveButton"
+          />
+        )}
+        {/* @ts-ignore */}
+        <Scheduler data={schedulerData}>
+          <ViewState defaultCurrentDate={props.itineraries[0].date} />
+          <EditingState onCommitChanges={handleCommitChanges} />
+          <WeekView startDayHour={8} endDayHour={20} cellDuration={15} />
+          <EditRecurrenceMenu />
+          <Appointments
+            appointmentComponent={(appointmentProps: any) => (
+              <Appointments.Appointment
+                {...appointmentProps}
+                className={
+                  appointmentProps.data.type === "commute"
+                    ? "schedule__appointmentCommute"
+                    : "schedule__appointmentDestination"
+                }
+              />
+            )}
+          />
+          <AppointmentTooltip showCloseButton />
+          <DragDropProvider
+            allowDrag={() => false}
+            allowResize={() => props.isEditing}
+          />
+          <Toolbar />
+          <DateNavigator />
+        </Scheduler>
+      </Paper>
+    </React.Fragment>
   );
 };
 

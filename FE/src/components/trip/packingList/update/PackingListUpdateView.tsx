@@ -5,7 +5,7 @@ import PackingListUpdateElement from "./PackingListUpdateElement";
 import { useCallback, useState } from "react";
 
 export interface IPackingListUpdateViewOwnProps {
-  packingLists: IPackingList[];
+  packingLists?: IPackingList[];
   onPackingListChange: (
     packingListUpdatePayload: IPackingListUpdatePayload
   ) => void;
@@ -21,7 +21,7 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
   const handlePackingListDelete = useCallback(
     (id: number) => {
       setPackingLists(
-        packingLists.filter((packingList) => packingList.id !== id)
+        packingLists?.filter((packingList) => packingList.id !== id)
       );
       props.onPackingListDelete(id);
     },
@@ -29,7 +29,7 @@ const PackingListUpdateView: React.FC<IPackingListUpdateViewProps> = (
   );
   return (
     <Row gutter={16}>
-      {packingLists.map((packingList) => (
+      {packingLists?.map((packingList) => (
         <Col span={6} key={packingList.id}>
           <PackingListUpdateElement
             onPackingListChange={props.onPackingListChange}

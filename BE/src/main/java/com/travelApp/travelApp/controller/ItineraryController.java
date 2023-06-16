@@ -38,6 +38,7 @@ import com.travelApp.travelApp.model.Trip;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryLocation;
 import com.travelApp.travelApp.model.payload.itinerary.ItineraryPayload;
 import com.travelApp.travelApp.model.payload.itinerary.RouteOptions;
+import com.travelApp.travelApp.model.payload.itinerary.ScheduleElement;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsPayload;
 import com.travelApp.travelApp.model.payload.itinerary.openRouteService.directions.OpenRouteServiceDirectionsResponse;
 
@@ -136,7 +137,7 @@ public class ItineraryController {
 			if (lastItineraryElementEndDateTime.getHour() > 20
 					|| lastItineraryElementEndDateTime.plusMinutes(commuteDuration + payloadLocation.getDuration())
 							.isAfter(itinerary.getDate().atTime(LocalTime.of(20, 0)))) {
-				if (commuteDuration/60 + payloadLocation.getDuration() / 60 > 12)
+				if (commuteDuration / 60 + payloadLocation.getDuration() / 60 > 12)
 					throw new Exception("Commute and stay duration for " + payloadLocation.getLabel()
 							+ " would be longer than 12 hours.");
 				response = getOpenRouteServiceDirections(itineraryLocations.subList(0, i), trip.getLocation(),
@@ -177,7 +178,7 @@ public class ItineraryController {
 					List<ItineraryLocation> clusterLocations = IntStream
 							.range(0, itineraryPayload.getLocations().size()).filter(i -> cluster.contains(i))
 							.mapToObj(itineraryPayload.getLocations()::get).collect(Collectors.toList());
-					createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay);
+					createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay++);
 
 				}
 			} catch (Exception e) {
@@ -214,7 +215,7 @@ public class ItineraryController {
 					List<ItineraryLocation> clusterLocations = IntStream
 							.range(0, itineraryPayload.getLocations().size()).filter(i -> cluster.contains(i))
 							.mapToObj(itineraryPayload.getLocations()::get).collect(Collectors.toList());
-					createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay);
+					createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay++);
 
 				}
 			} catch (Exception e) {
@@ -235,8 +236,37 @@ public class ItineraryController {
 
 	}
 
+	@PutMapping("/schedule")
+	public ResponseEntity updateItinerarySchedule(
+
+			@RequestBody List<ScheduleElement> scheduleElements) throws URISyntaxException {
+		Trip trip = null;
+		for (ScheduleElement scheduleElement : scheduleElements) {
+
+			ItineraryElement itineraryElement = itineraryElementRepository
+					.findById(
+							Long.parseLong(scheduleElement.getId().substring(0, scheduleElement.getId().length() - 1)))
+					.orElse(null);
+			if (trip == null)
+				trip = itineraryElement.getItinerary().getTrip();
+			Long previousCommuteLength = itineraryElement.getCommuteEndDate().getTime()
+					- itineraryElement.getCommuteStartDate().getTime();
+
+			itineraryElement.setCommuteStartDate(
+					new Timestamp(scheduleElement.getStartDate().getTime() - previousCommuteLength));
+			itineraryElement.setCommuteEndDate(scheduleElement.getStartDate());
+			itineraryElement.setStartDate(scheduleElement.getStartDate());
+			itineraryElement.setEndDate(scheduleElement.getEndDate());
+			itineraryElementRepository.save(itineraryElement);
+
+		}
+
+		return ResponseEntity.ok(trip);
+
+	}
+
 	@DeleteMapping("/{tripId}")
-	public ResponseEntity deleteItinenaries(@PathVariable(value="tripId") Long tripId) throws URISyntaxException {
+	public ResponseEntity deleteItinenaries(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
 
 		Trip trip = tripRepository.findById(tripId).orElse(null);
 		trip.getItineraries().clear();

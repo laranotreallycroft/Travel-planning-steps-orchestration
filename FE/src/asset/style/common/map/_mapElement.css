@@ -1,4 +1,5 @@
 .mapElement__MapContainer {
     width: 100%;
     height: 15vw;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }

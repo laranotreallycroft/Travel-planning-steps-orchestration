@@ -157,7 +157,7 @@ const itinerariesUpdateEffect = (
       return o;
     })
   );
-}; /*
+};
 const itineraryScheduleUpdateEffect = (
   action$: Observable<IPayloadAction<AppointmentModel[]>>,
   state$: Observable<any>
@@ -166,27 +166,21 @@ const itineraryScheduleUpdateEffect = (
     filter((action) => {
       return action.type === actions.ITINERARY_SCHEDULE_UPDATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const itinerary = getItinerary(state);
+    mergeMap((action) => {
       return from(
         axios
-          .put(`/itinerary/${itinerary.id}/schedule`, action.payload)
+          .put(`/itineraries/schedule`, action.payload)
           .then((response) => {
-            if (response.status === 201 || response.status === 200) {
-              notificationService.success("Itinerary successfully updated");
-              return {
-                trip: response.data,
-                itinerary: response.data.itineraries.find(
-                  (itineraryPayload: IItinerary) =>
-                    itineraryPayload.id === itinerary.id
-                ),
-              };
+            if (response.status === 200) {
+              notificationService.success(
+                "Itinerary schedules successfully updated"
+              );
+              return response.data;
             }
           })
           .catch((error) => {
             notificationService.error(
-              "Unable to update itinerary",
+              "Unable to update itinerary schedules",
               error.response.data
             );
             throw error;
@@ -194,16 +188,13 @@ const itineraryScheduleUpdateEffect = (
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) =>
-      of(tripStore(data?.trip), itineraryStore(data?.itinerary))
-    ),
-
+    map((data) => tripStore(data)),
     catchError((error: any, o: Observable<any>) => {
       return o;
     })
   );
 };
-*/
+
 const itinerariesDeleteEffect = (
   action$: Observable<IAction>,
   state$: Observable<any>
@@ -270,7 +261,7 @@ export const ItineraryBusinessStore = {
   effects: {
     itinerariesCreateEffect,
     itinerariesUpdateEffect,
-    // itineraryScheduleUpdateEffect,
+    itineraryScheduleUpdateEffect,
     itinerariesDeleteEffect,
   },
   reducers: { itinerary },

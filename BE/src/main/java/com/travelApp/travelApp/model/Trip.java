@@ -126,7 +126,7 @@ public class Trip {
 	}
 
 	public List<PackingList> getPackingLists() {
-		 packingLists.sort(Comparator.comparing(PackingList::getId));
+		if(packingLists!=null) packingLists.sort(Comparator.comparing(PackingList::getId));
 		 return packingLists;
 	}
 

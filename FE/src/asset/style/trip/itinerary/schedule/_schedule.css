@@ -1,16 +1,13 @@
 .schedule__saveButton {
     position: absolute;
-    right: 19px;
+    margin-top: 2vh;
+    right: 8vw;
     z-index: 1000;
-    top: 12px;
 }
 
-.schedule__dragContainer {
-    transform: none !important;
-}
-
-.schedule__labelContainer {
-    padding: 4px 8px;
+.schedule__container {
+    height: 100%;
+    overflow: auto;
 }
 
 .schedule__appointmentCommute {
@@ -23,4 +20,8 @@
     position: relative !important;
     background-color: #274c77 !important;
     color: white !important;
+}
+
+.VerticalAppointment-title {
+    white-space: break-spaces !important
 }
