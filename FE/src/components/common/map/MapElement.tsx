@@ -55,7 +55,11 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
             key={index}
             positions={pathArray}
             color={"#" + COLORS[index]}
-          />
+          >
+            <Popup>
+              <span>Day {index + 1} of your trip</span>
+            </Popup>
+          </Polyline>
         ))}
       {props.locations?.map((locationArray, index) =>
         locationArray?.map((location) => (
