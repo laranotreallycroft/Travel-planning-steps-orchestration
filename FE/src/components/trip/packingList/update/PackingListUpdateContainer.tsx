@@ -33,11 +33,14 @@ type IPackingListUpdateContainerProps = IPackingListUpdateContainerOwnProps &
 const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
   props: IPackingListUpdateContainerProps
 ) => {
-  let changedPackingLists: Map<number, string[]> = new Map();
+  let changedPackingLists: Map<number, IPackingListUpdatePayload> = new Map();
   let deletedPackingLists: number[] = [];
   const handlePackingListChange = useCallback(
     (payload: IPackingListUpdatePayload) => {
-      changedPackingLists.set(payload.packingListId, payload.items);
+      changedPackingLists.set(payload.packingListId, {
+        ...changedPackingLists.get(payload.packingListId),
+        ...payload,
+      });
     },
     [changedPackingLists]
   );
@@ -51,13 +54,12 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
 
   const handlePackingListUpdate = useCallback(() => {
     let updatePayloadArray: IPackingListUpdatePayload[] = [];
-    changedPackingLists.forEach((items: string[], packingListId: number) => {
-      const payload: IPackingListUpdatePayload = {
-        packingListId,
-        items,
-      };
-      updatePayloadArray.push(payload);
-    });
+    changedPackingLists.forEach(
+      (items: IPackingListUpdatePayload, packingListId: number) => {
+        updatePayloadArray.push(items);
+      }
+    );
+
     if (updatePayloadArray.length > 0 || deletedPackingLists.length > 0)
       props
         .packingListUpdate({

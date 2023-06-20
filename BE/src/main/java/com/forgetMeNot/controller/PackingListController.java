@@ -94,8 +94,13 @@ public class PackingListController {
 		for (PackingListUpdatePayload packingListUpdatePayload : packingListUpdateDeletePayload.getUpdate()) {
 			packingList = packingListRepository.findById(packingListUpdatePayload.getPackingListId()).orElse(null);
 			if (packingList != null) {
-				packingList.setItems(packingListUpdatePayload.getItems());
-				packingList.filterAndSetCheckedItems(packingListUpdatePayload.getItems());
+				if (packingListUpdatePayload.getItems() != null) {
+					packingList.setItems(packingListUpdatePayload.getItems());
+					packingList.filterAndSetCheckedItems(packingListUpdatePayload.getItems());
+				}
+				if (packingListUpdatePayload.getLabel() != null)
+					packingList.setLabel(packingListUpdatePayload.getLabel());
+
 				packingListRepository.save(packingList);
 			}
 		}

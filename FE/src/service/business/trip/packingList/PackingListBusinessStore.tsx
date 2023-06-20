@@ -23,7 +23,8 @@ export interface IPackingListCreatePayload {
 }
 export interface IPackingListUpdatePayload {
   packingListId: number;
-  items: string[];
+  label?: string;
+  items?: string[];
 }
 
 export interface IPackingListUpdateCombinedPayload {

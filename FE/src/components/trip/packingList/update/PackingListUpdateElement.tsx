@@ -1,4 +1,4 @@
-import { Button, Form } from "antd";
+import { Button, Col, Form, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { useState } from "react";
 import { ILabelValue } from "../../../../model/common/input";
@@ -37,14 +37,29 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (
         })
       }
     >
-      <Title level={5}>
-        {props.packingList.label}
+      <Row justify={"space-between"}>
+        <Col span={20} className="margin-left-sm">
+          <Title
+            level={5}
+            editable={{
+              onChange: (value: string) =>
+                props.onPackingListChange({
+                  packingListId: props.packingList.id,
+                  label: value,
+                }),
+              triggerType: ["text"],
+              enterIcon: null,
+            }}
+          >
+            {props.packingList.label}
+          </Title>
+        </Col>
         <Button
           icon={<CloseOutlined />}
           className="margin-left-sm packingListUpdateElement__deleteListButton"
           onClick={() => props.onPackingListDelete(props.packingList.id)}
         />
-      </Title>
+      </Row>
       <CustomDropdownInput
         formItemName="items"
         dropdownItems={dropdownItems}
