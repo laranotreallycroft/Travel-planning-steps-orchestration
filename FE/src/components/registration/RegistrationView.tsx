@@ -165,20 +165,6 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
               </Title>
             </Row>
           </div>
-          <div className="loginView__carouselImage">
-            <Row justify={"center"}>
-              <Title className="loginView__title">
-                Please log in to use the app
-              </Title>
-            </Row>
-          </div>
-          <div className="loginView__carouselImage">
-            <Row justify={"center"}>
-              <Title className="loginView__title">
-                Please log in to use the app
-              </Title>
-            </Row>
-          </div>
         </Carousel>
       </Col>
     </Row>

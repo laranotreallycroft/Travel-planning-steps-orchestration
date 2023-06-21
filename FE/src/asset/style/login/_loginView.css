@@ -5,7 +5,7 @@
 
 .loginView__carouselImage {
     background-image: linear-gradient(to bottom,
-            rgb(37, 26, 3),
+            rgb(237, 233, 232),
             rgba(0, 0, 0, 0) 35%), url(../../img/loginPreviewOne.jpg);
     height: 100%;
     background-size: cover;
@@ -13,6 +13,10 @@
     background-position: center center;
     overflow: hidden;
 }
+
+
+
+
 
 .loginView__title {
     font-family: 'ArcherBold';
