@@ -112,7 +112,7 @@ const Schedule: React.FC<IScheduleProps> = (props: IScheduleProps) => {
           />
           <AppointmentTooltip showCloseButton />
           <DragDropProvider
-            allowDrag={() => false}
+            allowDrag={() => props.isEditing}
             allowResize={() => props.isEditing}
           />
           <Toolbar />

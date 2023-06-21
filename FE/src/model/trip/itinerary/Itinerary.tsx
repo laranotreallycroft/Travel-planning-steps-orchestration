@@ -6,6 +6,7 @@ export interface IItinerary {
   date: string;
   routeGeometry: ICoordinates[];
   itineraryElements: IItineraryElement[];
+  transportationMethod: string;
 }
 export interface IItineraryElement {
   id: number;

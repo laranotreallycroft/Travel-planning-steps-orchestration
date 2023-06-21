@@ -2,6 +2,7 @@ package com.forgetMeNot.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -42,21 +43,34 @@ public class Itinerary {
 	@JsonIgnoreProperties("itinerary")
 	private List<ItineraryElement> itineraryElements;
 
+	private String transportationMethod;
+
 	public Itinerary() {
 
 	}
 
-	public Itinerary(Trip trip, LocalDate date) {
+	public Itinerary(Trip trip, LocalDate date, String transportationMethod) {
 		super();
 		this.trip = trip;
 		this.date = date;
+		this.itineraryElements = new ArrayList<>();
+		this.transportationMethod = transportationMethod;
 	}
 
-	public Itinerary(Trip trip, LocalDate date, LineString routeGeometry) {
+	public Itinerary(Trip trip, LocalDate date, LineString routeGeometry, String transportationMethod) {
 		super();
 		this.trip = trip;
 		this.date = date;
 		this.routeGeometry = routeGeometry;
+		this.transportationMethod = transportationMethod;
+	}
+
+	public String getTransportationMethod() {
+		return transportationMethod;
+	}
+
+	public void setTransportationMethod(String transportationMethod) {
+		this.transportationMethod = transportationMethod;
 	}
 
 	public Long getId() {
@@ -103,6 +117,13 @@ public class Itinerary {
 		if (this.itineraryElements == null)
 			itineraryElements = new ArrayList<>();
 		this.itineraryElements.add(itineraryElement);
+	}
+
+	public void removeItineraryElement(ItineraryElement itineraryElement) {
+		this.itineraryElements.remove(itineraryElement);
+	}
+	public void sortElementsAsc() {
+		itineraryElements.sort(Comparator.comparing(ItineraryElement::getStartDate));
 	}
 
 }

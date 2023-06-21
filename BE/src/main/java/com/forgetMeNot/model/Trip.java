@@ -126,8 +126,9 @@ public class Trip {
 	}
 
 	public List<PackingList> getPackingLists() {
-		if(packingLists!=null) packingLists.sort(Comparator.comparing(PackingList::getId));
-		 return packingLists;
+		if (packingLists != null)
+			packingLists.sort(Comparator.comparing(PackingList::getId));
+		return packingLists;
 	}
 
 	public void setPackingLists(List<PackingList> packingLists) {
@@ -147,4 +148,20 @@ public class Trip {
 			itineraries = new ArrayList<>();
 		itineraries.add(itinerary);
 	}
+
+	public void removeItinerary(Itinerary itinerary) {
+		itineraries.remove(itinerary);
+	}
+
+	public Itinerary findItineraryWithDate(LocalDate date) {
+		for (Itinerary itinerary : itineraries) {
+			if (itinerary.getDate().equals(date)) {
+				return itinerary;
+			}
+		}
+		Itinerary newItinerary = new Itinerary(this, date, itineraries.get(0).getTransportationMethod());
+		addItinerary(newItinerary);
+		return newItinerary;
+	}
+
 }

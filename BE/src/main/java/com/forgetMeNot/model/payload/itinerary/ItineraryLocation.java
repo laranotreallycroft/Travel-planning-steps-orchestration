@@ -11,8 +11,13 @@ public class ItineraryLocation extends GeosearchPayload {
 
 	}
 
-	public ItineraryLocation(List<GeosearchPayload> locations, RouteOptions routeOptions, Integer duration) {
+	public ItineraryLocation(List<GeosearchPayload> locations, Integer duration) {
 		super();
+		this.duration = duration;
+	}
+
+	public ItineraryLocation(String id, Double x, Double y, String label, Integer duration) {
+		super(id,x,y,label);
 		this.duration = duration;
 	}
 

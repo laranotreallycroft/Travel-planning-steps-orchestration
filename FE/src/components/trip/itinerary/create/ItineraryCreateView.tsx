@@ -70,7 +70,7 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
       form={form}
       onFinish={handleFinish}
       initialValues={
-        props.trip.itineraries
+        props.trip.itineraries && props.trip.itineraries.length > 0
           ? {
               locations: props.trip.itineraries.flatMap((itinerary) =>
                 itinerary.itineraryElements.map((itineraryElement) => {
@@ -83,7 +83,10 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (
                   };
                 })
               ),
-              routeOptions: { optimize: false, vehicleProfile: "driving-car" },
+              routeOptions: {
+                optimize: false,
+                vehicleProfile: props.trip.itineraries[0].transportationMethod,
+              },
             }
           : {
               locations: [],
