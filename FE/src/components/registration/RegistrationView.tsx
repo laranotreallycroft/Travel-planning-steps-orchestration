@@ -36,10 +36,11 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (
 
   const validatePassword = useCallback((rule: RuleObject, value: string) => {
     if (
-      value.length < 8 ||
-      !/[A-Z]/.test(value) ||
-      !/[a-z]/.test(value) ||
-      !/\d/.test(value)
+      value &&
+      (value.length < 8 ||
+        !/[A-Z]/.test(value) ||
+        !/[a-z]/.test(value) ||
+        !/\d/.test(value))
     )
       return Promise.reject(
         "Your password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number"
