@@ -167,7 +167,8 @@ public class ItineraryController {
 			try {
 				OpenRouteServiceDistanceMatrixResponse response = getOpenRouteServiceDistanceMatrix(
 						itineraryPayload.getLocations(), itineraryPayload.getRouteOptions());
-
+				if (response.getDurations() == null)
+					return ResponseEntity.badRequest().body("Unable to find route between stops.");
 				List<List<Integer>> clusters = DistanceMatrix.getClusters(response.getDurations(), null);
 				for (List<Integer> cluster : clusters) {
 					List<ItineraryLocation> clusterLocations = IntStream

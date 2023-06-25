@@ -32,9 +32,12 @@ type IItineraryMapUpdateContainerProps = IItineraryMapUpdateContainerOwnProps &
 const ItineraryMapUpdateContainer: React.FC<
   IItineraryMapUpdateContainerProps
 > = (props: IItineraryMapUpdateContainerProps) => {
-  const handleItineraryUpdate = useCallback((values: IItineraryForm) => {
-    return props.itinerariesUpdate({ ...values, tripId: props.trip.id });
-  }, []);
+  const handleItineraryUpdate = useCallback(
+    (values: IItineraryForm) => {
+      return props.itinerariesUpdate({ ...values, tripId: props.trip.id });
+    },
+    [props.trip.id]
+  );
 
   return (
     <ItineraryCreateView trip={props.trip} onSubmit={handleItineraryUpdate} />

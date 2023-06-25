@@ -21,10 +21,9 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
 
   const handleAdd = useCallback(
     (value: string) => {
-      //remove whitespace from value
       const newDropdownItem = {
         label: value,
-        value: value.replace(/\s+/g, ""),
+        value: value,
       };
 
       if (
