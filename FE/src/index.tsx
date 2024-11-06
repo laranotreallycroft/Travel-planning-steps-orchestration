@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom/client";
-import appRouter from "./components/appRouter";
+import appRouter from "components/appRouter";
 import { RouterProvider } from "react-router-dom";
-import "./asset/style/app.css";
+import "asset/style/app.css";
 import { ConfigProvider } from "antd";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleClientId } from "./env/const";
+import { googleClientId } from "env/const";
 import axios from "axios";
 import { Provider } from "react-redux";
-import { getPersistor, getStore } from "./service/business/RootBusinessStore";
+import { getPersistor, getStore } from "service/business/RootBusinessStore";
 import { PersistGate } from "redux-persist/integration/react";
 
 axios.defaults.baseURL = "http://localhost:8080/";
