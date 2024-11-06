@@ -9,12 +9,12 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs";
-import notificationService from "../../../util/notificationService";
-import trackAction from "../../../util/trackAction";
-import { IPayloadAction } from "../../common/types";
-import { userTripsStore } from "../../user/UserBusinessStore";
-import { getTrip, tripStore } from "../TripBusinessStore";
-import { ITrip } from "../../../../model/trip/Trip";
+import notificationService from "service/util/notificationService";
+import trackAction from "service/util/trackAction";
+import { IPayloadAction } from "service/business/common/types";
+import { userTripsStore } from "service/business/user/UserBusinessStore";
+import { getTrip, tripStore } from "service/business/trip/TripBusinessStore";
+import { ITrip } from "model/trip/Trip";
 
 export interface IPackingListCreatePayload {
   tripId: number;

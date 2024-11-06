@@ -1,4 +1,4 @@
-import ItineraryContainer from "../trip/itinerary/ItineraryContainer";
+import ItineraryContainer from "components/trip/itinerary/ItineraryContainer";
 
 export interface IItineraryPageOwnProps {}
 

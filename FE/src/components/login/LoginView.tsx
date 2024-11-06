@@ -12,8 +12,8 @@ import Title from "antd/es/typography/Title";
 import React from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { ILoginPayload } from "../../service/business/login/LoginBusinessStore";
-import notificationService from "../../service/util/notificationService";
+import { ILoginPayload } from "service/business/login/LoginBusinessStore";
+import notificationService from "service/util/notificationService";
 
 export interface ILoginForm {
   email: string;

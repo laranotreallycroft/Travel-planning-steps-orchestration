@@ -1,8 +1,8 @@
 import { FileAddOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Modal } from "antd";
 import React, { useCallback, useState } from "react";
-import { ILabelValue } from "../../../../model/common/input";
-import CustomDropdownInput from "../../../common/input/CustomDropdownInput";
+import { ILabelValue } from "model/common/input";
+import CustomDropdownInput from "components/common/input/CustomDropdownInput";
 
 export interface IPackingListCreateViewOwnProps {
   onPackingListCreate: (

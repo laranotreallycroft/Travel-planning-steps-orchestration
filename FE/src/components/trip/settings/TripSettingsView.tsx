@@ -2,10 +2,10 @@ import { Button, DatePicker, Form, Input, Popconfirm, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect } from "react";
-import { ITrip } from "../../../model/trip/Trip";
-import { ITripCreateForm } from "../create/TripCreateView";
-import MapSearch from "../../common/map/MapSearch";
-import { IGeosearchPayload } from "../../common/map/MapElement";
+import { ITrip } from "model/trip/Trip";
+import { ITripCreateForm } from "components/trip/create/TripCreateView";
+import MapSearch from "components/common/map/MapSearch";
+import { IGeosearchPayload } from "components/common/map/MapElement";
 
 export interface ITripSettingsViewOwnProps {
   trip: ITrip;

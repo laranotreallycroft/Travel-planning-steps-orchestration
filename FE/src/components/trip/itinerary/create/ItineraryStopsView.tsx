@@ -3,17 +3,17 @@ import { Button, Col, Form, Radio, Row, Select, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import notificationService from "../../../../service/util/notificationService";
-import DragAndDropTable from "../../../common/list/DragAndDropTable";
+import notificationService from "service/util/notificationService";
+import DragAndDropTable from "components/common/list/DragAndDropTable";
 import MapElement, {
   IGeosearchPayloadWithId,
-} from "../../../common/map/MapElement";
-import MapSearch from "../../../common/map/MapSearch";
-import { ITrip } from "../../../../model/trip/Trip";
+} from "components/common/map/MapElement";
+import MapSearch from "components/common/map/MapSearch";
+import { ITrip } from "model/trip/Trip";
 import {
   IItineraryForm,
   IItineraryElementPayload,
-} from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
+} from "service/business/trip/itinerary/ItineraryBusinessStore";
 import {
   DirectionsCar,
   DirectionsBike,

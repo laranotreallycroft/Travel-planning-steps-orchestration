@@ -1,6 +1,6 @@
 import ReactWeather from "react-open-weather";
 import React from "react";
-import { IWeather } from "../../../model/trip/weather/Weather";
+import { IWeather } from "model/trip/weather/Weather";
 import Title from "antd/es/typography/Title";
 import { Col, Row, Select, Spin } from "antd";
 

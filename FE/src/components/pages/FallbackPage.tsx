@@ -1,4 +1,4 @@
-import FallbackView from "../fallback/FallbackView";
+import FallbackView from "components/fallback/FallbackView";
 
 export interface IFallbackPageOwnProps {}
 

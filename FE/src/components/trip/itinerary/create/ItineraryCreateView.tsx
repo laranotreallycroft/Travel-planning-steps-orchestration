@@ -1,9 +1,9 @@
 import { Form, Steps } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ITrip } from "../../../../model/trip/Trip";
-import { IItineraryForm } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import ItineraryDurationView from "./ItineraryDurationView";
-import ItineraryStopsView from "./ItineraryStopsView";
+import { ITrip } from "model/trip/Trip";
+import { IItineraryForm } from "service/business/trip/itinerary/ItineraryBusinessStore";
+import ItineraryDurationView from "components/trip/itinerary/create/ItineraryDurationView";
+import ItineraryStopsView from "components/trip/itinerary/create/ItineraryStopsView";
 
 export interface IItineraryCreateViewOwnProps {
   trip: ITrip;

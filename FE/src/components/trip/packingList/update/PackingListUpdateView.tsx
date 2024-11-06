@@ -1,7 +1,7 @@
 import { Col, Row } from "antd";
-import { IPackingList } from "../../../../model/trip/packingList/PackingList";
-import { IPackingListUpdatePayload } from "../../../../service/business/trip/packingList/PackingListBusinessStore";
-import PackingListUpdateElement from "./PackingListUpdateElement";
+import { IPackingList } from "model/trip/packingList/PackingList";
+import { IPackingListUpdatePayload } from "service/business/trip/packingList/PackingListBusinessStore";
+import PackingListUpdateElement from "components/trip/packingList/update/PackingListUpdateElement";
 import { useCallback, useState } from "react";
 
 export interface IPackingListUpdateViewOwnProps {

@@ -1,4 +1,4 @@
-import WeatherContainer from "../trip/weather/WeatherContainer";
+import WeatherContainer from "components/trip/weather/WeatherContainer";
 
 export interface IWeatherPageOwnProps {}
 

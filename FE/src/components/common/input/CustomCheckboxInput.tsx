@@ -1,7 +1,7 @@
 import { Checkbox, Form } from "antd";
 import React from "react";
-import { IPackingListUpdatePayload } from "../../../service/business/trip/packingList/PackingListBusinessStore";
-import { IPackingList } from "../../../model/trip/packingList/PackingList";
+import { IPackingListUpdatePayload } from "service/business/trip/packingList/PackingListBusinessStore";
+import { IPackingList } from "model/trip/packingList/PackingList";
 import Title from "antd/es/typography/Title";
 
 export interface ICustomCheckboxInputOwnProps {

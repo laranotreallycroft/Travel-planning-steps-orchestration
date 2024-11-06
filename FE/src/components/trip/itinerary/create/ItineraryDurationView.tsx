@@ -4,8 +4,8 @@ import React from "react";
 import {
   IItineraryForm,
   IItineraryElementPayload,
-} from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import { IGeosearchPayloadWithId } from "../../../common/map/MapElement";
+} from "service/business/trip/itinerary/ItineraryBusinessStore";
+import { IGeosearchPayloadWithId } from "components/common/map/MapElement";
 export interface IItineraryDurationViewOwnProps {
   onPreviousStep: () => void;
   onNextStep: () => void;

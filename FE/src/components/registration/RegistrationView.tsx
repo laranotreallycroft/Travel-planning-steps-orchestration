@@ -13,8 +13,8 @@ import React, { useCallback } from "react";
 import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { RuleObject } from "antd/es/form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { IRegistrationPayload } from "../../service/business/registration/RegistrationBusinessStore";
-import notificationService from "../../service/util/notificationService";
+import { IRegistrationPayload } from "service/business/registration/RegistrationBusinessStore";
+import notificationService from "service/util/notificationService";
 
 export interface IRegistrationForm {
   email: string;

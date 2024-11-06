@@ -1,7 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Select } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
-import { ILabelValue } from "../../../model/common/input";
+import { ILabelValue } from "model/common/input";
 
 export interface ICustomDropdownInputOwnProps {
   formItemName: string;

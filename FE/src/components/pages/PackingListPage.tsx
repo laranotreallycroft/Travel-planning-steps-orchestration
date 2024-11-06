@@ -1,4 +1,4 @@
-import PackingListContainer from "../trip/packingList/PackingListContainer";
+import PackingListContainer from "components/trip/packingList/PackingListContainer";
 
 export interface IPackingListPageOwnProps {}
 

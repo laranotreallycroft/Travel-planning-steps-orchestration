@@ -1,13 +1,13 @@
 import { CredentialResponse } from "@react-oauth/google";
-import RegistrationView from "./RegistrationView";
+import RegistrationView from "components/registration/RegistrationView";
 import {
   IGoogleLoginPayload,
   LoginBusinessStore,
-} from "../../service/business/login/LoginBusinessStore";
+} from "service/business/login/LoginBusinessStore";
 import {
   IRegistrationPayload,
   RegistrationBusinessStore,
-} from "../../service/business/registration/RegistrationBusinessStore";
+} from "service/business/registration/RegistrationBusinessStore";
 import { connect } from "react-redux";
 import { useCallback } from "react";
 

@@ -1,7 +1,9 @@
 import { connect } from "react-redux";
-import TripSettingsView, { ITripSettingsForm } from "./TripSettingsView";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { ITrip, ITripPayload } from "../../../model/trip/Trip";
+import TripSettingsView, {
+  ITripSettingsForm,
+} from "components/trip/settings/TripSettingsView";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { ITrip, ITripPayload } from "model/trip/Trip";
 import { useCallback } from "react";
 
 export interface ITripSettingsContainerOwnProps {}

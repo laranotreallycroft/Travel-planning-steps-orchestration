@@ -1,4 +1,4 @@
-import RegistrationContainer from "../registration/RegistrationContainer";
+import RegistrationContainer from "components/registration/RegistrationContainer";
 
 export interface IRegistrationPageOwnProps {}
 

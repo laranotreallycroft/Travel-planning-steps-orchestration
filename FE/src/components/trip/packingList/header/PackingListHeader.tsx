@@ -1,13 +1,13 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Button, Col, Row } from "antd";
 import React from "react";
-import { ITrip } from "../../../../model/trip/Trip";
+import { ITrip } from "model/trip/Trip";
 import PackingListCopyView, {
   IPackingListCopyForm,
-} from "./PackingListCopyView";
+} from "components/trip/packingList/header/PackingListCopyView";
 import PackingListCreateView, {
   IPackingListCreateForm,
-} from "./PackingListCreateView";
+} from "components/trip/packingList/header/PackingListCreateView";
 export interface IPackingListHeaderOwnProps {
   trip: ITrip;
   userTrips?: ITrip[];

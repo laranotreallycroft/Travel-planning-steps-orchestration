@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
-import { IWeather, IWeatherPayload } from "../../../model/trip/weather/Weather";
-import { WeatherBusinessStore } from "../../../service/business/weather/WeatherBusinessStore";
+import { IWeather, IWeatherPayload } from "model/trip/weather/Weather";
+import { WeatherBusinessStore } from "service/business/weather/WeatherBusinessStore";
 import { useEffect, useState } from "react";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { ITrip } from "../../../model/trip/Trip";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { ITrip } from "model/trip/Trip";
 import React from "react";
-import WeatherView from "./WeatherView";
+import WeatherView from "components/trip/weather/WeatherView";
 export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {

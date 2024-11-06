@@ -1,11 +1,11 @@
 import axios from "axios";
 import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-import { ITrip } from "../../../model/trip/Trip";
-import { IUserCredentials } from "../../../model/user/User";
-import notificationService from "../../util/notificationService";
-import trackAction, { IAction } from "../../util/trackAction";
-import { IPayloadAction } from "../common/types";
-import { loginActions } from "../login/LoginBusinessStore";
+import { ITrip } from "model/trip/Trip";
+import { IUserCredentials } from "model/user/User";
+import notificationService from "service/util/notificationService";
+import trackAction, { IAction } from "service/util/trackAction";
+import { IPayloadAction } from "service/business/common/types";
+import { loginActions } from "service/business/login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors

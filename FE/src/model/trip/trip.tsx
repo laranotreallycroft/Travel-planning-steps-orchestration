@@ -1,6 +1,6 @@
-import { ICoordinates } from "../geometry/Coordinates";
-import { IPackingList } from "./packingList/PackingList";
-import { IItinerary } from "./itinerary/Itinerary";
+import { ICoordinates } from "model/geometry/Coordinates";
+import { IPackingList } from "model/trip/packingList/PackingList";
+import { IItinerary } from "model/trip/itinerary/Itinerary";
 
 export interface ITrip {
   id: number;

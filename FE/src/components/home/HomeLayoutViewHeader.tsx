@@ -3,8 +3,8 @@ import { Button, Col, Dropdown, MenuProps, Row, Select } from "antd";
 import Avatar from "antd/es/avatar/avatar";
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../asset/img/logo.png";
-import { ITrip } from "../../model/trip/Trip";
+import logo from "asset/img/logo.png";
+import { ITrip } from "model/trip/Trip";
 
 export interface IHomeLayoutViewHeaderOwnProps {
   userTrips: ITrip[];

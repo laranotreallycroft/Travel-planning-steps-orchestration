@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { connect } from "react-redux";
-import { LoginBusinessStore } from "../service/business/login/LoginBusinessStore";
+import { LoginBusinessStore } from "service/business/login/LoginBusinessStore";
 
 export interface IProtectedRouteOwnProps {
   children?: React.ReactElement;

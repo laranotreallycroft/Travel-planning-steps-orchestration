@@ -9,12 +9,15 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs";
-import { ITrip, ITripPayload } from "../../../model/trip/Trip";
-import notificationService from "../../util/notificationService";
-import trackAction, { IAction } from "../../util/trackAction";
-import { IIdPayload, IPayloadAction } from "../common/types";
-import { loginActions } from "../login/LoginBusinessStore";
-import { getUser, userTripsStore } from "../user/UserBusinessStore";
+import { ITrip, ITripPayload } from "model/trip/Trip";
+import notificationService from "service/util/notificationService";
+import trackAction, { IAction } from "service/util/trackAction";
+import { IIdPayload, IPayloadAction } from "service/business/common/types";
+import { loginActions } from "service/business/login/LoginBusinessStore";
+import {
+  getUser,
+  userTripsStore,
+} from "service/business/user/UserBusinessStore";
 
 // -
 // -------------------- Selectors

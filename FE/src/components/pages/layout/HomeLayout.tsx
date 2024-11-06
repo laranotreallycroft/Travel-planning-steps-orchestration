@@ -1,4 +1,4 @@
-import HomeLayoutContainer from "../../home/HomeLayoutContainer";
+import HomeLayoutContainer from "components/home/HomeLayoutContainer";
 
 export interface IHomeLayoutOwnProps {}
 

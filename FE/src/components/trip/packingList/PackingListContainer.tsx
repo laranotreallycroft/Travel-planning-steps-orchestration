@@ -1,23 +1,23 @@
 import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
-import { ITrip } from "../../../model/trip/Trip";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
+import { ITrip } from "model/trip/Trip";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
 import {
   IPackingListCopyPayload,
   IPackingListCreatePayload,
   IPackingListUpdatePayload,
   PackingListBusinessStore,
-} from "../../../service/business/trip/packingList/PackingListBusinessStore";
-import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
+} from "service/business/trip/packingList/PackingListBusinessStore";
+import { UserBusinessStore } from "service/business/user/UserBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
-} from "../../../service/util/trackAction";
-import PackingListView from "./PackingListView";
-import { IPackingListCopyForm } from "./header/PackingListCopyView";
-import { IPackingListCreateForm } from "./header/PackingListCreateView";
-import PackingListHeader from "./header/PackingListHeader";
-import PackingListUpdateContainer from "./update/PackingListUpdateContainer";
+} from "service/util/trackAction";
+import PackingListView from "components/trip/packingList/PackingListView";
+import { IPackingListCopyForm } from "components/trip/packingList/header/PackingListCopyView";
+import { IPackingListCreateForm } from "components/trip/packingList/header/PackingListCreateView";
+import PackingListHeader from "components/trip/packingList/header/PackingListHeader";
+import PackingListUpdateContainer from "components/trip/packingList/update/PackingListUpdateContainer";
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {

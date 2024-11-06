@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import { ITrip } from "../../../model/trip/Trip";
-import { IItinerary } from "../../../model/trip/itinerary/Itinerary";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { ItineraryBusinessStore } from "../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import ItineraryView from "./ItineraryView";
-import ItineraryCreateContainer from "./create/ItineraryCreateContainer";
+import { ITrip } from "model/trip/Trip";
+import { IItinerary } from "model/trip/itinerary/Itinerary";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { ItineraryBusinessStore } from "service/business/trip/itinerary/ItineraryBusinessStore";
+import ItineraryView from "components/trip/itinerary/ItineraryView";
+import ItineraryCreateContainer from "components/trip/itinerary/create/ItineraryCreateContainer";
 
 export interface IItineraryContainerOwnProps {}
 

@@ -6,15 +6,15 @@ import {
   createStore,
 } from "redux";
 import { combineEpics, createEpicMiddleware } from "redux-observable";
-import { LoginBusinessStore } from "./login/LoginBusinessStore";
-import { RegistrationBusinessStore } from "./registration/RegistrationBusinessStore";
+import { LoginBusinessStore } from "service/business/login/LoginBusinessStore";
+import { RegistrationBusinessStore } from "service/business/registration/RegistrationBusinessStore";
 import storage from "redux-persist/es/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import { TripBusinessStore } from "./trip/TripBusinessStore";
-import { UserBusinessStore } from "./user/UserBusinessStore";
-import { PackingListBusinessStore } from "./trip/packingList/PackingListBusinessStore";
-import { WeatherBusinessStore } from "./weather/WeatherBusinessStore";
-import { ItineraryBusinessStore } from "./trip/itinerary/ItineraryBusinessStore";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { UserBusinessStore } from "service/business/user/UserBusinessStore";
+import { PackingListBusinessStore } from "service/business/trip/packingList/PackingListBusinessStore";
+import { WeatherBusinessStore } from "service/business/weather/WeatherBusinessStore";
+import { ItineraryBusinessStore } from "service/business/trip/itinerary/ItineraryBusinessStore";
 
 const storeMiddleware = [];
 const epicMiddleware = createEpicMiddleware();

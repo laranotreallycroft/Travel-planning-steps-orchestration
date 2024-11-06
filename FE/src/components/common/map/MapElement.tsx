@@ -6,11 +6,11 @@ import {
   TileLayer,
 } from "react-leaflet";
 
-import { IIdPayload } from "../../../service/business/common/types";
-import { ChangeView, initMap } from "./utils";
-import { ICoordinates } from "../../../model/geometry/Coordinates";
+import { IIdPayload } from "service/business/common/types";
+import { ChangeView, initMap } from "components/common/map/utils";
+import { ICoordinates } from "model/geometry/Coordinates";
 import L, { LatLngExpression } from "leaflet";
-import { COLORS } from "../../../model/geometry/Colors";
+import { COLORS } from "model/geometry/Colors";
 
 export interface IGeosearchPayload extends ICoordinates {
   label: string;

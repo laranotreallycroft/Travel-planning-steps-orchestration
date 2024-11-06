@@ -2,18 +2,18 @@ import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button, Row } from "antd";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
-import { ITrip } from "../../../../model/trip/Trip";
-import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
+import { ITrip } from "model/trip/Trip";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
 import {
   IPackingListUpdateCombinedPayload,
   IPackingListUpdatePayload,
   PackingListBusinessStore,
-} from "../../../../service/business/trip/packingList/PackingListBusinessStore";
+} from "service/business/trip/packingList/PackingListBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
-} from "../../../../service/util/trackAction";
-import PackingListUpdateView from "./PackingListUpdateView";
+} from "service/util/trackAction";
+import PackingListUpdateView from "components/trip/packingList/update/PackingListUpdateView";
 
 export interface IPackingListUpdateContainerOwnProps {
   toggleEdit: () => void;

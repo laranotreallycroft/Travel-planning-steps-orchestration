@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { connect } from "react-redux";
-import { ITrip } from "../../../../model/trip/Trip";
-import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
-import { TripBusinessStore } from "../../../../service/business/trip/TripBusinessStore";
+import { ITrip } from "model/trip/Trip";
+import { IItinerary } from "model/trip/itinerary/Itinerary";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
 import {
   IItineraryForm,
   IItineraryPayload,
   ItineraryBusinessStore,
-} from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
+} from "service/business/trip/itinerary/ItineraryBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
-} from "../../../../service/util/trackAction";
-import ItineraryCreateView from "../create/ItineraryCreateView";
+} from "service/util/trackAction";
+import ItineraryCreateView from "components/trip/itinerary/create/ItineraryCreateView";
 
 export interface IItineraryMapUpdateContainerOwnProps {}
 

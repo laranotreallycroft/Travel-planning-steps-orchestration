@@ -3,7 +3,7 @@ import {
   ITrackableObject,
   TrackingHelper,
   createTrackableObject,
-} from "./tracking";
+} from "service/util/tracking";
 import { Observable, Observer } from "rxjs";
 
 export interface IAction extends Action<String> {}

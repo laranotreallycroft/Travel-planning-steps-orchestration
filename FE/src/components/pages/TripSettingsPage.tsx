@@ -1,4 +1,4 @@
-import TripSettingsContainer from "../trip/settings/TripSettingsContainer";
+import TripSettingsContainer from "components/trip/settings/TripSettingsContainer";
 
 export interface ITripSettingsPageOwnProps {}
 

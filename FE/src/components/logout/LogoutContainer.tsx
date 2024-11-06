@@ -1,4 +1,4 @@
-import LogoutView from "./LogoutView";
+import LogoutView from "components/logout/LogoutView";
 
 export interface ILogoutContainerOwnProps {}
 

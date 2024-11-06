@@ -1,4 +1,4 @@
-import { IAction } from "../../util/trackAction";
+import { IAction } from "service/util/trackAction";
 
 export interface IPayloadAction<T> extends IAction {
   payload: T;

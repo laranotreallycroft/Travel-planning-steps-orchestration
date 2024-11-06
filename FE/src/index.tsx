@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import appRouter from "components/appRouter";
 import { RouterProvider } from "react-router-dom";
 import "asset/style/app.css";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Spin } from "antd";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleClientId } from "env/const";
 import axios from "axios";
@@ -22,7 +22,7 @@ const persistor = getPersistor();
 
 root.render(
   <Provider store={store}>
-    <PersistGate loading={<div>loading...</div>} persistor={persistor}>
+    <PersistGate loading={<Spin />} persistor={persistor}>
       <ConfigProvider
         theme={{
           token: {

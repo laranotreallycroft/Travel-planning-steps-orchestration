@@ -1,8 +1,8 @@
 import { Col, Row } from "antd";
 import React from "react";
-import { IPackingList } from "../../../model/trip/packingList/PackingList";
-import { IPackingListUpdatePayload } from "../../../service/business/trip/packingList/PackingListBusinessStore";
-import CustomCheckboxInput from "../../common/input/CustomCheckboxInput";
+import { IPackingList } from "model/trip/packingList/PackingList";
+import { IPackingListUpdatePayload } from "service/business/trip/packingList/PackingListBusinessStore";
+import CustomCheckboxInput from "components/common/input/CustomCheckboxInput";
 
 export interface IPackingListViewOwnProps {
   packingLists?: IPackingList[];

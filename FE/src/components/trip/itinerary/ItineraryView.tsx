@@ -5,10 +5,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Button, Popconfirm, Radio, Row } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { ITrip } from "../../../model/trip/Trip";
-import MapElement from "../../common/map/MapElement";
-import ItineraryMapUpdateContainer from "./update/ItineraryMapUpdateContainer";
-import Schedule from "./schedule/Schedule";
+import { ITrip } from "model/trip/Trip";
+import MapElement from "components/common/map/MapElement";
+import ItineraryMapUpdateContainer from "components/trip/itinerary/update/ItineraryMapUpdateContainer";
+import Schedule from "components/trip/itinerary/schedule/Schedule";
 export interface IItineraryViewOwnProps {
   trip: ITrip;
   onItinerariesDelete: () => void;

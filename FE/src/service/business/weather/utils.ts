@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { getIcon } from "./iconsMap";
+import { getIcon } from "service/business/weather/iconsMap";
 import { v4 as uuidv4 } from "uuid";
 
 export const formatDate = (dte: number | null, lang: string): string => {

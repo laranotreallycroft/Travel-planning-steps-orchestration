@@ -17,7 +17,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
-import { IItineraryElementPayload } from "../../../service/business/trip/itinerary/ItineraryBusinessStore";
+import { IItineraryElementPayload } from "service/business/trip/itinerary/ItineraryBusinessStore";
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   "data-row-key": string;

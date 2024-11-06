@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Observable, filter, from, map, mergeMap } from "rxjs";
-import notificationService from "../../util/notificationService";
-import { IPayloadAction } from "../common/types";
-import { currentUserStore } from "../login/LoginBusinessStore";
-import trackAction from "../../util/trackAction";
+import notificationService from "service/util/notificationService";
+import { IPayloadAction } from "service/business/common/types";
+import { currentUserStore } from "service/business/login/LoginBusinessStore";
+import trackAction from "service/util/trackAction";
 
 // -
 // -------------------- Selectors

@@ -1,4 +1,4 @@
-import LoginContainer from "../login/LoginContainer";
+import LoginContainer from "components/login/LoginContainer";
 
 export interface ILoginPageOwnProps {}
 

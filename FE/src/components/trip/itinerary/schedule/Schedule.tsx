@@ -19,9 +19,12 @@ import { Button } from "antd";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
-import { ItineraryBusinessStore } from "../../../../service/business/trip/itinerary/ItineraryBusinessStore";
-import { mapDataToScheduler, moveRecursively } from "./utils";
+import { IItinerary } from "model/trip/itinerary/Itinerary";
+import { ItineraryBusinessStore } from "service/business/trip/itinerary/ItineraryBusinessStore";
+import {
+  mapDataToScheduler,
+  moveRecursively,
+} from "components/trip/itinerary/schedule/utils";
 import dayjs from "dayjs";
 
 export interface IScheduleOwnProps {

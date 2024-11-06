@@ -1,13 +1,15 @@
 import { useCallback } from "react";
 import { connect } from "react-redux";
-import { ITripPayload } from "../../../model/trip/Trip";
-import { TripBusinessStore } from "../../../service/business/trip/TripBusinessStore";
-import { UserBusinessStore } from "../../../service/business/user/UserBusinessStore";
+import { ITripPayload } from "model/trip/Trip";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { UserBusinessStore } from "service/business/user/UserBusinessStore";
 import {
   ITrackableAction,
   createTrackableAction,
-} from "../../../service/util/trackAction";
-import TripCreateView, { ITripCreateForm } from "./TripCreateView";
+} from "service/util/trackAction";
+import TripCreateView, {
+  ITripCreateForm,
+} from "components/trip/create/TripCreateView";
 
 export interface ITripCreateContainerOwnProps {
   isTripCreateModalOpen: boolean;

@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
-import { ITrip } from "../../model/trip/Trip";
-import { IUserCredentials } from "../../model/user/User";
-import { IIdPayload } from "../../service/business/common/types";
-import { LoginBusinessStore } from "../../service/business/login/LoginBusinessStore";
-import { TripBusinessStore } from "../../service/business/trip/TripBusinessStore";
-import { UserBusinessStore } from "../../service/business/user/UserBusinessStore";
-import HomeLayoutView from "./HomeLayoutView";
+import { ITrip } from "model/trip/Trip";
+import { IUserCredentials } from "model/user/User";
+import { IIdPayload } from "service/business/common/types";
+import { LoginBusinessStore } from "service/business/login/LoginBusinessStore";
+import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
+import { UserBusinessStore } from "service/business/user/UserBusinessStore";
+import HomeLayoutView from "components/home/HomeLayoutView";
 
 export interface IHomeLayoutContainerOwnProps {}
 export interface IHomeLayoutContainerStateProps {

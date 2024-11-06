@@ -4,15 +4,15 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import RegistrationPage from "./pages/RegistrationPage";
-import ProtectedRoute from "./ProtectedRoute";
-import FallbackPage from "./pages/FallbackPage";
-import HomeLayout from "./pages/layout/HomeLayout";
-import PackingListPage from "./pages/PackingListPage";
-import ItineraryPage from "./pages/ItineraryPage";
-import TripSettingsPage from "./pages/TripSettingsPage";
-import WeatherPage from "./pages/WeatherPage";
+import LoginPage from "components/pages/LoginPage";
+import RegistrationPage from "components/pages/RegistrationPage";
+import ProtectedRoute from "components/ProtectedRoute";
+import FallbackPage from "components/pages/FallbackPage";
+import HomeLayout from "components/pages/layout/HomeLayout";
+import PackingListPage from "components/pages/PackingListPage";
+import ItineraryPage from "components/pages/ItineraryPage";
+import TripSettingsPage from "components/pages/TripSettingsPage";
+import WeatherPage from "components/pages/WeatherPage";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(

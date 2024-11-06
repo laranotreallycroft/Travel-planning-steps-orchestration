@@ -4,12 +4,12 @@ import { RangeValue } from "rc-picker/lib/interface";
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { ITrackableAction } from "../../../service/util/trackAction";
+import { ITrackableAction } from "service/util/trackAction";
 import MapElement, {
   IGeosearchPayload,
   IGeosearchPayloadWithId,
-} from "../../common/map/MapElement";
-import MapSearch from "../../common/map/MapSearch";
+} from "components/common/map/MapElement";
+import MapSearch from "components/common/map/MapSearch";
 export interface ITripCreateViewOwnProps {
   isTripCreateModalOpen: boolean;
   onTripCreate: (values: ITripCreateForm) => ITrackableAction;

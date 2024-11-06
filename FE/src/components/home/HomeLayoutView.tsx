@@ -3,10 +3,10 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useCallback, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { ITrip } from "../../model/trip/Trip";
-import TripCreateContainer from "../trip/create/TripCreateContainer";
-import HomeLayoutViewHeader from "./HomeLayoutViewHeader";
-import HomeLayoutViewSider from "./HomeLayoutViewSider";
+import { ITrip } from "model/trip/Trip";
+import TripCreateContainer from "components/trip/create/TripCreateContainer";
+import HomeLayoutViewHeader from "components/home/HomeLayoutViewHeader";
+import HomeLayoutViewSider from "components/home/HomeLayoutViewSider";
 
 export interface IHomeLayoutViewOwnProps {
   userTrips: ITrip[];

@@ -3,8 +3,8 @@ import {
   IGoogleLoginPayload,
   ILoginPayload,
   LoginBusinessStore,
-} from "../../service/business/login/LoginBusinessStore";
-import LoginView from "./LoginView";
+} from "service/business/login/LoginBusinessStore";
+import LoginView from "components/login/LoginView";
 import { connect } from "react-redux";
 import { useCallback } from "react";
 import React from "react";

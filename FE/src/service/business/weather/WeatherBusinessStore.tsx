@@ -8,12 +8,12 @@ import {
   mergeMap,
   toArray,
 } from "rxjs";
-import { IWeather, IWeatherPayload } from "../../../model/trip/weather/Weather";
-import notificationService from "../../util/notificationService";
-import trackAction, { IAction } from "../../util/trackAction";
-import { IPayloadAction } from "../common/types";
-import { mapData } from "./utils";
-import { loginActions } from "../login/LoginBusinessStore";
+import { IWeather, IWeatherPayload } from "model/trip/weather/Weather";
+import notificationService from "service/util/notificationService";
+import trackAction, { IAction } from "service/util/trackAction";
+import { IPayloadAction } from "service/business/common/types";
+import { mapData } from "service/business/weather/utils";
+import { loginActions } from "service/business/login/LoginBusinessStore";
 
 // -
 // -------------------- Selectors

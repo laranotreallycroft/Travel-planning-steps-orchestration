@@ -1,10 +1,10 @@
 import { Button, Col, Form, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { useState } from "react";
-import { ILabelValue } from "../../../../model/common/input";
-import { IPackingList } from "../../../../model/trip/packingList/PackingList";
-import { IPackingListUpdatePayload } from "../../../../service/business/trip/packingList/PackingListBusinessStore";
-import CustomDropdownInput from "../../../common/input/CustomDropdownInput";
+import { ILabelValue } from "model/common/input";
+import { IPackingList } from "model/trip/packingList/PackingList";
+import { IPackingListUpdatePayload } from "service/business/trip/packingList/PackingListBusinessStore";
+import CustomDropdownInput from "components/common/input/CustomDropdownInput";
 import { CloseOutlined } from "@ant-design/icons";
 
 export interface IPackingListUpdateElementOwnProps {

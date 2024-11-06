@@ -2,8 +2,8 @@ import { Row, Select } from "antd";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
-import { IGeosearchPayload } from "./MapElement";
-import { initMap } from "./utils";
+import { IGeosearchPayload } from "components/common/map/MapElement";
+import { initMap } from "components/common/map/utils";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 export interface IMapSearchOwnProps {
   onSelectLocation: (value: string) => void;

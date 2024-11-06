@@ -1,5 +1,5 @@
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
-import { IItinerary } from "../../../../model/trip/itinerary/Itinerary";
+import { IItinerary } from "model/trip/itinerary/Itinerary";
 import dayjs from "dayjs";
 
 export const formatMinutes = (minutes: number) => {
