@@ -1,0 +1,6 @@
+.pageLayoutView__header {
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  height: 4rem;
+  display: flex;
+}

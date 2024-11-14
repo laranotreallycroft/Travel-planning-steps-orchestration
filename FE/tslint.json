@@ -1,0 +1,92 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "rxjs-tslint-rules",
+    // no preset rules, rules must be added manually to this config when desired
+    "tslint-sonarts"
+    // SonarQube TS rules
+  ],
+  "rules": {
+    // --
+    // --
+    // ----- custom overrides
+    // we need this because code templates produce template interfaces, also it preserves component structure so it's easier to visualize diffs in component
+    "no-empty-interface": false,
+    // React is full of inline multiline expressions, sooo ... we'll disable this one
+    "jsx-no-multiline-js": false,
+    // allow one line blocks, just check braces and whitespace
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-whitespace"
+    ],
+    // we do not use member access qualifiers
+    "member-access": false,
+    // do not sort my keys
+    "object-literal-sort-keys": false,
+    // allow lambdas, sometimes they are much simpler
+    "jsx-no-lambda": false,
+    // we do have large monitors nowadays, no need for short lines
+    "max-line-length": [
+      true,
+      360
+    ],
+    // our quoting preferences
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    // ignore semicolons on class arrow methods
+    "semicolon": [
+      true,
+      "always",
+      "ignore-bound-class-methods"
+    ],
+    // trailing comman adjustments
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "never"
+        },
+        "singleline": "never",
+        "esSpecCompliant": true
+      }
+    ],
+    // we will make unions as large as we need :-P
+    "max-union-size": false,
+    // this is annoying, so we'll make it a warning
+    "no-commented-code": {
+      "severity": "warning"
+    },
+    // --
+    // --
+    // ----- React overrides
+    // this collides with prettier's understanding of "reuqired parens" - we would like to add parens around eg. multiline JSX expressions but this rule is not configurable
+    "jsx-wrap-multiline": false,
+    // --
+    // --
+    // ----- SonarQube rules overrides
+    // we need this because code templates produce template interfaces, also it preserves component structure so it's easier to visualize diffs in component
+    "no-useless-intersection": false,
+    // allow max 2 consecutive blank lines - for better visual separation of code blocks
+    "no-consecutive-blank-lines": [
+      true,
+      2
+    ],
+    // confilcts with TSlint's own rule
+    "no-extra-semicolon": false,
+    // this is annoying, so we'll make it a warning
+    "no-identical-functions": {
+      "severity": "warning"
+    },
+    // there is no other logger but console
+    "no-console": false,
+    // attributes should be kept inline until they are too large
+    "jsx-alignment": false
+  }
+}

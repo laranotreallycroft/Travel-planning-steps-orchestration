@@ -13,10 +13,12 @@ import PackingListPage from "components/pages/PackingListPage";
 import ItineraryPage from "components/pages/ItineraryPage";
 import TripSettingsPage from "components/pages/TripSettingsPage";
 import WeatherPage from "components/pages/WeatherPage";
+import PageLayout from "components/pages/layout/PageLayout";
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      <Route path="/" element={<PageLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="registration" element={<RegistrationPage />} />

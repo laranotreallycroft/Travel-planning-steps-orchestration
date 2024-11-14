@@ -27,7 +27,7 @@ root.render(
         theme={{
           token: {
             colorPrimary: "#6096BA",
-            colorText: "#274C77",
+            colorText: "#2B3E58",
             colorInfo: "#A3CEF1",
             colorWarning: "#f8d410",
             colorError: "#c9424d",

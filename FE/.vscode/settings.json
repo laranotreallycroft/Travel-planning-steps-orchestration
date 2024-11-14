@@ -1,0 +1,22 @@
+{
+  // do formatting on editor save
+  "editor.formatOnSave": true,
+
+  // pure JSON doesn't allow comments so this prevents vscode from complaining - beware that extension/plugin reading configs must also suport JSON comments
+  "files.associations": {
+    "tscofig.json": "jsonc",
+    "tslint.json": "jsonc"
+    //".stylelintrc": "jsonc", // extension cannot read file with comments
+    //".prettierrc": "jsonc" // extension cannot read file with comments
+  },
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  // force stylelint to autofix on save (where autofixer is available)
+  "stylelint.autoFixOnSave": true,
+  // use local TS installation
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // force absolute imports on intellisense
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}
