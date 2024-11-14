@@ -15,6 +15,7 @@ import { UserBusinessStore } from "service/business/user/UserBusinessStore";
 import { PackingListBusinessStore } from "service/business/trip/packingList/PackingListBusinessStore";
 import { WeatherBusinessStore } from "service/business/weather/WeatherBusinessStore";
 import { ItineraryBusinessStore } from "service/business/trip/itinerary/ItineraryBusinessStore";
+import UserSettingsBusinessStore from "service/business/usersettings/userSettingsBusinessStore";
 
 const storeMiddleware = [];
 const epicMiddleware = createEpicMiddleware();
@@ -41,6 +42,9 @@ const rootEpic = combineEpics(
   ),
   ...Object.keys(ItineraryBusinessStore.effects).map(
     (key) => (ItineraryBusinessStore.effects as any)[key]
+  ),
+  ...Object.keys(UserSettingsBusinessStore.effects).map(
+    (key) => (UserSettingsBusinessStore.effects as any)[key]
   )
 );
 
@@ -52,6 +56,7 @@ const rootReducer = combineReducers({
   ...PackingListBusinessStore.reducers,
   ...WeatherBusinessStore.reducers,
   ...ItineraryBusinessStore.reducers,
+  ...UserSettingsBusinessStore.reducers,
 });
 
 const persistConfig = {

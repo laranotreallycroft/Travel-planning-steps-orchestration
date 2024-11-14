@@ -1,14 +1,15 @@
-import ReactDOM from "react-dom/client";
-import appRouter from "components/appRouter";
-import { RouterProvider } from "react-router-dom";
-import "asset/style/app.css";
-import { ConfigProvider, Spin } from "antd";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleClientId } from "env/const";
+import { Spin } from "antd";
+import "asset/style/app.css";
 import axios from "axios";
+import appRouter from "components/appRouter";
+import LocaleProvider from "components/locale/LocaleProvider";
+import { googleClientId } from "env/const";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { getPersistor, getStore } from "service/business/RootBusinessStore";
+import { RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
+import { getPersistor, getStore } from "service/business/RootBusinessStore";
 
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -22,24 +23,12 @@ const persistor = getPersistor();
 
 root.render(
   <Provider store={store}>
-    <PersistGate loading={<Spin />} persistor={persistor}>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#6096BA",
-            colorText: "#2B3E58",
-            colorInfo: "#A3CEF1",
-            colorWarning: "#f8d410",
-            colorError: "#c9424d",
-            fontFamily: "Verdana",
-            fontSize: 16,
-          },
-        }}
-      >
+    <LocaleProvider>
+      <PersistGate loading={<Spin />} persistor={persistor}>
         <GoogleOAuthProvider clientId={googleClientId}>
           <RouterProvider router={appRouter} />
         </GoogleOAuthProvider>
-      </ConfigProvider>
-    </PersistGate>
+      </PersistGate>
+    </LocaleProvider>
   </Provider>
 );
