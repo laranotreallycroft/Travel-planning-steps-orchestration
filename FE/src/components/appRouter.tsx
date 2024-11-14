@@ -21,7 +21,7 @@ const appRouter = createBrowserRouter(
       <Route path="/info" element={<PageLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
         <Route path="login" element={<LoginPage />} />
-        <Route path="registration" element={<RegistrationPage />} />
+        <Route path="create" element={<RegistrationPage />} />
       </Route>
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>

@@ -109,7 +109,7 @@ const LocaleProvider: React.FC<ILocaleProviderProps> = (
       locale={getLocale()}
       theme={{
         token: {
-          colorPrimary: "#6096BA",
+          colorPrimary: "#41689d",
           colorText: "#2B3E58",
           colorInfo: "#2B3E58",
           colorWarning: "#f8d410",

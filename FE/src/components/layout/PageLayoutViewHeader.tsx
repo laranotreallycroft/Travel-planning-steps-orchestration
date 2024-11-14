@@ -44,7 +44,8 @@ const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (
 
   const items: MenuProps["items"] = [
     getItem(props.translate("NAVIGATION.INFO"), "/info"),
-    getItem(props.translate("NAVIGATION.INFO"), "/other"),
+    getItem(props.translate("NAVIGATION.LOGIN"), "/login"),
+    getItem(props.translate("NAVIGATION.CREATE"), "/create"),
   ];
 
   return (

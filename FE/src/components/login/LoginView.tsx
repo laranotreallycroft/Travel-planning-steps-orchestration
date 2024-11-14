@@ -97,7 +97,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
           </Row>
           <Row justify={"center"} align={"middle"} className="margin-top-md">
             New to forget-me-not?
-            <Typography.Link href={"/registration"} className="margin-left-sm">
+            <Typography.Link href={"/create"} className="margin-left-sm">
               Create Account
             </Typography.Link>
           </Row>
