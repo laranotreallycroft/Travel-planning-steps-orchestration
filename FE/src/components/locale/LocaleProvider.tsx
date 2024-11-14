@@ -111,9 +111,11 @@ const LocaleProvider: React.FC<ILocaleProviderProps> = (
         token: {
           colorPrimary: "#6096BA",
           colorText: "#2B3E58",
-          colorInfo: "#A3CEF1",
+          colorInfo: "#2B3E58",
           colorWarning: "#f8d410",
           colorError: "#c9424d",
+          colorBgBase: "#fff",
+          colorBgContainer: "#fff",
           fontFamily: "Verdana",
           fontSize: 16,
         },

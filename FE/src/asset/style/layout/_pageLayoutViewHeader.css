@@ -7,3 +7,9 @@
   height: 100%;
   object-fit: contain;
 }
+
+.pageLayoutViewHeader__menuContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

@@ -18,7 +18,7 @@ import PageLayout from "components/pages/layout/PageLayout";
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<PageLayout />}></Route>
+      <Route path="/info" element={<PageLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="registration" element={<RegistrationPage />} />

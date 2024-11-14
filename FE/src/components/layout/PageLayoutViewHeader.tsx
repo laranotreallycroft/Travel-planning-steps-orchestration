@@ -1,9 +1,26 @@
-import { Col, Row } from "antd";
+import { Menu, MenuProps } from "antd";
 import logo from "asset/img/logo.png";
 import withLocalize, {
   IWithLocalizeOwnProps,
 } from "components/common/localize/withLocalize";
-import React from "react";
+import React, { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router";
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  className?: string,
+  icon?: React.ReactNode
+): MenuItem {
+  return {
+    key,
+    icon,
+    label,
+    className,
+  } as MenuItem;
+}
 
 export interface IPageLayoutViewHeaderOwnProps {}
 
@@ -13,19 +30,38 @@ type IPageLayoutViewHeaderProps = IPageLayoutViewHeaderOwnProps &
 const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (
   props: IPageLayoutViewHeaderProps
 ) => {
+  const navigator = useNavigate();
+  const location = useLocation();
+
+  const currentTab = useMemo(
+    () => location.pathname.substring(location.pathname.indexOf("/")),
+    [location.pathname]
+  );
+
+  const handleMenuSelect: MenuProps["onClick"] = (e) => {
+    navigator(e.key);
+  };
+
+  const items: MenuProps["items"] = [
+    getItem(props.translate("NAVIGATION.INFO"), "/info"),
+    getItem(props.translate("NAVIGATION.INFO"), "/other"),
+  ];
+
   return (
     <React.Fragment>
       <div className="pageLayoutViewHeader__imgContainer">
         <img src={logo} className="pageLayoutViewHeader__img" alt="" />
       </div>
-      <Row
-        align={"middle"}
-        justify={"center"}
-        gutter={[16, 16]}
-        className="fullWidth"
-      >
-        <Col>{props.translate("NAVIGATION.INFO")}</Col>
-      </Row>
+
+      <div className="pageLayoutViewHeader__menuContainer">
+        <Menu
+          onClick={handleMenuSelect}
+          selectedKeys={[currentTab]}
+          items={items}
+          mode="horizontal"
+          disabledOverflow={true}
+        />
+      </div>
     </React.Fragment>
   );
 };
