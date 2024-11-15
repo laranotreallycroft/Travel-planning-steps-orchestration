@@ -1,20 +1,13 @@
-import {
-  Button,
-  Carousel,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Row,
-  Typography,
-} from "antd";
-import Title from "antd/es/typography/Title";
-import React, { useCallback } from "react";
-import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
-import { RuleObject } from "antd/es/form";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { IRegistrationPayload } from "service/business/registration/RegistrationBusinessStore";
-import notificationService from "service/util/notificationService";
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { Button, Col, Divider, Form, Input, Row, Typography } from 'antd';
+import { RuleObject } from 'antd/es/form';
+import logo from 'asset/img/logo.png';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import React, { useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import { IRegistrationPayload } from 'service/business/registration/RegistrationBusinessStore';
+import notificationService from 'service/util/notificationService';
 
 export interface IRegistrationForm {
   email: string;
@@ -27,149 +20,100 @@ export interface IRegistrationViewOwnProps {
   onRegistration: (registrationValues: IRegistrationPayload) => void;
 }
 
-type IRegistrationViewProps = IRegistrationViewOwnProps;
+type IRegistrationViewProps = IRegistrationViewOwnProps & IWithLocalizeOwnProps;
 
-const RegistrationView: React.FC<IRegistrationViewProps> = (
-  props: IRegistrationViewProps
-) => {
+const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistrationViewProps) => {
   const [form] = Form.useForm<IRegistrationForm>();
 
   const validatePassword = useCallback((rule: RuleObject, value: string) => {
-    if (
-      value &&
-      (value.length < 8 ||
-        !/[A-Z]/.test(value) ||
-        !/[a-z]/.test(value) ||
-        !/\d/.test(value))
-    )
-      return Promise.reject(
-        "Your password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number"
-      );
+    if (value && (value.length < 8 || !/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/\d/.test(value))) return Promise.reject(props.translate('REGISTRATION_VIEW.PASSWORD_VALIDATION.REJECT'));
     return Promise.resolve();
   }, []);
 
-  const validateConfirmPassword = useCallback(
-    (rule: RuleObject, value: string) => {
-      const password = form.getFieldValue("password");
-      if (password === value) {
-        return Promise.resolve();
-      } else {
-        return Promise.reject("Make sure your passwords match.");
-      }
-    },
-    []
-  );
+  const validateConfirmPassword = useCallback((rule: RuleObject, value: string) => {
+    const password = form.getFieldValue('password');
+    if (password === value) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject(props.translate('REGISTRATION_VIEW.PASSWORD_VALIDATION.NOT_THE_SAME'));
+    }
+  }, []);
 
   const handleFinish = useCallback((values: IRegistrationForm) => {
     props.onRegistration({ email: values.email, password: values.password });
   }, []);
 
   return (
-    <Row className="fullScreen">
-      <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form">
-        <Row justify={"center"}>
-          <Title className="loginView__title">forget-me-not</Title>
+    <Row justify={'center'} align={'middle'} className="fullHeight">
+      <Col span={6}>
+        <Row justify={'center'} className="loginView__imgContainer">
+          <Link to="/" className="loginView__imgLink">
+            <img src={logo} className="loginView__img" alt="" />
+          </Link>
         </Row>
-        <Row justify={"center"}>
-          <Title level={3} className="loginView__title">
-            Welcome to forget-me-not
-          </Title>
-        </Row>
-        <Form<IRegistrationForm>
-          form={form}
-          onFinish={handleFinish}
-          className="fullWidth"
-        >
+        <Form<IRegistrationForm> form={form} onFinish={handleFinish} className="fullWidth">
           <Form.Item
-            name={"email"}
-            label={"Email"}
+            name={'email'}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
-                type: "email",
-                message: "The input is not a valid e-mail.",
+                type: 'email',
+                message: props.translate('REGISTRATION_VIEW.FORM.EMAIL_MESSAGE'),
               },
             ]}
           >
-            <Input placeholder="Input email" />
+            <Input placeholder={props.translate('REGISTRATION_VIEW.FORM.EMAIL_PLACEHOLDER')} size="large" />
           </Form.Item>
           <Form.Item
-            name={"password"}
-            label={"Password"}
+            name={'password'}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
-              { required: true, message: "Please input a password." },
+              {
+                required: true,
+                message: props.translate('REGISTRATION_VIEW.FORM.PASSWORD_MESSAGE'),
+              },
               { validator: validatePassword },
             ]}
           >
-            <Input.Password
-              placeholder="Input Password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
+            <Input.Password placeholder={props.translate('REGISTRATION_VIEW.FORM.PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
           </Form.Item>
           <Form.Item
-            name={"confirmPassword"}
-            label={"Confirm Password"}
+            name={'confirmPassword'}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
-              { required: true, message: "Please input a password." },
+              {
+                required: true,
+                message: props.translate('REGISTRATION_VIEW.FORM.PASSWORD_MESSAGE'),
+              },
               { validator: validateConfirmPassword },
             ]}
           >
-            <Input.Password
-              placeholder="Confirm Password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
+            <Input.Password placeholder={props.translate('REGISTRATION_VIEW.FORM.CONFIRM_PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
           </Form.Item>
-          <Row justify={"center"}>
+          <Row justify={'center'}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Button
-                className="fullWidth"
-                type="primary"
-                onClick={form.submit}
-              >
-                Sign up
+              <Button className="fullWidth" type="primary" onClick={form.submit}>
+                {props.translate('REGISTRATION_VIEW.SIGN_UP')}
               </Button>
             </Col>
           </Row>
-          <Divider>Or</Divider>
-          <Row justify={"center"}>
-            <GoogleLogin
-              onSuccess={props.onGoogleLogin}
-              onError={() =>
-                notificationService.error("Unable to sign up with Google")
-              }
-            />
+          <Divider>{props.translate('REGISTRATION_VIEW.OR')}</Divider>
+          <Row justify={'center'}>
+            <GoogleLogin onSuccess={props.onGoogleLogin} onError={() => notificationService.error(props.translate('REGISTRATION_VIEW.GOOGLE_SIGN_UP_FAIL'))} />
           </Row>
-          <Row justify={"center"} align={"middle"} className="margin-top-md">
-            Already have an account?
-            <Typography.Link href={"/login"} className="margin-left-sm">
-              Login
+          <Row justify={'center'} align={'middle'} className="margin-top-md">
+            <Typography.Link href={'/login'} className="margin-left-sm">
+              {props.translate('REGISTRATION_VIEW.LOG_IN')}
             </Typography.Link>
           </Row>
         </Form>
-      </Col>
-      <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-        <Carousel className="loginView__carousel">
-          <div className="loginView__carouselImage">
-            <Row justify={"center"}>
-              <Title className="loginView__title">
-                Please log in to use the app
-              </Title>
-            </Row>
-          </div>
-        </Carousel>
       </Col>
     </Row>
   );
 };
 
-export default RegistrationView;
+export default withLocalize<IRegistrationViewOwnProps>(RegistrationView as any);

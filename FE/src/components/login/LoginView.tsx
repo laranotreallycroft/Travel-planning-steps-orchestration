@@ -1,19 +1,12 @@
-import {
-  Button,
-  Carousel,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Row,
-  Typography,
-} from "antd";
-import Title from "antd/es/typography/Title";
-import React from "react";
-import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { ILoginPayload } from "service/business/login/LoginBusinessStore";
-import notificationService from "service/util/notificationService";
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { Button, Col, Divider, Form, Input, Row, Typography } from 'antd';
+import logo from 'asset/img/logo.png';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ILoginPayload } from 'service/business/login/LoginBusinessStore';
+import notificationService from 'service/util/notificationService';
 
 export interface ILoginForm {
   email: string;
@@ -25,97 +18,66 @@ export interface ILoginViewOwnProps {
   onLogin: (loginValues: ILoginPayload) => void;
 }
 
-type ILoginViewProps = ILoginViewOwnProps;
+type ILoginViewProps = ILoginViewOwnProps & IWithLocalizeOwnProps;
 
 const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   const [form] = Form.useForm<ILoginForm>();
 
   return (
-    <Row className="fullScreen">
-      <Col xs={24} sm={24} md={12} lg={12} xl={12} className="loginView__form ">
-        <Row justify={"center"}>
-          <Title className="loginView__title">forget-me-not</Title>
+    <Row justify={'center'} align={'middle'} className="fullHeight">
+      <Col span={6}>
+        <Row justify={'center'} className="loginView__imgContainer">
+          <Link to="/" className="loginView__imgLink">
+            <img src={logo} className="loginView__img" alt="" />
+          </Link>
         </Row>
-        <Row justify={"center"}>
-          <Title level={3} className="loginView__title">
-            Welcome to forget-me-not
-          </Title>
-        </Row>
-        <Form<ILoginForm>
-          form={form}
-          onFinish={props.onLogin}
-          requiredMark={false}
-          className="fullWidth"
-        >
+        <Form<ILoginForm> form={form} onFinish={props.onLogin} requiredMark={false} className="fullWidth">
           <Form.Item
-            name={"email"}
-            label={"Email"}
+            name={'email'}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
-                message: "Please input an e-mail",
+                message: props.translate('LOGIN_VIEW.FORM.EMAIL_MESSAGE'),
               },
             ]}
           >
-            <Input placeholder="Input email" />
+            <Input placeholder={props.translate('LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER')} size="large" />
           </Form.Item>
           <Form.Item
-            name={"password"}
-            label={"Password"}
+            name={'password'}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input a password" }]}
+            rules={[
+              {
+                required: true,
+                message: props.translate('LOGIN_VIEW.FORM.PASSWORD_MESSAGE'),
+              },
+            ]}
           >
-            <Input.Password
-              placeholder="Input password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
+            <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_MESSAGE')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
           </Form.Item>
-          <Row justify={"center"}>
+          <Row justify={'center'} className="margin-top-xxl">
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Button
-                className="fullWidth"
-                type="primary"
-                onClick={form.submit}
-              >
-                Sign in
+              <Button className="fullWidth" type="primary" onClick={form.submit}>
+                {props.translate('LOGIN_VIEW.SIGN_IN')}
               </Button>
             </Col>
           </Row>
-          <Divider>Or</Divider>
-          <Row justify={"center"}>
-            <GoogleLogin
-              onSuccess={props.onGoogleLogin}
-              onError={() =>
-                notificationService.error("Unable to log in with Google")
-              }
-            />
+          <Divider>{props.translate('LOGIN_VIEW.OR')}</Divider>
+          <Row justify={'center'}>
+            <GoogleLogin onSuccess={props.onGoogleLogin} onError={() => notificationService.error(props.translate('LOGIN_VIEW.GOOGLE_LOGIN_FAIL'))} />
           </Row>
-          <Row justify={"center"} align={"middle"} className="margin-top-md">
-            New to forget-me-not?
-            <Typography.Link href={"/create"} className="margin-left-sm">
-              Create Account
+          <Row justify={'center'} align={'middle'} className="margin-top-md">
+            <Typography.Link href={'/create'} className="margin-left-sm">
+              {props.translate('LOGIN_VIEW.SIGN_UP')}
             </Typography.Link>
           </Row>
         </Form>
-      </Col>
-      <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-        <Carousel className="loginView__carousel">
-          <div className="loginView__carouselImage">
-            <Row justify={"center"}>
-              <Title className="loginView__title">
-                Please log in to use the app
-              </Title>
-            </Row>
-          </div>
-        </Carousel>
       </Col>
     </Row>
   );
 };
 
-export default LoginView;
+export default withLocalize<ILoginViewOwnProps>(LoginView as any);

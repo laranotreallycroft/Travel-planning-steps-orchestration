@@ -113,11 +113,12 @@ const LocaleProvider: React.FC<ILocaleProviderProps> = (
           colorText: "#2B3E58",
           colorInfo: "#2B3E58",
           colorWarning: "#f8d410",
-          colorError: "#c9424d",
+          colorError: "#f4ca96",
           colorBgBase: "#fff",
           colorBgContainer: "#fff",
           fontFamily: "Verdana",
           fontSize: 16,
+          colorLink: "#41689d",
         },
       }}
     >

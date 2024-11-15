@@ -2,7 +2,6 @@ import {
   Route,
   createRoutesFromElements,
   createBrowserRouter,
-  Navigate,
 } from "react-router-dom";
 import LoginPage from "components/pages/LoginPage";
 import RegistrationPage from "components/pages/RegistrationPage";
@@ -18,15 +17,14 @@ import PageLayout from "components/pages/layout/PageLayout";
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/info" element={<PageLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
+        <Route path="/" element={<PageLayout />}></Route>
         <Route path="login" element={<LoginPage />} />
         <Route path="create" element={<RegistrationPage />} />
       </Route>
 
       <Route element={<ProtectedRoute forLoggedIn={true} />}>
         <Route element={<HomeLayout />}>
-          <Route path="/" element={<Navigate to="/weather" replace={true} />} />
           <Route path="weather" element={<WeatherPage />} />
           <Route path="itinerary" element={<ItineraryPage />} />
           <Route path="packinglist" element={<PackingListPage />} />
