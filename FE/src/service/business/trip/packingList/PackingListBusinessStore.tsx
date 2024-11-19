@@ -1,20 +1,11 @@
-import axios from "axios";
-import {
-  Observable,
-  filter,
-  from,
-  map,
-  mergeMap,
-  of,
-  switchMap,
-  withLatestFrom,
-} from "rxjs";
-import notificationService from "service/util/notificationService";
-import trackAction from "service/util/trackAction";
-import { IPayloadAction } from "service/business/common/types";
-import { userTripsStore } from "service/business/user/UserBusinessStore";
-import { getTrip, tripStore } from "service/business/trip/TripBusinessStore";
-import { ITrip } from "model/trip/Trip";
+import axios from 'axios';
+import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import notificationService from 'service/util/notificationService';
+import trackAction from 'service/util/trackAction';
+import { IPayloadAction } from 'service/business/common/types';
+import { userTripsStore } from 'service/business/user/UserTripsBusinessStore';
+import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
+import { ITrip } from 'model/trip/Trip';
 
 export interface IPackingListCreatePayload {
   tripId: number;
@@ -42,42 +33,31 @@ export interface IPackingListCopyPayload {
 // -
 // -------------------- Actions
 const actions = {
-  PACKING_LIST_CREATE: "PACKING_LIST_CREATE",
-  PACKING_LIST_COPY: "PACKING_LIST_COPY",
-  PACKING_LIST_UPDATE: "PACKING_LIST_UPDATE",
-  PACKING_LIST_CHECKED: "PACKING_LIST_CHECKED",
+  PACKING_LIST_CREATE: 'PACKING_LIST_CREATE',
+  PACKING_LIST_COPY: 'PACKING_LIST_COPY',
+  PACKING_LIST_UPDATE: 'PACKING_LIST_UPDATE',
+  PACKING_LIST_CHECKED: 'PACKING_LIST_CHECKED',
 };
 
-export const packingListCreate = (
-  payload: IPackingListCreatePayload
-): IPayloadAction<IPackingListCreatePayload> => {
+export const packingListCreate = (payload: IPackingListCreatePayload): IPayloadAction<IPackingListCreatePayload> => {
   return { type: actions.PACKING_LIST_CREATE, payload: payload };
 };
-export const packingListCopy = (
-  payload: IPackingListCopyPayload
-): IPayloadAction<IPackingListCopyPayload> => {
+export const packingListCopy = (payload: IPackingListCopyPayload): IPayloadAction<IPackingListCopyPayload> => {
   return { type: actions.PACKING_LIST_COPY, payload: payload };
 };
 
-export const packingListUpdate = (
-  payload: IPackingListUpdateCombinedPayload
-): IPayloadAction<IPackingListUpdateCombinedPayload> => {
+export const packingListUpdate = (payload: IPackingListUpdateCombinedPayload): IPayloadAction<IPackingListUpdateCombinedPayload> => {
   return { type: actions.PACKING_LIST_UPDATE, payload: payload };
 };
 
-export const packingListChecked = (
-  payload: IPackingListUpdatePayload
-): IPayloadAction<IPackingListUpdatePayload> => {
+export const packingListChecked = (payload: IPackingListUpdatePayload): IPayloadAction<IPackingListUpdatePayload> => {
   return { type: actions.PACKING_LIST_CHECKED, payload: payload };
 };
 
 // -
 // -------------------- Side-effects
 
-const packingListCreateEffect = (
-  action$: Observable<IPayloadAction<IPackingListCreatePayload>>,
-  state$: Observable<any>
-) => {
+const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingListCreatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.PACKING_LIST_CREATE;
@@ -90,37 +70,25 @@ const packingListCreateEffect = (
           .post(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success(
-                "New packing list successfully created"
-              );
+              notificationService.success('New packing list successfully created');
 
               return {
                 userTrips: response.data,
-                trip: response.data.find(
-                  (value: ITrip) => value.id === trip.id
-                ),
+                trip: response.data.find((value: ITrip) => value.id === trip.id),
               };
             }
           })
           .catch((error) => {
-            notificationService.error(
-              "Unable to create packing list",
-              error.response.data
-            );
+            notificationService.error('Unable to create packing list', error.response.data);
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) =>
-      of(userTripsStore(data?.userTrips), tripStore(data?.trip))
-    )
+    switchMap((data) => of(userTripsStore(data?.userTrips), tripStore(data?.trip)))
   );
 };
 
-const packingListCopyEffect = (
-  action$: Observable<IPayloadAction<IPackingListCopyPayload>>,
-  state$: Observable<any>
-) => {
+const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCopyPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.PACKING_LIST_COPY;
@@ -133,36 +101,24 @@ const packingListCopyEffect = (
           .post(`/packinglists/copy`, action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success(
-                "New packing lists successfully created"
-              );
+              notificationService.success('New packing lists successfully created');
               return {
                 userTrips: response.data,
-                trip: response.data.find(
-                  (value: ITrip) => value.id === trip.id
-                ),
+                trip: response.data.find((value: ITrip) => value.id === trip.id),
               };
             }
           })
           .catch((error) => {
-            notificationService.error(
-              "Unable to create packing lists",
-              error.response.data
-            );
+            notificationService.error('Unable to create packing lists', error.response.data);
           })
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) =>
-      of(userTripsStore(data?.userTrips), tripStore(data?.trip))
-    )
+    switchMap((data) => of(userTripsStore(data?.userTrips), tripStore(data?.trip)))
   );
 };
 
-const packingListUpdateffect = (
-  action$: Observable<IPayloadAction<IPackingListUpdateCombinedPayload>>,
-  state$: Observable<any>
-) => {
+const packingListUpdateffect = (action$: Observable<IPayloadAction<IPackingListUpdateCombinedPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.PACKING_LIST_UPDATE;
@@ -177,10 +133,7 @@ const packingListUpdateffect = (
             }
           })
           .catch((error) => {
-            notificationService.error(
-              "Unable to update trip",
-              error.response.data
-            );
+            notificationService.error('Unable to update trip', error.response.data);
           })
       ).pipe(trackAction(action));
     }),
@@ -189,10 +142,7 @@ const packingListUpdateffect = (
   );
 };
 
-const packingListCheckedffect = (
-  action$: Observable<IPayloadAction<IPackingListUpdatePayload>>,
-  state$: Observable<any>
-) => {
+const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingListUpdatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.PACKING_LIST_CHECKED;
@@ -207,10 +157,7 @@ const packingListCheckedffect = (
             }
           })
           .catch((error) => {
-            notificationService.error(
-              "Unable to update trip",
-              error.response.data
-            );
+            notificationService.error('Unable to update trip', error.response.data);
           })
       ).pipe(trackAction(action));
     }),

@@ -16,11 +16,11 @@ function getItem(label: React.ReactNode, key: React.Key, className?: string, ico
   } as MenuItem;
 }
 
-export interface IPageLayoutViewHeaderOwnProps {}
+export interface IAppLayoutViewHeaderOwnProps {}
 
-type IPageLayoutViewHeaderProps = IPageLayoutViewHeaderOwnProps & IWithLocalizeOwnProps;
+type IAppLayoutViewHeaderProps = IAppLayoutViewHeaderOwnProps & IWithLocalizeOwnProps;
 
-const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (props: IPageLayoutViewHeaderProps) => {
+const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLayoutViewHeaderProps) => {
   const navigator = useNavigate();
   const location = useLocation();
 
@@ -32,9 +32,9 @@ const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (props: IPage
 
   const items: MenuProps['items'] = [
     getItem(props.translate('NAVIGATION.INFO'), '/'),
-    getItem(<Button className="pageLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
+    getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
     getItem(
-      <Button type="primary" className="pageLayoutViewHeader__button">
+      <Button type="primary" className="appLayoutViewHeader__button">
         {props.translate('NAVIGATION.CREATE')}
       </Button>,
       '/create'
@@ -43,12 +43,12 @@ const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (props: IPage
 
   return (
     <Row justify={'space-between'} className="fullWidth">
-      <Col span={4} className="pageLayoutViewHeader__imgContainer">
-        <img src={logo} className="pageLayoutViewHeader__img" alt="" />
+      <Col span={4} className="appLayoutViewHeader__imgContainer">
+        <img src={logo} className="appLayoutViewHeader__img" alt="" />
       </Col>
 
       <Col span={16}>
-        <Menu className="pageLayoutViewHeader__menuContainer" onClick={handleMenuSelect} selectedKeys={[currentTab]} items={items} mode="horizontal" disabledOverflow={true} />
+        <Menu className="appLayoutViewHeader__menuContainer" onClick={handleMenuSelect} selectedKeys={[currentTab]} items={items} mode="horizontal" disabledOverflow={true} />
       </Col>
       <Col span={2}>
         <LocalePickerContainer />
@@ -57,4 +57,4 @@ const PageLayoutViewHeader: React.FC<IPageLayoutViewHeaderProps> = (props: IPage
   );
 };
 
-export default withLocalize(PageLayoutViewHeader as any);
+export default withLocalize(AppLayoutViewHeader as any);

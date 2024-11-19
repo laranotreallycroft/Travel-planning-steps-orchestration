@@ -1,24 +1,20 @@
-import {
-  Route,
-  createRoutesFromElements,
-  createBrowserRouter,
-} from "react-router-dom";
-import LoginPage from "components/pages/LoginPage";
-import RegistrationPage from "components/pages/RegistrationPage";
-import ProtectedRoute from "components/ProtectedRoute";
-import FallbackPage from "components/pages/FallbackPage";
-import HomeLayout from "components/pages/layout/HomeLayout";
-import PackingListPage from "components/pages/PackingListPage";
-import ItineraryPage from "components/pages/ItineraryPage";
-import TripSettingsPage from "components/pages/TripSettingsPage";
-import WeatherPage from "components/pages/WeatherPage";
-import PageLayout from "components/pages/layout/PageLayout";
+import { Route, createRoutesFromElements, createBrowserRouter } from 'react-router-dom';
+import LoginPage from 'components/pages/LoginPage';
+import RegistrationPage from 'components/pages/RegistrationPage';
+import ProtectedRoute from 'components/ProtectedRoute';
+import FallbackPage from 'components/pages/FallbackPage';
+import HomeLayout from 'components/pages/layout/HomeLayout';
+import PackingListPage from 'components/pages/PackingListPage';
+import ItineraryPage from 'components/pages/ItineraryPage';
+import TripSettingsPage from 'components/pages/TripSettingsPage';
+import WeatherPage from 'components/pages/WeatherPage';
+import AppLayout from 'components/pages/layout/AppLayout';
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      <Route path="/" element={<AppLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
-        <Route path="/" element={<PageLayout />}></Route>
         <Route path="login" element={<LoginPage />} />
         <Route path="create" element={<RegistrationPage />} />
       </Route>

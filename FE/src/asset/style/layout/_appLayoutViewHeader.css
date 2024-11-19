@@ -1,0 +1,17 @@
+.appLayoutViewHeader__imgContainer {
+  padding: 0.5rem;
+  height: 4rem;
+}
+.appLayoutViewHeader__img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.appLayoutViewHeader__menuContainer {
+  display: flex;
+  justify-content: center;
+}
+
+li:has(button.appLayoutViewHeader__button)::after {
+  border: none !important;
+}

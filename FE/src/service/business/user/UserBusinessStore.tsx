@@ -1,91 +1,64 @@
-import axios from "axios";
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from "rxjs";
-import { ITrip } from "model/trip/Trip";
-import { IUserCredentials } from "model/user/User";
-import notificationService from "service/util/notificationService";
-import trackAction, { IAction } from "service/util/trackAction";
-import { IPayloadAction } from "service/business/common/types";
-import { loginActions } from "service/business/login/LoginBusinessStore";
+import axios from 'axios';
+import { Observable, filter, from, map, mergeMap } from 'rxjs';
+import { IPayloadAction } from 'service/business/common/types';
+import { currentUserStore } from 'service/business/login/LoginBusinessStore';
+import notificationService from 'service/util/notificationService';
+import trackAction from 'service/util/trackAction';
 
 // -
 // -------------------- Selectors
-export const getUser = (store: any): IUserCredentials => store.user;
-const getUserTrips = (store: any): ITrip[] => store.userTrips;
 
 // -
 // -------------------- Actions
 const actions = {
-  USER_TRIPS_FETCH: "USER_TRIPS_FETCH",
-  USER_TRIPS_STORE: "USER_TRIPS_STORE",
-  USER_TRIPS_CLEAR: "USER_TRIPS_CLEAR",
+  CREATE_USER: 'CREATE_USER',
 };
 
-export const userTripsFetch = (): IAction => {
-  return { type: actions.USER_TRIPS_FETCH };
-};
+export interface IUserCreatePayload {
+  email: string;
+  password: string;
+}
 
-export const userTripsStore = (payload: ITrip[]): IPayloadAction<ITrip[]> => {
-  return { type: actions.USER_TRIPS_STORE, payload: payload };
-};
-
-const userTripsClear = (): IAction => {
-  return { type: actions.USER_TRIPS_CLEAR };
+const createUser = (payload: IUserCreatePayload): IPayloadAction<IUserCreatePayload> => {
+  return { type: actions.CREATE_USER, payload: payload };
 };
 
 // -
 // -------------------- Side-effects
 
-const userTripsFetchEffect = (
-  action$: Observable<IAction>,
-  state$: Observable<any>
-) => {
+const userCreateEffect = (action$: Observable<IPayloadAction<IUserCreatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
-    filter((action) => action.type === actions.USER_TRIPS_FETCH),
-
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const user = getUser(state);
-
+    filter((action) => {
+      return action.type === actions.CREATE_USER;
+    }),
+    mergeMap((action) => {
       return from(
         axios
-          .get(`/users/${user.id}/trips`)
+          .post('/users', action.payload)
           .then((response) => {
-            if (response.status === 200) {
+            if (response.status === 201) {
+              notificationService.success('User successfully created');
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error(
-              "Unable to fetch user trips",
-              error.response.data
-            );
+            notificationService.error('Unable to create user', error.response.data);
           })
       ).pipe(trackAction(action));
     }),
-
     filter((data) => data !== undefined),
-    map((data) => userTripsStore(data))
+    map((data) => currentUserStore(data))
   );
 };
 
 // -
 // -------------------- Reducers
 
-const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
-  if (action.type === actions.USER_TRIPS_STORE) {
-    return [...action.payload];
-  } else if (
-    action.type === actions.USER_TRIPS_CLEAR ||
-    action.type === loginActions.LOGOUT
-  ) {
-    return null;
-  }
-  return state;
-};
-
 export const UserBusinessStore = {
-  selectors: { getUser, getUserTrips },
-  actions: { userTripsFetch, userTripsStore, userTripsClear },
-  effects: { userTripsFetchEffect },
-  reducers: { userTrips },
+  selectors: {},
+  actions: {
+    createUser,
+  },
+  effects: { userCreateEffect },
+  reducers: {},
 };

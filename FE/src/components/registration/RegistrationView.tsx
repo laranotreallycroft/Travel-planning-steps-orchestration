@@ -6,7 +6,7 @@ import logo from 'asset/img/logo.png';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { IRegistrationPayload } from 'service/business/registration/RegistrationBusinessStore';
+import { IUserCreatePayload } from 'service/business/user/UserBusinessStore';
 import notificationService from 'service/util/notificationService';
 
 export interface IRegistrationForm {
@@ -17,7 +17,7 @@ export interface IRegistrationForm {
 
 export interface IRegistrationViewOwnProps {
   onGoogleLogin: (googleCredential: CredentialResponse) => void;
-  onRegistration: (registrationValues: IRegistrationPayload) => void;
+  onUserCreate: (registrationValues: IUserCreatePayload) => void;
 }
 
 type IRegistrationViewProps = IRegistrationViewOwnProps & IWithLocalizeOwnProps;
@@ -40,7 +40,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
   }, []);
 
   const handleFinish = useCallback((values: IRegistrationForm) => {
-    props.onRegistration({ email: values.email, password: values.password });
+    props.onUserCreate({ email: values.email, password: values.password });
   }, []);
 
   return (
