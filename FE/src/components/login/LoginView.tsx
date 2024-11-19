@@ -26,11 +26,11 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
       <Col span={6}>
-        <Row justify={'center'} className="loginView__imgContainer">
+        <div className="loginView__imgWrapper">
           <Link to="/" className="loginView__imgLink">
-            <img src={logo} className="loginView__img" alt="" />
+            <img src={logo} className="loginView__img" alt="logo" />
           </Link>
-        </Row>
+        </div>
         <Form<ILoginForm> form={form} onFinish={props.onLogin} requiredMark={false} className="fullWidth">
           <Form.Item
             name={'email'}
@@ -56,7 +56,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
               },
             ]}
           >
-            <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_MESSAGE')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+            <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
           </Form.Item>
           <Row justify={'center'} className="margin-top-xxl">
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>

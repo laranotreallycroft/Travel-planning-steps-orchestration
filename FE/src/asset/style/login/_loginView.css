@@ -8,12 +8,7 @@
 }
 
 .loginView__carouselImage {
-  background-image: linear-gradient(
-      to bottom,
-      rgb(237, 233, 232),
-      rgba(0, 0, 0, 0) 35%
-    ),
-    url(../../img/loginPreviewOne.jpg);
+  background-image: linear-gradient(to bottom, rgb(237, 233, 232), rgba(0, 0, 0, 0) 35%), url(../../img/loginPreviewOne.jpg);
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -22,7 +17,7 @@
 }
 
 .loginView__title {
-  font-family: "ArcherBold";
+  font-family: 'ArcherBold';
   letter-spacing: 0.1rem;
 }
 
@@ -33,13 +28,13 @@
   align-items: center;
 }
 
-.loginView__imgContainer {
-  margin-bottom: 60px;
+.loginView__imgWrapper {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
 .loginView__imgLink {
-  display: flex;
-  justify-content: center;
+  display: inline;
 }
 
 .loginView__img {

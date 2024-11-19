@@ -46,11 +46,11 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
       <Col span={6}>
-        <Row justify={'center'} className="loginView__imgContainer">
+        <div className="loginView__imgWrapper">
           <Link to="/" className="loginView__imgLink">
-            <img src={logo} className="loginView__img" alt="" />
+            <img src={logo} className="loginView__img" alt="logo" />
           </Link>
-        </Row>
+        </div>
         <Form<IRegistrationForm> form={form} onFinish={handleFinish} className="fullWidth">
           <Form.Item
             name={'email'}
