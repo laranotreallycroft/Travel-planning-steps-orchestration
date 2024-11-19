@@ -40,7 +40,6 @@ const LocalePicker: React.FC<ILocalePickerProps> = (props) => {
     [props.locale]
   );
 
-  console.log(props.locale);
   return <Menu mode="horizontal" expandIcon={<ArrowDropDown />} triggerSubMenuAction="click" onClick={props.onLocaleChange} defaultSelectedKeys={[props.locale]} items={items}></Menu>;
 };
 
