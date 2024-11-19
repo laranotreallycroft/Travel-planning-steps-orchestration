@@ -4,7 +4,6 @@ import { ITrip, ITripPayload } from 'model/trip/Trip';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
-import { loginActions } from 'service/business/login/LoginBusinessStore';
 import { getUser, userTripsStore } from 'service/business/user/UserTripsBusinessStore';
 
 // -
@@ -160,7 +159,7 @@ const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) 
 const trip = (state: any = null, action: IPayloadAction<ITrip>) => {
   if (action.type === actions.TRIP_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.TRIP_CLEAR || action.type === loginActions.LOGOUT) {
+  } else if (action.type === actions.TRIP_CLEAR) {
     return null;
   }
   return state;

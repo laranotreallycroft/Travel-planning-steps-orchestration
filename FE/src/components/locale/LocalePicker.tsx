@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 
@@ -25,15 +25,23 @@ type ILocalePickerProps = ILocalePickerOwnProps & ILocalePickerStateProps & ILoc
 
 /** Menu component for picking app locale */
 const LocalePicker: React.FC<ILocalePickerProps> = (props) => {
-  return (
-    <Menu mode="horizontal" expandIcon={<ArrowDropDown />} triggerSubMenuAction="click" onClick={props.onLocaleChange} defaultSelectedKeys={[props.locale]}>
-      <Menu.SubMenu icon={<LanguageOutlined />} title={props.locale.toLocaleUpperCase()}>
-        {Object.keys(MESSAGES).map((locale) => {
-          return <Menu.Item key={locale}>{LABELS[locale]}</Menu.Item>;
-        })}
-      </Menu.SubMenu>
-    </Menu>
+  const items = useMemo(
+    () => [
+      {
+        key: 'locale',
+        icon: <LanguageOutlined />,
+        label: props.locale.toUpperCase(),
+        children: Object.keys(MESSAGES).map((locale) => ({
+          key: locale,
+          label: LABELS[locale],
+        })),
+      },
+    ],
+    [props.locale]
   );
+
+  console.log(props.locale);
+  return <Menu mode="horizontal" expandIcon={<ArrowDropDown />} triggerSubMenuAction="click" onClick={props.onLocaleChange} defaultSelectedKeys={[props.locale]} items={items}></Menu>;
 };
 
 // -- HOCs and exports

@@ -5,7 +5,6 @@ import { IUserCredentials } from 'model/user/User';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 import { IPayloadAction } from 'service/business/common/types';
-import { loginActions } from 'service/business/login/LoginBusinessStore';
 
 // -
 // -------------------- Selectors
@@ -68,7 +67,7 @@ const userTripsFetchEffect = (action$: Observable<IAction>, state$: Observable<a
 const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
   if (action.type === actions.USER_TRIPS_STORE) {
     return [...action.payload];
-  } else if (action.type === actions.USER_TRIPS_CLEAR || action.type === loginActions.LOGOUT) {
+  } else if (action.type === actions.USER_TRIPS_CLEAR) {
     return null;
   }
   return state;

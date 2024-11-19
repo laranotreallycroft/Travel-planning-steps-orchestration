@@ -2,6 +2,7 @@ const en: any = {
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
   'NAVIGATION.CREATE': 'Sign up',
+  'NAVIGATION.LOGOUT': 'Sign out',
 
   'LOGIN_VIEW.FORM.EMAIL_MESSAGE': 'Please enter email',
   'LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER': 'Email address',

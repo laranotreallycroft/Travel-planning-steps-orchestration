@@ -16,7 +16,9 @@ function getItem(label: React.ReactNode, key: React.Key, className?: string, ico
   } as MenuItem;
 }
 
-export interface IAppLayoutViewHeaderOwnProps {}
+export interface IAppLayoutViewHeaderOwnProps {
+  isUserLoggedIn: boolean;
+}
 
 type IAppLayoutViewHeaderProps = IAppLayoutViewHeaderOwnProps & IWithLocalizeOwnProps;
 
@@ -30,16 +32,22 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
     navigator(e.key);
   };
 
-  const items: MenuProps['items'] = [
-    getItem(props.translate('NAVIGATION.INFO'), '/'),
-    getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
-    getItem(
-      <Button type="primary" className="appLayoutViewHeader__button">
-        {props.translate('NAVIGATION.CREATE')}
-      </Button>,
-      '/create'
-    ),
-  ];
+  const items: MenuProps['items'] = useMemo(() => {
+    if (props.isUserLoggedIn) {
+      return [getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGOUT')}</Button>, '/login')];
+    } else {
+      return [
+        getItem(props.translate('NAVIGATION.INFO'), '/'),
+        getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
+        getItem(
+          <Button type="primary" className="appLayoutViewHeader__button">
+            {props.translate('NAVIGATION.CREATE')}
+          </Button>,
+          '/create'
+        ),
+      ];
+    }
+  }, [props.isUserLoggedIn]);
 
   return (
     <Row justify={'space-between'} className="fullWidth">
@@ -57,4 +65,4 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
   );
 };
 
-export default withLocalize(AppLayoutViewHeader as any);
+export default withLocalize<IAppLayoutViewHeaderOwnProps>(AppLayoutViewHeader as any);

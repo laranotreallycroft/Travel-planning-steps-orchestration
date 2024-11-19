@@ -3,7 +3,9 @@ import { Header } from 'antd/es/layout/layout';
 import AppLayoutViewHeader from 'components/layout/AppLayoutViewHeader';
 import React from 'react';
 
-export interface IAppLayoutViewOwnProps {}
+export interface IAppLayoutViewOwnProps {
+  isUserLoggedIn: boolean;
+}
 
 type IAppLayoutViewProps = IAppLayoutViewOwnProps;
 
@@ -11,7 +13,7 @@ const AppLayoutView: React.FC<IAppLayoutViewProps> = (props: IAppLayoutViewProps
   return (
     <Layout className="fullHeight">
       <Header className="appLayoutView__header">
-        <AppLayoutViewHeader />
+        <AppLayoutViewHeader isUserLoggedIn={props.isUserLoggedIn} />
       </Header>
     </Layout>
   );
