@@ -7,17 +7,21 @@ export interface IAppLayoutContainerOwnProps {}
 export interface IAppLayoutContainerStateProps {
   isUserLoggedIn: boolean;
 }
-export interface IAppLayoutContainerDispatchProps {}
+export interface IAppLayoutContainerDispatchProps {
+  logout: () => void;
+}
 type IAppLayoutContainerProps = IAppLayoutContainerOwnProps & IAppLayoutContainerStateProps & IAppLayoutContainerDispatchProps;
 
 const AppLayoutContainer: React.FC<IAppLayoutContainerProps> = (props: IAppLayoutContainerProps) => {
-  return <AppLayoutView isUserLoggedIn={props.isUserLoggedIn} />;
+  return <AppLayoutView isUserLoggedIn={props.isUserLoggedIn} logout={props.logout} />;
 };
 
 const mapStateToProps = (state: any): IAppLayoutContainerStateProps => ({
   isUserLoggedIn: LoginBusinessStore.selectors.isUserLoggedIn(state),
 });
 
-const mapDispatchToProps = (dispatch: any): IAppLayoutContainerDispatchProps => ({});
+const mapDispatchToProps = (dispatch: any): IAppLayoutContainerDispatchProps => ({
+  logout: () => dispatch(LoginBusinessStore.actions.logout()),
+});
 
 export default connect<IAppLayoutContainerStateProps, IAppLayoutContainerDispatchProps, IAppLayoutContainerOwnProps>(mapStateToProps, mapDispatchToProps)(AppLayoutContainer);

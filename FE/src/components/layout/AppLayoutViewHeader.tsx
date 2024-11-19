@@ -18,6 +18,7 @@ function getItem(label: React.ReactNode, key: React.Key, className?: string, ico
 
 export interface IAppLayoutViewHeaderOwnProps {
   isUserLoggedIn: boolean;
+  logout: () => void;
 }
 
 type IAppLayoutViewHeaderProps = IAppLayoutViewHeaderOwnProps & IWithLocalizeOwnProps;
@@ -34,7 +35,14 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
 
   const items: MenuProps['items'] = useMemo(() => {
     if (props.isUserLoggedIn) {
-      return [getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGOUT')}</Button>, '/login')];
+      return [
+        getItem(
+          <Button className="appLayoutViewHeader__button" onClick={props.logout}>
+            {props.translate('NAVIGATION.LOGOUT')}
+          </Button>,
+          '/login'
+        ),
+      ];
     } else {
       return [
         getItem(props.translate('NAVIGATION.INFO'), '/'),

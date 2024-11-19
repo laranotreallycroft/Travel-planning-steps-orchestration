@@ -5,6 +5,7 @@ import React from 'react';
 
 export interface IAppLayoutViewOwnProps {
   isUserLoggedIn: boolean;
+  logout: () => void;
 }
 
 type IAppLayoutViewProps = IAppLayoutViewOwnProps;
@@ -13,7 +14,7 @@ const AppLayoutView: React.FC<IAppLayoutViewProps> = (props: IAppLayoutViewProps
   return (
     <Layout className="fullHeight">
       <Header className="appLayoutView__header">
-        <AppLayoutViewHeader isUserLoggedIn={props.isUserLoggedIn} />
+        <AppLayoutViewHeader isUserLoggedIn={props.isUserLoggedIn} logout={props.logout} />
       </Header>
     </Layout>
   );

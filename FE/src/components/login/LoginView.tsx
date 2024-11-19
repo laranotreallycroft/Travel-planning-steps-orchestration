@@ -31,7 +31,17 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             <img src={logo} className="loginView__img" alt="logo" />
           </Link>
         </div>
-        <Form<ILoginForm> form={form} onFinish={props.onLogin} requiredMark={false} className="fullWidth">
+        <Form<ILoginForm>
+          form={form}
+          onFinish={props.onLogin}
+          requiredMark={false}
+          className="fullWidth"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              form.submit();
+            }
+          }}
+        >
           <Form.Item
             name={'email'}
             labelCol={{ span: 24 }}

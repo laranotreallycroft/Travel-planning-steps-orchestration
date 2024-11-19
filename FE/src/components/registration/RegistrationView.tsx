@@ -51,7 +51,16 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
             <img src={logo} className="loginView__img" alt="logo" />
           </Link>
         </div>
-        <Form<IRegistrationForm> form={form} onFinish={handleFinish} className="fullWidth">
+        <Form<IRegistrationForm>
+          form={form}
+          onFinish={handleFinish}
+          className="fullWidth"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              form.submit();
+            }
+          }}
+        >
           <Form.Item
             name={'email'}
             labelCol={{ span: 24 }}

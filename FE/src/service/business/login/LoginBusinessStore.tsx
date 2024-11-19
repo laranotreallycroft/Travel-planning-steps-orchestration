@@ -10,7 +10,7 @@ import trackAction, { IAction } from 'service/util/trackAction';
 // -------------------- Selectors
 const getCurrentUser = (store: any): IUserCredentials => store.currentUser;
 
-const isUserLoggedIn = (store: any): boolean => store.user != null;
+const isUserLoggedIn = (store: any): boolean => store.currentUser != null;
 
 // -
 // -------------------- Actions
@@ -108,7 +108,6 @@ const logoutEffect = (action$: Observable<IAction>, state$: Observable<any>) => 
     // persist token
     mergeMap((action) => {
       return of(null).pipe(
-        // Purge store after logout but BEFORE action thunk confirmation because it will do a redirect which can prevent purge from happening
         tap(() => {
           StoreService.getPersistor().purge();
         }),
@@ -124,7 +123,7 @@ const logoutEffect = (action$: Observable<IAction>, state$: Observable<any>) => 
 // -
 // -------------------- Reducers
 
-const user = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
+const currentUser = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
   if (action.type === loginActions.CURRENT_USER_STORE) {
     return { ...action.payload };
   } else if (action.type === loginActions.LOGOUT) {
@@ -141,5 +140,5 @@ export const LoginBusinessStore = {
     logout,
   },
   effects: { loginEffect, googleLoginEffect, logoutEffect },
-  reducers: { user },
+  reducers: { currentUser },
 };
