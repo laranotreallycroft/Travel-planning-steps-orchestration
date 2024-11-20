@@ -4,7 +4,8 @@ import { ITrip, ITripPayload } from 'model/trip/Trip';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
-import { getUser, userTripsStore } from 'service/business/user/UserTripsBusinessStore';
+import { userTripsStore } from 'service/business/user/UserTripsBusinessStore';
+import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 
 // -
 // -------------------- Selectors
@@ -55,7 +56,7 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripPayload>>, sta
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const user = getUser(state);
+      const user = LoginBusinessStore.selectors.getCurrentUser(state);
       return from(
         axios
           .post('/trips', { ...action.payload, userId: user.id })

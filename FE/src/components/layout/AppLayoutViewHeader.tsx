@@ -45,7 +45,7 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
       ];
     } else {
       return [
-        getItem(props.translate('NAVIGATION.INFO'), '/'),
+        getItem(props.translate('NAVIGATION.INFO'), '/overview'),
         getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
         getItem(
           <Button type="primary" className="appLayoutViewHeader__button">

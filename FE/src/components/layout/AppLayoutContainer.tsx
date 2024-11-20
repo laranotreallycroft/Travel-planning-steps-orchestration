@@ -3,7 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 
-export interface IAppLayoutContainerOwnProps {}
+export interface IAppLayoutContainerOwnProps {
+  children?: React.ReactNode;
+}
 export interface IAppLayoutContainerStateProps {
   isUserLoggedIn: boolean;
 }
@@ -13,7 +15,11 @@ export interface IAppLayoutContainerDispatchProps {
 type IAppLayoutContainerProps = IAppLayoutContainerOwnProps & IAppLayoutContainerStateProps & IAppLayoutContainerDispatchProps;
 
 const AppLayoutContainer: React.FC<IAppLayoutContainerProps> = (props: IAppLayoutContainerProps) => {
-  return <AppLayoutView isUserLoggedIn={props.isUserLoggedIn} logout={props.logout} />;
+  return (
+    <AppLayoutView isUserLoggedIn={props.isUserLoggedIn} logout={props.logout}>
+      {props.children}
+    </AppLayoutView>
+  );
 };
 
 const mapStateToProps = (state: any): IAppLayoutContainerStateProps => ({

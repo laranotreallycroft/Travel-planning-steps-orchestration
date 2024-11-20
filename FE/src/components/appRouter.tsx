@@ -13,18 +13,21 @@ import AppLayout from 'components/pages/layout/AppLayout';
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<AppLayout />}></Route>
       <Route element={<ProtectedRoute forLoggedIn={false} />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="create" element={<RegistrationPage />} />
       </Route>
-
-      <Route element={<ProtectedRoute forLoggedIn={true} />}>
-        <Route element={<HomeLayout />}>
-          <Route path="weather" element={<WeatherPage />} />
-          <Route path="itinerary" element={<ItineraryPage />} />
-          <Route path="packinglist" element={<PackingListPage />} />
-          <Route path="settings" element={<TripSettingsPage />} />
+      <Route path="/" element={<AppLayout />}>
+        <Route element={<ProtectedRoute forLoggedIn={false} />}>
+          <Route path="overview" element={<div>placeholder</div>} />
+        </Route>
+        <Route element={<ProtectedRoute forLoggedIn={true} />}>
+          <Route element={<HomeLayout />}>
+            <Route path="weather" element={<WeatherPage />} />
+            <Route path="itinerary" element={<ItineraryPage />} />
+            <Route path="packinglist" element={<PackingListPage />} />
+            <Route path="settings" element={<TripSettingsPage />} />
+          </Route>
         </Route>
       </Route>
 

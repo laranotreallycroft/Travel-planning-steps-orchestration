@@ -1,14 +1,13 @@
 import axios from 'axios';
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from 'rxjs';
 import { ITrip } from 'model/trip/Trip';
-import { IUserCredentials } from 'model/user/User';
+import { Observable, filter, from, map, mergeMap, withLatestFrom } from 'rxjs';
+import { IPayloadAction } from 'service/business/common/types';
+import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
-import { IPayloadAction } from 'service/business/common/types';
 
 // -
 // -------------------- Selectors
-export const getUser = (store: any): IUserCredentials => store.user;
 const getUserTrips = (store: any): ITrip[] => store.userTrips;
 
 // -
@@ -40,7 +39,7 @@ const userTripsFetchEffect = (action$: Observable<IAction>, state$: Observable<a
 
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      const user = getUser(state);
+      const user = LoginBusinessStore.selectors.getCurrentUser(state);
 
       return from(
         axios
@@ -74,7 +73,7 @@ const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
 };
 
 export const UserTripsBusinessStore = {
-  selectors: { getUser, getUserTrips },
+  selectors: { getUserTrips },
   actions: { userTripsFetch, userTripsStore, userTripsClear },
   effects: { userTripsFetchEffect },
   reducers: { userTrips },
