@@ -3,8 +3,10 @@ package com.odysseus.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import com.odysseus.model.payload.user.UserCreatePayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity login(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
+    public ResponseEntity<Object> login(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
         String payloadEmail = loginPayload.getEmail();
         String payloadPassword = loginPayload.getPassword();
 
@@ -57,10 +59,10 @@ public class LoginController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) throws URISyntaxException {
+    public ResponseEntity<Object> googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) throws URISyntaxException {
+
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList(googleClientId)).build();
-
         GoogleIdToken idToken;
         try {
             idToken = verifier.verify(googleLoginPayload.getCredential());
@@ -84,7 +86,9 @@ public class LoginController {
             }
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
         }
     }
+
+
 }

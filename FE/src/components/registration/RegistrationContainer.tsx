@@ -26,14 +26,14 @@ const RegistrationContainer: React.FC<IRegistrationContainerProps> = (props: IRe
     [props.googleLogin]
   );
 
-  const handleRegistration = useCallback(
+  const handleUserCreate = useCallback(
     (registrationPayload: IUserCreatePayload) => {
       props.createUser(registrationPayload);
     },
     [props.createUser]
   );
 
-  return <RegistrationView onGoogleLogin={handleGoogleLogin} onUserCreate={handleRegistration} />;
+  return <RegistrationView onGoogleLogin={handleGoogleLogin} onUserCreate={handleUserCreate} />;
 };
 
 const mapStateToProps = (state: any): IRegistrationContainerStateProps => ({});

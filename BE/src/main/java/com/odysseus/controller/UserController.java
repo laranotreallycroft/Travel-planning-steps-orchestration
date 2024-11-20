@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import com.odysseus.model.payload.common.IdPayload;
-import com.odysseus.model.payload.login.LoginPayload;
+import com.odysseus.model.payload.user.UserCreatePayload;
 import com.odysseus.utils.Security;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,26 +37,42 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity registration(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
-        String payloadEmail = loginPayload.getEmail();
-        String payloadPassword = loginPayload.getPassword();
-
-        if (userRepository.findByEmail(payloadEmail, false) != null) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-
+    public ResponseEntity<Object> createUser(@RequestBody UserCreatePayload userCreatePayload) {
         try {
-            byte[] passwordSalt = Security.getSalt();
-            String passwordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
-            User user = new User(payloadEmail, passwordSalt, passwordHash);
-            userRepository.save(user);
+            // Validate inputs
+            if (isEmailExists(userCreatePayload.getEmail())) {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
+
+            // Create and save the user
+            User user = createNewUser(userCreatePayload);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating user");
+            }
+
+            // Respond with created user's ID
             IdPayload idPayload = new IdPayload(user.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
+            // Log exception details and respond with generic error
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
-        return ResponseEntity.badRequest().body("Something went wrong");
+    }
 
+    private boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email, false) != null;
+    }
+
+    private User createNewUser(UserCreatePayload payload) throws NoSuchAlgorithmException {
+        String email = payload.getEmail();
+        String password = payload.getPassword();
+
+        byte[] passwordSalt = Security.getSalt();
+        String passwordHash = Security.getSecurePassword(password, passwordSalt);
+
+        User user = new User(email, passwordSalt, passwordHash);
+        return userRepository.save(user);
     }
 
 }

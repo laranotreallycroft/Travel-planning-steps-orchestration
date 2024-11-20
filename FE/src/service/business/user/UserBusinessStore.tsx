@@ -18,6 +18,7 @@ const actions = {
 export interface IUserCreatePayload {
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 const createUser = (payload: IUserCreatePayload): IPayloadAction<IUserCreatePayload> => {

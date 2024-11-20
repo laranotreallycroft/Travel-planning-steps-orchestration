@@ -9,12 +9,6 @@ import { Link } from 'react-router-dom';
 import { IUserCreatePayload } from 'service/business/user/UserBusinessStore';
 import notificationService from 'service/util/notificationService';
 
-export interface IRegistrationForm {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 export interface IRegistrationViewOwnProps {
   onGoogleLogin: (googleCredential: CredentialResponse) => void;
   onUserCreate: (registrationValues: IUserCreatePayload) => void;
@@ -23,7 +17,7 @@ export interface IRegistrationViewOwnProps {
 type IRegistrationViewProps = IRegistrationViewOwnProps & IWithLocalizeOwnProps;
 
 const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistrationViewProps) => {
-  const [form] = Form.useForm<IRegistrationForm>();
+  const [form] = Form.useForm<IUserCreatePayload>();
 
   const validatePassword = useCallback((rule: RuleObject, value: string) => {
     if (value && (value.length < 8 || !/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/\d/.test(value))) return Promise.reject(props.translate('REGISTRATION_VIEW.PASSWORD_VALIDATION.REJECT'));
@@ -39,10 +33,6 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
     }
   }, []);
 
-  const handleFinish = useCallback((values: IRegistrationForm) => {
-    props.onUserCreate({ email: values.email, password: values.password });
-  }, []);
-
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
       <Col span={6}>
@@ -51,9 +41,9 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
             <img src={logo} className="loginView__img" alt="logo" />
           </Link>
         </div>
-        <Form<IRegistrationForm>
+        <Form<IUserCreatePayload>
           form={form}
-          onFinish={handleFinish}
+          onFinish={props.onUserCreate}
           className="fullWidth"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
