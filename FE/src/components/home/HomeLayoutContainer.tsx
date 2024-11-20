@@ -4,16 +4,16 @@ import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IIdPayload } from 'service/business/common/types';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
-import { UserTripsBusinessStore } from 'service/business/user/UserTripsBusinessStore';
+import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 
 export interface IHomeLayoutContainerOwnProps {}
 export interface IHomeLayoutContainerStateProps {
-  userTrips: ITrip[];
+  tripList: ITrip[];
   trip: ITrip;
 }
 export interface IHomeLayoutContainerDispatchProps {
-  userTripsFetch: () => void;
-  userTripsClear: () => void;
+  tripListFetch: () => void;
+  tripListClear: () => void;
   tripFetch: (payload: IIdPayload) => void;
   tripClear: () => void;
 }
@@ -21,9 +21,9 @@ type IHomeLayoutContainerProps = IHomeLayoutContainerOwnProps & IHomeLayoutConta
 
 const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (props: IHomeLayoutContainerProps) => {
   useEffect(() => {
-    props.userTripsFetch();
+    props.tripListFetch();
     return () => {
-      props.userTripsClear();
+      props.tripListClear();
       props.tripClear();
     };
   }, []);
@@ -32,17 +32,17 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (props: IHomeLa
     props.tripFetch({ id: selectedTripId });
   }, []);
 
-  return <HomeLayoutView userTrips={props.userTrips} trip={props.trip} onTripSelect={handleTripSelect} />;
+  return <HomeLayoutView tripList={props.tripList} trip={props.trip} onTripSelect={handleTripSelect} />;
 };
 
 const mapStateToProps = (state: any): IHomeLayoutContainerStateProps => ({
-  userTrips: UserTripsBusinessStore.selectors.getUserTrips(state),
+  tripList: TripListBusinessStore.selectors.getTripList(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (dispatch: any): IHomeLayoutContainerDispatchProps => ({
-  userTripsFetch: () => dispatch(UserTripsBusinessStore.actions.userTripsFetch()),
-  userTripsClear: () => dispatch(UserTripsBusinessStore.actions.userTripsClear()),
+  tripListFetch: () => dispatch(TripListBusinessStore.actions.tripListFetch()),
+  tripListClear: () => dispatch(TripListBusinessStore.actions.tripListClear()),
   tripFetch: (payload: IIdPayload) => dispatch(TripBusinessStore.actions.tripFetch(payload)),
   tripClear: () => dispatch(TripBusinessStore.actions.tripClear()),
 });

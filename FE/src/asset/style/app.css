@@ -35,5 +35,6 @@ html {
 @import 'trip/itinerary/schedule/_schedule.css';
 @import 'trip/itinerary/_itineraryView.css';
 @import 'trip/_tripSettingsView.css';
+@import 'trip/_tripListView.css';
 @import 'common/list/_dragAndDropTable.css';
 @import 'locale/_localePicker.css';

@@ -3,7 +3,7 @@ import { ITripPayload } from 'model/trip/Trip';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
-import { UserTripsBusinessStore } from 'service/business/user/UserTripsBusinessStore';
+import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface ITripCreateContainerOwnProps {
@@ -14,7 +14,7 @@ export interface ITripCreateContainerOwnProps {
 export interface ITripCreateContainerStateProps {}
 export interface ITripCreateContainerDispatchProps {
   tripCreate: (tripCreatePayload: ITripPayload) => ITrackableAction;
-  userTripsFetch: () => void;
+  tripListFetch: () => void;
 }
 type ITripCreateContainerProps = ITripCreateContainerOwnProps & ITripCreateContainerStateProps & ITripCreateContainerDispatchProps;
 
@@ -37,7 +37,7 @@ const mapStateToProps = (state: any): ITripCreateContainerStateProps => ({});
 const mapDispatchToProps = (dispatch: any): ITripCreateContainerDispatchProps => ({
   tripCreate: (tripCreatePayload: ITripPayload) => dispatch(createTrackableAction(TripBusinessStore.actions.tripCreate(tripCreatePayload))),
 
-  userTripsFetch: () => dispatch(UserTripsBusinessStore.actions.userTripsFetch()),
+  tripListFetch: () => dispatch(TripListBusinessStore.actions.tripListFetch()),
 });
 
 export default connect<ITripCreateContainerStateProps, ITripCreateContainerDispatchProps, ITripCreateContainerOwnProps>(mapStateToProps, mapDispatchToProps)(TripCreateContainer);

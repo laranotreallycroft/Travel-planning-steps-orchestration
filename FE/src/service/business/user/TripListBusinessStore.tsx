@@ -8,34 +8,34 @@ import trackAction, { IAction } from 'service/util/trackAction';
 
 // -
 // -------------------- Selectors
-const getUserTrips = (store: any): ITrip[] => store.userTrips;
+const getTripList = (store: any): ITrip[] => store.tripList;
 
 // -
 // -------------------- Actions
 const actions = {
-  USER_TRIPS_FETCH: 'USER_TRIPS_FETCH',
-  USER_TRIPS_STORE: 'USER_TRIPS_STORE',
-  USER_TRIPS_CLEAR: 'USER_TRIPS_CLEAR',
+  TRIP_LIST_FETCH: 'TRIP_LIST_FETCH',
+  TRIP_LIST_STORE: 'TRIP_LIST_STORE',
+  TRIP_LIST_CLEAR: 'TRIP_LIST_CLEAR',
 };
 
-export const userTripsFetch = (): IAction => {
-  return { type: actions.USER_TRIPS_FETCH };
+export const tripListFetch = (): IAction => {
+  return { type: actions.TRIP_LIST_FETCH };
 };
 
-export const userTripsStore = (payload: ITrip[]): IPayloadAction<ITrip[]> => {
-  return { type: actions.USER_TRIPS_STORE, payload: payload };
+export const tripListStore = (payload: ITrip[]): IPayloadAction<ITrip[]> => {
+  return { type: actions.TRIP_LIST_STORE, payload: payload };
 };
 
-const userTripsClear = (): IAction => {
-  return { type: actions.USER_TRIPS_CLEAR };
+const tripListClear = (): IAction => {
+  return { type: actions.TRIP_LIST_CLEAR };
 };
 
 // -
 // -------------------- Side-effects
 
-const userTripsFetchEffect = (action$: Observable<IAction>, state$: Observable<any>) => {
+const tripListFetchEffect = (action$: Observable<IAction>, state$: Observable<any>) => {
   return action$.pipe(
-    filter((action) => action.type === actions.USER_TRIPS_FETCH),
+    filter((action) => action.type === actions.TRIP_LIST_FETCH),
 
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -50,31 +50,31 @@ const userTripsFetchEffect = (action$: Observable<IAction>, state$: Observable<a
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to fetch user trips', error.response.data);
+            notificationService.error('Unable to fetch trip list', error.response.data);
           })
       ).pipe(trackAction(action));
     }),
 
     filter((data) => data !== undefined),
-    map((data) => userTripsStore(data))
+    map((data) => tripListStore(data))
   );
 };
 
 // -
 // -------------------- Reducers
 
-const userTrips = (state: any = null, action: IPayloadAction<ITrip[]>) => {
-  if (action.type === actions.USER_TRIPS_STORE) {
+const tripList = (state: any = null, action: IPayloadAction<ITrip[]>) => {
+  if (action.type === actions.TRIP_LIST_STORE) {
     return [...action.payload];
-  } else if (action.type === actions.USER_TRIPS_CLEAR) {
+  } else if (action.type === actions.TRIP_LIST_CLEAR) {
     return null;
   }
   return state;
 };
 
-export const UserTripsBusinessStore = {
-  selectors: { getUserTrips },
-  actions: { userTripsFetch, userTripsStore, userTripsClear },
-  effects: { userTripsFetchEffect },
-  reducers: { userTrips },
+export const TripListBusinessStore = {
+  selectors: { getTripList },
+  actions: { tripListFetch, tripListStore, tripListClear },
+  effects: { tripListFetchEffect },
+  reducers: { tripList },
 };

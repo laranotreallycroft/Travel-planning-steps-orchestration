@@ -8,12 +8,12 @@ import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 import { IPackingListCopyPayload, IPackingListCreatePayload, IPackingListUpdatePayload, PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
-import { UserTripsBusinessStore } from 'service/business/user/UserTripsBusinessStore';
+import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface IPackingListContainerOwnProps {}
 export interface IPackingListContainerStateProps {
-  userTrips: ITrip[];
+  tripList: ITrip[];
   trip: ITrip;
 }
 export interface IPackingListContainerDispatchProps {
@@ -57,7 +57,7 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (props: IPack
     <React.Fragment>
       {!isEditing && (
         <React.Fragment>
-          <PackingListHeader trip={props.trip} userTrips={props.userTrips} onPackingListCreate={handlePackingListCreate} onPackingListCopy={handlePackingListCopy} toggleEdit={toggleEdit} />
+          <PackingListHeader trip={props.trip} tripList={props.tripList} onPackingListCreate={handlePackingListCreate} onPackingListCopy={handlePackingListCopy} toggleEdit={toggleEdit} />
           <PackingListView packingLists={props.trip.packingLists} onPackingListChecked={props.packingListChecked} />
         </React.Fragment>
       )}
@@ -67,7 +67,7 @@ const PackingListContainer: React.FC<IPackingListContainerProps> = (props: IPack
 };
 
 const mapStateToProps = (state: any): IPackingListContainerStateProps => ({
-  userTrips: UserTripsBusinessStore.selectors.getUserTrips(state),
+  tripList: TripListBusinessStore.selectors.getTripList(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 

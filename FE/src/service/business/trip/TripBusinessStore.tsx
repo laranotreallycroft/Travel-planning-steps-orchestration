@@ -4,8 +4,8 @@ import { ITrip, ITripPayload } from 'model/trip/Trip';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
-import { userTripsStore } from 'service/business/user/UserTripsBusinessStore';
 import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
+import { tripListStore } from 'service/business/user/TripListBusinessStore';
 
 // -
 // -------------------- Selectors
@@ -72,7 +72,7 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripPayload>>, sta
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(userTripsStore(data), tripStore(data[data.length - 1])))
+    switchMap((data) => of(tripListStore(data), tripStore(data[data.length - 1])))
   );
 };
 
@@ -115,7 +115,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripPayload>>, stat
             if (response.status === 200) {
               notificationService.success('Trip successfully changed');
               return {
-                userTrips: response.data,
+                tripList: response.data,
                 trip: response.data.find((tripPayload: ITrip) => tripPayload.id === trip.id),
               };
             }
@@ -126,7 +126,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripPayload>>, stat
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(userTripsStore(data?.userTrips), tripStore(data?.trip)))
+    switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
   );
 };
 const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) => {
@@ -151,7 +151,7 @@ const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) 
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(userTripsStore(data), tripClear()))
+    switchMap((data) => of(tripListStore(data), tripClear()))
   );
 };
 // -

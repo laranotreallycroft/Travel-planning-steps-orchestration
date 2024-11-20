@@ -1,33 +1,23 @@
-import {
-  Button,
-  Col,
-  Form,
-  Modal,
-  Radio,
-  RadioChangeEvent,
-  Select,
-} from "antd";
-import React, { useCallback, useState } from "react";
-import { ITrip } from "model/trip/Trip";
-import { packingListsPresets } from "model/trip/const/packingList";
-import { CopyOutlined } from "@ant-design/icons";
+import { Button, Col, Form, Modal, Radio, RadioChangeEvent, Select } from 'antd';
+import React, { useCallback, useState } from 'react';
+import { ITrip } from 'model/trip/Trip';
+import { packingListsPresets } from 'model/trip/const/packingList';
+import { CopyOutlined } from '@ant-design/icons';
 export interface IPackingListCopyForm {
   packingListIds: number[];
 }
 export interface IPackingListCopyViewOwnProps {
   trip: ITrip;
-  userTrips?: ITrip[];
+  tripList?: ITrip[];
   onPackingListCopy: (packingListCopyPayload: IPackingListCopyForm) => void;
 }
 type IPackingListCopyViewProps = IPackingListCopyViewOwnProps;
 
-const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
-  props: IPackingListCopyViewProps
-) => {
+const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (props: IPackingListCopyViewProps) => {
   const [form] = Form.useForm<IPackingListCopyForm>();
   const [isCopyModalOpen, setIsCopyModalOpen] = useState<boolean>(false);
   const [isPresetView, setIsPresetView] = useState<boolean>(false);
-  const selectedTripId = Form.useWatch("tripId", form);
+  const selectedTripId = Form.useWatch('tripId', form);
 
   const toggleCopyModal = useCallback(() => {
     setIsCopyModalOpen((prevState) => !prevState);
@@ -40,7 +30,7 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
 
   const handleViewChange = useCallback((e: RadioChangeEvent) => {
     setIsPresetView(e.target.value);
-    form.setFieldValue("tripId", undefined);
+    form.setFieldValue('tripId', undefined);
   }, []);
 
   const handleFinish = useCallback(
@@ -57,41 +47,28 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
         Copy
       </Button>
 
-      <Modal
-        title="Copy from another trip"
-        open={isCopyModalOpen}
-        onCancel={handleModalClose}
-        onOk={form.submit}
-      >
-        <Radio.Group
-          onChange={handleViewChange}
-          defaultValue={false}
-          className="margin-bottom-md packingListCopyView__radioButton"
-        >
+      <Modal title="Copy from another trip" open={isCopyModalOpen} onCancel={handleModalClose} onOk={form.submit}>
+        <Radio.Group onChange={handleViewChange} defaultValue={false} className="margin-bottom-md packingListCopyView__radioButton">
           <Radio.Button value={false}>Your trips</Radio.Button>
           <Radio.Button value={true}>Presets</Radio.Button>
         </Radio.Group>
-        <Form<IPackingListCopyForm>
-          form={form}
-          onFinish={handleFinish}
-          requiredMark={false}
-        >
+        <Form<IPackingListCopyForm> form={form} onFinish={handleFinish} requiredMark={false}>
           <Form.Item
-            name={"tripId"}
-            label={isPresetView ? "Preset name" : "Trip name"}
+            name={'tripId'}
+            label={isPresetView ? 'Preset name' : 'Trip name'}
             rules={[
               {
                 required: true,
-                message: "",
+                message: '',
               },
             ]}
           >
             <Select
-              placeholder={isPresetView ? "Preset" : "Trip"}
+              placeholder={isPresetView ? 'Preset' : 'Trip'}
               options={
                 isPresetView
                   ? packingListsPresets
-                  : props.userTrips
+                  : props.tripList
                       ?.filter((trip) => trip.id !== props.trip.id)
                       .map((trip) => {
                         return {
@@ -105,28 +82,24 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (
           </Form.Item>
 
           <Form.Item
-            name={"packingListIds"}
-            label={"Packing lists"}
+            name={'packingListIds'}
+            label={'Packing lists'}
             rules={[
               {
                 required: true,
-                message: "",
+                message: '',
               },
             ]}
           >
             <Select
-              placeholder={"Trip packing list"}
+              placeholder={'Trip packing list'}
               mode="multiple"
               allowClear
-              filterOption={(input, option) =>
-                option?.label.toLowerCase().indexOf(input.toLowerCase())! >= 0
-              }
+              filterOption={(input, option) => option?.label.toLowerCase().indexOf(input.toLowerCase())! >= 0}
               options={
                 isPresetView
-                  ? packingListsPresets?.find(
-                      (preset) => preset.key === selectedTripId
-                    )?.packingLists
-                  : props.userTrips
+                  ? packingListsPresets?.find((preset) => preset.key === selectedTripId)?.packingLists
+                  : props.tripList
                       ?.find((trip) => trip.id === selectedTripId)
                       ?.packingLists?.map((packingList) => {
                         return {

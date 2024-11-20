@@ -1,10 +1,10 @@
-import { connect } from "react-redux";
-import { ITrip } from "model/trip/Trip";
-import { IItinerary } from "model/trip/itinerary/Itinerary";
-import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
-import { ItineraryBusinessStore } from "service/business/trip/itinerary/ItineraryBusinessStore";
-import ItineraryView from "components/trip/itinerary/ItineraryView";
-import ItineraryCreateContainer from "components/trip/itinerary/create/ItineraryCreateContainer";
+import { connect } from 'react-redux';
+import { ITrip } from 'model/trip/Trip';
+import { IItinerary } from 'model/trip/itinerary/Itinerary';
+import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { ItineraryBusinessStore } from 'service/business/trip/itinerary/ItineraryBusinessStore';
+import ItineraryView from 'components/trip/itinerary/ItineraryView';
+import ItineraryCreateContainer from 'components/trip/itinerary/create/ItineraryCreateContainer';
 
 export interface IItineraryContainerOwnProps {}
 
@@ -17,21 +17,10 @@ export interface IItineraryContainerDispatchProps {
   itineraryClear: () => void;
   itinerariesDelete: () => void;
 }
-type IItineraryContainerProps = IItineraryContainerOwnProps &
-  IItineraryContainerStateProps &
-  IItineraryContainerDispatchProps;
+type IItineraryContainerProps = IItineraryContainerOwnProps & IItineraryContainerStateProps & IItineraryContainerDispatchProps;
 
-const ItineraryContainer: React.FC<IItineraryContainerProps> = (
-  props: IItineraryContainerProps
-) => {
-  return props.trip.itineraries && props.trip.itineraries.length > 0 ? (
-    <ItineraryView
-      trip={props.trip}
-      onItinerariesDelete={props.itinerariesDelete}
-    />
-  ) : (
-    <ItineraryCreateContainer />
-  );
+const ItineraryContainer: React.FC<IItineraryContainerProps> = (props: IItineraryContainerProps) => {
+  return props.trip?.itineraries && props.trip.itineraries.length > 0 ? <ItineraryView trip={props.trip} onItinerariesDelete={props.itinerariesDelete} /> : <ItineraryCreateContainer />;
 };
 
 const mapStateToProps = (state: any): IItineraryContainerStateProps => ({
@@ -39,22 +28,10 @@ const mapStateToProps = (state: any): IItineraryContainerStateProps => ({
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
-const mapDispatchToProps = (
-  dispatch: any
-): IItineraryContainerDispatchProps => ({
-  itineraryStore: (itineraryPayload: IItinerary) =>
-    dispatch(ItineraryBusinessStore.actions.itineraryStore(itineraryPayload)),
-  itineraryClear: () =>
-    dispatch(ItineraryBusinessStore.actions.itineraryClear()),
-  itinerariesDelete: () =>
-    dispatch(ItineraryBusinessStore.actions.itinerariesDelete()),
+const mapDispatchToProps = (dispatch: any): IItineraryContainerDispatchProps => ({
+  itineraryStore: (itineraryPayload: IItinerary) => dispatch(ItineraryBusinessStore.actions.itineraryStore(itineraryPayload)),
+  itineraryClear: () => dispatch(ItineraryBusinessStore.actions.itineraryClear()),
+  itinerariesDelete: () => dispatch(ItineraryBusinessStore.actions.itinerariesDelete()),
 });
 
-export default connect<
-  IItineraryContainerStateProps,
-  IItineraryContainerDispatchProps,
-  IItineraryContainerOwnProps
->(
-  mapStateToProps,
-  mapDispatchToProps
-)(ItineraryContainer);
+export default connect<IItineraryContainerStateProps, IItineraryContainerDispatchProps, IItineraryContainerOwnProps>(mapStateToProps, mapDispatchToProps)(ItineraryContainer);

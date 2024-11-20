@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/trips")
-    public ResponseEntity getUserTrips(@PathVariable(value = "userId") Long userId) throws URISyntaxException {
+    public ResponseEntity getTripList(@PathVariable(value = "userId") Long userId) throws URISyntaxException {
 
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {

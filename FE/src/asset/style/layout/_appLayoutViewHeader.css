@@ -11,7 +11,3 @@
   display: flex;
   justify-content: center;
 }
-
-li:has(button.appLayoutViewHeader__button)::after {
-  border: none !important;
-}

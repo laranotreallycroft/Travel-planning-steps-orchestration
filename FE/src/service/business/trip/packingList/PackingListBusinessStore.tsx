@@ -3,7 +3,7 @@ import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom 
 import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
 import { IPayloadAction } from 'service/business/common/types';
-import { userTripsStore } from 'service/business/user/UserTripsBusinessStore';
+import { tripListStore } from 'service/business/user/TripListBusinessStore';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
 import { ITrip } from 'model/trip/Trip';
 
@@ -73,7 +73,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
               notificationService.success('New packing list successfully created');
 
               return {
-                userTrips: response.data,
+                tripList: response.data,
                 trip: response.data.find((value: ITrip) => value.id === trip.id),
               };
             }
@@ -84,7 +84,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(userTripsStore(data?.userTrips), tripStore(data?.trip)))
+    switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
   );
 };
 
@@ -103,7 +103,7 @@ const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCo
             if (response.status === 201) {
               notificationService.success('New packing lists successfully created');
               return {
-                userTrips: response.data,
+                tripList: response.data,
                 trip: response.data.find((value: ITrip) => value.id === trip.id),
               };
             }
@@ -114,7 +114,7 @@ const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCo
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(userTripsStore(data?.userTrips), tripStore(data?.trip)))
+    switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
   );
 };
 

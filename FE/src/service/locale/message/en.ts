@@ -30,6 +30,9 @@ const en: any = {
   'REGISTRATION_VIEW.OR': 'Or',
   'REGISTRATION_VIEW.GOOGLE_SIGN_UP_FAIL': 'Unable to sign up with Google',
   'REGISTRATION_VIEW.LOG_IN': 'Already have an account? Sign in.',
+
+  'TRIP_LIST_VIEW.UPCOMING.NO_DATA': 'No Upcoming Trips',
+  'TRIP_LIST_VIEW.CREATE_FIRST_TRIP_BUTTON': 'Add Your First Trip!',
 };
 
 export default en;

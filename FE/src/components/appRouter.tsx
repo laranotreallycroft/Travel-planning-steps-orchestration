@@ -6,6 +6,7 @@ import LoginPage from 'components/pages/LoginPage';
 import PackingListPage from 'components/pages/PackingListPage';
 import RegistrationPage from 'components/pages/RegistrationPage';
 import TripSettingsPage from 'components/pages/TripSettingsPage';
+import UpcomingTripsPage from 'components/pages/UpcomingTripsPage';
 import WeatherPage from 'components/pages/WeatherPage';
 import ProtectedRoute from 'components/ProtectedRoute';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
@@ -24,7 +25,7 @@ const appRouter = createBrowserRouter(
         <Route element={<ProtectedRoute forLoggedIn={true} />}>
           {/* The other routes */}
           <Route path="trips">
-            <Route path="upcoming" element={<div>Placeholder for Upcoming Trips</div>} />
+            <Route path="upcoming" element={<UpcomingTripsPage />} />
             <Route path="past" element={<div>Placeholder for Past Trips</div>} />
           </Route>
 
