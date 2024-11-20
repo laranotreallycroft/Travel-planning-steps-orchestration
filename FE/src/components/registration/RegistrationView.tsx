@@ -63,8 +63,6 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
         >
           <Form.Item
             name={'email'}
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -77,8 +75,6 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
           </Form.Item>
           <Form.Item
             name={'password'}
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -91,8 +87,6 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
           </Form.Item>
           <Form.Item
             name={'confirmPassword'}
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,

@@ -3,6 +3,7 @@ import { IUserCredentials } from 'model/user/User';
 import { Observable, filter, from, ignoreElements, map, mergeMap, of, tap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import StoreService from 'service/business/StoreService';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -28,6 +29,7 @@ export interface IGoogleLoginPayload {
 export interface ILoginPayload {
   email: string;
   password: string;
+  keepSignedin?: boolean;
 }
 
 export const login = (payload: ILoginPayload): IPayloadAction<ILoginPayload> => {
@@ -61,6 +63,12 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
           .then((response) => {
             if (response.status === 200) {
               notificationService.success('Login Successful');
+              const persistor = StoreService.getPersistor();
+              if (action.payload.keepSignedin) {
+                persistor.persist();
+              } else {
+                persistor.pause();
+              }
               return response.data;
             }
           })
@@ -85,7 +93,7 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
           .post('/login/google', action.payload)
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
-              notificationService.success('Login Successful');
+              notificationService.success(LocalizeService.translate('LOGIN.SUCCESS_MESSAGE'));
               return response.data;
             }
           })

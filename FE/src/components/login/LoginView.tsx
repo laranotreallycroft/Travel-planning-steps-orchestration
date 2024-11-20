@@ -1,17 +1,12 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { Button, Col, Divider, Form, Input, Row, Typography } from 'antd';
+import { Button, Checkbox, Col, Divider, Form, Input, Row, Typography } from 'antd';
 import logo from 'asset/img/logo.png';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ILoginPayload } from 'service/business/login/LoginBusinessStore';
 import notificationService from 'service/util/notificationService';
-
-export interface ILoginForm {
-  email: string;
-  password: string;
-}
 
 export interface ILoginViewOwnProps {
   onGoogleLogin: (googleCredential: CredentialResponse) => void;
@@ -21,7 +16,7 @@ export interface ILoginViewOwnProps {
 type ILoginViewProps = ILoginViewOwnProps & IWithLocalizeOwnProps;
 
 const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
-  const [form] = Form.useForm<ILoginForm>();
+  const [form] = Form.useForm<ILoginPayload>();
 
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
@@ -31,7 +26,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             <img src={logo} className="loginView__img" alt="logo" />
           </Link>
         </div>
-        <Form<ILoginForm>
+        <Form<ILoginPayload>
           form={form}
           onFinish={props.onLogin}
           requiredMark={false}
@@ -44,8 +39,6 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
         >
           <Form.Item
             name={'email'}
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -57,8 +50,6 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
           </Form.Item>
           <Form.Item
             name={'password'}
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
             rules={[
               {
                 required: true,
@@ -67,6 +58,9 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             ]}
           >
             <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+          </Form.Item>
+          <Form.Item name={'keepSignedin'} valuePropName="checked">
+            <Checkbox>{props.translate('LOGIN_VIEW.FORM.KEEP_SIGNED_IN')}</Checkbox>
           </Form.Item>
           <Row justify={'center'} className="margin-top-xxl">
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
