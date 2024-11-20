@@ -3,6 +3,8 @@ const en: any = {
   'NAVIGATION.LOGIN': 'Sign in',
   'NAVIGATION.CREATE': 'Sign up',
   'NAVIGATION.LOGOUT': 'Sign out',
+  'NAVIGATION.UPCOMING_TRIPS': 'Upcoming trips',
+  'NAVIGATION.PAST_TRIPS': 'Past trips',
 
   'LOGIN.SUCCESS_MESSAGE': 'Login successful',
 

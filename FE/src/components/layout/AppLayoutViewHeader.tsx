@@ -2,7 +2,7 @@ import { Button, Col, Menu, MenuProps, Row } from 'antd';
 import logo from 'asset/img/logo.png';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import LocalePickerContainer from 'components/locale/LocalePickerContainer';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -33,41 +33,57 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
     navigator(e.key);
   };
 
+  const handleLogin = useCallback(() => {
+    navigator('/login');
+  }, []);
+
+  const handleUserCreate = useCallback(() => {
+    navigator('/create');
+  }, []);
+
   const items: MenuProps['items'] = useMemo(() => {
     if (props.isUserLoggedIn) {
-      return [
-        getItem(
-          <Button className="appLayoutViewHeader__button" onClick={props.logout}>
-            {props.translate('NAVIGATION.LOGOUT')}
-          </Button>,
-          '/login'
-        ),
-      ];
+      return [getItem(props.translate('NAVIGATION.UPCOMING_TRIPS'), '/trips/upcoming'), getItem(props.translate('NAVIGATION.PAST_TRIPS'), '/trips/past')];
     } else {
-      return [
-        getItem(props.translate('NAVIGATION.INFO'), '/overview'),
-        getItem(<Button className="appLayoutViewHeader__button">{props.translate('NAVIGATION.LOGIN')}</Button>, '/login'),
-        getItem(
-          <Button type="primary" className="appLayoutViewHeader__button">
-            {props.translate('NAVIGATION.CREATE')}
-          </Button>,
-          '/create'
-        ),
-      ];
+      return [getItem(props.translate('NAVIGATION.INFO'), '/overview')];
     }
   }, [props.isUserLoggedIn]);
 
   return (
     <Row justify={'space-between'} className="fullWidth">
-      <Col span={4} className="appLayoutViewHeader__imgContainer">
+      <Col span={6} className="appLayoutViewHeader__imgContainer">
         <img src={logo} className="appLayoutViewHeader__img" alt="" />
       </Col>
 
-      <Col span={16}>
+      <Col span={8}>
         <Menu className="appLayoutViewHeader__menuContainer" onClick={handleMenuSelect} selectedKeys={[currentTab]} items={items} mode="horizontal" disabledOverflow={true} />
       </Col>
-      <Col span={2}>
-        <LocalePickerContainer />
+      <Col span={5}>
+        <Row gutter={[8, 8]} justify={'end'}>
+          {props.isUserLoggedIn ? (
+            <Col>
+              <Button className="appLayoutViewHeader__button" onClick={props.logout}>
+                {props.translate('NAVIGATION.LOGOUT')}
+              </Button>
+            </Col>
+          ) : (
+            <React.Fragment>
+              <Col>
+                <Button onClick={handleLogin} className="appLayoutViewHeader__button">
+                  {props.translate('NAVIGATION.LOGIN')}
+                </Button>
+              </Col>
+              <Col>
+                <Button onClick={handleUserCreate} type="primary" className="appLayoutViewHeader__button">
+                  {props.translate('NAVIGATION.CREATE')}
+                </Button>
+              </Col>
+            </React.Fragment>
+          )}
+          <Col flex={'auto'}>
+            <LocalePickerContainer />
+          </Col>
+        </Row>
       </Col>
     </Row>
   );
