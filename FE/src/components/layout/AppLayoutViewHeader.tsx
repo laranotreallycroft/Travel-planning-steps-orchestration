@@ -62,19 +62,15 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
         <Row gutter={[8, 8]} justify={'end'}>
           {props.isUserLoggedIn ? (
             <Col>
-              <Button className="appLayoutViewHeader__button" onClick={props.logout}>
-                {props.translate('NAVIGATION.LOGOUT')}
-              </Button>
+              <Button onClick={props.logout}>{props.translate('NAVIGATION.LOGOUT')}</Button>
             </Col>
           ) : (
             <React.Fragment>
               <Col>
-                <Button onClick={handleLogin} className="appLayoutViewHeader__button">
-                  {props.translate('NAVIGATION.LOGIN')}
-                </Button>
+                <Button onClick={handleLogin}>{props.translate('NAVIGATION.LOGIN')}</Button>
               </Col>
               <Col>
-                <Button onClick={handleUserCreate} type="primary" className="appLayoutViewHeader__button">
+                <Button onClick={handleUserCreate} type="primary">
                   {props.translate('NAVIGATION.CREATE')}
                 </Button>
               </Col>

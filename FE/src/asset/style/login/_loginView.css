@@ -1,33 +1,3 @@
-.ant-carousel,
-.loginView__carousel,
-.loginView__carousel > div,
-.loginView__carousel > * > *,
-.loginView__carousel > * > * > * > * {
-  height: 100%;
-  width: 100%;
-}
-
-.loginView__carouselImage {
-  background-image: linear-gradient(to bottom, rgb(237, 233, 232), rgba(0, 0, 0, 0) 35%), url(../../img/loginPreviewOne.jpg);
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  overflow: hidden;
-}
-
-.loginView__title {
-  font-family: 'ArcherBold';
-  letter-spacing: 0.1rem;
-}
-
-.loginView__form {
-  padding: 4% 14% 0% 14%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .loginView__imgWrapper {
   text-align: center;
   margin-bottom: 50px;
