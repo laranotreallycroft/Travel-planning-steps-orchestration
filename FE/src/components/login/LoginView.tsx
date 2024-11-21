@@ -20,7 +20,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
 
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
-      <Col span={6}>
+      <Col xs={20} sm={16} md={12} lg={10} xl={8}>
         <div className="loginView__imgWrapper">
           <Link to="/" className="loginView__imgLink">
             <img src={logo} className="loginView__img" alt="logo" />
@@ -63,7 +63,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
             <Checkbox>{props.translate('LOGIN_VIEW.FORM.KEEP_SIGNED_IN')}</Checkbox>
           </Form.Item>
           <Row justify={'center'} className="margin-top-xxl">
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <Col xs={22} sm={22} md={12} lg={12} xl={12}>
               <Button className="fullWidth" type="primary" onClick={form.submit}>
                 {props.translate('LOGIN_VIEW.SIGN_IN')}
               </Button>

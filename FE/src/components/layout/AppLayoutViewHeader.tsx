@@ -51,14 +51,14 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
 
   return (
     <Row justify={'space-between'} className="fullWidth">
-      <Col span={6} className="appLayoutViewHeader__imgContainer">
+      <Col lg={8} className="appLayoutViewHeader__imgContainer">
         <img src={logo} className="appLayoutViewHeader__img" alt="" />
       </Col>
 
-      <Col span={8}>
+      <Col lg={8}>
         <Menu className="appLayoutViewHeader__menuContainer" onClick={handleMenuSelect} selectedKeys={[currentTab]} items={items} mode="horizontal" disabledOverflow={true} />
       </Col>
-      <Col span={5}>
+      <Col lg={8}>
         <Row gutter={[8, 8]} justify={'end'}>
           {props.isUserLoggedIn ? (
             <Col>
@@ -76,7 +76,7 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
               </Col>
             </React.Fragment>
           )}
-          <Col flex={'auto'}>
+          <Col>
             <LocalePickerContainer />
           </Col>
         </Row>

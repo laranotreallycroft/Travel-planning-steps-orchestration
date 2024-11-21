@@ -35,7 +35,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
 
   return (
     <Row justify={'center'} align={'middle'} className="fullHeight">
-      <Col span={6}>
+      <Col xs={20} sm={16} md={12} lg={10} xl={8}>
         <div className="loginView__imgWrapper">
           <Link to="/" className="loginView__imgLink">
             <img src={logo} className="loginView__img" alt="logo" />
@@ -88,7 +88,7 @@ const RegistrationView: React.FC<IRegistrationViewProps> = (props: IRegistration
             <Input.Password placeholder={props.translate('REGISTRATION_VIEW.FORM.CONFIRM_PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
           </Form.Item>
           <Row justify={'center'}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <Col xs={22} sm={22} md={12} lg={12} xl={12}>
               <Button className="fullWidth" type="primary" onClick={form.submit}>
                 {props.translate('REGISTRATION_VIEW.SIGN_UP')}
               </Button>
