@@ -45,7 +45,7 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
     if (props.isUserLoggedIn) {
       return [getItem(props.translate('NAVIGATION.UPCOMING_TRIPS'), '/trips/upcoming'), getItem(props.translate('NAVIGATION.PAST_TRIPS'), '/trips/past')];
     } else {
-      return [getItem(props.translate('NAVIGATION.INFO'), '/overview')];
+      return [getItem(props.translate('NAVIGATION.INFO'), '/')];
     }
   }, [props.isUserLoggedIn]);
 
