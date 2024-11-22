@@ -3,6 +3,7 @@ import { IUserCredentials } from 'model/user/User';
 import { Observable, filter, from, ignoreElements, map, mergeMap, of, tap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import StoreService from 'service/business/StoreService';
+import AuthTokenManager from 'service/util/AuthTokenManager';
 import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
@@ -62,13 +63,13 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
           .post('/login', action.payload)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success('Login Successful');
-              const persistor = StoreService.getPersistor();
               if (action.payload.keepSignedin) {
-                persistor.persist();
+                AuthTokenManager.saveToken(response.data.id);
               } else {
-                persistor.pause();
+                AuthTokenManager.saveToken(response.data.id, true);
               }
+
+              notificationService.success('Login Successful');
               return response.data;
             }
           })
@@ -93,6 +94,12 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
           .post('/login/google', action.payload)
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
+              if (action.payload.keepSignedin) {
+                AuthTokenManager.saveToken(response.data.id);
+              } else {
+                AuthTokenManager.saveToken(response.data.id, true);
+              }
+
               notificationService.success(LocalizeService.translate('LOGIN.SUCCESS_MESSAGE'));
               return response.data;
             }
@@ -117,6 +124,7 @@ const logoutEffect = (action$: Observable<IAction>, state$: Observable<any>) => 
     mergeMap((action) => {
       return of(null).pipe(
         tap(() => {
+          AuthTokenManager.deleteToken();
           StoreService.getPersistor().purge();
         }),
 

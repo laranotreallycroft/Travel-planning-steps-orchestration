@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
+import AuthTokenManager from 'service/util/AuthTokenManager';
 
 axios.defaults.baseURL = 'http://localhost:8080/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -18,6 +19,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const store = StoreService.getStore();
 const persistor = StoreService.getPersistor();
+if (AuthTokenManager.getToken().length === 0) {
+  persistor.purge();
+}
 
 root.render(
   <Provider store={store}>
