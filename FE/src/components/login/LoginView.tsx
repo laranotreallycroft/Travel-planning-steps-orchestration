@@ -36,6 +36,8 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
               form.submit();
             }
           }}
+          action="/login" // Action triggers browser's credential management
+          method="post" // Indicates this is a login form
         >
           <Form.Item
             name={'email'}
@@ -46,7 +48,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
               },
             ]}
           >
-            <Input placeholder={props.translate('LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER')} size="large" />
+            <Input placeholder={props.translate('LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER')} size="large" name="email" type="email" />
           </Form.Item>
           <Form.Item
             name={'password'}
@@ -57,7 +59,7 @@ const LoginView: React.FC<ILoginViewProps> = (props: ILoginViewProps) => {
               },
             ]}
           >
-            <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+            <Input.Password placeholder={props.translate('LOGIN_VIEW.FORM.PASSWORD_PLACEHOLDER')} size="large" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} name="password" type="password" />
           </Form.Item>
           <Form.Item name={'keepSignedin'} valuePropName="checked">
             <Checkbox>{props.translate('LOGIN_VIEW.FORM.KEEP_SIGNED_IN')}</Checkbox>
