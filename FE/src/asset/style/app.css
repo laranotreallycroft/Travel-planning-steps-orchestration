@@ -20,6 +20,7 @@ html {
 @import 'home/_homeLayoutView.css';
 @import 'home/_homeLayoutViewHeader.css';
 @import 'layout/_appLayoutViewHeader.css';
+@import 'layout/_appLayoutViewSider.css';
 @import 'layout/_fallbackView.css';
 @import 'layout/_appLayoutView.css';
 @import 'home/_homeLayoutViewSider.css';

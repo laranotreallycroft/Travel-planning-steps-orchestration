@@ -4,3 +4,17 @@
   height: 4rem;
   display: flex;
 }
+@media (max-width: 768px) {
+  .appLayoutView__screen-lg {
+    display: none;
+  }
+  .appLayoutView__header {
+    padding-right: 0 !important;
+    padding-left: 10px !important;
+  }
+}
+@media (min-width: 769px) {
+  .appLayoutView__screen-md {
+    display: none;
+  }
+}

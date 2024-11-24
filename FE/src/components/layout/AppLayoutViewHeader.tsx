@@ -1,76 +1,48 @@
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Button, Col, Menu, MenuProps, Row } from 'antd';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 import logo from 'asset/img/logo.png';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import LocalePickerContainer from 'components/locale/LocalePickerContainer';
-import React, { useCallback, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(label: React.ReactNode, key: React.Key, className?: string, icon?: React.ReactNode): MenuItem {
-  return {
-    key,
-    icon,
-    label,
-    className,
-  } as MenuItem;
-}
+import React from 'react';
 
 export interface IAppLayoutViewHeaderOwnProps {
+  collapsed: boolean;
   isUserLoggedIn: boolean;
-  logout: () => void;
+  currentTab: string;
+  menuItems: ItemType[];
+  onMenuItemSelect: MenuProps['onClick'];
+  onLogin: () => void;
+  onUserCreate: () => void;
+  onLogout: () => void;
+  onToggleSiderCollapsed: () => void;
 }
 
 type IAppLayoutViewHeaderProps = IAppLayoutViewHeaderOwnProps & IWithLocalizeOwnProps;
 
 const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLayoutViewHeaderProps) => {
-  const navigator = useNavigate();
-  const location = useLocation();
-
-  const currentTab = useMemo(() => location.pathname.substring(location.pathname.indexOf('/')), [location.pathname]);
-
-  const handleMenuSelect: MenuProps['onClick'] = (e) => {
-    navigator(e.key);
-  };
-
-  const handleLogin = useCallback(() => {
-    navigator('/login');
-  }, []);
-
-  const handleUserCreate = useCallback(() => {
-    navigator('/create');
-  }, []);
-
-  const items: MenuProps['items'] = useMemo(() => {
-    if (props.isUserLoggedIn) {
-      return [getItem(props.translate('NAVIGATION.UPCOMING_TRIPS'), '/trips/upcoming'), getItem(props.translate('NAVIGATION.PAST_TRIPS'), '/trips/past')];
-    } else {
-      return [getItem(props.translate('NAVIGATION.INFO'), '/')];
-    }
-  }, [props.isUserLoggedIn]);
-
   return (
     <Row justify={'space-between'} className="fullWidth">
-      <Col lg={8} className="appLayoutViewHeader__imgContainer">
+      <Col span={1} md={8} className="appLayoutViewHeader__imgContainer">
         <img src={logo} className="appLayoutViewHeader__img" alt="" />
       </Col>
 
-      <Col lg={8}>
-        <Menu className="appLayoutViewHeader__menuContainer" onClick={handleMenuSelect} selectedKeys={[currentTab]} items={items} mode="horizontal" disabledOverflow={true} />
+      <Col lg={8} className="appLayoutViewHeader__menuContainer appLayoutView__screen-lg">
+        <Menu onClick={props.onMenuItemSelect} selectedKeys={[props.currentTab]} items={props.menuItems} mode="horizontal" disabledOverflow={true} />
       </Col>
-      <Col lg={8}>
+      <Col lg={8} className="appLayoutView__screen-lg">
         <Row gutter={[8, 8]} justify={'end'}>
           {props.isUserLoggedIn ? (
             <Col>
-              <Button onClick={props.logout}>{props.translate('NAVIGATION.LOGOUT')}</Button>
+              <Button onClick={props.onLogout}>{props.translate('NAVIGATION.LOGOUT')}</Button>
             </Col>
           ) : (
             <React.Fragment>
               <Col>
-                <Button onClick={handleLogin}>{props.translate('NAVIGATION.LOGIN')}</Button>
+                <Button onClick={props.onLogin}>{props.translate('NAVIGATION.LOGIN')}</Button>
               </Col>
               <Col>
-                <Button onClick={handleUserCreate} type="primary">
+                <Button onClick={props.onUserCreate} type="primary">
                   {props.translate('NAVIGATION.CREATE')}
                 </Button>
               </Col>
@@ -80,6 +52,9 @@ const AppLayoutViewHeader: React.FC<IAppLayoutViewHeaderProps> = (props: IAppLay
             <LocalePickerContainer />
           </Col>
         </Row>
+      </Col>
+      <Col className="appLayoutView__screen-md">
+        <Button className="appLayoutViewHeader__siderButton" type="text" size="large" icon={props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} onClick={props.onToggleSiderCollapsed} />
       </Col>
     </Row>
   );

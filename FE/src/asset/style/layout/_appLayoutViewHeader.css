@@ -11,3 +11,6 @@
   display: flex;
   justify-content: center;
 }
+.appLayoutViewHeader__siderButton {
+  background-color: #ffffff !important;
+}

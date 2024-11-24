@@ -15,7 +15,7 @@ const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) =
   return (
     <Row justify={'center'} align={'middle'} className="tripListView__container">
       <Col>
-        <img src={noUpcomingImage} alt="No Data" />
+        <img src={noUpcomingImage} alt="No Data" className="fullWidth" />
       </Col>
 
       <Col>
