@@ -1,6 +1,6 @@
 import { AppointmentModel } from '@devexpress/dx-react-scheduler';
 import axios from 'axios';
-import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { IGeosearchData } from 'model/geometry/Coordinates';
 import { IItinerary } from 'model/trip/itinerary/Itinerary';
 import { Observable, catchError, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
@@ -8,7 +8,7 @@ import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
-export interface IItineraryElementPayload extends IGeosearchPayloadWithId {
+export interface IItineraryElementPayload extends IGeosearchData {
   duration: number;
 }
 

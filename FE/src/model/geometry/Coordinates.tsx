@@ -5,11 +5,14 @@ export interface ICoordinates {
   y: number;
 }
 
-export interface IGeosearchPayload extends ICoordinates {
+export interface IGeosearchResult extends ICoordinates {
   label: string;
   raw: {
     place_id: string;
   };
 }
 
-export interface IGeosearchPayloadWithId extends IGeosearchPayload, IIdRef {}
+export interface IGeosearchData extends IIdRef {
+  label: string;
+  coordinates: ICoordinates;
+}

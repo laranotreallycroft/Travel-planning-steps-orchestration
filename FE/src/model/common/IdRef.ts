@@ -5,6 +5,6 @@
  * Then these objects are reprensented with an object containing only "id" property of referenced object. Then this interface
  * can be used to avoid hardcoding that property's type.
  */
-export interface IIdRef<T = string | number> {
+export interface IIdRef<T = number> {
   id: T;
 }

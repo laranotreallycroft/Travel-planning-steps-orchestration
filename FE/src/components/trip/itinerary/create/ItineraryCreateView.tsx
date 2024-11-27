@@ -65,8 +65,8 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (props: IItiner
                   return {
                     id: itineraryElement.id,
                     label: itineraryElement.label,
-                    x: itineraryElement.location.x,
-                    y: itineraryElement.location.y,
+                    x: itineraryElement.location.coordinates.x,
+                    y: itineraryElement.location.coordinates.y,
                     duration: itineraryElement.duration,
                   };
                 })

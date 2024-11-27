@@ -5,7 +5,7 @@ import { Button, Col, Form, Radio, Row, Select, Tooltip } from 'antd';
 import Title from 'antd/es/typography/Title';
 import DragAndDropTable from 'components/common/list/DragAndDropTable';
 import MapElement from 'components/common/map/MapElement';
-import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { IGeosearchData } from 'model/geometry/Coordinates';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useState } from 'react';
 import { IItineraryElementPayload, IItineraryForm } from 'service/business/trip/itinerary/ItineraryBusinessStore';
@@ -96,7 +96,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
   );*/
 
   const handleRemoveLocation = useCallback(
-    (e: any, value: IGeosearchPayloadWithId) => {
+    (e: any, value: IGeosearchData) => {
       e.stopPropagation();
       e.preventDefault();
       const newLocations = locations.filter((location) => location.id !== value.id);
@@ -108,13 +108,13 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
 
   const handleNext = () => {
     if (locations.length === 0) notificationService.error('Unable to generate route', 'Please select at least one stop');
-    else if (
+    /* else if (
       locations.every((element) => {
         return element.x === props.trip.location.x && element.y === props.trip.location.y;
       })
     )
       notificationService.error('Unable to generate route', 'All stops are the same as trip origin');
-    else props.onNextStep();
+    else props.onNextStep();*/
   };
   return (
     <React.Fragment>
@@ -149,13 +149,13 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
           <Form.List name="locations">
             {() => (
               <DragAndDropTable
-                sortableContextItems={locations ? locations.map((location) => location.id) : form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => location.id)}
+                sortableContextItems={locations ? locations.map((location) => location.id) : form.getFieldValue('locations').map((location: IGeosearchData) => location.id)}
                 tableDataSource={
                   locations
                     ? locations.map((location) => {
                         return { ...location, key: location.id };
                       })
-                    : form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => {
+                    : form.getFieldValue('locations').map((location: IGeosearchData) => {
                         return { ...location, key: location.id };
                       })
                 }

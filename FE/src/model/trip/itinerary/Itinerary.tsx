@@ -1,4 +1,4 @@
-import { ICoordinates, IGeosearchPayload } from 'model/geometry/Coordinates';
+import { ICoordinates, IGeosearchData } from 'model/geometry/Coordinates';
 
 export interface IItinerary {
   id: number;
@@ -10,7 +10,7 @@ export interface IItinerary {
 export interface IItineraryElement {
   id: number;
   label: string;
-  location: IGeosearchPayload;
+  location: IGeosearchData;
   duration: number;
   travelDuration: number;
   commuteStartDate: Date;

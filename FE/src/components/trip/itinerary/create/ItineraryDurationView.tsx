@@ -1,6 +1,6 @@
 import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { IGeosearchData } from 'model/geometry/Coordinates';
 import React from 'react';
 import { IItineraryForm, IItineraryElementPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 export interface IItineraryDurationViewOwnProps {
@@ -30,7 +30,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IIt
         <Table
           className="fullWidth"
           bordered
-          dataSource={form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => {
+          dataSource={form.getFieldValue('locations').map((location: IGeosearchData) => {
             return { ...location, key: location.id };
           })}
           columns={[

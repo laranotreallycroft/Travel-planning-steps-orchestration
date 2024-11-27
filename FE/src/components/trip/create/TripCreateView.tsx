@@ -3,7 +3,7 @@ import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/
 import MapElement from 'components/common/map/MapElement';
 import MapSearch from 'components/common/map/MapSearch';
 import { Dayjs } from 'dayjs';
-import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { IGeosearchData } from 'model/geometry/Coordinates';
 import { ITripCreatePayload } from 'model/trip/Trip';
 import { RangeValue } from 'rc-picker/lib/interface';
 import React, { useCallback, useState } from 'react';
@@ -15,32 +15,21 @@ export interface ITripCreateViewOwnProps {
 
 export interface ITripCreateForm {
   dateRange: RangeValue<Dayjs>;
-  location: IGeosearchPayloadWithId;
+  location: IGeosearchData;
 }
 
 type ITripCreateViewProps = ITripCreateViewOwnProps & IWithLocalizeOwnProps;
 
 const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewProps) => {
   const [form] = Form.useForm<ITripCreateForm>();
-  const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayloadWithId>();
-
-  const handleSelectLocation = useCallback((value: IGeosearchPayloadWithId) => {
-    setSelectedLocation(value);
-  }, []);
+  const [selectedLocation, setSelectedLocation] = useState<IGeosearchData>();
 
   const handleFinish = useCallback(
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
         dateFrom: values.dateRange?.[0]?.format('YYYY-MM-DD')!,
         dateTo: values.dateRange?.[1]?.format('YYYY-MM-DD')!,
-        location: {
-          id: Number(values.location.raw.place_id),
-          label: values.location.label,
-          coordinates: {
-            x: values.location.x,
-            y: values.location.y,
-          },
-        },
+        location: values.location,
       };
       props.onTripCreateModalClose();
       props.onTripCreate(payload);
@@ -73,7 +62,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewPr
             },
           ]}
         >
-          <MapSearch onChange={handleSelectLocation} showValueAfterSearch={true} />
+          <MapSearch onChange={setSelectedLocation} showValueAfterSearch={true} />
         </Form.Item>
         <MapElement selectedLocation={selectedLocation} locationList={selectedLocation ? [[selectedLocation]] : undefined} />
       </Form>
