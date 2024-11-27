@@ -1,3 +1,5 @@
+import { IIdRef } from 'model/common/IdRef';
+
 export interface ICoordinates {
   x: number;
   y: number;
@@ -10,6 +12,4 @@ export interface IGeosearchPayload extends ICoordinates {
   };
 }
 
-export interface IGeosearchPayloadWithId extends IGeosearchPayload {
-  id: number;
-}
+export interface IGeosearchPayloadWithId extends IGeosearchPayload, IIdRef {}

@@ -20,7 +20,7 @@ export interface IMapElementOwnProps {
 }
 type IMapElementProps = IMapElementOwnProps & IWithLocalizeOwnProps;
 
-initMap();
+//initMap();
 
 const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
   return (
