@@ -34,7 +34,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewPr
         dateFrom: values.dateRange?.[0]?.format('YYYY-MM-DD')!,
         dateTo: values.dateRange?.[1]?.format('YYYY-MM-DD')!,
         location: {
-          id: values.location.raw.place_id,
+          id: Number(values.location.raw.place_id),
           label: values.location.label,
           coordinates: {
             x: values.location.x,

@@ -13,7 +13,7 @@ type IItineraryDurationViewProps = IItineraryDurationViewOwnProps;
 const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IItineraryDurationViewProps) => {
   const form = Form.useFormInstance<IItineraryForm>();
 
-  const handleDurationChange = (value: number, locationId: string) => {
+  const handleDurationChange = (value: number, locationId: number) => {
     const locations = form.getFieldsValue(true).locations;
     const newLocations = locations.map((location: IItineraryElementPayload) => {
       if (location.id === locationId) location.duration = value;

@@ -32,7 +32,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
         provider.search({ query: value }).then((geosearchPayloadArray: IGeosearchPayload[]) => {
           setSearchLocationArray(
             geosearchPayloadArray.map((value) => {
-              return { ...value, id: value.raw.place_id };
+              return { ...value, id: Number(value.raw.place_id) };
             })
           );
         });

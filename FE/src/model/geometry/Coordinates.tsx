@@ -1,5 +1,3 @@
-import { IIdPayload } from 'service/business/common/types';
-
 export interface ICoordinates {
   x: number;
   y: number;
@@ -12,4 +10,6 @@ export interface IGeosearchPayload extends ICoordinates {
   };
 }
 
-export interface IGeosearchPayloadWithId extends IGeosearchPayload, IIdPayload {}
+export interface IGeosearchPayloadWithId extends IGeosearchPayload {
+  id: number;
+}

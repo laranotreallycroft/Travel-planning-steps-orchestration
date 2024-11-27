@@ -23,11 +23,11 @@ export interface IDataSelectOwnProps<T> {
 type IDataSelectProps<T> = IDataSelectOwnProps<T>;
 
 export interface ISelectOption<T> {
-  value: string;
+  value: string | number;
   data: T;
-  key: string;
+  key: string | number;
   /** id is used as data-test-id */
-  id: string;
+  id: string | number;
   label: string;
 }
 
@@ -53,9 +53,9 @@ export const DataSelect = <T extends IIdRef>(props: IDataSelectProps<T>) => {
   const getValueIds = useCallback(
     (value?: T | T[]): string | string[] | undefined => {
       if (LangUtils.isArray(value)) {
-        return value.map((item) => item.id);
+        return value.map((item) => item.id.toString());
       } else if (LangUtils.isJsObject(value)) {
-        return value?.id;
+        return value?.id.toString();
       } else return undefined;
     },
     [props.mode]
