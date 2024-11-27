@@ -1,22 +1,22 @@
 package com.odysseus.model.payload.common;
 
-public class Location {
+public class LocationPayload {
 
-    private String id;
+    private Long id;
     private Coordinates coordinates;
     private String label;
 
-    public Location() {
+    public LocationPayload() {
 
     }
 
-    public Location(Coordinates coordinates, String label) {
+    public LocationPayload(Coordinates coordinates, String label) {
         super();
         this.coordinates = coordinates;
         this.label = label;
     }
 
-    public Location(String id, Coordinates coordinates, String label) {
+    public LocationPayload(Long id, Coordinates coordinates, String label) {
         super();
         this.id = id;
         this.coordinates = coordinates;
@@ -24,11 +24,11 @@ public class Location {
     }
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

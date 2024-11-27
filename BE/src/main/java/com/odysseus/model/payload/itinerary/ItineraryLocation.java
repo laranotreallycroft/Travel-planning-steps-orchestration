@@ -3,21 +3,21 @@ package com.odysseus.model.payload.itinerary;
 import java.util.List;
 
 import com.odysseus.model.payload.common.Coordinates;
-import com.odysseus.model.payload.common.Location;
+import com.odysseus.model.payload.common.LocationPayload;
 
-public class ItineraryLocation extends Location {
+public class ItineraryLocation extends LocationPayload {
     private Integer duration;
 
     public ItineraryLocation() {
 
     }
 
-    public ItineraryLocation(List<Location> locations, Integer duration) {
+    public ItineraryLocation(List<LocationPayload> locations, Integer duration) {
         super();
         this.duration = duration;
     }
 
-    public ItineraryLocation(String id, Coordinates coordinates, String label, Integer duration) {
+    public ItineraryLocation(Long id, Coordinates coordinates, String label, Integer duration) {
         super(id, coordinates, label);
         this.duration = duration;
     }

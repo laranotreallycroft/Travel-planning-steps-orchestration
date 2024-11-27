@@ -111,7 +111,7 @@ public class ItineraryController {
                                              RouteOptions routeOptions, Integer tripDay) throws Exception {
 
         OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryLocations,
-                trip.getLocation(), routeOptions);
+                trip.getLocation().getCoordinates(), routeOptions);
         if (!response.routeFound())
             throw new Exception("Unable to find route between stops.");
 
@@ -135,7 +135,7 @@ public class ItineraryController {
                 if (commuteDuration / 60 + payloadLocation.getDuration() / 60 > 12)
                     throw new Exception("Commute and stay duration for " + payloadLocation.getLabel()
                             + " would be longer than 12 hours.");
-                response = getOpenRouteServiceDirections(itineraryLocations.subList(0, i), trip.getLocation(),
+                response = getOpenRouteServiceDirections(itineraryLocations.subList(0, i), trip.getLocation().getCoordinates(),
                         routeOptions);
                 createItinerariesFromPayload(trip, itineraryLocations.subList(i, itineraryLocations.size()),
                         routeOptions, ++tripDay);
@@ -282,7 +282,7 @@ public class ItineraryController {
         itinerary.getItineraryElements().clear();
         if (itineraryLocations.size() > 0) {
             OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryLocations,
-                    trip.getLocation(), routeOptions);
+                    trip.getLocation().getCoordinates(), routeOptions);
             if (!response.routeFound())
                 throw new Exception("Unable to find route between stops.");
 

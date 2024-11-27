@@ -38,9 +38,10 @@ public class Trip {
     @Column(name = "date_to")
     private LocalDate dateTo;
 
-    @Column(name = "location_label")
-    private String locationLabel;
-    private Point location;
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    @JsonBackReference
+    private Location location;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -59,23 +60,15 @@ public class Trip {
 
     }
 
-    public Trip(String label, LocalDate dateFrom, LocalDate dateTo, String locationLabel, Point location, User user) {
+    public Trip(String label, LocalDate dateFrom, LocalDate dateTo, Location location, User user) {
         super();
         this.label = label;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-        this.locationLabel = locationLabel;
         this.location = location;
         this.user = user;
     }
 
-    public String getLocationLabel() {
-        return locationLabel;
-    }
-
-    public void setLocationLabel(String locationLabel) {
-        this.locationLabel = locationLabel;
-    }
 
     public Long getId() {
         return id;
@@ -109,11 +102,11 @@ public class Trip {
         this.dateTo = dateTo;
     }
 
-    public Coordinate getLocation() {
-        return location.getCoordinate();
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocation(Point location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

@@ -2,7 +2,7 @@ package com.odysseus.model.payload.trip;
 
 import java.time.LocalDate;
 
-import com.odysseus.model.payload.common.Location;
+import com.odysseus.model.payload.common.LocationPayload;
 
 public class TripPayload {
 
@@ -10,14 +10,14 @@ public class TripPayload {
     private Long userId;
     private LocalDate dateFrom;
     private LocalDate dateTo;
-    private Location location;
+    private LocationPayload location;
 
     public TripPayload() {
 
     }
 
     public TripPayload(String label, Long userId, LocalDate dateFrom, LocalDate dateTo, String locationLabel,
-                       Location location) {
+                       LocationPayload location) {
         super();
         this.label = label;
         this.userId = userId;
@@ -58,11 +58,11 @@ public class TripPayload {
         this.dateTo = dateTo;
     }
 
-    public Location getLocation() {
+    public LocationPayload getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationPayload location) {
         this.location = location;
     }
 

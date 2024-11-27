@@ -22,6 +22,7 @@ export interface ITripCreatePayload {
 export interface ILocation {
   coordinates: ICoordinates;
   label: string;
+  id: string;
 }
 
 export interface ITripUpdatePayload extends ITripCreatePayload {

@@ -3,7 +3,7 @@ package com.odysseus.model.payload.itinerary.openRouteService.distanceMatrix;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.odysseus.model.payload.common.Location;
+import com.odysseus.model.payload.common.LocationPayload;
 import com.odysseus.model.payload.itinerary.ItineraryLocation;
 
 public class OpenRouteServiceDistanceMatrixPayload {
@@ -16,7 +16,7 @@ public class OpenRouteServiceDistanceMatrixPayload {
     public OpenRouteServiceDistanceMatrixPayload(List<ItineraryLocation> itineraryLocations) {
         this.locations = new ArrayList<>();
 
-        for (Location coordinates : itineraryLocations) {
+        for (LocationPayload coordinates : itineraryLocations) {
             ArrayList<Double> coordinatesList = new ArrayList<>();
             coordinatesList.add(coordinates.getCoordinates().getX());
             coordinatesList.add(coordinates.getCoordinates().getY());

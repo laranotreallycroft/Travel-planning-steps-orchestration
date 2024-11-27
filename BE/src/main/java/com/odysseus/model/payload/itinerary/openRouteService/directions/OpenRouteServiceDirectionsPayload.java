@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.locationtech.jts.geom.Coordinate;
 
-import com.odysseus.model.payload.common.Location;
+import com.odysseus.model.payload.common.LocationPayload;
 import com.odysseus.model.payload.itinerary.ItineraryLocation;
 
 
@@ -27,7 +27,7 @@ public class OpenRouteServiceDirectionsPayload {
         start.add(origin.getX());
         start.add(origin.getY());
         this.coordinates.add(start);
-        for (Location coordinates : itineraryLocations) {
+        for (LocationPayload coordinates : itineraryLocations) {
             ArrayList<Double> coordinatesList = new ArrayList<>();
             coordinatesList.add(coordinates.getCoordinates().getX());
             coordinatesList.add(coordinates.getCoordinates().getY());

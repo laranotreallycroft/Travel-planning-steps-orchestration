@@ -2,6 +2,8 @@ package com.odysseus.controller;
 
 import java.net.URISyntaxException;
 
+import com.odysseus.model.Location;
+import com.odysseus.repository.LocationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,10 +27,12 @@ import com.odysseus.repository.UserRepository;
 public class TripController {
     private final UserRepository userRepository;
     private final TripRepository tripRepository;
+    private final LocationRepository locationRepository;
 
-    public TripController(UserRepository userRepository, TripRepository tripRepository) {
+    public TripController(UserRepository userRepository, TripRepository tripRepository, LocationRepository locationRepository) {
         this.userRepository = userRepository;
         this.tripRepository = tripRepository;
+        this.locationRepository = locationRepository;
     }
 
     @PostMapping
@@ -36,10 +40,14 @@ public class TripController {
 
         User user = userRepository.findById(tripCreatePayload.getUserId()).orElse(null);
         if (user != null) {
+            Location location = locationRepository.findById(tripCreatePayload.getLocation().getId()).orElse(null);
+            if (location == null) {
+                location = new Location(tripCreatePayload.getLocation().getId(), tripCreatePayload.getLocation().getLabel(), tripCreatePayload.getLocation().getCoordinates().toPoint());
+                locationRepository.save(location);
 
+            }
             Trip trip = new Trip(tripCreatePayload.getLabel(), tripCreatePayload.getDateFrom(),
-                    tripCreatePayload.getDateTo(), tripCreatePayload.getLocation().getLabel(),
-                    tripCreatePayload.getLocation().getCoordinates().toPoint(), user);
+                    tripCreatePayload.getDateTo(), location, user);
             tripRepository.save(trip);
             return ResponseEntity.status(HttpStatus.CREATED).body(user.getTrips());
 
@@ -66,8 +74,7 @@ public class TripController {
             trip.setDateFrom(tripPayload.getDateFrom());
             trip.setDateTo(tripPayload.getDateTo());
 
-            trip.setLocation(tripPayload.getLocation().getCoordinates().toPoint());
-            trip.setLocationLabel(tripPayload.getLocation().getLabel());
+            //  trip.setLocation(tripPayload.getLocation().getCoordinates().toPoint());
 
             tripRepository.save(trip);
             return ResponseEntity.ok(trip.getUser().getTrips());
