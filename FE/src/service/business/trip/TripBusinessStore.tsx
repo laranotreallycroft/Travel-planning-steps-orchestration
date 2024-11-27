@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
-import { ITrip, ITripPayload } from 'model/trip/Trip';
+import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
@@ -22,7 +22,7 @@ const actions = {
   TRIP_CLEAR: 'TRIP_CLEAR',
 };
 
-export const tripCreate = (payload: ITripPayload): IPayloadAction<ITripPayload> => {
+export const tripCreate = (payload: ITripCreatePayload): IPayloadAction<ITripCreatePayload> => {
   return { type: actions.TRIP_CREATE, payload: payload };
 };
 
@@ -30,7 +30,7 @@ export const tripFetch = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
   return { type: actions.TRIP_FETCH, payload: payload };
 };
 
-export const tripUpdate = (payload: ITripPayload): IPayloadAction<ITripPayload> => {
+export const tripUpdate = (payload: ITripCreatePayload): IPayloadAction<ITripCreatePayload> => {
   return { type: actions.TRIP_UPDATE, payload: payload };
 };
 
@@ -49,7 +49,7 @@ export const tripClear = (): IAction => {
 // -
 // -------------------- Side-effects
 
-const tripCreateEffect = (action$: Observable<IPayloadAction<ITripPayload>>, state$: Observable<any>) => {
+const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.TRIP_CREATE;
@@ -100,7 +100,7 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
   );
 };
 
-const tripUpdateffect = (action$: Observable<IPayloadAction<ITripPayload>>, state$: Observable<any>) => {
+const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.TRIP_UPDATE;

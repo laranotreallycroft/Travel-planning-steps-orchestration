@@ -1,27 +1,15 @@
-import { DeleteOutlined, ZoomInOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Radio, Row, Select, Tooltip } from "antd";
-import Title from "antd/es/typography/Title";
-import React, { useCallback, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import notificationService from "service/util/notificationService";
-import DragAndDropTable from "components/common/list/DragAndDropTable";
-import MapElement, {
-  IGeosearchPayloadWithId,
-} from "components/common/map/MapElement";
-import MapSearch from "components/common/map/MapSearch";
-import { ITrip } from "model/trip/Trip";
-import {
-  IItineraryForm,
-  IItineraryElementPayload,
-} from "service/business/trip/itinerary/ItineraryBusinessStore";
-import {
-  DirectionsCar,
-  DirectionsBike,
-  DirectionsWalk,
-  Hiking,
-  Accessible,
-} from "@mui/icons-material";
-import SportsMotorsportsIcon from "@mui/icons-material/SportsMotorsports";
+import { DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
+import { Accessible, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
+import SportsMotorsportsIcon from '@mui/icons-material/SportsMotorsports';
+import { Button, Col, Form, Radio, Row, Select, Tooltip } from 'antd';
+import Title from 'antd/es/typography/Title';
+import DragAndDropTable from 'components/common/list/DragAndDropTable';
+import MapElement from 'components/common/map/MapElement';
+import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { ITrip } from 'model/trip/Trip';
+import React, { useCallback, useState } from 'react';
+import { IItineraryElementPayload, IItineraryForm } from 'service/business/trip/itinerary/ItineraryBusinessStore';
+import notificationService from 'service/util/notificationService';
 const vehicleProfiles = [
   {
     label: (
@@ -30,7 +18,7 @@ const vehicleProfiles = [
         Car
       </Row>
     ),
-    value: "driving-car",
+    value: 'driving-car',
   },
   {
     label: (
@@ -39,7 +27,7 @@ const vehicleProfiles = [
         Bicycle
       </Row>
     ),
-    value: "cycling-regular",
+    value: 'cycling-regular',
   },
   {
     label: (
@@ -48,7 +36,7 @@ const vehicleProfiles = [
         Mountain bicycle
       </Row>
     ),
-    value: "cycling-mountain",
+    value: 'cycling-mountain',
   },
   {
     label: (
@@ -57,7 +45,7 @@ const vehicleProfiles = [
         Walking
       </Row>
     ),
-    value: "foot-walking",
+    value: 'foot-walking',
   },
   {
     label: (
@@ -66,7 +54,7 @@ const vehicleProfiles = [
         Hiking
       </Row>
     ),
-    value: "foot-hiking",
+    value: 'foot-hiking',
   },
   {
     label: (
@@ -75,7 +63,7 @@ const vehicleProfiles = [
         Wheelchair
       </Row>
     ),
-    value: "wheelchair",
+    value: 'wheelchair',
   },
 ];
 
@@ -86,17 +74,14 @@ export interface IItineraryStopsViewOwnProps {
 
 type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
 
-const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
-  props: IItineraryStopsViewProps
-) => {
+const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItineraryStopsViewProps) => {
   const form = Form.useFormInstance<IItineraryForm>();
-  const locations = Form.useWatch("locations", form);
-  const [selectedLocation, setSelectedLocation] =
-    useState<IItineraryElementPayload>(form.getFieldValue("locations")[0]);
+  const locations = Form.useWatch('locations', form);
+  const [selectedLocation, setSelectedLocation] = useState<IItineraryElementPayload>(form.getFieldValue('locations')[0]);
   const setLocations = useCallback((locations: IItineraryElementPayload[]) => {
-    form.setFieldValue("locations", locations);
+    form.setFieldValue('locations', locations);
   }, []);
-
+  /*
   const handleAddLocation = useCallback(
     (value: string) => {
       const parsedValue: IItineraryElementPayload = {
@@ -108,15 +93,13 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
       setLocations([...locations, parsedValue]);
     },
     [locations]
-  );
+  );*/
 
   const handleRemoveLocation = useCallback(
     (e: any, value: IGeosearchPayloadWithId) => {
       e.stopPropagation();
       e.preventDefault();
-      const newLocations = locations.filter(
-        (location) => location.id !== value.id
-      );
+      const newLocations = locations.filter((location) => location.id !== value.id);
       setSelectedLocation(newLocations[0]);
       setLocations(newLocations);
     },
@@ -124,23 +107,13 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
   );
 
   const handleNext = () => {
-    if (locations.length === 0)
-      notificationService.error(
-        "Unable to generate route",
-        "Please select at least one stop"
-      );
+    if (locations.length === 0) notificationService.error('Unable to generate route', 'Please select at least one stop');
     else if (
       locations.every((element) => {
-        return (
-          element.x === props.trip.location.x &&
-          element.y === props.trip.location.y
-        );
+        return element.x === props.trip.location.x && element.y === props.trip.location.y;
       })
     )
-      notificationService.error(
-        "Unable to generate route",
-        "All stops are the same as trip origin"
-      );
+      notificationService.error('Unable to generate route', 'All stops are the same as trip origin');
     else props.onNextStep();
   };
   return (
@@ -151,24 +124,21 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
 
       <Row gutter={16}>
         <Col span={12}>
-          <MapSearch onSelectLocation={handleAddLocation} />
+          {
+            //<MapSearch onSelectLocation={handleAddLocation} />
+          }
         </Col>
         <Col span={8}>
-          <Form.Item name={["routeOptions", "optimize"]}>
+          <Form.Item name={['routeOptions', 'optimize']}>
             <Radio.Group>
-              <Radio.Button value={false}>
-                Keep original route order
-              </Radio.Button>
+              <Radio.Button value={false}>Keep original route order</Radio.Button>
               <Radio.Button value={true}>Optimize route</Radio.Button>
             </Radio.Group>
           </Form.Item>
         </Col>
 
         <Col span={4}>
-          <Form.Item
-            name={["routeOptions", "vehicleProfile"]}
-            className="fullWidth"
-          >
+          <Form.Item name={['routeOptions', 'vehicleProfile']} className="fullWidth">
             <Select options={vehicleProfiles} />
           </Form.Item>
         </Col>
@@ -179,48 +149,32 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
           <Form.List name="locations">
             {() => (
               <DragAndDropTable
-                sortableContextItems={
-                  locations
-                    ? locations.map((location) => location.id)
-                    : form
-                        .getFieldValue("locations")
-                        .map((location: IGeosearchPayloadWithId) => location.id)
-                }
+                sortableContextItems={locations ? locations.map((location) => location.id) : form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => location.id)}
                 tableDataSource={
                   locations
                     ? locations.map((location) => {
                         return { ...location, key: location.id };
                       })
-                    : form
-                        .getFieldValue("locations")
-                        .map((location: IGeosearchPayloadWithId) => {
-                          return { ...location, key: location.id };
-                        })
+                    : form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => {
+                        return { ...location, key: location.id };
+                      })
                 }
                 tableColumns={[
                   {
-                    title: "Location",
-                    dataIndex: "label",
+                    title: 'Location',
+                    dataIndex: 'label',
                   },
                   {
-                    title: "Action",
-                    key: "action",
+                    title: 'Action',
+                    key: 'action',
                     width: 100,
                     render: (_, location) => (
-                      <Row justify={"space-between"}>
-                        <Tooltip placement="bottom" title={"Remove stop"}>
-                          <Button
-                            icon={<DeleteOutlined />}
-                            onClick={(e) => handleRemoveLocation(e, location)}
-                            size="small"
-                          />
+                      <Row justify={'space-between'}>
+                        <Tooltip placement="bottom" title={'Remove stop'}>
+                          <Button icon={<DeleteOutlined />} onClick={(e) => handleRemoveLocation(e, location)} size="small" />
                         </Tooltip>
-                        <Tooltip placement="bottom" title={"Zoom to location"}>
-                          <Button
-                            icon={<ZoomInOutlined />}
-                            onClick={() => setSelectedLocation(location)}
-                            size="small"
-                          />
+                        <Tooltip placement="bottom" title={'Zoom to location'}>
+                          <Button icon={<ZoomInOutlined />} onClick={() => setSelectedLocation(location)} size="small" />
                         </Tooltip>
                       </Row>
                     ),
@@ -232,15 +186,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (
           </Form.List>
         </Col>
         <Col span={12}>
-          <MapElement
-            selectedLocation={selectedLocation}
-            locations={[locations]}
-            className="fullHeight"
-          />
+          <MapElement selectedLocation={selectedLocation} locationList={[locations]} className="fullHeight" />
         </Col>
       </Row>
 
-      <Row justify={"end"} align={"bottom"} className="margin-top-md">
+      <Row justify={'end'} align={'bottom'} className="margin-top-md">
         <Button type="primary" onClick={handleNext}>
           Next
         </Button>

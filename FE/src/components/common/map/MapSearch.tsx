@@ -1,80 +1,78 @@
-import { Row, Select } from "antd";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { debounce } from "lodash";
-import { useCallback, useEffect, useState } from "react";
-import { IGeosearchPayload } from "components/common/map/MapElement";
-import { initMap } from "components/common/map/utils";
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import { DataSelect } from 'components/common/input/DataSelect';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import { initMap } from 'components/common/map/utils';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { debounce } from 'lodash';
+import { IGeosearchPayload, IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { useCallback, useState } from 'react';
+import AppConfigService from 'service/common/AppConfigService';
+import { LangUtils } from 'service/util/LangUtils';
+
+const debounceTimeout = AppConfigService.getValue('common.debounceTimeout');
+const minSearchLength = AppConfigService.getValue('common.minSearchStringLength');
+
 export interface IMapSearchOwnProps {
-  onSelectLocation: (value: string) => void;
+  value?: IGeosearchPayloadWithId;
+  onChange: (value: IGeosearchPayloadWithId) => void;
   showValueAfterSearch?: boolean;
   initialValue?: string;
 }
-type IMapSearchProps = IMapSearchOwnProps;
+
+type IMapSearchProps = IMapSearchOwnProps & IWithLocalizeOwnProps;
 
 initMap();
 const provider = new OpenStreetMapProvider();
+
 const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
-  const [selectedLabel, setSelectedLabel] = useState<string | undefined>(
-    props.initialValue
-  );
-
-  useEffect(() => {
-    setSelectedLabel(props.initialValue);
-  }, [props.initialValue]);
-
-  const [searchLocationArray, setSearchLocationArray] =
-    useState<IGeosearchPayload[]>();
+  const [searchLocationArray, setSearchLocationArray] = useState<IGeosearchPayloadWithId[]>();
 
   const handleLocationSearch = useCallback(
-    debounce((value: string) => {
-      if (value.length > 0) {
-        provider
-          .search({ query: value })
-          .then((geosearchPayloadArray: IGeosearchPayload[]) => {
-            setSearchLocationArray(geosearchPayloadArray);
-          });
+    debounce((value?: string) => {
+      if (value && value.length > minSearchLength) {
+        provider.search({ query: value }).then((geosearchPayloadArray: IGeosearchPayload[]) => {
+          setSearchLocationArray(
+            geosearchPayloadArray.map((value) => {
+              return { ...value, id: value.raw.place_id };
+            })
+          );
+        });
       } else {
         setSearchLocationArray([]);
       }
-    }, 500),
+    }, debounceTimeout),
     [provider.search]
   );
 
   const handleLocationSelect = useCallback(
-    (value: string) => {
-      props.onSelectLocation(value);
-      setSelectedLabel(value);
-      handleLocationSearch("");
+    (value?: IGeosearchPayloadWithId | IGeosearchPayloadWithId[]) => {
+      if (value && !LangUtils.isArray(value)) {
+        props.onChange(value);
+        setSearchLocationArray([]);
+      }
     },
-    [props.onSelectLocation, handleLocationSearch]
+    [props.onChange]
   );
+
   return (
-    <Select
-      filterOption={false}
-      showSearch={true}
-      placeholder="Location"
+    <DataSelect<IGeosearchPayloadWithId>
+      enableSearch={true}
+      placeholder={props.translate('MAP_SEARCH.PLACEHOLDER')}
       defaultValue={props.initialValue}
-      value={props.showValueAfterSearch ? selectedLabel : null}
       onChange={handleLocationSelect}
       onSearch={handleLocationSearch}
-      options={searchLocationArray?.map((location: IGeosearchPayload) => {
+      options={searchLocationArray?.map((location: IGeosearchPayloadWithId) => {
         return {
+          id: location.id,
+          value: location.id,
+          key: location.id,
           label: location.label,
-          value: JSON.stringify(location),
-          key: location.raw?.place_id,
+          data: location,
         };
       })}
-      notFoundContent={
-        <Row>
-          <SentimentVeryDissatisfiedIcon className="margin-left-xs" />
-          No location found
-        </Row>
-      }
-      className="fullWidth"
+      notFoundContent={null}
       dropdownStyle={{ zIndex: 10000 }}
     />
   );
 };
 
-export default MapSearch;
+export default withLocalize<IMapSearchOwnProps>(MapSearch as any);

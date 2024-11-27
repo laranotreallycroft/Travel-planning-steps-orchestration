@@ -1,11 +1,8 @@
-import { Button, Col, Form, InputNumber, Row, Table } from "antd";
-import Title from "antd/es/typography/Title";
-import React from "react";
-import {
-  IItineraryForm,
-  IItineraryElementPayload,
-} from "service/business/trip/itinerary/ItineraryBusinessStore";
-import { IGeosearchPayloadWithId } from "components/common/map/MapElement";
+import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
+import Title from 'antd/es/typography/Title';
+import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import React from 'react';
+import { IItineraryForm, IItineraryElementPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 export interface IItineraryDurationViewOwnProps {
   onPreviousStep: () => void;
   onNextStep: () => void;
@@ -13,9 +10,7 @@ export interface IItineraryDurationViewOwnProps {
 
 type IItineraryDurationViewProps = IItineraryDurationViewOwnProps;
 
-const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
-  props: IItineraryDurationViewProps
-) => {
+const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IItineraryDurationViewProps) => {
   const form = Form.useFormInstance<IItineraryForm>();
 
   const handleDurationChange = (value: number, locationId: string) => {
@@ -24,7 +19,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
       if (location.id === locationId) location.duration = value;
       return location;
     });
-    form.setFieldValue("locations", newLocations);
+    form.setFieldValue('locations', newLocations);
   };
   return (
     <React.Fragment>
@@ -35,32 +30,22 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
         <Table
           className="fullWidth"
           bordered
-          dataSource={form
-            .getFieldValue("locations")
-            .map((location: IGeosearchPayloadWithId) => {
-              return { ...location, key: location.id };
-            })}
+          dataSource={form.getFieldValue('locations').map((location: IGeosearchPayloadWithId) => {
+            return { ...location, key: location.id };
+          })}
           columns={[
             {
-              title: "Location",
-              dataIndex: "label",
-              key: "label",
+              title: 'Location',
+              dataIndex: 'label',
+              key: 'label',
             },
             {
-              title: "Duration",
-              dataIndex: "",
-              key: "duration",
+              title: 'Duration',
+              dataIndex: '',
+              key: 'duration',
               render: (_, location) => (
-                <Row gutter={16} justify={"center"}>
-                  <InputNumber
-                    defaultValue={location.duration}
-                    min={1}
-                    max={600}
-                    onChange={(value) =>
-                      handleDurationChange(value ?? 1, location.id)
-                    }
-                    className="itineraryDurationView__input"
-                  />
+                <Row gutter={16} justify={'center'}>
+                  <InputNumber defaultValue={location.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, location.id)} className="itineraryDurationView__input" />
                   <Col>minutes</Col>
                 </Row>
               ),
@@ -70,7 +55,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (
           pagination={false}
         />
       </Row>
-      <Row justify={"space-between"} align={"bottom"} className="margin-top-md">
+      <Row justify={'space-between'} align={'bottom'} className="margin-top-md">
         <Button type="primary" onClick={props.onPreviousStep}>
           Back
         </Button>

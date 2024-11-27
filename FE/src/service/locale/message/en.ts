@@ -33,6 +33,13 @@ const en: any = {
 
   'TRIP_LIST_VIEW.UPCOMING.NO_DATA': 'No Upcoming Trips',
   'TRIP_LIST_VIEW.CREATE_FIRST_TRIP_BUTTON': 'Add Your First Trip!',
+
+  'TRIP_CREATE_VIEW.MODAL_TITLE': 'Add a New Trip!',
+  'TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL': 'Travel dates',
+  'TRIP_CREATE_VIEW.FORM.LOCATION.LABEL': 'Travel destination',
+
+  'MAP_SEARCH.PLACEHOLDER': 'Location',
+  'MAP_ELEMENT.PATH_POPUP.LABEL': 'Day %{count} of your trip',
 };
 
 export default en;

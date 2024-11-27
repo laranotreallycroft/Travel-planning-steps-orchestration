@@ -1,6 +1,6 @@
-import { ICoordinates } from "model/geometry/Coordinates";
-import { IPackingList } from "model/trip/packingList/PackingList";
-import { IItinerary } from "model/trip/itinerary/Itinerary";
+import { ICoordinates } from 'model/geometry/Coordinates';
+import { IPackingList } from 'model/trip/packingList/PackingList';
+import { IItinerary } from 'model/trip/itinerary/Itinerary';
 
 export interface ITrip {
   id: number;
@@ -13,10 +13,17 @@ export interface ITrip {
   itineraries?: IItinerary[];
 }
 
-export interface ITripPayload {
-  label: string;
+export interface ITripCreatePayload {
   dateFrom: string;
   dateTo: string;
-  location: ICoordinates;
-  locationLabel: string;
+  location: ILocation;
+}
+
+export interface ILocation {
+  coordinates: ICoordinates;
+  label: string;
+}
+
+export interface ITripUpdatePayload extends ITripCreatePayload {
+  label: string;
 }

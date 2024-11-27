@@ -1,6 +1,6 @@
-import L, { LatLngExpression } from "leaflet";
-import { useEffect } from "react";
-import { useMap } from "react-leaflet";
+import L, { LatLngExpression } from 'leaflet';
+import { useEffect } from 'react';
+import { useMap } from 'react-leaflet';
 
 export interface IChangeViewProps {
   center: LatLngExpression;
@@ -12,9 +12,9 @@ export const initMap = () => {
   //@ts-ignore
   delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-    iconUrl: require("leaflet/dist/images/marker-icon.png"),
-    shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
   });
 };
 

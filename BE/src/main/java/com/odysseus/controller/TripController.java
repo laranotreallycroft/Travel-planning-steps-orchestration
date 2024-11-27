@@ -32,14 +32,14 @@ public class TripController {
     }
 
     @PostMapping
-    public ResponseEntity createTrip(@RequestBody TripPayload tripCreatePayload) throws URISyntaxException {
+    public ResponseEntity<?> createTrip(@RequestBody TripPayload tripCreatePayload) throws URISyntaxException {
 
         User user = userRepository.findById(tripCreatePayload.getUserId()).orElse(null);
         if (user != null) {
 
             Trip trip = new Trip(tripCreatePayload.getLabel(), tripCreatePayload.getDateFrom(),
-                    tripCreatePayload.getDateTo(), tripCreatePayload.getLocationLabel(),
-                    tripCreatePayload.getLocation().toPoint(), user);
+                    tripCreatePayload.getDateTo(), tripCreatePayload.getLocation().getLabel(),
+                    tripCreatePayload.getLocation().getCoordinates().toPoint(), user);
             tripRepository.save(trip);
             return ResponseEntity.status(HttpStatus.CREATED).body(user.getTrips());
 
@@ -66,8 +66,8 @@ public class TripController {
             trip.setDateFrom(tripPayload.getDateFrom());
             trip.setDateTo(tripPayload.getDateTo());
 
-            trip.setLocation(tripPayload.getLocation().toPoint());
-            trip.setLocationLabel(tripPayload.getLocationLabel());
+            trip.setLocation(tripPayload.getLocation().getCoordinates().toPoint());
+            trip.setLocationLabel(tripPayload.getLocation().getLabel());
 
             tripRepository.save(trip);
             return ResponseEntity.ok(trip.getUser().getTrips());

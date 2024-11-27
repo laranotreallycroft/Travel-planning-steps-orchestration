@@ -1,5 +1,4 @@
-import { IGeosearchPayload } from "components/common/map/MapElement";
-import { ICoordinates } from "model/geometry/Coordinates";
+import { ICoordinates, IGeosearchPayload } from 'model/geometry/Coordinates';
 
 export interface IItinerary {
   id: number;

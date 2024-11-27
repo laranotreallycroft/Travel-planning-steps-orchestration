@@ -143,7 +143,7 @@ public class ItineraryController {
             }
 
             ItineraryElement itineraryElement = new ItineraryElement(payloadLocation.getLabel(),
-                    payloadLocation.toPoint(), Timestamp.valueOf(lastItineraryElementEndDateTime),
+                    payloadLocation.getCoordinates().toPoint(), Timestamp.valueOf(lastItineraryElementEndDateTime),
                     Timestamp.valueOf(lastItineraryElementEndDateTime.plusMinutes(commuteDuration)),
                     Timestamp.valueOf(lastItineraryElementEndDateTime.plusMinutes(commuteDuration)),
                     Timestamp.valueOf(lastItineraryElementEndDateTime
@@ -274,11 +274,11 @@ public class ItineraryController {
 
         RouteOptions routeOptions = new RouteOptions(false, itinerary.getTransportationMethod());
         List<ItineraryLocation> itineraryLocations = new ArrayList<>();
-        for (ItineraryElement itineraryElement : itinerary.getItineraryElements()) {
+        /*for (ItineraryElement itineraryElement : itinerary.getItineraryElements()) {
             itineraryLocations.add(new ItineraryLocation(itineraryElement.getId().toString(),
-                    itineraryElement.getLocation().getX(), itineraryElement.getLocation().getY(),
+                    itineraryElement.getLocation(),
                     itineraryElement.getLabel(), itineraryElement.getDuration()));
-        }
+        }*/
         itinerary.getItineraryElements().clear();
         if (itineraryLocations.size() > 0) {
             OpenRouteServiceDirectionsResponse response = getOpenRouteServiceDirections(itineraryLocations,
@@ -308,7 +308,7 @@ public class ItineraryController {
                 }
 
                 ItineraryElement itineraryElement = new ItineraryElement(originalItineraryLocation.getLabel(),
-                        originalItineraryLocation.toPoint(), Timestamp.valueOf(lastItineraryElementEndDateTime),
+                        originalItineraryLocation.getCoordinates().toPoint(), Timestamp.valueOf(lastItineraryElementEndDateTime),
                         Timestamp.valueOf(lastItineraryElementEndDateTime.plusMinutes(commuteDuration)),
                         Timestamp.valueOf(lastItineraryElementEndDateTime.plusMinutes(commuteDuration)),
                         Timestamp.valueOf(lastItineraryElementEndDateTime

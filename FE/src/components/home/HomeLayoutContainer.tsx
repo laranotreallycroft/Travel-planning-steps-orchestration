@@ -29,7 +29,7 @@ const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (props: IHomeLa
   }, []);
 
   const handleTripSelect = useCallback((selectedTripId: number) => {
-    props.tripFetch({ id: selectedTripId });
+    // props.tripFetch({ id: selectedTripId });
   }, []);
 
   return <HomeLayoutView tripList={props.tripList} trip={props.trip} onTripSelect={handleTripSelect} />;

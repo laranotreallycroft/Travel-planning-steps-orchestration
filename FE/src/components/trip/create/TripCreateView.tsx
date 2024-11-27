@@ -1,108 +1,83 @@
-import { DatePicker, Form, Modal } from "antd";
-import { Dayjs } from "dayjs";
-import { RangeValue } from "rc-picker/lib/interface";
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import { ITrackableAction } from "service/util/trackAction";
-import MapElement, {
-  IGeosearchPayload,
-  IGeosearchPayloadWithId,
-} from "components/common/map/MapElement";
-import MapSearch from "components/common/map/MapSearch";
+import { DatePicker, Form, Modal } from 'antd';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import MapElement from 'components/common/map/MapElement';
+import MapSearch from 'components/common/map/MapSearch';
+import { Dayjs } from 'dayjs';
+import { IGeosearchPayloadWithId } from 'model/geometry/Coordinates';
+import { ITripCreatePayload } from 'model/trip/Trip';
+import { RangeValue } from 'rc-picker/lib/interface';
+import React, { useCallback, useState } from 'react';
+
 export interface ITripCreateViewOwnProps {
-  isTripCreateModalOpen: boolean;
-  onTripCreate: (values: ITripCreateForm) => ITrackableAction;
+  onTripCreate: (values: ITripCreatePayload) => void;
   onTripCreateModalClose: () => void;
 }
 
 export interface ITripCreateForm {
   dateRange: RangeValue<Dayjs>;
-  location: IGeosearchPayload;
+  location: IGeosearchPayloadWithId;
 }
 
-type ITripCreateViewProps = ITripCreateViewOwnProps;
+type ITripCreateViewProps = ITripCreateViewOwnProps & IWithLocalizeOwnProps;
 
-const TripCreateView: React.FC<ITripCreateViewProps> = (
-  props: ITripCreateViewProps
-) => {
-  const navigator = useNavigate();
+const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewProps) => {
   const [form] = Form.useForm<ITripCreateForm>();
-  const [selectedLocation, setSelectedLocation] =
-    useState<IGeosearchPayloadWithId>();
+  const [selectedLocation, setSelectedLocation] = useState<IGeosearchPayloadWithId>();
 
-  const handleSelectLocation = useCallback((value: string) => {
-    const parsedValue: IGeosearchPayload = JSON.parse(value);
-    form.setFieldValue("location", parsedValue);
-    setSelectedLocation({
-      ...parsedValue,
-      id: uuidv4(),
-    });
-  }, []);
-
-  const handleCancel = useCallback(() => {
-    form.resetFields();
-    setSelectedLocation(undefined);
-    props.onTripCreateModalClose();
+  const handleSelectLocation = useCallback((value: IGeosearchPayloadWithId) => {
+    setSelectedLocation(value);
   }, []);
 
   const handleFinish = useCallback(
     (values: ITripCreateForm) => {
-      handleCancel();
-      props
-        .onTripCreate(values)
-        .track()
-        .subscribe(() => {
-          navigator("/settings");
-        });
+      const payload: ITripCreatePayload = {
+        dateFrom: values.dateRange?.[0]?.format('YYYY-MM-DD')!,
+        dateTo: values.dateRange?.[1]?.format('YYYY-MM-DD')!,
+        location: {
+          label: values.location.label,
+          coordinates: {
+            x: values.location.x,
+            y: values.location.y,
+          },
+        },
+      };
+      props.onTripCreateModalClose();
+      props.onTripCreate(payload);
     },
-    [props.onTripCreate]
+    [props.onTripCreateModalClose, props.onTripCreate]
   );
 
   return (
-    <Modal
-      title="Create trip"
-      open={props.isTripCreateModalOpen}
-      onCancel={handleCancel}
-      onOk={form.submit}
-      className="tripCreateView__modal"
-    >
-      <Form form={form} onFinish={handleFinish} requiredMark={false}>
+    <Modal title={props.translate('TRIP_CREATE_VIEW.MODAL_TITLE')} open={true} onCancel={props.onTripCreateModalClose} onOk={form.submit} className="tripCreateView__modal">
+      <Form<ITripCreateForm> form={form} onFinish={handleFinish} requiredMark={false} className="margin-top-lg" layout="vertical">
         <Form.Item
-          name={"dateRange"}
-          label={"Your travel dates"}
+          name={'dateRange'}
+          label={props.translate('TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL')}
           rules={[
             {
               required: true,
-              message: "",
+              message: '',
             },
           ]}
         >
           <DatePicker.RangePicker />
         </Form.Item>
         <Form.Item
-          name={"location"}
-          label={"Your travel destination"}
-          className="fullWidth"
+          name={'location'}
+          label={props.translate('TRIP_CREATE_VIEW.FORM.LOCATION.LABEL')}
           rules={[
             {
               required: true,
-              message: "",
+              message: '',
             },
           ]}
         >
-          <MapSearch
-            onSelectLocation={handleSelectLocation}
-            showValueAfterSearch={true}
-          />
+          <MapSearch onChange={handleSelectLocation} showValueAfterSearch={true} />
         </Form.Item>
-        <MapElement
-          selectedLocation={selectedLocation}
-          locations={selectedLocation ? [[selectedLocation]] : undefined}
-        />
+        <MapElement selectedLocation={selectedLocation} locationList={selectedLocation ? [[selectedLocation]] : undefined} />
       </Form>
     </Modal>
   );
 };
 
-export default TripCreateView;
+export default withLocalize<ITripCreateViewOwnProps>(TripCreateView as any);

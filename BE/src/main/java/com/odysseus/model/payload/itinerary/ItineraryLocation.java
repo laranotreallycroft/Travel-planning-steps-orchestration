@@ -2,22 +2,23 @@ package com.odysseus.model.payload.itinerary;
 
 import java.util.List;
 
-import com.odysseus.model.payload.common.GeosearchPayload;
+import com.odysseus.model.payload.common.Coordinates;
+import com.odysseus.model.payload.common.Location;
 
-public class ItineraryLocation extends GeosearchPayload {
+public class ItineraryLocation extends Location {
     private Integer duration;
 
     public ItineraryLocation() {
 
     }
 
-    public ItineraryLocation(List<GeosearchPayload> locations, Integer duration) {
+    public ItineraryLocation(List<Location> locations, Integer duration) {
         super();
         this.duration = duration;
     }
 
-    public ItineraryLocation(String id, Double x, Double y, String label, Integer duration) {
-        super(id, x, y, label);
+    public ItineraryLocation(String id, Coordinates coordinates, String label, Integer duration) {
+        super(id, coordinates, label);
         this.duration = duration;
     }
 
