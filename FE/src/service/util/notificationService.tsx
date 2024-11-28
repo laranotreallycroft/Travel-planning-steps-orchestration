@@ -6,7 +6,6 @@ const notificationService = {
       message,
       description,
       placement: 'top',
-      duration: 0,
     });
   },
   error: (message: string, description?: string) => {
