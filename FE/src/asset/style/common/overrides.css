@@ -1,0 +1,13 @@
+.ant-notification-notice-message {
+  margin-bottom: 0 !important;
+}
+
+.ant-notification-notice {
+  padding: 5px 10px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.ant-notification-notice-close {
+  position: unset !important;
+}

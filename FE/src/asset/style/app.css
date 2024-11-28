@@ -39,4 +39,5 @@ html {
 @import 'trip/_tripSettingsView.css';
 @import 'trip/_tripListView.css';
 @import 'common/list/_dragAndDropTable.css';
+@import 'common/overrides.css';
 @import 'locale/_localePicker.css';
