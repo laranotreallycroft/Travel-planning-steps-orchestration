@@ -24,17 +24,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/{userId}/trips")
-    public ResponseEntity getTripList(@PathVariable(value = "userId") Long userId) throws URISyntaxException {
-
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            List<Trip> trips = user.getTrips();
-            return ResponseEntity.ok(trips.toArray());
-
-        }
-        return ResponseEntity.badRequest().body("Something went wrong");
-    }
 
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody UserCreatePayload userCreatePayload) {

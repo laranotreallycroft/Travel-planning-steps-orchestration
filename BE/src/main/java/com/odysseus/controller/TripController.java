@@ -1,6 +1,7 @@
 package com.odysseus.controller;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import com.odysseus.model.Location;
 import com.odysseus.model.payload.common.LocationPayload;
@@ -59,6 +60,20 @@ public class TripController {
 
         }
         return ResponseEntity.badRequest().body("Something went wrong");
+    }
+
+    @GetMapping
+    public ResponseEntity getTripList() {
+        List<Trip> trips = tripRepository.findAll();
+        return ResponseEntity.ok(trips.toArray());
+        // add jwt
+       /* User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            List<Trip> trips = user.getTrips();
+            return ResponseEntity.ok(trips.toArray());
+
+        }
+        return ResponseEntity.badRequest().body("Something went wrong");*/
     }
 
     @GetMapping("/{tripId}")

@@ -1,21 +1,17 @@
-import { ITrip } from 'model/trip/Trip';
-import React from 'react';
+import { Button, Col, Row, Typography } from 'antd';
 import noUpcomingImage from 'asset/img/no_upcoming.svg';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
-import { Button, Col, Row, Typography } from 'antd';
+import React from 'react';
 
-export interface ITripListViewOwnProps {
-  tripList: ITrip[];
+export interface ITripListEmptyOwnProps {
   onTripCreateModalOpen: () => void;
 }
 
-type ITripListViewProps = ITripListViewOwnProps & IWithLocalizeOwnProps;
+type ITripListEmptyProps = ITripListEmptyOwnProps & IWithLocalizeOwnProps;
 
-const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) => {
-  return props.tripList?.length > 0 ? (
-    <div></div>
-  ) : (
-    <Row justify={'center'} align={'middle'} className="tripListView__container">
+const TripListEmpty: React.FC<ITripListEmptyProps> = (props: ITripListEmptyProps) => {
+  return (
+    <Row justify={'center'} align={'middle'} className="TripListEmpty__container">
       <Col>
         <img src={noUpcomingImage} alt="No Data" className="fullWidth" />
       </Col>
@@ -33,4 +29,4 @@ const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) =
   );
 };
 
-export default withLocalize<ITripListViewOwnProps>(TripListView as any);
+export default withLocalize<ITripListEmptyOwnProps>(TripListEmpty as any);

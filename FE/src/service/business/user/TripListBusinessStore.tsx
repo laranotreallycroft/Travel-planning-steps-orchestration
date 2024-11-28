@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { ITrip } from 'model/trip/Trip';
-import { Observable, filter, from, map, mergeMap, withLatestFrom } from 'rxjs';
+import { Observable, filter, from, map, mergeMap } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
-import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -37,13 +36,10 @@ const tripListFetchEffect = (action$: Observable<IAction>, state$: Observable<an
   return action$.pipe(
     filter((action) => action.type === actions.TRIP_LIST_FETCH),
 
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const user = LoginBusinessStore.selectors.getCurrentUser(state);
-
+    mergeMap((action) => {
       return from(
         axios
-          .get(`/users/${user.id}/trips`)
+          .get(`/trips`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

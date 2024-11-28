@@ -40,7 +40,7 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "location_id")
-    @JsonBackReference
+    @JsonIgnoreProperties("trips")
     private Location location;
 
     @ManyToOne
