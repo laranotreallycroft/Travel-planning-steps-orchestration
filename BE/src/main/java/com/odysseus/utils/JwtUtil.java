@@ -1,8 +1,11 @@
 package com.odysseus.utils;
 
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -18,7 +21,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(Map.of("email", email, "isGoogleUser", isGoogleUser)) // Add custom claims
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour validity
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 day validity
                 .signWith(key)
                 .compact();
     }
@@ -54,4 +57,6 @@ public class JwtUtil {
                 .getExpiration()
                 .before(new Date());
     }
+
+  
 }

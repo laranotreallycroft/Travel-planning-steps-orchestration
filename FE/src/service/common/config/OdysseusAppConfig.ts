@@ -6,7 +6,7 @@ const ODYSSEUS_APP_CONFIG = {
   authentication: {
     token: {
       name: 'token',
-      duration: 30 * 24 * 60 * 60 * 1000, // 1 month
+      duration: 24 * 60 * 60 * 1000, // 1 day
     },
   },
   cookies: {

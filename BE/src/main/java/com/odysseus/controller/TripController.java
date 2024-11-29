@@ -1,38 +1,29 @@
 package com.odysseus.controller;
 
+import com.odysseus.model.Location;
+import com.odysseus.model.Trip;
+import com.odysseus.model.User;
+import com.odysseus.model.payload.common.LocationPayload;
+import com.odysseus.model.payload.trip.TripPayload;
+import com.odysseus.model.payload.trip.TripSettingsPayload;
+import com.odysseus.repository.LocationRepository;
+import com.odysseus.repository.TripRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.net.URISyntaxException;
 import java.util.List;
 
-import com.odysseus.model.Location;
-import com.odysseus.model.payload.common.LocationPayload;
-import com.odysseus.repository.LocationRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.odysseus.model.Trip;
-import com.odysseus.model.User;
-import com.odysseus.model.payload.trip.TripPayload;
-import com.odysseus.model.payload.trip.TripSettingsPayload;
-import com.odysseus.repository.TripRepository;
-import com.odysseus.repository.UserRepository;
+import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
 
 @RestController
 @RequestMapping("/trips")
 public class TripController {
-    private final UserRepository userRepository;
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
 
-    public TripController(UserRepository userRepository, TripRepository tripRepository, LocationRepository locationRepository) {
-        this.userRepository = userRepository;
+    public TripController(TripRepository tripRepository, LocationRepository locationRepository) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
     }
@@ -49,17 +40,18 @@ public class TripController {
 
     @PostMapping
     public ResponseEntity<?> createTrip(@RequestBody TripPayload tripCreatePayload) throws URISyntaxException {
+        User user = getCurrentUser();
 
-        User user = userRepository.findById(tripCreatePayload.getUserId()).orElse(null);
         if (user != null) {
             Location location = getLocation(tripCreatePayload.getLocation());
             Trip trip = new Trip(tripCreatePayload.getLabel(), tripCreatePayload.getDateFrom(),
                     tripCreatePayload.getDateTo(), location, user);
             tripRepository.save(trip);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user.getTrips());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
 
         }
         return ResponseEntity.badRequest().body("Something went wrong");
+
     }
 
     @GetMapping

@@ -1,5 +1,9 @@
 package com.odysseus.utils;
 
+import io.jsonwebtoken.Jwt;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -54,5 +58,5 @@ public class SecurityUtils {
         String hashedPassword = getSecurePassword(rawPassword, salt);
         return hashedPassword.equals(storedPasswordHash);
     }
-
+    
 }

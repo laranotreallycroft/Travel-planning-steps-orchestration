@@ -12,7 +12,7 @@ export interface ITripListViewOwnProps {
 type ITripListViewProps = ITripListViewOwnProps & IWithLocalizeOwnProps;
 
 const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) => {
-  return props.tripList?.length > 0 ? (
+  return props.tripList?.length === 0 ? (
     <div></div>
   ) : (
     <Row justify={'center'} align={'middle'} className="tripListView__container">

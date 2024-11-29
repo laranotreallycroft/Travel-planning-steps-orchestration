@@ -11,7 +11,6 @@ import com.odysseus.model.payload.login.LoginPayload;
 import com.odysseus.repository.UserRepository;
 import com.odysseus.utils.JwtUtil;
 import com.odysseus.utils.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,4 +92,6 @@ public class LoginController {
 
 
     }
+
+
 }
