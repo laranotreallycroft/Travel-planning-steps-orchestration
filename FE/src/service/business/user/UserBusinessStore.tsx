@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { Observable, filter, from, map, mergeMap } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import { currentUserStore } from 'service/business/login/LoginBusinessStore';
+import EntityApiService from 'service/business/utils';
 import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
@@ -35,8 +35,7 @@ const userCreateEffect = (action$: Observable<IPayloadAction<IUserCreatePayload>
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .post('/users', action.payload)
+        EntityApiService.postEntity('/users', action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success(LocalizeService.translate('USER.CREATE.SUCCESS_MESSAGE'));

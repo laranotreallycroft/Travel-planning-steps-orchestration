@@ -1,10 +1,10 @@
 import { AppointmentModel } from '@devexpress/dx-react-scheduler';
-import axios from 'axios';
 import { IGeosearchData } from 'model/geometry/Coordinates';
 import { IItinerary } from 'model/trip/itinerary/Itinerary';
 import { Observable, catchError, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
+import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -73,8 +73,7 @@ const itinerariesCreateEffect = (action$: Observable<IPayloadAction<IItineraryPa
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .post(`/itineraries`, action.payload)
+        EntityApiService.postEntity(`/itineraries`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success('New itineraries successfully created');
@@ -103,8 +102,7 @@ const itinerariesUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPa
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .put(`/itineraries`, action.payload)
+        EntityApiService.putEntity(`/itineraries`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success('Itineraries successfully updated');
@@ -132,8 +130,7 @@ const itineraryScheduleUpdateEffect = (action$: Observable<IPayloadAction<Appoin
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .put(`/itineraries/schedule`, action.payload)
+        EntityApiService.putEntity(`/itineraries/schedule`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success('Itinerary schedules successfully updated');
@@ -163,8 +160,7 @@ const itinerariesDeleteEffect = (action$: Observable<IAction>, state$: Observabl
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
-        axios
-          .delete(`/itineraries/${trip.id}`)
+        EntityApiService.deleteEntity(`/itineraries/${trip.id}`)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success('Itineraries successfully deleted');

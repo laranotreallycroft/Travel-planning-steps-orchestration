@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { IUserCredentials } from 'model/user/User';
 import { Observable, filter, from, ignoreElements, map, mergeMap, of, tap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import StoreService from 'service/business/StoreService';
+import EntityApiService from 'service/business/utils';
 import AuthTokenManager from 'service/util/AuthTokenManager';
 import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
@@ -59,14 +59,13 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .post('/login', action.payload)
+        EntityApiService.postEntity('/login', action.payload)
           .then((response) => {
             if (response.status === 200) {
               if (action.payload.keepSignedin) {
-                AuthTokenManager.saveToken(response.data.id);
+                AuthTokenManager.saveToken(response.data.token);
               } else {
-                AuthTokenManager.saveToken(response.data.id, true);
+                AuthTokenManager.saveToken(response.data.token, true);
               }
 
               notificationService.success('Login Successful');
@@ -90,8 +89,7 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .post('/login/google', action.payload)
+        EntityApiService.postEntity('/login/google', action.payload)
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
               if (action.payload.keepSignedin) {

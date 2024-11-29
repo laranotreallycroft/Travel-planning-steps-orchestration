@@ -1,11 +1,11 @@
-import axios from 'axios';
+import { ITrip } from 'model/trip/Trip';
 import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import { IPayloadAction } from 'service/business/common/types';
+import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
+import { tripListStore } from 'service/business/user/TripListBusinessStore';
+import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
-import { IPayloadAction } from 'service/business/common/types';
-import { tripListStore } from 'service/business/user/TripListBusinessStore';
-import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
-import { ITrip } from 'model/trip/Trip';
 
 export interface IPackingListCreatePayload {
   tripId: number;
@@ -66,8 +66,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
-        axios
-          .post(`/packinglists`, action.payload)
+        EntityApiService.postEntity(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success('New packing list successfully created');
@@ -97,8 +96,7 @@ const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCo
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
-        axios
-          .post(`/packinglists/copy`, action.payload)
+        EntityApiService.postEntity(`/packinglists/copy`, action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success('New packing lists successfully created');
@@ -125,8 +123,7 @@ const packingListUpdateffect = (action$: Observable<IPayloadAction<IPackingListU
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .put(`/packinglists`, action.payload)
+        EntityApiService.putEntity(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -149,8 +146,7 @@ const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingList
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .put(`/packinglists/checked`, action.payload)
+        EntityApiService.putEntity(`/packinglists/checked`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

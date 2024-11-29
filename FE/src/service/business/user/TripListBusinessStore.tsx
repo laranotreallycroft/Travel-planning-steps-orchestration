@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { ITrip } from 'model/trip/Trip';
 import { Observable, filter, from, map, mergeMap } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
+import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -38,8 +38,7 @@ const tripListFetchEffect = (action$: Observable<IAction>, state$: Observable<an
 
     mergeMap((action) => {
       return from(
-        axios
-          .get(`/trips`)
+        EntityApiService.getEntity(`/trips`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

@@ -1,12 +1,17 @@
 package com.odysseus.controller;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
-import com.odysseus.model.payload.user.UserCreatePayload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.odysseus.model.User;
+import com.odysseus.model.payload.common.AuthResponse;
+import com.odysseus.model.payload.login.GoogleLoginPayload;
+import com.odysseus.model.payload.login.LoginPayload;
+import com.odysseus.repository.UserRepository;
+import com.odysseus.utils.JwtUtil;
+import com.odysseus.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,51 +20,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.odysseus.model.User;
-import com.odysseus.model.payload.common.IdPayload;
-import com.odysseus.model.payload.login.GoogleLoginPayload;
-import com.odysseus.model.payload.login.LoginPayload;
-import com.odysseus.repository.UserRepository;
-import com.odysseus.utils.Security;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-    @Value("${google.clientId}")
-    private String googleClientId;
+
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-    public LoginController(UserRepository userRepository) {
+    public LoginController(JwtUtil jwtUtil, UserRepository userRepository) {
+        this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
     }
 
+    @Value("${google.clientId}")
+    private String googleClientId;
+
+    /**
+     * Endpoint for regular email/password login
+     *
+     * @param loginPayload - Payload containing email and password from the user
+     * @return ResponseEntity with either an error message or a generated JWT token for authenticated users
+     */
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody LoginPayload loginPayload) throws URISyntaxException {
-        String payloadEmail = loginPayload.getEmail();
-        String payloadPassword = loginPayload.getPassword();
+    public ResponseEntity<Object> login(@RequestBody LoginPayload loginPayload) {
+        User user = userRepository.findByEmail(loginPayload.getEmail(), false);
 
-        User user = userRepository.findByEmail(payloadEmail, false);
-        if (user != null) {
-            String passwordHash = user.getPasswordHash();
-            byte[] passwordSalt = user.getPasswordSalt();
-            String payloadPasswordHash = Security.getSecurePassword(payloadPassword, passwordSalt);
-
-            if (payloadPasswordHash.equals(passwordHash)) {
-                IdPayload idPayload = new IdPayload(user.getId());
-                return ResponseEntity.ok(idPayload);
-            }
-
+        if (user == null || !SecurityUtils.verifyPassword(loginPayload.getPassword(), user.getPasswordHash(), user.getPasswordSalt())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
-        return ResponseEntity.badRequest().body("Wrong email or password");
+
+        String token = jwtUtil.generateToken(user.getEmail(), false);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    /**
+     * Endpoint for Google login using Google ID token
+     *
+     * @param googleLoginPayload - Payload containing Google credential (ID token) from the user
+     * @return ResponseEntity with either an error message or a generated JWT token for authenticated users
+     */
     @PostMapping("/google")
-    public ResponseEntity<Object> googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) throws URISyntaxException {
+    public ResponseEntity<Object> googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) {
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList(googleClientId)).build();
@@ -67,19 +72,16 @@ public class LoginController {
         try {
             idToken = verifier.verify(googleLoginPayload.getCredential());
             if (idToken != null) {
-                Payload payload = idToken.getPayload();
-                String payloadUserId = payload.getSubject();
+                GoogleIdToken.Payload payload = idToken.getPayload();
                 String payloadEmail = payload.getEmail();
 
                 User user = userRepository.findByEmail(payloadEmail, true);
-                if (user != null) {
-                    IdPayload idPayload = new IdPayload(user.getId());
-                    return ResponseEntity.ok(idPayload);
+                if (user == null) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Google user not registered");
                 }
-                user = new User(true, payloadUserId, payloadEmail);
-                userRepository.save(user);
-                IdPayload idPayload = new IdPayload(user.getId());
-                return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
+
+                String token = jwtUtil.generateToken(user.getEmail(), true);
+                return ResponseEntity.ok(new AuthResponse(token));
 
             } else {
                 return ResponseEntity.badRequest().body("Unable to login with Google");
@@ -88,7 +90,7 @@ public class LoginController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
         }
+
+
     }
-
-
 }

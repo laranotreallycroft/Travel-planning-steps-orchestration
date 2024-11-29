@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.odysseus.model.payload.common.IdPayload;
 import com.odysseus.model.payload.user.UserCreatePayload;
-import com.odysseus.utils.Security;
+import com.odysseus.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,12 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-
+    /**
+     * Endpoint to handle creating a new user.
+     *
+     * @param userCreatePayload The payload containing user details for creation
+     * @return ResponseEntity with status and message, either success or error
+     */
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody UserCreatePayload userCreatePayload) {
         try {
@@ -33,15 +38,8 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Email already exists");
             }
 
-            // Create and save the user
             User user = createNewUser(userCreatePayload);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating user");
-            }
-
-            // Respond with created user's ID
-            IdPayload idPayload = new IdPayload(user.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(idPayload);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             // Log exception details and respond with generic error
             e.printStackTrace();
@@ -49,16 +47,28 @@ public class UserController {
         }
     }
 
+    /**
+     * Helper method to check if an email is already registered in the system.
+     *
+     * @param email The email to check for existence
+     * @return true if the email already exists, false otherwise
+     */
     private boolean isEmailExists(String email) {
         return userRepository.findByEmail(email, false) != null;
     }
 
-    private User createNewUser(UserCreatePayload payload) throws NoSuchAlgorithmException {
+    /**
+     * Helper method to create a new user based on the provided payload.
+     *
+     * @param payload The payload containing the user details (email and password)
+     * @return The saved User object
+     */
+    private User createNewUser(UserCreatePayload payload) {
         String email = payload.getEmail();
         String password = payload.getPassword();
 
-        byte[] passwordSalt = Security.getSalt();
-        String passwordHash = Security.getSecurePassword(password, passwordSalt);
+        byte[] passwordSalt = SecurityUtils.getSalt();
+        String passwordHash = SecurityUtils.getSecurePassword(password, passwordSalt);
 
         User user = new User(email, passwordSalt, passwordHash);
         return userRepository.save(user);

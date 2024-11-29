@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
-import notificationService from 'service/util/notificationService';
-import trackAction, { IAction } from 'service/util/trackAction';
+import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 import { tripListStore } from 'service/business/user/TripListBusinessStore';
+import EntityApiService from 'service/business/utils';
+import notificationService from 'service/util/notificationService';
+import trackAction, { IAction } from 'service/util/trackAction';
 
 // -
 // -------------------- Selectors
@@ -58,8 +58,7 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
     mergeMap(([action, state]) => {
       const user = LoginBusinessStore.selectors.getCurrentUser(state);
       return from(
-        axios
-          .post('/trips', { ...action.payload, userId: user.id })
+        EntityApiService.postEntity('/trips', { ...action.payload, userId: user.id })
           .then((response) => {
             if (response.status === 201) {
               notificationService.success('New trip successfully created');
@@ -83,8 +82,7 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
     }),
     mergeMap((action) => {
       return from(
-        axios
-          .get('/trips/' + action.payload.id)
+        EntityApiService.getEntity('/trips/' + action.payload.id)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -109,8 +107,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
-        axios
-          .put('/trips/' + trip.id, action.payload)
+        EntityApiService.putEntity('/trips/' + trip.id, action.payload)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success('Trip successfully changed');
@@ -138,8 +135,7 @@ const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) 
     mergeMap(([action, state]) => {
       const trip = getTrip(state);
       return from(
-        axios
-          .delete('/trips/' + trip.id)
+        EntityApiService.deleteEntity('/trips/' + trip.id)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
