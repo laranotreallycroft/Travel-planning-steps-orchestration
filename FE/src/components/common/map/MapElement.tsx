@@ -20,8 +20,6 @@ export interface IMapElementOwnProps {
 }
 type IMapElementProps = IMapElementOwnProps & IWithLocalizeOwnProps;
 
-//initMap();
-
 const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
   return (
     <MapContainer center={defaultLocation} zoom={defaultZoom} scrollWheelZoom={true} className={'mapElement__MapContainer ' + props.className}>

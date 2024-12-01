@@ -19,7 +19,6 @@ export interface IMapSearchOwnProps {
 
 type IMapSearchProps = IMapSearchOwnProps & IWithLocalizeOwnProps;
 
-//initMap(); remove for now, see if any bugs occur
 const provider = new OpenStreetMapProvider();
 
 const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
