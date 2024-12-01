@@ -55,17 +55,10 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity getTripList() {
-        List<Trip> trips = tripRepository.findAll();
+    public ResponseEntity<?> getTripList() {
+        User currentUser = getCurrentUser();
+        List<Trip> trips = tripRepository.findByUserId(currentUser.getId());
         return ResponseEntity.ok(trips.toArray());
-        // add jwt
-       /* User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            List<Trip> trips = user.getTrips();
-            return ResponseEntity.ok(trips.toArray());
-
-        }
-        return ResponseEntity.badRequest().body("Something went wrong");*/
     }
 
     @GetMapping("/{tripId}")

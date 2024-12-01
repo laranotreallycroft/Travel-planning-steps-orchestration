@@ -5,15 +5,15 @@ import { IItinerary } from 'model/trip/itinerary/Itinerary';
 export interface ITrip {
   id: number;
   label: string;
-  dateFrom: Date;
-  dateTo: Date;
-  locationLabel: string;
-  location: ICoordinates;
+  dateFrom: string;
+  dateTo: string;
+  location: ILocation;
   packingLists?: IPackingList[];
   itineraries?: IItinerary[];
 }
 
 export interface ITripCreatePayload {
+  label: string;
   dateFrom: string;
   dateTo: string;
   location: ILocation;

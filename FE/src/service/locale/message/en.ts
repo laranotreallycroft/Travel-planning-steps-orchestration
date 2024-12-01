@@ -33,13 +33,22 @@ const en: any = {
 
   'TRIP_LIST_VIEW.UPCOMING.NO_DATA': 'No Upcoming Trips',
   'TRIP_LIST_VIEW.CREATE_FIRST_TRIP_BUTTON': 'Add Your First Trip!',
+  'TRIP_LIST_VIEW.CREATE_TRIP_BUTTON': 'Add a Trip',
+  'TRIP_LIST_VIEW.TABLE.LABEL': 'Trip name',
+  'TRIP_LIST_VIEW.TABLE.LOCATION_LABEL': 'Destination',
+  'TRIP_LIST_VIEW.TABLE.DATE': 'Travel dates',
 
-  'TRIP_CREATE_VIEW.MODAL_TITLE': 'Add a New Trip!',
+  'TRIP_CREATE_VIEW.MODAL_TITLE': 'Add Trip',
+  'TRIP_CREATE_VIEW.FORM.LABEL.LABEL': 'Trip name',
+  'TRIP_CREATE_VIEW.FORM.LABEL.PLACEHOLDER': 'Enter trip name',
   'TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL': 'Travel dates',
   'TRIP_CREATE_VIEW.FORM.LOCATION.LABEL': 'Travel destination',
 
-  'MAP_SEARCH.PLACEHOLDER': 'Location',
+  'MAP_SEARCH.PLACEHOLDER': 'Destination',
   'MAP_ELEMENT.PATH_POPUP.LABEL': 'Day %{count} of your trip',
+
+  'TRIP_CARD.FIRST_WORD': 'Trip',
+  'TRIP_CARD.SECOND_WORD': ' to',
 };
 
 export default en;

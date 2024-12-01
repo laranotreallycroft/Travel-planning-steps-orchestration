@@ -1,10 +1,23 @@
-body,
-#root,
 html {
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+}
+
+body {
   height: 100%;
   width: 100%;
+  display: table-cell;
+}
+
+#root {
+  height: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 .ant-table-placeholder {
@@ -37,6 +50,7 @@ html {
 @import 'trip/itinerary/schedule/_schedule.css';
 @import 'trip/itinerary/_itineraryView.css';
 @import 'trip/_tripSettingsView.css';
+@import 'trip/_tripCard.css';
 @import 'trip/_tripListView.css';
 @import 'common/list/_dragAndDropTable.css';
 @import 'common/overrides.css';

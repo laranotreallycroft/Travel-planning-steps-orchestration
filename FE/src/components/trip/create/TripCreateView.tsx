@@ -1,4 +1,4 @@
-import { DatePicker, Form, Modal } from 'antd';
+import { DatePicker, Form, Input, Modal } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import MapElement from 'components/common/map/MapElement';
 import MapSearch from 'components/common/map/MapSearch';
@@ -14,6 +14,7 @@ export interface ITripCreateViewOwnProps {
 }
 
 export interface ITripCreateForm {
+  label: string;
   dateRange: RangeValue<Dayjs>;
   location: IGeosearchData;
 }
@@ -27,6 +28,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewPr
   const handleFinish = useCallback(
     (values: ITripCreateForm) => {
       const payload: ITripCreatePayload = {
+        label: values.label,
         dateFrom: values.dateRange?.[0]?.format('YYYY-MM-DD')!,
         dateTo: values.dateRange?.[1]?.format('YYYY-MM-DD')!,
         location: values.location,
@@ -40,6 +42,18 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewPr
   return (
     <Modal title={props.translate('TRIP_CREATE_VIEW.MODAL_TITLE')} open={true} onCancel={props.onTripCreateModalClose} onOk={form.submit} className="tripCreateView__modal">
       <Form<ITripCreateForm> form={form} onFinish={handleFinish} requiredMark={false} className="margin-top-lg" layout="vertical">
+        <Form.Item
+          name={'label'}
+          label={props.translate('TRIP_CREATE_VIEW.FORM.LABEL.LABEL')}
+          rules={[
+            {
+              required: true,
+              message: '',
+            },
+          ]}
+        >
+          <Input placeholder={props.translate('TRIP_CREATE_VIEW.FORM.LABEL.PLACEHOLDER')} />
+        </Form.Item>
         <Form.Item
           name={'dateRange'}
           label={props.translate('TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL')}

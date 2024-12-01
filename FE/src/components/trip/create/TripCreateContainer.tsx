@@ -1,11 +1,13 @@
 import TripCreateView from 'components/trip/create/TripCreateView';
 import { ITripCreatePayload } from 'model/trip/Trip';
+import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface ITripCreateContainerOwnProps {
+  onTripCreate?: () => void;
   onTripCreateModalClose: () => void;
 }
 
@@ -17,7 +19,18 @@ export interface ITripCreateContainerDispatchProps {
 type ITripCreateContainerProps = ITripCreateContainerOwnProps & ITripCreateContainerStateProps & ITripCreateContainerDispatchProps;
 
 const TripCreateContainer: React.FC<ITripCreateContainerProps> = (props: ITripCreateContainerProps) => {
-  return <TripCreateView onTripCreate={props.tripCreate} onTripCreateModalClose={props.onTripCreateModalClose} />;
+  const handleTripCreate = useCallback(
+    (payload: ITripCreatePayload) => {
+      props
+        .tripCreate(payload)
+        .track()
+        .subscribe(() => {
+          props.onTripCreate?.();
+        });
+    },
+    [props.tripCreate, props.onTripCreate]
+  );
+  return <TripCreateView onTripCreate={handleTripCreate} onTripCreateModalClose={props.onTripCreateModalClose} />;
 };
 
 const mapStateToProps = (state: any): ITripCreateContainerStateProps => ({});

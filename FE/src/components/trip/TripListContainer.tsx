@@ -28,10 +28,11 @@ const TripListContainer: React.FC<ITripListContainerProps> = (props: ITripListCo
       props.tripListClear();
     };
   }, []);
+
   return (
     <React.Fragment>
       <TripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />
-      {isTripCreateModalOpen && <TripCreateContainer onTripCreateModalClose={toggleTripCreateModal} />}
+      {isTripCreateModalOpen && <TripCreateContainer onTripCreate={props.tripListFetch} onTripCreateModalClose={toggleTripCreateModal} />}
     </React.Fragment>
   );
 };

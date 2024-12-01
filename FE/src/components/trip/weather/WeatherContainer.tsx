@@ -1,11 +1,11 @@
-import { connect } from "react-redux";
-import { IWeather, IWeatherPayload } from "model/trip/weather/Weather";
-import { WeatherBusinessStore } from "service/business/weather/WeatherBusinessStore";
-import { useEffect, useState } from "react";
-import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
-import { ITrip } from "model/trip/Trip";
-import React from "react";
-import WeatherView from "components/trip/weather/WeatherView";
+import { connect } from 'react-redux';
+import { IWeather, IWeatherPayload } from 'model/trip/weather/Weather';
+import { WeatherBusinessStore } from 'service/business/weather/WeatherBusinessStore';
+import { useEffect, useState } from 'react';
+import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { ITrip } from 'model/trip/Trip';
+import React from 'react';
+import WeatherView from 'components/trip/weather/WeatherView';
 export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {
@@ -19,19 +19,15 @@ export interface IWeatherContainerDispatchProps {
   predictedWeatherFetch: (weatherPayload: IWeatherPayload) => void;
   predictedWeatherClear: () => void;
 }
-type IWeatherContainerProps = IWeatherContainerOwnProps &
-  IWeatherContainerStateProps &
-  IWeatherContainerDispatchProps;
+type IWeatherContainerProps = IWeatherContainerOwnProps & IWeatherContainerStateProps & IWeatherContainerDispatchProps;
 
-const WeatherContainer: React.FC<IWeatherContainerProps> = (
-  props: IWeatherContainerProps
-) => {
+const WeatherContainer: React.FC<IWeatherContainerProps> = (props: IWeatherContainerProps) => {
   const [selectedYear, setselectedYear] = useState<number>(2022);
 
   useEffect(() => {
     props.currentWeatherFetch({
-      lat: props.trip.location.y,
-      lon: props.trip.location.x,
+      lat: props.trip.location.coordinates.y,
+      lon: props.trip.location.coordinates.x,
     });
     return () => {
       props.currentWeatherClear();
@@ -41,19 +37,11 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
   useEffect(() => {
     const futureDateFrom = new Date(props.trip.dateFrom);
     const futureDateTo = new Date(props.trip.dateTo);
-    const oneYearAgoDateFrom = new Date(
-      selectedYear,
-      futureDateFrom.getMonth(),
-      futureDateFrom.getDate()
-    );
-    const oneYearAgoDateTo = new Date(
-      selectedYear,
-      futureDateTo.getMonth(),
-      futureDateTo.getDate()
-    );
+    const oneYearAgoDateFrom = new Date(selectedYear, futureDateFrom.getMonth(), futureDateFrom.getDate());
+    const oneYearAgoDateTo = new Date(selectedYear, futureDateTo.getMonth(), futureDateTo.getDate());
     props.predictedWeatherFetch({
-      lat: props.trip.location.y,
-      lon: props.trip.location.x,
+      lat: props.trip.location.coordinates.y,
+      lon: props.trip.location.coordinates.x,
 
       timestampFrom: oneYearAgoDateFrom.getTime() / 1000,
       timestampTo: oneYearAgoDateTo.getTime() / 1000,
@@ -62,14 +50,7 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (
       props.predictedWeatherClear();
     };
   }, [props.trip, selectedYear]);
-  return (
-    <WeatherView
-      currentWeather={props.currentWeather}
-      predictedWeather={props.predictedWeather}
-      selectedYear={selectedYear}
-      setSelectedYear={setselectedYear}
-    />
-  );
+  return <WeatherView currentWeather={props.currentWeather} predictedWeather={props.predictedWeather} selectedYear={selectedYear} setSelectedYear={setselectedYear} />;
 };
 
 const mapStateToProps = (state: any): IWeatherContainerStateProps => ({
@@ -79,23 +60,10 @@ const mapStateToProps = (state: any): IWeatherContainerStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any): IWeatherContainerDispatchProps => ({
-  currentWeatherFetch: (weatherPayload: IWeatherPayload) =>
-    dispatch(WeatherBusinessStore.actions.currentWeatherFetch(weatherPayload)),
-  currentWeatherClear: () =>
-    dispatch(WeatherBusinessStore.actions.currentWeatherClear()),
-  predictedWeatherFetch: (weatherPayload: IWeatherPayload) =>
-    dispatch(
-      WeatherBusinessStore.actions.predictedWeatherFetch(weatherPayload)
-    ),
-  predictedWeatherClear: () =>
-    dispatch(WeatherBusinessStore.actions.predictedWeatherClear()),
+  currentWeatherFetch: (weatherPayload: IWeatherPayload) => dispatch(WeatherBusinessStore.actions.currentWeatherFetch(weatherPayload)),
+  currentWeatherClear: () => dispatch(WeatherBusinessStore.actions.currentWeatherClear()),
+  predictedWeatherFetch: (weatherPayload: IWeatherPayload) => dispatch(WeatherBusinessStore.actions.predictedWeatherFetch(weatherPayload)),
+  predictedWeatherClear: () => dispatch(WeatherBusinessStore.actions.predictedWeatherClear()),
 });
 
-export default connect<
-  IWeatherContainerStateProps,
-  IWeatherContainerDispatchProps,
-  IWeatherContainerOwnProps
->(
-  mapStateToProps,
-  mapDispatchToProps
-)(WeatherContainer);
+export default connect<IWeatherContainerStateProps, IWeatherContainerDispatchProps, IWeatherContainerOwnProps>(mapStateToProps, mapDispatchToProps)(WeatherContainer);

@@ -17,7 +17,7 @@ type IHomeLayoutViewProps = IHomeLayoutViewOwnProps;
 
 const HomeLayoutView: React.FC<IHomeLayoutViewProps> = (props: IHomeLayoutViewProps) => {
   return (
-    <Layout className="fullHeight">
+    <Layout>
       <Header className="homeLayoutView__header">
         <HomeLayoutViewHeader onTripSelect={props.onTripSelect} trip={props.trip} tripList={props.tripList} />
       </Header>

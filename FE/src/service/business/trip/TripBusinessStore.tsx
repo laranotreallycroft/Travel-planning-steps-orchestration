@@ -1,7 +1,6 @@
 import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
-import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
-import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 import { tripListStore } from 'service/business/user/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
@@ -54,11 +53,9 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
     filter((action) => {
       return action.type === actions.TRIP_CREATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const user = LoginBusinessStore.selectors.getCurrentUser(state);
+    mergeMap((action) => {
       return from(
-        EntityApiService.postEntity('/trips', { ...action.payload, userId: user.id })
+        EntityApiService.postEntity('/trips', action.payload)
           .then((response) => {
             if (response.status === 201) {
               notificationService.success('New trip successfully created');
@@ -70,8 +67,8 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    switchMap((data) => of(tripListStore(data), tripStore(data[data.length - 1])))
+
+    ignoreElements()
   );
 };
 
@@ -82,7 +79,7 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
     }),
     mergeMap((action) => {
       return from(
-        EntityApiService.getEntity('/trips/' + action.payload.id)
+        EntityApiService.getEntity(`/trips/${action.payload.id}`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

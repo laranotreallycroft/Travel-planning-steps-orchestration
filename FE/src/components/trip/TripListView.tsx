@@ -1,8 +1,10 @@
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Col, Row } from 'antd';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import TripCard from 'components/trip/TripCard';
+import TripListEmpty from 'components/trip/TripListEmpty';
 import { ITrip } from 'model/trip/Trip';
 import React from 'react';
-import noUpcomingImage from 'asset/img/no_upcoming.svg';
-import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
-import { Button, Col, Row, Typography } from 'antd';
 
 export interface ITripListViewOwnProps {
   tripList: ITrip[];
@@ -12,24 +14,30 @@ export interface ITripListViewOwnProps {
 type ITripListViewProps = ITripListViewOwnProps & IWithLocalizeOwnProps;
 
 const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) => {
-  return props.tripList?.length === 0 ? (
-    <div></div>
-  ) : (
-    <Row justify={'center'} align={'middle'} className="tripListView__container">
-      <Col>
-        <img src={noUpcomingImage} alt="No Data" className="fullWidth" />
-      </Col>
+  return (
+    <React.Fragment>
+      {props.tripList?.length > 0 ? (
+        <React.Fragment>
+          <Row className="margin-md">
+            <Col>
+              <Button type="primary" onClick={props.onTripCreateModalOpen} icon={<PlusOutlined />}>
+                {props.translate('TRIP_LIST_VIEW.CREATE_TRIP_BUTTON')}
+              </Button>
+            </Col>
+          </Row>
 
-      <Col>
-        <Typography.Title level={3}>{props.translate('TRIP_LIST_VIEW.UPCOMING.NO_DATA')}</Typography.Title>
-      </Col>
-
-      <Col>
-        <Button type="primary" size="large" onClick={props.onTripCreateModalOpen}>
-          {props.translate('TRIP_LIST_VIEW.CREATE_FIRST_TRIP_BUTTON')}
-        </Button>
-      </Col>
-    </Row>
+          <Row gutter={[4, 4]}>
+            {props.tripList.map((trip) => (
+              <Col sm={24} md={12}>
+                <TripCard trip={trip} />
+              </Col>
+            ))}
+          </Row>
+        </React.Fragment>
+      ) : (
+        <TripListEmpty onTripCreateModalOpen={props.onTripCreateModalOpen} />
+      )}
+    </React.Fragment>
   );
 };
 
