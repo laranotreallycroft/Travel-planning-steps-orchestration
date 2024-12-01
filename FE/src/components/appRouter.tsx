@@ -5,6 +5,7 @@ import HomeLayout from 'components/pages/layout/HomeLayout';
 import LoginPage from 'components/pages/LoginPage';
 import PackingListPage from 'components/pages/PackingListPage';
 import RegistrationPage from 'components/pages/RegistrationPage';
+import TripPage from 'components/pages/TripPage';
 import TripSettingsPage from 'components/pages/TripSettingsPage';
 import UpcomingTripsPage from 'components/pages/UpcomingTripsPage';
 import WeatherPage from 'components/pages/WeatherPage';
@@ -27,6 +28,7 @@ const appRouter = createBrowserRouter(
           <Route path="trips">
             <Route path="upcoming" element={<UpcomingTripsPage />} />
             <Route path="past" element={<div>Placeholder for Past Trips</div>} />
+            <Route path=":tripId" element={<TripPage />} />
           </Route>
 
           <Route element={<HomeLayout />}>
