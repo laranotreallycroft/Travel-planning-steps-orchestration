@@ -6,14 +6,14 @@ import TripListEmpty from 'components/trip/TripListEmpty';
 import { ITrip } from 'model/trip/Trip';
 import React from 'react';
 
-export interface ITripListViewOwnProps {
+export interface IUpcomingTripListViewOwnProps {
   tripList: ITrip[];
   onTripCreateModalOpen: () => void;
 }
 
-type ITripListViewProps = ITripListViewOwnProps & IWithLocalizeOwnProps;
+type IUpcomingTripListViewProps = IUpcomingTripListViewOwnProps & IWithLocalizeOwnProps;
 
-const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) => {
+const UpcomingTripListView: React.FC<IUpcomingTripListViewProps> = (props: IUpcomingTripListViewProps) => {
   return (
     <React.Fragment>
       {props.tripList?.length > 0 ? (
@@ -35,10 +35,10 @@ const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) =
           </Row>
         </React.Fragment>
       ) : (
-        <TripListEmpty onTripCreateModalOpen={props.onTripCreateModalOpen} />
+        <TripListEmpty isUpcomingTrips={true} onTripCreateModalOpen={props.onTripCreateModalOpen} />
       )}
     </React.Fragment>
   );
 };
 
-export default withLocalize<ITripListViewOwnProps>(TripListView as any);
+export default withLocalize<IUpcomingTripListViewOwnProps>(UpcomingTripListView as any);

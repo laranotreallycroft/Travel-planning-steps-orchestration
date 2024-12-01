@@ -160,3 +160,7 @@
 .no-border {
   border: none;
 }
+
+.flex-col {
+  flex-direction: column !important;
+}

@@ -12,7 +12,7 @@ export interface IHomeLayoutContainerStateProps {
   trip: ITrip;
 }
 export interface IHomeLayoutContainerDispatchProps {
-  tripListFetch: () => void;
+  //  tripListFetch: () => void;
   tripListClear: () => void;
   tripFetch: (payload: IIdPayload) => void;
   tripClear: () => void;
@@ -21,7 +21,7 @@ type IHomeLayoutContainerProps = IHomeLayoutContainerOwnProps & IHomeLayoutConta
 
 const HomeLayoutContainer: React.FC<IHomeLayoutContainerProps> = (props: IHomeLayoutContainerProps) => {
   useEffect(() => {
-    props.tripListFetch();
+    // props.tripListFetch();
     return () => {
       props.tripListClear();
       props.tripClear();
@@ -41,7 +41,7 @@ const mapStateToProps = (state: any): IHomeLayoutContainerStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any): IHomeLayoutContainerDispatchProps => ({
-  tripListFetch: () => dispatch(TripListBusinessStore.actions.tripListFetch()),
+  // tripListFetch: () => dispatch(TripListBusinessStore.actions.tripListFetch()),
   tripListClear: () => dispatch(TripListBusinessStore.actions.tripListClear()),
   tripFetch: (payload: IIdPayload) => dispatch(TripBusinessStore.actions.tripFetch(payload)),
   tripClear: () => dispatch(TripBusinessStore.actions.tripClear()),

@@ -1,16 +1,16 @@
 import TripCreateContainer from 'components/trip/create/TripCreateContainer';
-import TripListView from 'components/trip/TripListView';
+import UpcomingTripListView from 'components/trip/UpcomingTripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
+import { ITripListFilter, TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 
 export interface ITripListContainerOwnProps {}
 export interface ITripListContainerStateProps {
   tripList: ITrip[];
 }
 export interface ITripListContainerDispatchProps {
-  tripListFetch: () => void;
+  tripListFetch: (filter: ITripListFilter) => void;
   tripListClear: () => void;
 }
 type ITripListContainerProps = ITripListContainerOwnProps & ITripListContainerStateProps & ITripListContainerDispatchProps;
@@ -22,17 +22,21 @@ const TripListContainer: React.FC<ITripListContainerProps> = (props: ITripListCo
     setIsTripCreateModalOpen((prevState) => !prevState);
   }, []);
 
+  const fetchTripList = useCallback(() => {
+    props.tripListFetch({ upcomingOnly: true });
+  }, [props.tripListFetch]);
+
   useEffect(() => {
-    props.tripListFetch();
+    fetchTripList();
     return () => {
       props.tripListClear();
     };
-  }, []);
+  }, [fetchTripList]);
 
   return (
     <React.Fragment>
-      <TripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />
-      {isTripCreateModalOpen && <TripCreateContainer onTripCreate={props.tripListFetch} onTripCreateModalClose={toggleTripCreateModal} />}
+      <UpcomingTripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />
+      {isTripCreateModalOpen && <TripCreateContainer onTripCreate={fetchTripList} onTripCreateModalClose={toggleTripCreateModal} />}
     </React.Fragment>
   );
 };
@@ -42,7 +46,7 @@ const mapStateToProps = (state: any): ITripListContainerStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any): ITripListContainerDispatchProps => ({
-  tripListFetch: () => dispatch(TripListBusinessStore.actions.tripListFetch()),
+  tripListFetch: (filter: ITripListFilter) => dispatch(TripListBusinessStore.actions.tripListFetch(filter)),
   tripListClear: () => dispatch(TripListBusinessStore.actions.tripListClear()),
 });
 

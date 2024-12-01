@@ -5,6 +5,10 @@ import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
+export interface ITripListFilter {
+  upcomingOnly?: boolean;
+  pastOnly?: boolean;
+}
 // -
 // -------------------- Selectors
 const getTripList = (store: any): ITrip[] => store.tripList;
@@ -17,8 +21,8 @@ const actions = {
   TRIP_LIST_CLEAR: 'TRIP_LIST_CLEAR',
 };
 
-export const tripListFetch = (): IAction => {
-  return { type: actions.TRIP_LIST_FETCH };
+export const tripListFetch = (listFilter: ITripListFilter): IPayloadAction<ITripListFilter> => {
+  return { type: actions.TRIP_LIST_FETCH, payload: listFilter };
 };
 
 export const tripListStore = (payload: ITrip[]): IPayloadAction<ITrip[]> => {
@@ -32,13 +36,13 @@ const tripListClear = (): IAction => {
 // -
 // -------------------- Side-effects
 
-const tripListFetchEffect = (action$: Observable<IAction>, state$: Observable<any>) => {
+const tripListFetchEffect = (action$: Observable<IPayloadAction<ITripListFilter>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => action.type === actions.TRIP_LIST_FETCH),
 
     mergeMap((action) => {
       return from(
-        EntityApiService.getEntity(`/trips`)
+        EntityApiService.getEntity(`/trips`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               return response.data;

@@ -32,6 +32,7 @@ const en: any = {
   'REGISTRATION_VIEW.LOG_IN': 'Already have an account? Sign in.',
 
   'TRIP_LIST_VIEW.UPCOMING.NO_DATA': 'No Upcoming Trips',
+  'TRIP_LIST_VIEW.PAST.NO_DATA': 'No Past Trips',
   'TRIP_LIST_VIEW.CREATE_FIRST_TRIP_BUTTON': 'Add Your First Trip!',
   'TRIP_LIST_VIEW.CREATE_TRIP_BUTTON': 'Add a Trip',
   'TRIP_LIST_VIEW.TABLE.LABEL': 'Trip name',

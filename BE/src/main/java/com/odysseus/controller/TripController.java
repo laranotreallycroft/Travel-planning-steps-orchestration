@@ -4,6 +4,7 @@ import com.odysseus.model.Location;
 import com.odysseus.model.Trip;
 import com.odysseus.model.User;
 import com.odysseus.model.payload.common.LocationPayload;
+import com.odysseus.model.payload.trip.TripListFilter;
 import com.odysseus.model.payload.trip.TripPayload;
 import com.odysseus.model.payload.trip.TripSettingsPayload;
 import com.odysseus.repository.LocationRepository;
@@ -13,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
 
@@ -55,9 +58,14 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getTripList() {
+    public ResponseEntity<?> getTripList(@ModelAttribute TripListFilter tripListFilter) {
         User currentUser = getCurrentUser();
         List<Trip> trips = tripRepository.findByUserId(currentUser.getId());
+        if (tripListFilter.isUpcomingOnly())
+            trips = trips.stream().filter(trip -> trip.getDateTo().isAfter(LocalDate.now())).toList();
+        if (tripListFilter.isPastOnly())
+            trips = trips.stream().filter(trip -> trip.getDateTo().isBefore(LocalDate.now())).toList();
+
         return ResponseEntity.ok(trips.toArray());
     }
 
