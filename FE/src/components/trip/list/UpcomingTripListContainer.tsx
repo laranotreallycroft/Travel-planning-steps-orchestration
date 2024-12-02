@@ -35,8 +35,7 @@ const UpcomingTripListContainer: React.FC<IUpcomingTripListContainerProps> = (pr
 
   return (
     <React.Fragment>
-      <UpcomingTripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />
-      {isTripCreateModalOpen && <TripCreateContainer onTripCreate={fetchTripList} onTripCreateModalClose={toggleTripCreateModal} />}
+      {props.tripList && <UpcomingTripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />} {isTripCreateModalOpen && <TripCreateContainer onTripCreate={fetchTripList} onTripCreateModalClose={toggleTripCreateModal} />}
     </React.Fragment>
   );
 };

@@ -26,11 +26,7 @@ const PastTripListContainer: React.FC<IPastTripListContainerProps> = (props: IPa
     };
   }, [fetchTripList]);
 
-  return (
-    <React.Fragment>
-      <PastTripListView tripList={props.tripList} />
-    </React.Fragment>
-  );
+  return <React.Fragment>{props.tripList && <PastTripListView tripList={props.tripList} />}</React.Fragment>;
 };
 
 const mapStateToProps = (state: any): IPastTripListContainerStateProps => ({

@@ -16,7 +16,7 @@ type IUpcomingTripListViewProps = IUpcomingTripListViewOwnProps & IWithLocalizeO
 const UpcomingTripListView: React.FC<IUpcomingTripListViewProps> = (props: IUpcomingTripListViewProps) => {
   return (
     <React.Fragment>
-      {props.tripList?.length > 0 ? (
+      {props.tripList.length > 0 ? (
         <React.Fragment>
           <Row className="margin-md">
             <Col>

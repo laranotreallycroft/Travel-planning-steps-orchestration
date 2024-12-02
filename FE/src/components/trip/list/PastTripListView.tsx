@@ -14,7 +14,7 @@ type IPastTripListViewProps = IPastTripListViewOwnProps & IWithLocalizeOwnProps;
 const PastTripListView: React.FC<IPastTripListViewProps> = (props: IPastTripListViewProps) => {
   return (
     <React.Fragment>
-      {props.tripList?.length > 0 ? (
+      {props.tripList.length > 0 ? (
         <Row gutter={[4, 4]}>
           {props.tripList.map((trip) => (
             <Col sm={24} md={12} className="fullWidth">
