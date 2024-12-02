@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Row } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
-import TripCard from 'components/trip/TripCard';
+import TripCard from 'components/trip/list/TripCard';
 import TripListEmpty from 'components/trip/list/TripListEmpty';
 import { ITrip } from 'model/trip/Trip';
 import React from 'react';

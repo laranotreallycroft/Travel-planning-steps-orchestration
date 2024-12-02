@@ -1,5 +1,4 @@
-import TripCard from 'components/trip/TripCard';
-import TripTabs from 'components/trip/TripTabs';
+import TripView from 'components/trip/TripView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -27,17 +26,7 @@ const TripContainer: React.FC<ITripContainerProps> = (props: ITripContainerProps
     };
   }, [props.tripId]);
 
-  return (
-    <React.Fragment>
-      {props.trip && (
-        <React.Fragment>
-          <div>
-            <TripCard trip={props.trip} /> <TripTabs />
-          </div>
-        </React.Fragment>
-      )}
-    </React.Fragment>
-  );
+  return <React.Fragment>{props.trip && <TripView trip={props.trip} />}</React.Fragment>;
 };
 
 const mapStateToProps = (state: any): ITripContainerStateProps => ({

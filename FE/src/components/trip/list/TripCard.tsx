@@ -23,7 +23,7 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
     () =>
       classNames({
         tripCard__card: true,
-        panel: true,
+        panel: props.isClickable ?? false,
         'padding-lg': true,
         'tripCard__card-clickable': props.isClickable ?? false,
       }),

@@ -50,6 +50,9 @@ const en: any = {
 
   'TRIP_CARD.FIRST_WORD': 'Trip',
   'TRIP_CARD.SECOND_WORD': ' to',
+
+  'TRIP_VIEW.RETURN_TO_UPCOMING': 'Return to upcoming trips',
+  'TRIP_VIEW.RETURN_TO_PAST': 'Return to past trips',
 };
 
 export default en;

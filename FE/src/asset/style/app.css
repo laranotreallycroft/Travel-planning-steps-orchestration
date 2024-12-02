@@ -40,6 +40,7 @@ body {
 @import 'trip/_packingListCopyView.css';
 @import 'trip/_packingListUpdateElement.css';
 @import 'trip/_weatherView.css';
+@import 'trip/_tripTabs.css';
 @import 'trip/itinerary/create/_itineraryStopsView.css';
 @import 'trip/itinerary/create/_itineraryDurationView.css';
 @import 'trip/itinerary/create/_itineraryCreateView.css';
@@ -51,4 +52,6 @@ body {
 @import 'trip/_upcomingTripListView.css';
 @import 'common/list/_dragAndDropTable.css';
 @import 'common/overrides.css';
+@import 'common/overrides.css';
 @import 'locale/_localePicker.css';
+@import 'common/components/returnHeader.css';
