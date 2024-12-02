@@ -17,7 +17,7 @@ const PastTripListView: React.FC<IPastTripListViewProps> = (props: IPastTripList
       {props.tripList.length > 0 ? (
         <Row gutter={[4, 4]}>
           {props.tripList.map((trip) => (
-            <Col sm={24} md={12} className="fullWidth">
+            <Col sm={24} md={12} className="fullWidth" key={trip.id}>
               <TripCard trip={trip} isClickable={true} />
             </Col>
           ))}

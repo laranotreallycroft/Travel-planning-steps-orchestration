@@ -6,7 +6,7 @@
 }
 @media (max-width: 768px) {
   .appLayoutView__screen-lg {
-    display: none;
+    display: none !important;
   }
   .appLayoutView__header {
     padding-right: 0 !important;
@@ -15,7 +15,7 @@
 }
 @media (min-width: 769px) {
   .appLayoutView__screen-md {
-    display: none;
+    display: none !important;
   }
 }
 
