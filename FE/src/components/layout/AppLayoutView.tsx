@@ -61,7 +61,7 @@ const AppLayoutView: React.FC<IAppLayoutViewProps> = (props: IAppLayoutViewProps
         <Header className="appLayoutView__header">
           <AppLayoutViewHeader collapsed={isSiderCollapsed} currentTab={currentTab} isUserLoggedIn={props.isUserLoggedIn} menuItems={menuItems} onMenuItemSelect={handleMenuItemSelect} onLogin={handleLogin} onUserCreate={handleUserCreate} onLogout={props.logout} onToggleSiderCollapsed={toggleSiderCollapsed} />
         </Header>
-        <Content>{props.children}</Content>
+        <Content className="appLayoutView__content">{props.children}</Content>
       </Layout>
       <AppLayoutViewSider collapsed={isSiderCollapsed} currentTab={currentTab} isUserLoggedIn={props.isUserLoggedIn} menuItems={menuItems} onMenuItemSelect={handleMenuItemSelect} onLogin={handleLogin} onUserCreate={handleUserCreate} onLogout={props.logout} />
     </Layout>

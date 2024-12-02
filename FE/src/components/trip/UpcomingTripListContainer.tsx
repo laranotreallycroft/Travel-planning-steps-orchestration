@@ -5,17 +5,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ITripListFilter, TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 
-export interface ITripListContainerOwnProps {}
-export interface ITripListContainerStateProps {
+export interface IUpcomingTripListContainerOwnProps {}
+export interface IUpcomingTripListContainerStateProps {
   tripList: ITrip[];
 }
-export interface ITripListContainerDispatchProps {
+export interface IUpcomingTripListContainerDispatchProps {
   tripListFetch: (filter: ITripListFilter) => void;
   tripListClear: () => void;
 }
-type ITripListContainerProps = ITripListContainerOwnProps & ITripListContainerStateProps & ITripListContainerDispatchProps;
+type IUpcomingTripListContainerProps = IUpcomingTripListContainerOwnProps & IUpcomingTripListContainerStateProps & IUpcomingTripListContainerDispatchProps;
 
-const TripListContainer: React.FC<ITripListContainerProps> = (props: ITripListContainerProps) => {
+const UpcomingTripListContainer: React.FC<IUpcomingTripListContainerProps> = (props: IUpcomingTripListContainerProps) => {
   const [isTripCreateModalOpen, setIsTripCreateModalOpen] = useState<boolean>(false);
 
   const toggleTripCreateModal = useCallback(() => {
@@ -41,13 +41,13 @@ const TripListContainer: React.FC<ITripListContainerProps> = (props: ITripListCo
   );
 };
 
-const mapStateToProps = (state: any): ITripListContainerStateProps => ({
+const mapStateToProps = (state: any): IUpcomingTripListContainerStateProps => ({
   tripList: TripListBusinessStore.selectors.getTripList(state),
 });
 
-const mapDispatchToProps = (dispatch: any): ITripListContainerDispatchProps => ({
+const mapDispatchToProps = (dispatch: any): IUpcomingTripListContainerDispatchProps => ({
   tripListFetch: (filter: ITripListFilter) => dispatch(TripListBusinessStore.actions.tripListFetch(filter)),
   tripListClear: () => dispatch(TripListBusinessStore.actions.tripListClear()),
 });
 
-export default connect<ITripListContainerStateProps, ITripListContainerDispatchProps, ITripListContainerOwnProps>(mapStateToProps, mapDispatchToProps)(TripListContainer);
+export default connect<IUpcomingTripListContainerStateProps, IUpcomingTripListContainerDispatchProps, IUpcomingTripListContainerOwnProps>(mapStateToProps, mapDispatchToProps)(UpcomingTripListContainer);

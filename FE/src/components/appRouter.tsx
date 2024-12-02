@@ -8,7 +8,7 @@ import PastTripsPage from 'components/pages/PastTripsPage';
 import RegistrationPage from 'components/pages/RegistrationPage';
 import TripPage from 'components/pages/TripPage';
 import TripSettingsPage from 'components/pages/TripSettingsPage';
-import UpcomingTripsPage from 'components/pages/UpcomingTripsPage';
+import UpcomingTripListPage from 'components/pages/UpcomingTripListPage';
 import WeatherPage from 'components/pages/WeatherPage';
 import ProtectedRoute from 'components/ProtectedRoute';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
@@ -27,7 +27,7 @@ const appRouter = createBrowserRouter(
         <Route element={<ProtectedRoute forLoggedIn={true} />}>
           {/* The other routes */}
           <Route path="trips">
-            <Route path="upcoming" element={<UpcomingTripsPage />} />
+            <Route path="upcoming" element={<UpcomingTripListPage />} />
             <Route path="past" element={<PastTripsPage />} />
             <Route path=":tripId" element={<TripPage />} />
           </Route>
