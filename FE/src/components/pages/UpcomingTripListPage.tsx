@@ -1,4 +1,4 @@
-import UpcomingTripListContainer from 'components/trip/UpcomingTripListContainer';
+import UpcomingTripListContainer from 'components/trip/list/UpcomingTripListContainer';
 
 export interface IUpcomingTripListPageOwnProps {}
 

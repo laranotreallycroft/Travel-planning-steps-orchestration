@@ -1,5 +1,5 @@
 import TripCreateContainer from 'components/trip/create/TripCreateContainer';
-import UpcomingTripListView from 'components/trip/UpcomingTripListView';
+import UpcomingTripListView from 'components/trip/list/UpcomingTripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';

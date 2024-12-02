@@ -1,4 +1,4 @@
-import PastTripListContainer from 'components/trip/PastTripListContainer';
+import PastTripListContainer from 'components/trip/list/PastTripListContainer';
 
 export interface IPastTripsPageOwnProps {}
 
