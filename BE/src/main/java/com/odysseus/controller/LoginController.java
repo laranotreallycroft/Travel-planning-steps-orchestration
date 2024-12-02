@@ -53,7 +53,7 @@ public class LoginController {
         }
 
         String token = jwtUtil.generateToken(user.getEmail(), false);
-        return ResponseEntity.ok(new AuthResponse(token));
+        return ResponseEntity.ok(new AuthResponse(token, user.getEmail()));
     }
 
     /**
@@ -81,7 +81,7 @@ public class LoginController {
                 }
 
                 String token = jwtUtil.generateToken(user.getEmail(), true);
-                return ResponseEntity.ok(new AuthResponse(token));
+                return ResponseEntity.ok(new AuthResponse(token, user.getEmail()));
 
             } else {
                 return ResponseEntity.badRequest().body("Unable to login with Google");

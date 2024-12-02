@@ -1,6 +1,6 @@
 import { IUser } from 'model/user/User';
-import { Observable, filter, from, ignoreElements, mergeMap, of, tap } from 'rxjs';
-import { IIdPayload, IPayloadAction } from 'service/business/common/types';
+import { Observable, filter, from, ignoreElements, map, mergeMap, of, tap } from 'rxjs';
+import { IPayloadAction } from 'service/business/common/types';
 import StoreService from 'service/business/StoreService';
 import EntityApiService from 'service/business/utils';
 import AuthTokenManager from 'service/util/AuthTokenManager';
@@ -45,8 +45,8 @@ const logout = (): IAction => {
   return { type: loginActions.LOGOUT };
 };
 
-export const currentUserStore = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
-  return { type: loginActions.CURRENT_USER_STORE, payload: payload };
+export const currentUserStore = (user: IUser): IPayloadAction<IUser> => {
+  return { type: loginActions.CURRENT_USER_STORE, payload: user };
 };
 
 // -
@@ -77,7 +77,7 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
           })
       ).pipe(trackAction(action));
     }),
-    ignoreElements()
+    map((data) => currentUserStore(data.user))
   );
 };
 
@@ -106,7 +106,7 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
           })
       ).pipe(trackAction(action));
     }),
-    ignoreElements()
+    map((data) => currentUserStore(data.user))
   );
 };
 
