@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
@@ -70,8 +71,11 @@ public class TripController {
     }
 
     @GetMapping("/{tripId}")
-    public ResponseEntity getTrip(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
+    public ResponseEntity<?> getTrip(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
         Trip trip = tripRepository.findById(tripId).orElse(null);
+        if (!Objects.equals(trip.getUser().getId(), getCurrentUser().getId())) {
+            return ResponseEntity.badRequest().body("User does not have permission for this action.");
+        }
         if (trip != null) {
             return ResponseEntity.ok(trip);
 
