@@ -7,8 +7,9 @@ import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { TripListBusinessStore } from 'service/business/trip/TripListBusinessStore';
 import { IPackingListCopyPayload, IPackingListCreatePayload, IPackingListUpdatePayload, PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
-import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
+
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface IPackingListContainerOwnProps {}

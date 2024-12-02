@@ -1,3 +1,3 @@
-export interface IUserCredentials {
-  id: number;
+export interface IUser {
+  email: string;
 }

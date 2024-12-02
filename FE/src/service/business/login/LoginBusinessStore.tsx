@@ -1,5 +1,5 @@
-import { IUserCredentials } from 'model/user/User';
-import { Observable, filter, from, ignoreElements, map, mergeMap, of, tap } from 'rxjs';
+import { IUser } from 'model/user/User';
+import { Observable, filter, from, ignoreElements, mergeMap, of, tap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import StoreService from 'service/business/StoreService';
 import EntityApiService from 'service/business/utils';
@@ -10,7 +10,7 @@ import trackAction, { IAction } from 'service/util/trackAction';
 
 // -
 // -------------------- Selectors
-const getCurrentUser = (store: any): IUserCredentials => store.currentUser;
+const getCurrentUser = (store: any): IUser => store.currentUser;
 
 const isUserLoggedIn = (store: any): boolean => store.currentUser != null;
 
@@ -77,8 +77,7 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    map((data) => currentUserStore(data))
+    ignoreElements()
   );
 };
 
@@ -107,8 +106,7 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    map((data) => currentUserStore(data))
+    ignoreElements()
   );
 };
 
@@ -137,7 +135,7 @@ const logoutEffect = (action$: Observable<IAction>, state$: Observable<any>) => 
 // -
 // -------------------- Reducers
 
-const currentUser = (state: any = null, action: IPayloadAction<IUserCredentials>) => {
+const currentUser = (state: any = null, action: IPayloadAction<IUser>) => {
   if (action.type === loginActions.CURRENT_USER_STORE) {
     return { ...action.payload };
   } else if (action.type === loginActions.LOGOUT) {

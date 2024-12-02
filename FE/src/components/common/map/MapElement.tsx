@@ -22,7 +22,7 @@ type IMapElementProps = IMapElementOwnProps & IWithLocalizeOwnProps;
 
 const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
   return (
-    <MapContainer center={defaultLocation} zoom={defaultZoom} scrollWheelZoom={true} className={'mapElement__MapContainer ' + props.className}>
+    <MapContainer center={defaultLocation} zoom={defaultZoom} scrollWheelZoom={true} className={'mapElement__mapContainer ' + props.className}>
       <ChangeView center={props.selectedLocation ? [props.selectedLocation.coordinates.y, props.selectedLocation.coordinates.x] : defaultLocation} zoom={defaultZoom} />
       <TileLayer url={tileLayer} />
       {props.pathList?.map((pathArray, index) => (

@@ -1,5 +1,5 @@
 import TripSettingsView from 'components/trip/settings/TripSettingsView';
-import { ITrip, ITripCreatePayload, ITripUpdatePayload } from 'model/trip/Trip';
+import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
@@ -10,13 +10,13 @@ export interface ITripSettingsContainerStateProps {
   trip: ITrip;
 }
 export interface ITripSettingsContainerDispatchProps {
-  tripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  tripUpdate: (tripUpdatePayload: ITrip) => void;
   tripDelete: () => void;
 }
 type ITripSettingsContainerProps = ITripSettingsContainerOwnProps & ITripSettingsContainerStateProps & ITripSettingsContainerDispatchProps;
 
 const TripSettingsContainer: React.FC<ITripSettingsContainerProps> = (props: ITripSettingsContainerProps) => {
-  const handleTripUpdate = useCallback((values: ITripUpdatePayload) => {
+  const handleTripUpdate = useCallback((values: ITrip) => {
     props.tripUpdate(values);
   }, []);
   return <TripSettingsView trip={props.trip} onTripUpdate={handleTripUpdate} onTripDelete={props.tripDelete} />;

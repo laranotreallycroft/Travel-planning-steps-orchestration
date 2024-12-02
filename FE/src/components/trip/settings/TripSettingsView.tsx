@@ -4,12 +4,12 @@ import MapSearch from 'components/common/map/MapSearch';
 import { ITripCreateForm } from 'components/trip/create/TripCreateView';
 import dayjs from 'dayjs';
 import { IGeosearchData } from 'model/geometry/Coordinates';
-import { ITrip, ITripUpdatePayload } from 'model/trip/Trip';
+import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect } from 'react';
 
 export interface ITripSettingsViewOwnProps {
   trip: ITrip;
-  onTripUpdate: (tripUpdatePayload: ITripUpdatePayload) => void;
+  onTripUpdate: (tripUpdatePayload: ITrip) => void;
   onTripDelete: () => void;
 }
 

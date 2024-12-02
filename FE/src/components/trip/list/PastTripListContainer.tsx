@@ -2,7 +2,7 @@ import PastTripListView from 'components/trip/list/PastTripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { ITripListFilter, TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
+import { ITripListFilter, TripListBusinessStore } from 'service/business/trip/TripListBusinessStore';
 
 export interface IPastTripListContainerOwnProps {}
 export interface IPastTripListContainerStateProps {

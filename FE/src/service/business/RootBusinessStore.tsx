@@ -6,8 +6,8 @@ import { LoginBusinessStore } from 'service/business/login/LoginBusinessStore';
 import { ItineraryBusinessStore } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 import { PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { TripListBusinessStore } from 'service/business/trip/TripListBusinessStore';
 import { UserBusinessStore } from 'service/business/user/UserBusinessStore';
-import { TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
 import UserSettingsBusinessStore from 'service/business/usersettings/userSettingsBusinessStore';
 import { WeatherBusinessStore } from 'service/business/weather/WeatherBusinessStore';
 

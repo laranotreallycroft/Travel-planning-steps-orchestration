@@ -1,4 +1,4 @@
-import { IPayloadAction } from "service/business/common/types";
+import { IPayloadAction } from 'service/business/common/types';
 
 // -
 // -------------------- Types&Consts
@@ -17,13 +17,11 @@ const getUserSettings = (store: any): IUserSettings => store.userSettings;
 // -------------------- Actions
 
 const Actions = {
-  USER_SETTINGS_STORE: "USER_SETTINGS_STORE",
+  USER_SETTINGS_STORE: 'USER_SETTINGS_STORE',
 };
 
 /** Store UserSettings to store */
-const storeUserSettings = (
-  userSettings: IUserSettings
-): IPayloadAction<IUserSettings> => {
+const storeUserSettings = (userSettings: IUserSettings): IPayloadAction<IUserSettings> => {
   return {
     type: Actions.USER_SETTINGS_STORE,
     payload: userSettings,
@@ -36,10 +34,7 @@ const storeUserSettings = (
 // -
 // -------------------- Reducers
 
-const userSettings = (
-  state: IUserSettings | null = null,
-  action: IPayloadAction<IUserSettings>
-) => {
+const userSettings = (state: IUserSettings | null = null, action: IPayloadAction<IUserSettings>) => {
   if (action.type === Actions.USER_SETTINGS_STORE) {
     return action.payload;
   }

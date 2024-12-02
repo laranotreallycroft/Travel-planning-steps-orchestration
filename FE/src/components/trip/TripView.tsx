@@ -1,6 +1,6 @@
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import ReturnHeader from 'components/common/ReturnHeader';
-import TripCard from 'components/trip/list/TripCard';
+import TripCard from 'components/trip/common/TripCard';
 import TripTabs from 'components/trip/TripTabs';
 import { ITrip } from 'model/trip/Trip';
 import moment from 'moment';

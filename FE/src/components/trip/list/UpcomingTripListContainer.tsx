@@ -3,7 +3,7 @@ import UpcomingTripListView from 'components/trip/list/UpcomingTripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ITripListFilter, TripListBusinessStore } from 'service/business/user/TripListBusinessStore';
+import { ITripListFilter, TripListBusinessStore } from 'service/business/trip/TripListBusinessStore';
 
 export interface IUpcomingTripListContainerOwnProps {}
 export interface IUpcomingTripListContainerStateProps {

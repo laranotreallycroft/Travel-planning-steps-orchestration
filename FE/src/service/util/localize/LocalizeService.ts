@@ -1,7 +1,7 @@
-import Polyglot from "node-polyglot";
+import Polyglot from 'node-polyglot';
 
-import LocaleNotInitializedException from "service/util/localize/LocaleNotInitialized";
-import MissingLocaleException from "service/util/localize/MissingLocaleException";
+import LocaleNotInitializedException from 'service/util/localize/LocaleNotInitialized';
+import MissingLocaleException from 'service/util/localize/MissingLocaleException';
 
 // global polyglot instance
 let polyglot: Polyglot;
@@ -9,12 +9,8 @@ let polyglot: Polyglot;
 /** Service for initializing and accessing localization support. */
 export default class LocalizeService {
   /** Initialize localization support with locale and message bundle. */
-  static initLocalize(
-    defaultLocale: string,
-    messages: Record<string, Record<string, string>>
-  ) {
-    const localeMessages =
-      defaultLocale && messages[defaultLocale] ? messages[defaultLocale] : {};
+  static initLocalize(defaultLocale: string, messages: Record<string, Record<string, string>>) {
+    const localeMessages = defaultLocale && messages[defaultLocale] ? messages[defaultLocale] : {};
     if (localeMessages == null) {
       throw new MissingLocaleException(defaultLocale);
     }
@@ -23,11 +19,7 @@ export default class LocalizeService {
   }
 
   /** Find and return message with given name from message bundle. If message is not found, returns fallback message. */
-  static translateOrFallback(
-    name: string,
-    fallbackName: string,
-    params?: Record<string, any>
-  ) {
+  static translateOrFallback(name: string, fallbackName: string, params?: Record<string, any>) {
     let translation = LocalizeService.translate(name, params || {});
     if (translation === name) {
       translation = LocalizeService.translate(fallbackName, params || {});

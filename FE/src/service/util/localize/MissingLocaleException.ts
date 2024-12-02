@@ -1,4 +1,4 @@
-import LemonError from "service/common/CustomError";
+import LemonError from 'service/common/CustomError';
 
 export default class MissingLocaleException extends LemonError {
   constructor(locale: string) {

@@ -1,7 +1,7 @@
-import CustomError from "service/common/CustomError";
-import { ConfigManagerValueNotFoundException } from "service/util/config/ConfigManagerValueNotFoundException";
-import { ConfigUtils } from "service/util/config/ConfigUtils";
-import { ConfigValueContainer } from "service/util/config/ConfigValueContainer";
+import CustomError from 'service/common/CustomError';
+import { ConfigManagerValueNotFoundException } from 'service/util/config/ConfigManagerValueNotFoundException';
+import { ConfigUtils } from 'service/util/config/ConfigUtils';
+import { ConfigValueContainer } from 'service/util/config/ConfigValueContainer';
 
 /**
  * Config manager provides easy way to extract values at arbitrary path in config object. Multi config manager handles multiple configs.
@@ -12,11 +12,7 @@ import { ConfigValueContainer } from "service/util/config/ConfigValueContainer";
  * and it's unclear in which to set value.
  */
 export default class MultiConfigManager<T> {
-  // tslint:disable-next-line: variable-name
-  constructor(
-    private _name: string,
-    private _configs: Array<ConfigValueContainer<T>>
-  ) {}
+  constructor(private _name: string, private _configs: Array<ConfigValueContainer<T>>) {}
 
   name() {
     return `Multi config manager [${this._name}]`;
@@ -41,22 +37,13 @@ export default class MultiConfigManager<T> {
    * Set value on object under selector path. Path is a string of property names concatenated with ".", eg. "prop1.prop2.prop3".
    * Last property name is used as a target property for given value.
    */
-  setValue(
-    targetSelector: string,
-    name: string,
-    value: any,
-    overwrite: boolean = true
-  ): void {
-    throw new CustomError(
-      "Multi config manager does not support setting values. Multiple configs, remember? ;-)"
-    );
+  setValue(targetSelector: string, name: string, value: any, overwrite: boolean = true): void {
+    throw new CustomError('Multi config manager does not support setting values. Multiple configs, remember? ;-)');
   }
 
   private reduceStateValue(selector: string) {
     return this._configs.reduce((accum, config) => {
-      return accum !== undefined
-        ? accum
-        : ConfigUtils.reducePath(config.value(), selector);
+      return accum !== undefined ? accum : ConfigUtils.reducePath(config.value(), selector);
     }, undefined);
   }
 }

@@ -24,7 +24,3 @@ export interface ILocation {
   label: string;
   id: number;
 }
-
-export interface ITripUpdatePayload extends ITripCreatePayload {
-  label: string;
-}

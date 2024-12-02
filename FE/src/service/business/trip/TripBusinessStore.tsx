@@ -1,7 +1,7 @@
 import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
 import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
-import { tripListStore } from 'service/business/user/TripListBusinessStore';
+import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';

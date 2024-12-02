@@ -2,7 +2,7 @@ import { ITrip } from 'model/trip/Trip';
 import { Observable, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
-import { tripListStore } from 'service/business/user/TripListBusinessStore';
+import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
