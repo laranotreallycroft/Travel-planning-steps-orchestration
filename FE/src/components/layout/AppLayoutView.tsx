@@ -3,7 +3,7 @@ import { Content, Header } from 'antd/es/layout/layout';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import AppLayoutViewHeader from 'components/layout/AppLayoutViewHeader';
 import AppLayoutViewSider from 'components/layout/AppLayoutViewSider';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
