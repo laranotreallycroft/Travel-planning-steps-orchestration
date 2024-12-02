@@ -1,7 +1,6 @@
 import FallbackPage from 'components/pages/FallbackPage';
 import ItineraryPage from 'components/pages/ItineraryPage';
 import AppLayout from 'components/pages/layout/AppLayout';
-import HomeLayout from 'components/pages/layout/HomeLayout';
 import LoginPage from 'components/pages/LoginPage';
 import PackingListPage from 'components/pages/PackingListPage';
 import PastTripsPage from 'components/pages/PastTripsPage';
@@ -29,14 +28,12 @@ const appRouter = createBrowserRouter(
           <Route path="trips">
             <Route path="upcoming" element={<UpcomingTripListPage />} />
             <Route path="past" element={<PastTripsPage />} />
-            <Route path=":tripId" element={<TripPage />} />
-          </Route>
-
-          <Route element={<HomeLayout />}>
-            <Route path="weather" element={<WeatherPage />} />
-            <Route path="itinerary" element={<ItineraryPage />} />
-            <Route path="packinglist" element={<PackingListPage />} />
-            <Route path="settings" element={<TripSettingsPage />} />
+            <Route path=":tripId" element={<TripPage />}>
+              <Route path="weather" element={<WeatherPage />} />
+              <Route path="itinerary" element={<ItineraryPage />} />
+              <Route path="packinglist" element={<PackingListPage />} />
+              <Route path="settings" element={<TripSettingsPage />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<FallbackPage />} />

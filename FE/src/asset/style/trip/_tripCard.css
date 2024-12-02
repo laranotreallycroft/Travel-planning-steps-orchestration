@@ -1,7 +1,7 @@
 .tripCard__card {
   background-color: #fff;
 }
-.tripCard__card:hover {
+.tripCard__card-clickable:hover {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
@@ -35,4 +35,19 @@
 }
 .tripCard__label-thirdWord {
   font-size: 1.5rem;
+}
+
+.tripCard__tag {
+  margin: 0;
+}
+
+.tripCard__imgCol {
+  max-height: 15rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tripCard__img {
+  max-width: 100%;
+  max-height: 100%;
 }

@@ -1,19 +1,52 @@
-import React from 'react';
+import TripCard from 'components/trip/TripCard';
+import TripTabs from 'components/trip/TripTabs';
+import { ITrip } from 'model/trip/Trip';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { IIdPayload } from 'service/business/common/types';
+import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 
 export interface ITripContainerOwnProps {
   tripId: string;
 }
-export interface ITripContainerStateProps {}
-export interface ITripContainerDispatchProps {}
+export interface ITripContainerStateProps {
+  trip: ITrip;
+}
+export interface ITripContainerDispatchProps {
+  tripFetch: (payload: IIdPayload) => void;
+  tripClear: () => void;
+}
 type ITripContainerProps = ITripContainerOwnProps & ITripContainerStateProps & ITripContainerDispatchProps;
 
 const TripContainer: React.FC<ITripContainerProps> = (props: ITripContainerProps) => {
-  return <React.Fragment>{props.tripId} </React.Fragment>;
+  useEffect(() => {
+    props.tripFetch({ id: props.tripId });
+
+    return () => {
+      props.tripClear();
+    };
+  }, [props.tripId]);
+
+  return (
+    <React.Fragment>
+      {props.trip && (
+        <React.Fragment>
+          <div>
+            <TripCard trip={props.trip} /> <TripTabs />
+          </div>
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
 };
 
-const mapStateToProps = (state: any): ITripContainerStateProps => ({});
+const mapStateToProps = (state: any): ITripContainerStateProps => ({
+  trip: TripBusinessStore.selectors.getTrip(state),
+});
 
-const mapDispatchToProps = (dispatch: any): ITripContainerDispatchProps => ({});
+const mapDispatchToProps = (dispatch: any): ITripContainerDispatchProps => ({
+  tripFetch: (payload: IIdPayload) => dispatch(TripBusinessStore.actions.tripFetch(payload)),
+  tripClear: () => dispatch(TripBusinessStore.actions.tripClear()),
+});
 
 export default connect<ITripContainerStateProps, ITripContainerDispatchProps, ITripContainerOwnProps>(mapStateToProps, mapDispatchToProps)(TripContainer);

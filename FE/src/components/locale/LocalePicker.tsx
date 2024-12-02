@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 
-import { ArrowDropDown, LanguageOutlined } from '@mui/icons-material';
+import { GlobalOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { LABELS, MESSAGES } from 'service/locale/message';
@@ -29,7 +29,7 @@ const LocalePicker: React.FC<ILocalePickerProps> = (props) => {
     () => [
       {
         key: 'locale',
-        icon: <LanguageOutlined />,
+        icon: <GlobalOutlined />,
         label: props.locale.toUpperCase(),
         children: Object.keys(MESSAGES).map((locale) => ({
           key: locale,
@@ -40,7 +40,7 @@ const LocalePicker: React.FC<ILocalePickerProps> = (props) => {
     [props.locale]
   );
 
-  return <Menu className="localePicker__menu" mode="horizontal" expandIcon={<ArrowDropDown />} triggerSubMenuAction="click" onClick={props.onLocaleChange} defaultSelectedKeys={[props.locale]} items={items} disabledOverflow={true}></Menu>;
+  return <Menu className="localePicker__menu" mode="horizontal" triggerSubMenuAction="click" onClick={props.onLocaleChange} defaultSelectedKeys={[props.locale]} items={items} disabledOverflow={true}></Menu>;
 };
 
 // -- HOCs and exports

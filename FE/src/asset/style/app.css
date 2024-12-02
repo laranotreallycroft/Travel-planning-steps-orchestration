@@ -30,13 +30,10 @@ body {
 @import 'common/common.css';
 @import 'common/map/_mapElement.css';
 @import 'login/_loginView.css';
-@import 'home/_homeLayoutView.css';
-@import 'home/_homeLayoutViewHeader.css';
 @import 'layout/_appLayoutViewHeader.css';
 @import 'layout/_appLayoutViewSider.css';
 @import 'layout/_fallbackView.css';
 @import 'layout/_appLayoutView.css';
-@import 'home/_homeLayoutViewSider.css';
 @import 'trip/_tripCreateView.css';
 @import 'common/input/_customDropdownInput.css';
 @import 'common/input/_customCheckboxGroup.css';
