@@ -8,7 +8,7 @@ import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
 
 export interface IPackingListCreatePayload {
-  tripId: number;
+  tripId: string;
   label: string;
   items: string[];
 }
@@ -24,7 +24,7 @@ export interface IPackingListUpdateCombinedPayload {
 }
 
 export interface IPackingListCopyPayload {
-  tripId: number;
+  tripId: string;
   packingListIds: number[];
 }
 // -

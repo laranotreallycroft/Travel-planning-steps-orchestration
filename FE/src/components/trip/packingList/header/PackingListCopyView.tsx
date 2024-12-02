@@ -1,8 +1,8 @@
+import { CopyOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Modal, Radio, RadioChangeEvent, Select } from 'antd';
-import React, { useCallback, useState } from 'react';
 import { ITrip } from 'model/trip/Trip';
 import { packingListsPresets } from 'model/trip/const/packingList';
-import { CopyOutlined } from '@ant-design/icons';
+import React, { useCallback, useState } from 'react';
 export interface IPackingListCopyForm {
   packingListIds: number[];
 }
@@ -63,7 +63,7 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (props: IPackin
               },
             ]}
           >
-            <Select
+            {/* <Select
               placeholder={isPresetView ? 'Preset' : 'Trip'}
               options={
                 isPresetView
@@ -78,7 +78,7 @@ const PackingListCopyView: React.FC<IPackingListCopyViewProps> = (props: IPackin
                         };
                       })
               }
-            />
+            />*/}
           </Form.Item>
 
           <Form.Item

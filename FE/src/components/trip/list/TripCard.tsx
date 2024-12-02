@@ -5,8 +5,9 @@ import { toLocalDateFormat } from 'components/common/localize/utils';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import { classNames } from 'components/common/util/classNames';
 import { ITrip } from 'model/trip/Trip';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useResizeObserver } from 'service/util/resizeService';
 
 export interface ITripCardOwnProps {
   trip: ITrip;
@@ -16,6 +17,15 @@ export interface ITripCardOwnProps {
 type ITripCardProps = ITripCardOwnProps & IWithLocalizeOwnProps;
 
 const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
+  const [showImageCol, setShowImageCol] = useState<boolean>(true);
+  const ref = useResizeObserver((size) => {
+    if (size.width < 250) {
+      setShowImageCol(false);
+    } else {
+      setShowImageCol(true);
+    }
+  });
+
   const navigator = useNavigate();
   const cityName = props.trip.location.label.substring(0, props.trip.location.label.indexOf(','));
 
@@ -35,8 +45,8 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
   }, [props.trip.id]);
 
   return (
-    <Row className={cardClassName} onClick={props.isClickable ? handleCardClick : undefined}>
-      <Col span={14}>
+    <Row ref={ref} className={cardClassName} onClick={props.isClickable ? handleCardClick : undefined}>
+      <Col span={showImageCol ? 14 : 24}>
         <div className="tripCard__dataContainer">
           <Paragraph ellipsis={{ tooltip: props.trip.label }} className="tripCard__title">
             {props.trip.label}
@@ -59,9 +69,11 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
           </Row>
         </div>
       </Col>
-      <Col span={10} className="tripCard__imgCol">
-        <img src={imagePlaceholder} className="tripCard__img" alt=""></img>
-      </Col>
+      {showImageCol && (
+        <Col span={10} className="tripCard__imgCol">
+          <img src={imagePlaceholder} className="tripCard__img" alt=""></img>
+        </Col>
+      )}
     </Row>
   );
 };

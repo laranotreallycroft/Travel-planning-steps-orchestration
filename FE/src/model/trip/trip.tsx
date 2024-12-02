@@ -3,7 +3,7 @@ import { IPackingList } from 'model/trip/packingList/PackingList';
 import { IItinerary } from 'model/trip/itinerary/Itinerary';
 
 export interface ITrip {
-  id: number;
+  id: string;
   label: string;
   dateFrom: string;
   dateTo: string;

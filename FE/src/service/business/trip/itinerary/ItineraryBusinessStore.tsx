@@ -17,7 +17,7 @@ export interface IItineraryForm {
   settings: IItinerarySettings;
 }
 export interface IItineraryPayload extends IItineraryForm {
-  tripId: number;
+  tripId: string;
 }
 
 export interface IItinerarySettings {
