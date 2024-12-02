@@ -93,9 +93,9 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
               if (action.payload.keepSignedin) {
-                AuthTokenManager.saveToken(response.data.id);
+                AuthTokenManager.saveToken(response.data.token);
               } else {
-                AuthTokenManager.saveToken(response.data.id, true);
+                AuthTokenManager.saveToken(response.data.token, true);
               }
 
               notificationService.success(LocalizeService.translate('LOGIN.SUCCESS_MESSAGE'));

@@ -73,10 +73,11 @@ public class LoginController {
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();
                 String payloadEmail = payload.getEmail();
-
+                String subject = payload.getSubject();
                 User user = userRepository.findByEmail(payloadEmail, true);
                 if (user == null) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Google user not registered");
+                    user = new User(true, subject, payloadEmail);
+                    userRepository.save(user);
                 }
 
                 String token = jwtUtil.generateToken(user.getEmail(), true);

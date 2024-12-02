@@ -26,7 +26,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())) // Enable CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
