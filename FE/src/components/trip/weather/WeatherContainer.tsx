@@ -10,60 +10,66 @@ export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {
   currentWeather: IWeather;
-  predictedWeather: IWeather;
+  pastWeather: IWeather;
   trip: ITrip;
 }
+
 export interface IWeatherContainerDispatchProps {
   currentWeatherFetch: (weatherPayload: IWeatherPayload) => void;
   currentWeatherClear: () => void;
-  predictedWeatherFetch: (weatherPayload: IWeatherPayload) => void;
-  predictedWeatherClear: () => void;
+  pastWeatherFetch: (weatherPayload: IWeatherPayload) => void;
+  pastWeatherClear: () => void;
 }
+
 type IWeatherContainerProps = IWeatherContainerOwnProps & IWeatherContainerStateProps & IWeatherContainerDispatchProps;
 
 const WeatherContainer: React.FC<IWeatherContainerProps> = (props: IWeatherContainerProps) => {
-  const [selectedYear, setselectedYear] = useState<number>(2022);
+  const [selectedYear, setselectedYear] = useState<number>(new Date().getFullYear());
 
   useEffect(() => {
     props.currentWeatherFetch({
       lat: props.trip.location.coordinates.y,
       lon: props.trip.location.coordinates.x,
     });
+
     return () => {
       props.currentWeatherClear();
     };
-  }, [props.trip]);
+  }, [props.trip.location.coordinates]);
 
   useEffect(() => {
     const futureDateFrom = new Date(props.trip.dateFrom);
     const futureDateTo = new Date(props.trip.dateTo);
-    const oneYearAgoDateFrom = new Date(selectedYear, futureDateFrom.getMonth(), futureDateFrom.getDate());
-    const oneYearAgoDateTo = new Date(selectedYear, futureDateTo.getMonth(), futureDateTo.getDate());
-    props.predictedWeatherFetch({
+    const pastDateFrom = new Date(selectedYear, futureDateFrom.getMonth(), futureDateFrom.getDate());
+    const pastDateTo = new Date(selectedYear, futureDateTo.getMonth(), futureDateTo.getDate());
+
+    props.pastWeatherFetch({
       lat: props.trip.location.coordinates.y,
       lon: props.trip.location.coordinates.x,
 
-      timestampFrom: oneYearAgoDateFrom.getTime() / 1000,
-      timestampTo: oneYearAgoDateTo.getTime() / 1000,
+      timestampFrom: pastDateFrom.getTime() / 1000,
+      timestampTo: pastDateTo.getTime() / 1000,
     });
+
     return () => {
-      props.predictedWeatherClear();
+      props.pastWeatherClear();
     };
-  }, [props.trip, selectedYear]);
-  return <WeatherView currentWeather={props.currentWeather} predictedWeather={props.predictedWeather} selectedYear={selectedYear} setSelectedYear={setselectedYear} />;
+  }, [props.trip.dateFrom, props.trip.dateTo, props.trip.location.coordinates, selectedYear]);
+
+  return <React.Fragment>{props.pastWeather && props.currentWeather && <WeatherView currentWeather={props.currentWeather} pastWeather={props.pastWeather} selectedYear={selectedYear} setSelectedYear={setselectedYear} />} </React.Fragment>;
 };
 
 const mapStateToProps = (state: any): IWeatherContainerStateProps => ({
   currentWeather: WeatherBusinessStore.selectors.getCurrentWeather(state),
-  predictedWeather: WeatherBusinessStore.selectors.getPredictedWeather(state),
+  pastWeather: WeatherBusinessStore.selectors.getPastWeather(state),
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
 const mapDispatchToProps = (dispatch: any): IWeatherContainerDispatchProps => ({
   currentWeatherFetch: (weatherPayload: IWeatherPayload) => dispatch(WeatherBusinessStore.actions.currentWeatherFetch(weatherPayload)),
   currentWeatherClear: () => dispatch(WeatherBusinessStore.actions.currentWeatherClear()),
-  predictedWeatherFetch: (weatherPayload: IWeatherPayload) => dispatch(WeatherBusinessStore.actions.predictedWeatherFetch(weatherPayload)),
-  predictedWeatherClear: () => dispatch(WeatherBusinessStore.actions.predictedWeatherClear()),
+  pastWeatherFetch: (weatherPayload: IWeatherPayload) => dispatch(WeatherBusinessStore.actions.pastWeatherFetch(weatherPayload)),
+  pastWeatherClear: () => dispatch(WeatherBusinessStore.actions.pastWeatherClear()),
 });
 
 export default connect<IWeatherContainerStateProps, IWeatherContainerDispatchProps, IWeatherContainerOwnProps>(mapStateToProps, mapDispatchToProps)(WeatherContainer);

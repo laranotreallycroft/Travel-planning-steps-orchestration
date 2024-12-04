@@ -1,12 +1,11 @@
 package com.odysseus.controller;
 
-import com.odysseus.model.Location;
-import com.odysseus.model.Trip;
-import com.odysseus.model.User;
-import com.odysseus.model.payload.common.LocationPayload;
-import com.odysseus.model.payload.trip.TripListFilter;
-import com.odysseus.model.payload.trip.TripPayload;
-import com.odysseus.model.payload.trip.TripSettingsPayload;
+import com.odysseus.model.location.Location;
+import com.odysseus.model.trip.Trip;
+import com.odysseus.model.user.User;
+import com.odysseus.model.location.LocationRequest;
+import com.odysseus.model.trip.TripListFilter;
+import com.odysseus.model.trip.TripCreateRequest;
 import com.odysseus.repository.LocationRepository;
 import com.odysseus.repository.TripRepository;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
 
@@ -32,10 +30,10 @@ public class TripController {
         this.locationRepository = locationRepository;
     }
 
-    public Location getLocation(LocationPayload locationPayload) {
-        Location location = locationRepository.findById(locationPayload.getId()).orElse(null);
+    public Location getLocation(LocationRequest locationRequest) {
+        Location location = locationRepository.findById(locationRequest.getId()).orElse(null);
         if (location == null) {
-            location = new Location(locationPayload.getId(), locationPayload.getLabel(), locationPayload.getCoordinates().toPoint());
+            location = new Location(locationRequest.getId(), locationRequest.getLabel(), locationRequest.getCoordinates().toPoint());
             locationRepository.save(location);
 
         }
@@ -43,13 +41,13 @@ public class TripController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTrip(@RequestBody TripPayload tripCreatePayload) throws URISyntaxException {
+    public ResponseEntity<?> createTrip(@RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
         User user = getCurrentUser();
 
         if (user != null) {
-            Location location = getLocation(tripCreatePayload.getLocation());
-            Trip trip = new Trip(tripCreatePayload.getLabel(), tripCreatePayload.getDateFrom(),
-                    tripCreatePayload.getDateTo(), location, user);
+            Location location = getLocation(tripCreateRequest.getLocation());
+            Trip trip = new Trip(tripCreateRequest.getLabel(), tripCreateRequest.getDateFrom(),
+                    tripCreateRequest.getDateTo(), location, user);
             tripRepository.save(trip);
             return ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -85,13 +83,13 @@ public class TripController {
 
     @PutMapping("/{tripId}")
     public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId,
-                                     @RequestBody TripSettingsPayload tripPayload) throws URISyntaxException {
+                                     @RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
         Trip trip = tripRepository.findById(tripId).orElse(null);
         if (trip != null) {
-            trip.setLabel(tripPayload.getLabel());
-            trip.setDateFrom(tripPayload.getDateFrom());
-            trip.setDateTo(tripPayload.getDateTo());
-            Location location = getLocation(tripPayload.getLocation());
+            trip.setLabel(tripCreateRequest.getLabel());
+            trip.setDateFrom(tripCreateRequest.getDateFrom());
+            trip.setDateTo(tripCreateRequest.getDateTo());
+            Location location = getLocation(tripCreateRequest.getLocation());
             trip.setLocation(location);
 
             tripRepository.save(trip);

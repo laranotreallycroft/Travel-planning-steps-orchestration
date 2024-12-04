@@ -1,15 +1,22 @@
 import axios from 'axios';
-import { Observable, filter, forkJoin, from, map, mergeMap, toArray } from 'rxjs';
 import { IWeather, IWeatherPayload } from 'model/trip/weather/Weather';
+import { Observable, filter, forkJoin, from, map, mergeMap, toArray } from 'rxjs';
+import { IPayloadAction } from 'service/business/common/types';
+import EntityApiService from 'service/business/utils';
+import { mapData } from 'service/business/weather/utils';
+import AppConfigService from 'service/common/AppConfigService';
+import { CookieManager } from 'service/util/CookieManager';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
-import { IPayloadAction } from 'service/business/common/types';
-import { mapData } from 'service/business/weather/utils';
+
+const cookieLocaleName = AppConfigService.getValue('cookies.locale.name');
+const cookieLocaleValue = CookieManager.getCookie(cookieLocaleName);
+const weatherApiId = AppConfigService.getValue('weather.apiId');
 
 // -
 // -------------------- Selectors
 const getCurrentWeather = (store: any): IWeather => store.currentWeather;
-const getPredictedWeather = (store: any): IWeather => store.predictedWeather;
+const getPastWeather = (store: any): IWeather => store.pastWeather;
 
 // -
 // -------------------- Actions
@@ -18,9 +25,9 @@ const actions = {
   CURRENT_WEATHER_STORE: 'CURRENT_WEATHER_STORE',
   CURRENT_WEATHER_CLEAR: 'CURRENT_WEATHER_CLEAR',
 
-  PREDICTED_WEATHER_FETCH: 'PREDICTED_WEATHER_FETCH',
-  PREDICTED_WEATHER_STORE: 'PREDICTED_WEATHER_STORE',
-  PREDICTED_WEATHER_CLEAR: 'PREDICTED_WEATHER_CLEAR',
+  PAST_WEATHER_FETCH: 'PAST_WEATHER_FETCH',
+  PAST_WEATHER_STORE: 'PAST_WEATHER_STORE',
+  PAST_WEATHER_CLEAR: 'PAST_WEATHER_CLEAR',
 };
 
 export const currentWeatherFetch = (payload: IWeatherPayload): IPayloadAction<IWeatherPayload> => {
@@ -35,16 +42,16 @@ export const currentWeatherClear = (): IAction => {
   return { type: actions.CURRENT_WEATHER_CLEAR };
 };
 
-export const predictedWeatherFetch = (payload: IWeatherPayload): IPayloadAction<IWeatherPayload> => {
-  return { type: actions.PREDICTED_WEATHER_FETCH, payload: payload };
+export const pastWeatherFetch = (payload: IWeatherPayload): IPayloadAction<IWeatherPayload> => {
+  return { type: actions.PAST_WEATHER_FETCH, payload: payload };
 };
 
-export const predictedWeatherStore = (payload: IWeather): IPayloadAction<IWeather> => {
-  return { type: actions.PREDICTED_WEATHER_STORE, payload: payload };
+export const pastWeatherStore = (payload: IWeather): IPayloadAction<IWeather> => {
+  return { type: actions.PAST_WEATHER_STORE, payload: payload };
 };
 
-export const predictedWeatherClear = (): IAction => {
-  return { type: actions.PREDICTED_WEATHER_CLEAR };
+export const pastWeatherClear = (): IAction => {
+  return { type: actions.PAST_WEATHER_CLEAR };
 };
 
 // -
@@ -56,62 +63,36 @@ const currentWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPa
       return action.type === actions.CURRENT_WEATHER_FETCH;
     }),
     mergeMap((action) => {
-      const baseUrl = 'https://api.openweathermap.org/data/3.0/';
-      const url = `onecall?lat=${action.payload.lat}&lon=${action.payload.lon}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`;
-
       return from(
-        axios({
-          method: 'get',
-          url: url,
-          baseURL: baseUrl,
-        })
+        EntityApiService.getEntity('/weather/current', { ...action.payload, lang: cookieLocaleValue })
           .then((response) => {
-            if (response.status === 200) {
+            if (response.status === 201) {
               return response.data;
-            } else return undefined;
+            }
           })
           .catch((error) => {
             notificationService.error('Unable to fetch weather data', error.response.data.message);
           })
       ).pipe(trackAction(action));
     }),
-    mergeMap((data) => {
-      return axios({
-        method: 'get',
-        url: `reverse?lat=${data.lat}&lon=${data.lon}&limit=5&appid=e767a44febd8dff85969c3726d040132`,
-        baseURL: 'http://api.openweathermap.org/geo/1.0/',
-      })
-        .then((response) => {
-          const payload = mapData(data.daily, data.current, 'en');
-
-          return { ...payload, name: response.data[0].name };
-        })
-        .catch((error) => {
-          notificationService.error('Unable to fetch weather data', error.response.data.message);
-        });
-    }),
-
-    filter((data) => data !== undefined),
-
-    map((data) => {
-      return currentWeatherStore(data!);
-    })
+    map((data) => currentWeatherStore(data))
   );
 };
 
-const predictedWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPayload>>, state$: Observable<any>) => {
+const pastWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.PREDICTED_WEATHER_FETCH;
+      return action.type === actions.PAST_WEATHER_FETCH;
     }),
     mergeMap((action) => {
       const baseUrl = 'https://api.openweathermap.org/data/3.0/';
+      const cookieLocaleValue = CookieManager.getCookie(cookieLocaleName);
 
       const requests: any[] = [];
       requests.push(
         axios({
           method: 'get',
-          url: `reverse?lat=${action.payload.lat}&lon=${action.payload.lon}&limit=5&appid=e767a44febd8dff85969c3726d040132`,
+          url: `reverse?lat=${action.payload.lat}&lon=${action.payload.lon}&lang=${cookieLocaleValue}&limit=5&appid=${weatherApiId}`,
           baseURL: 'http://api.openweathermap.org/geo/1.0/',
         })
       );
@@ -120,7 +101,7 @@ const predictedWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeather
         requests.push(
           axios({
             method: 'get',
-            url: `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&dt=${i}&exclude=minutely&units=metric&appid=e767a44febd8dff85969c3726d040132`,
+            url: `onecall/timemachine?lat=${action.payload.lat}&lon=${action.payload.lon}&dt=${i}&exclude=minutely,hourly,alert&units=metric&appid=${weatherApiId}`,
             baseURL: baseUrl,
           })
         );
@@ -137,8 +118,8 @@ const predictedWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeather
     map((data) => {
       const namePayload = data[0][0];
       const dataPayload = data.slice(1).map((data) => data.data[0]);
-      const payload = mapData(dataPayload, dataPayload[0], 'en');
-      return predictedWeatherStore({ ...payload, name: namePayload.name });
+      const payload = mapData(dataPayload, dataPayload[0], cookieLocaleValue);
+      return pastWeatherStore({ ...payload, name: namePayload.name });
     })
   );
 };
@@ -155,29 +136,29 @@ const currentWeather = (state: any = null, action: IPayloadAction<IWeather>) => 
   return state;
 };
 
-const predictedWeather = (state: any = null, action: IPayloadAction<IWeather>) => {
-  if (action.type === actions.PREDICTED_WEATHER_STORE) {
+const pastWeather = (state: any = null, action: IPayloadAction<IWeather>) => {
+  if (action.type === actions.PAST_WEATHER_STORE) {
     return { ...action.payload };
-  } else if (action.type === actions.PREDICTED_WEATHER_CLEAR) {
+  } else if (action.type === actions.PAST_WEATHER_CLEAR) {
     return null;
   }
   return state;
 };
 
 export const WeatherBusinessStore = {
-  selectors: { getCurrentWeather, getPredictedWeather },
+  selectors: { getCurrentWeather, getPastWeather },
   actions: {
     currentWeatherFetch,
     currentWeatherStore,
     currentWeatherClear,
 
-    predictedWeatherFetch,
-    predictedWeatherStore,
-    predictedWeatherClear,
+    pastWeatherFetch,
+    pastWeatherStore,
+    pastWeatherClear,
   },
   effects: {
     currentWeatherFetchEffect,
-    predictedWeatherFetchEffect,
+    pastWeatherFetchEffect,
   },
-  reducers: { currentWeather, predictedWeather },
+  reducers: { currentWeather, pastWeather },
 };

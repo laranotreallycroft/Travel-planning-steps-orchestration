@@ -1,7 +1,7 @@
 package com.odysseus.utils;
 
-import com.odysseus.model.User;
-import com.odysseus.model.payload.common.JwtAuthenticationToken;
+import com.odysseus.model.user.User;
+import com.odysseus.model.login.JwtAuthenticationToken;
 import com.odysseus.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

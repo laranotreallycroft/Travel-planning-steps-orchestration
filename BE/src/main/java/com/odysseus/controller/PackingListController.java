@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.odysseus.model.PackingList;
-import com.odysseus.model.Trip;
-import com.odysseus.model.payload.packingList.PackingListCopyPayload;
-import com.odysseus.model.payload.packingList.PackingListCreatePayload;
-import com.odysseus.model.payload.packingList.PackingListUpdateDeletePayload;
-import com.odysseus.model.payload.packingList.PackingListUpdatePayload;
+import com.odysseus.model.packingList.PackingList;
+import com.odysseus.model.trip.Trip;
+import com.odysseus.model.packingList.PackingListCopyPayload;
+import com.odysseus.model.packingList.PackingListCreatePayload;
+import com.odysseus.model.packingList.PackingListUpdateDeletePayload;
+import com.odysseus.model.packingList.PackingListUpdatePayload;
 import com.odysseus.repository.PackingListRepository;
 import com.odysseus.repository.TripRepository;
 import com.odysseus.utils.PackingListPresets;

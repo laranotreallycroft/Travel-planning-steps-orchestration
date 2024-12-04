@@ -5,6 +5,7 @@ import TripTabs from 'components/trip/TripTabs';
 import { ITrip } from 'model/trip/Trip';
 import moment from 'moment';
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 export interface ITripViewOwnProps {
   trip: ITrip;
@@ -17,8 +18,11 @@ const TripView: React.FC<ITripViewProps> = (props: ITripViewProps) => {
   return (
     <React.Fragment>
       <ReturnHeader label={isUpcoming ? props.translate('TRIP_VIEW.RETURN_TO_UPCOMING') : props.translate('TRIP_VIEW.RETURN_TO_PAST')} to={isUpcoming ? '/trips/upcoming' : '/trips/past'} />
-      <TripCard trip={props.trip} />
-      <TripTabs />
+      <div className="panel">
+        <TripCard trip={props.trip} />
+        <TripTabs />
+        <Outlet />
+      </div>
     </React.Fragment>
   );
 };

@@ -4,10 +4,10 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.odysseus.model.User;
-import com.odysseus.model.payload.common.AuthResponse;
-import com.odysseus.model.payload.login.GoogleLoginPayload;
-import com.odysseus.model.payload.login.LoginPayload;
+import com.odysseus.model.user.User;
+import com.odysseus.model.login.AuthResponse;
+import com.odysseus.model.login.GoogleLoginRequest;
+import com.odysseus.model.login.LoginRequest;
 import com.odysseus.repository.UserRepository;
 import com.odysseus.utils.JwtUtil;
 import com.odysseus.utils.SecurityUtils;
@@ -41,14 +41,14 @@ public class LoginController {
     /**
      * Endpoint for regular email/password login
      *
-     * @param loginPayload - Payload containing email and password from the user
+     * @param loginRequest - Payload containing email and password from the user
      * @return ResponseEntity with either an error message or a generated JWT token for authenticated users
      */
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody LoginPayload loginPayload) {
-        User user = userRepository.findByEmail(loginPayload.getEmail(), false);
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail(), false);
 
-        if (user == null || !SecurityUtils.verifyPassword(loginPayload.getPassword(), user.getPasswordHash(), user.getPasswordSalt())) {
+        if (user == null || !SecurityUtils.verifyPassword(loginRequest.getPassword(), user.getPasswordHash(), user.getPasswordSalt())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
@@ -59,17 +59,17 @@ public class LoginController {
     /**
      * Endpoint for Google login using Google ID token
      *
-     * @param googleLoginPayload - Payload containing Google credential (ID token) from the user
+     * @param googleLoginRequest - Payload containing Google credential (ID token) from the user
      * @return ResponseEntity with either an error message or a generated JWT token for authenticated users
      */
     @PostMapping("/google")
-    public ResponseEntity<Object> googleLogin(@RequestBody GoogleLoginPayload googleLoginPayload) {
+    public ResponseEntity<Object> googleLogin(@RequestBody GoogleLoginRequest googleLoginRequest) {
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList(googleClientId)).build();
         GoogleIdToken idToken;
         try {
-            idToken = verifier.verify(googleLoginPayload.getCredential());
+            idToken = verifier.verify(googleLoginRequest.getCredential());
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();
                 String payloadEmail = payload.getEmail();

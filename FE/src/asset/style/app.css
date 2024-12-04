@@ -44,7 +44,6 @@ body {
 @import 'trip/_packingListUpdateElement.css';
 @import 'trip/_tripCreateView.css';
 @import 'trip/_tripSettingsView.css';
-@import 'trip/_tripTabs.css';
 @import 'trip/_weatherView.css';
 @import 'trip/common/_tripCard.css';
 @import 'trip/itinerary/_itineraryView.css';

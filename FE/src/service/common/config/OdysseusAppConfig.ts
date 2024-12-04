@@ -9,6 +9,9 @@ const ODYSSEUS_APP_CONFIG = {
       duration: 24 * 60 * 60 * 1000, // 1 day
     },
   },
+  weather: {
+    apiId: 'e767a44febd8dff85969c3726d040132',
+  },
   cookies: {
     locale: {
       name: 'locale',

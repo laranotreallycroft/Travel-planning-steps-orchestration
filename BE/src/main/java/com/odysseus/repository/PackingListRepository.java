@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.odysseus.model.PackingList;
+import com.odysseus.model.packingList.PackingList;
 
 @Repository
 public interface PackingListRepository extends JpaRepository<PackingList, Long> {
