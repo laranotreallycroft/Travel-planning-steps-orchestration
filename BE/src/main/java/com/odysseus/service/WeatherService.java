@@ -60,7 +60,7 @@ public class WeatherService {
             // Extract the first reverse geocoding result
             ObjectMapper mapper = new ObjectMapper();
             ReverseApiResponseItem responseItem = mapper.convertValue(reverseData.get(0), ReverseApiResponseItem.class);
-            mappedResponse.setLocationName(responseItem.getName());
+            mappedResponse.setName(responseItem.getName());
 
             return mappedResponse;
         }).join();
@@ -80,7 +80,7 @@ public class WeatherService {
         if (currentWeather.getWeather() != null && !currentWeather.getWeather().isEmpty()) {
             OneCallApiResponse.WeatherDescription weather = currentWeather.getWeather().get(0);
             mapped.setDescription(weather.getDescription());
-
+            mapped.setIcon(weather.getIcon());
         }
         mapped.setTemperature(currentWeather.getTemp());
         mapped.setWind(currentWeather.getWind_speed());
@@ -98,10 +98,10 @@ public class WeatherService {
             if (dailyWeather.getWeather() != null && !dailyWeather.getWeather().isEmpty()) {
                 OneCallApiResponse.WeatherDescription weather = dailyWeather.getWeather().get(0);
                 forecast.setDescription(weather.getDescription());
+                forecast.setIcon(weather.getIcon());
 
             }
-            forecast.setTemperatureMin(dailyWeather.getTemp().getMin());
-            forecast.setTemperatureMax(dailyWeather.getTemp().getMax());
+            forecast.setTemperature(dailyWeather.getTemp().getMin(), dailyWeather.getTemp().getMax());
             forecast.setWind(String.valueOf(dailyWeather.getWind_speed()));
             forecast.setHumidity(dailyWeather.getHumidity());
             forecast.setKey(UUID.randomUUID().toString());

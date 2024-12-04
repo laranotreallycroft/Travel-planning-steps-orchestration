@@ -1,12 +1,10 @@
 package com.odysseus.model.weather;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
 
 public class WeatherResponse {
-    private String locationName;
+    private String name;
     private CurrentWeather current;
     private List<DailyForecast> forecast;
 
@@ -16,18 +14,18 @@ public class WeatherResponse {
         this.forecast = forecast;
     }
 
-    public WeatherResponse(String locationName, CurrentWeather current, List<DailyForecast> forecast) {
-        this.locationName = locationName;
+    public WeatherResponse(String name, CurrentWeather current, List<DailyForecast> forecast) {
+        this.name = name;
         this.current = current;
         this.forecast = forecast;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public String getName() {
+        return name;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setName(String locationName) {
+        this.name = locationName;
     }
 
     public CurrentWeather getCurrent() {
@@ -46,12 +44,11 @@ public class WeatherResponse {
         this.forecast = forecast;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class CurrentWeather {
         private String date;
         private String description;
         private String icon;
-        private double temperature;
+        private TemperatureResponse temperature;
         private double wind;
         private int humidity;
 
@@ -59,7 +56,7 @@ public class WeatherResponse {
 
         }
 
-        public CurrentWeather(String date, String description, String icon, double temperature, double wind, int humidity) {
+        public CurrentWeather(String date, String description, String icon, TemperatureResponse temperature, double wind, int humidity) {
             this.date = date;
             this.description = description;
             this.icon = icon;
@@ -84,19 +81,35 @@ public class WeatherResponse {
             this.description = description;
         }
 
-        public String getIcon() {
-            return icon;
-        }
 
         public void setIcon(String icon) {
             this.icon = icon;
         }
 
-        public double getTemperature() {
+
+        public void setTemperature(double temperature) {
+            this.temperature = new TemperatureResponse((int) Math.round(temperature));
+        }
+
+
+        public void setWind(double wind) {
+            this.wind = wind;
+        }
+
+
+        public void setHumidity(int humidity) {
+            this.humidity = humidity;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public TemperatureResponse getTemperature() {
             return temperature;
         }
 
-        public void setTemperature(double temperature) {
+        public void setTemperature(TemperatureResponse temperature) {
             this.temperature = temperature;
         }
 
@@ -104,26 +117,59 @@ public class WeatherResponse {
             return wind;
         }
 
-        public void setWind(double wind) {
-            this.wind = wind;
-        }
-
         public int getHumidity() {
             return humidity;
         }
+    }
 
-        public void setHumidity(int humidity) {
-            this.humidity = humidity;
+    private static class TemperatureResponse {
+        private int min;
+        private int max;
+        private int current;
+
+        public TemperatureResponse() {
+
+        }
+
+        public TemperatureResponse(int current) {
+            this.current = current;
+        }
+
+        public TemperatureResponse(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(int min) {
+            this.min = min;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(int max) {
+            this.max = max;
+        }
+
+        public double getCurrent() {
+            return current;
+        }
+
+        public void setCurrent(int current) {
+            this.current = current;
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DailyForecast {
         private String date;
         private String description;
         private String icon;
-        private Double temperatureMin;
-        private Double temperatureMax;
+        private TemperatureResponse temperature;
         private String wind;
         private int humidity;
         private String key;
@@ -136,8 +182,7 @@ public class WeatherResponse {
             this.date = date;
             this.description = description;
             this.icon = icon;
-            this.temperatureMin = temperatureMin;
-            this.temperatureMax = temperatureMax;
+            this.temperature = new TemperatureResponse((int) Math.round(temperatureMin), (int) Math.round(temperatureMax));
             this.wind = wind;
             this.humidity = humidity;
             this.key = key;
@@ -167,21 +212,10 @@ public class WeatherResponse {
             this.icon = icon;
         }
 
-        public Double getTemperatureMin() {
-            return temperatureMin;
+        public void setTemperature(double min, double max) {
+            this.temperature = new TemperatureResponse((int) Math.round(min), (int) Math.round(max));
         }
 
-        public void setTemperatureMin(Double temperatureMin) {
-            this.temperatureMin = temperatureMin;
-        }
-
-        public Double getTemperatureMax() {
-            return temperatureMax;
-        }
-
-        public void setTemperatureMax(Double temperatureMax) {
-            this.temperatureMax = temperatureMax;
-        }
 
         public String getWind() {
             return wind;
@@ -205,6 +239,14 @@ public class WeatherResponse {
 
         public void setKey(String key) {
             this.key = key;
+        }
+
+        public TemperatureResponse getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(TemperatureResponse temperature) {
+            this.temperature = temperature;
         }
     }
 }

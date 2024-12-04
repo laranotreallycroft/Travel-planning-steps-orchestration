@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { IWeather } from 'model/trip/weather/Weather';
 import { getIcon } from 'service/business/weather/iconsMap';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -53,4 +54,10 @@ export const mapData = (forecastData: any, todayData: any, lang: string): any =>
     mapped.forecast = mapForecast(forecastData, lang);
   }
   return mapped;
+};
+
+export const mapIcon = (weather: IWeather): any => {
+  weather.current.icon = getIcon(weather.current.icon);
+  weather.forecast.forEach((day) => (day.icon = getIcon(day.icon)));
+  return weather;
 };

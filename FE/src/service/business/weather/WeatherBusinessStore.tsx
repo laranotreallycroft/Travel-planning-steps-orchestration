@@ -3,7 +3,7 @@ import { IWeather, IWeatherPayload } from 'model/trip/weather/Weather';
 import { Observable, filter, forkJoin, from, map, mergeMap, toArray } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import EntityApiService from 'service/business/utils';
-import { mapData } from 'service/business/weather/utils';
+import { mapData, mapIcon } from 'service/business/weather/utils';
 import AppConfigService from 'service/common/AppConfigService';
 import { CookieManager } from 'service/util/CookieManager';
 import notificationService from 'service/util/notificationService';
@@ -66,16 +66,17 @@ const currentWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPa
       return from(
         EntityApiService.getEntity('/weather/current', { ...action.payload, lang: cookieLocaleValue })
           .then((response) => {
-            if (response.status === 201) {
-              return response.data;
-            }
+            return response.data;
           })
           .catch((error) => {
             notificationService.error('Unable to fetch weather data', error.response.data.message);
           })
       ).pipe(trackAction(action));
     }),
-    map((data) => currentWeatherStore(data))
+    map((data) => {
+      const mappedIcon = mapIcon(data);
+      return currentWeatherStore(mappedIcon);
+    })
   );
 };
 

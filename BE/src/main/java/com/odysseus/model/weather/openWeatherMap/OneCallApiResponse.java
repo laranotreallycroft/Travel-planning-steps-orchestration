@@ -152,15 +152,17 @@ public class OneCallApiResponse {
     public static class WeatherDescription {
         private int id;
         private String description;
+        private String icon;
 
         public WeatherDescription() {
 
         }
 
 
-        public WeatherDescription(int id, String description) {
+        public WeatherDescription(int id, String description, String icon) {
             this.id = id;
             this.description = description;
+            this.icon = icon;
         }
 
         public int getId() {
@@ -175,6 +177,13 @@ public class OneCallApiResponse {
             return description;
         }
 
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
     }
 
 }
