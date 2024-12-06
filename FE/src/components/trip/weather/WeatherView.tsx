@@ -18,7 +18,6 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
     <Row gutter={[16, 16]}>
       <Col span={12}>
         <Title level={4}>Current weather</Title>
-
         <ReactWeather data={props.currentWeather} lang="en" locationLabel={props.currentWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
       </Col>
 
@@ -38,9 +37,7 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
             className="weatherView__select"
           />
         </Row>
-        {
-          // <ReactWeather data={props.pastWeather} lang="en" locationLabel={props.pastWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
-        }
+        <ReactWeather data={props.pastWeather} lang="en" locationLabel={props.pastWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
       </Col>
     </Row>
   );

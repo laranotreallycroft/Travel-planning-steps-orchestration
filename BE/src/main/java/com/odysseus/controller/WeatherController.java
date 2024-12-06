@@ -1,5 +1,6 @@
 package com.odysseus.controller;
 
+import com.odysseus.model.weather.PastWeatherRequest;
 import com.odysseus.model.weather.WeatherRequest;
 import com.odysseus.model.weather.WeatherResponse;
 import com.odysseus.service.WeatherService;
@@ -25,6 +26,17 @@ public class WeatherController {
             @ModelAttribute WeatherRequest weatherRequest) {
         try {
             WeatherResponse weatherResponse = weatherService.fetchCurrentWeather(weatherRequest.getLat(), weatherRequest.getLon(), weatherRequest.getLang());
+            return ResponseEntity.ok(weatherResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/past")
+    public ResponseEntity<?> getPastWeather(
+            @ModelAttribute PastWeatherRequest weatherRequest) {
+        try {
+            WeatherResponse weatherResponse = weatherService.fetchPastWeather(weatherRequest.getLat(), weatherRequest.getLon(), weatherRequest.getLang(), weatherRequest.getTimestamp());
             return ResponseEntity.ok(weatherResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

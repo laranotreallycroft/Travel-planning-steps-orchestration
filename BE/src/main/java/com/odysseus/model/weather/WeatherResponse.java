@@ -1,20 +1,24 @@
 package com.odysseus.model.weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class WeatherResponse {
     private String name;
-    private CurrentWeather current;
-    private List<DailyForecast> forecast;
+    private Weather current;
+    private List<Weather> forecast;
 
+    public WeatherResponse() {
+        forecast = new ArrayList<Weather>();
+    }
 
-    public WeatherResponse(CurrentWeather current, List<DailyForecast> forecast) {
+    public WeatherResponse(Weather current, List<Weather> forecast) {
         this.current = current;
         this.forecast = forecast;
     }
 
-    public WeatherResponse(String name, CurrentWeather current, List<DailyForecast> forecast) {
+    public WeatherResponse(String name, Weather current, List<Weather> forecast) {
         this.name = name;
         this.current = current;
         this.forecast = forecast;
@@ -28,35 +32,40 @@ public class WeatherResponse {
         this.name = locationName;
     }
 
-    public CurrentWeather getCurrent() {
+    public Weather getCurrent() {
         return current;
     }
 
-    public void setCurrent(CurrentWeather current) {
+    public void setCurrent(Weather current) {
         this.current = current;
     }
 
-    public List<DailyForecast> getForecast() {
+    public List<Weather> getForecast() {
         return forecast;
     }
 
-    public void setForecast(List<DailyForecast> forecast) {
+    public void setForecast(List<Weather> forecast) {
         this.forecast = forecast;
     }
 
-    public static class CurrentWeather {
+    public void addForecast(Weather forecast) {
+        this.forecast.add(forecast);
+    }
+
+    public static class Weather {
         private String date;
         private String description;
         private String icon;
         private TemperatureResponse temperature;
         private double wind;
         private int humidity;
+        private String key;
 
-        public CurrentWeather() {
+        public Weather() {
 
         }
 
-        public CurrentWeather(String date, String description, String icon, TemperatureResponse temperature, double wind, int humidity) {
+        public Weather(String date, String description, String icon, TemperatureResponse temperature, double wind, int humidity) {
             this.date = date;
             this.description = description;
             this.icon = icon;
@@ -109,6 +118,10 @@ public class WeatherResponse {
             return temperature;
         }
 
+        public void setTemperature(double min, double max) {
+            this.temperature = new TemperatureResponse((int) Math.round(min), (int) Math.round(max));
+        }
+
         public void setTemperature(TemperatureResponse temperature) {
             this.temperature = temperature;
         }
@@ -119,6 +132,13 @@ public class WeatherResponse {
 
         public int getHumidity() {
             return humidity;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String string) {
         }
     }
 
@@ -165,88 +185,5 @@ public class WeatherResponse {
         }
     }
 
-    public static class DailyForecast {
-        private String date;
-        private String description;
-        private String icon;
-        private TemperatureResponse temperature;
-        private String wind;
-        private int humidity;
-        private String key;
 
-        public DailyForecast() {
-
-        }
-
-        public DailyForecast(String date, String description, String icon, Double temperatureMin, Double temperatureMax, String wind, int humidity, String key) {
-            this.date = date;
-            this.description = description;
-            this.icon = icon;
-            this.temperature = new TemperatureResponse((int) Math.round(temperatureMin), (int) Math.round(temperatureMax));
-            this.wind = wind;
-            this.humidity = humidity;
-            this.key = key;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
-
-        public void setTemperature(double min, double max) {
-            this.temperature = new TemperatureResponse((int) Math.round(min), (int) Math.round(max));
-        }
-
-
-        public String getWind() {
-            return wind;
-        }
-
-        public void setWind(String wind) {
-            this.wind = wind;
-        }
-
-        public int getHumidity() {
-            return humidity;
-        }
-
-        public void setHumidity(int humidity) {
-            this.humidity = humidity;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public TemperatureResponse getTemperature() {
-            return temperature;
-        }
-
-        public void setTemperature(TemperatureResponse temperature) {
-            this.temperature = temperature;
-        }
-    }
 }

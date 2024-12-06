@@ -1,8 +1,7 @@
 export interface IWeatherPayload {
   lat: number;
   lon: number;
-  timestampFrom?: number;
-  timestampTo?: number;
+  timestamp?: number;
 }
 export interface IWeather {
   name: string;

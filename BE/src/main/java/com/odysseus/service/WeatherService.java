@@ -4,12 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odysseus.model.weather.WeatherResponse;
 import com.odysseus.model.weather.openWeatherMap.OneCallApiResponse;
 import com.odysseus.model.weather.openWeatherMap.ReverseApiResponseItem;
+import com.odysseus.model.weather.openWeatherMap.TimemachineApiResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,6 +27,8 @@ public class WeatherService {
     private String oneCallBaseUrl;
     @Value("${weather.reverse.baseUrl}")
     private String reverseBaseUrl;
+    @Value("${weather.timemachine.baseUrl}")
+    private String timemachineBaseUrl;
 
     public WeatherService(ParallelService parallelService) {
         this.parallelService = parallelService;
@@ -37,11 +36,11 @@ public class WeatherService {
 
     public WeatherResponse fetchCurrentWeather(double lat, double lon, String lang) {
         String oneCallUrl = String.format(
-                "%sonecall?lat=%f&lon=%f&lang=%s&exclude=minutely,hourly,alerts&units=metric&appid=%s",
+                "%s?lat=%f&lon=%f&lang=%s&exclude=minutely,hourly,alerts&units=metric&appid=%s",
                 oneCallBaseUrl, lat, lon, lang, apiKey
         );
         String geoUrl = String.format(
-                "%sreverse?lat=%f&lon=%f&limit=5&appid=%s",
+                "%s?lat=%f&lon=%f&limit=1&appid=%s",
                 reverseBaseUrl, lat, lon, apiKey
         );
 
@@ -68,13 +67,68 @@ public class WeatherService {
 
     }
 
+    public WeatherResponse fetchPastWeather(double lat, double lon, String lang, long dt) {
+
+        String geoUrl = String.format(
+                "%s?lat=%f&lon=%f&limit=1&appid=%s",
+                reverseBaseUrl, lat, lon, apiKey
+        );
+
+        CompletableFuture[] weatherPastArray = new CompletableFuture[6];
+        for (int i = 0; i < 6; i++) {
+            long offset = i * 60 * 60 * 24;
+            String timemachineUrl = String.format(
+                    "%s?lat=%f&lon=%f&lang=%s&exclude=minutely,hourly,alerts&units=metric&dt=%s&appid=%s",
+                    timemachineBaseUrl, lat, lon, lang, dt + offset, apiKey
+            );
+            CompletableFuture<TimemachineApiResponse> weatherFuture = parallelService.fetchData(timemachineUrl, TimemachineApiResponse.class);
+            weatherPastArray[i] = weatherFuture;
+        }
+
+        CompletableFuture<ArrayList> reverseFuture = parallelService.fetchData(geoUrl, ArrayList.class);
+
+        // Combine all weather futures
+        CompletableFuture<Void> allWeatherFutures = CompletableFuture.allOf(weatherPastArray);
+
+        return allWeatherFutures.thenCompose(ignored -> {
+            // Extract results after all futures complete
+            List<TimemachineApiResponse> weatherResults = new ArrayList<>();
+            for (CompletableFuture<TimemachineApiResponse> future : weatherPastArray) {
+                weatherResults.add(future.join());
+            }
+
+
+            return reverseFuture.thenApply(reverseData -> {
+                if (reverseData == null || reverseData.isEmpty()) {
+                    throw new RuntimeException("Unable to fetch location data");
+                }
+
+                WeatherResponse mappedResponse = new WeatherResponse();
+                for (TimemachineApiResponse response : weatherResults) {
+                    WeatherResponse.Weather weather = mapCurrentWeatherData(response.getData(), lang);
+                    if (mappedResponse.getCurrent() == null)
+                        mappedResponse.setCurrent(weather);
+                    mappedResponse.addForecast(weather);
+                }
+
+
+                ObjectMapper mapper = new ObjectMapper();
+                ReverseApiResponseItem responseItem = mapper.convertValue(reverseData.get(0), ReverseApiResponseItem.class);
+                mappedResponse.setName(responseItem.getName());
+
+                return mappedResponse;
+            });
+        }).join();
+
+
+    }
 
     private WeatherResponse mapWeatherData(OneCallApiResponse data, String lang) {
         return new WeatherResponse(mapCurrentWeatherData(data.getCurrent(), lang), mapForecast(data.getDaily(), lang));
     }
 
-    private WeatherResponse.CurrentWeather mapCurrentWeatherData(OneCallApiResponse.CurrentWeather currentWeather, String lang) {
-        WeatherResponse.CurrentWeather mapped = new WeatherResponse.CurrentWeather();
+    private WeatherResponse.Weather mapCurrentWeatherData(OneCallApiResponse.CurrentWeather currentWeather, String lang) {
+        WeatherResponse.Weather mapped = new WeatherResponse.Weather();
 
         mapped.setDate(formatDate(currentWeather.getDt(), lang));
         if (currentWeather.getWeather() != null && !currentWeather.getWeather().isEmpty()) {
@@ -88,11 +142,11 @@ public class WeatherService {
         return mapped;
     }
 
-    private List<WeatherResponse.DailyForecast> mapForecast(List<OneCallApiResponse.DailyWeather> dailyWeatherList, String lang) {
-        List<WeatherResponse.DailyForecast> mappedForecast = new ArrayList<>();
+    private List<WeatherResponse.Weather> mapForecast(List<OneCallApiResponse.DailyWeather> dailyWeatherList, String lang) {
+        List<WeatherResponse.Weather> mappedForecast = new ArrayList<>();
 
         for (OneCallApiResponse.DailyWeather dailyWeather : dailyWeatherList) {
-            WeatherResponse.DailyForecast forecast = new WeatherResponse.DailyForecast();
+            WeatherResponse.Weather forecast = new WeatherResponse.Weather();
             forecast.setDate(formatDate(dailyWeather.getDt(), lang));
 
             if (dailyWeather.getWeather() != null && !dailyWeather.getWeather().isEmpty()) {
@@ -102,7 +156,7 @@ public class WeatherService {
 
             }
             forecast.setTemperature(dailyWeather.getTemp().getMin(), dailyWeather.getTemp().getMax());
-            forecast.setWind(String.valueOf(dailyWeather.getWind_speed()));
+            forecast.setWind(dailyWeather.getWind_speed());
             forecast.setHumidity(dailyWeather.getHumidity());
             forecast.setKey(UUID.randomUUID().toString());
             mappedForecast.add(forecast);

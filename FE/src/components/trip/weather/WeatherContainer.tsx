@@ -1,11 +1,10 @@
-import { connect } from 'react-redux';
-import { IWeather, IWeatherPayload } from 'model/trip/weather/Weather';
-import { WeatherBusinessStore } from 'service/business/weather/WeatherBusinessStore';
-import { useEffect, useState } from 'react';
-import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
-import { ITrip } from 'model/trip/Trip';
-import React from 'react';
 import WeatherView from 'components/trip/weather/WeatherView';
+import { ITrip } from 'model/trip/Trip';
+import { IWeather, IWeatherPayload } from 'model/trip/weather/Weather';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { WeatherBusinessStore } from 'service/business/weather/WeatherBusinessStore';
 export interface IWeatherContainerOwnProps {}
 
 export interface IWeatherContainerStateProps {
@@ -24,7 +23,7 @@ export interface IWeatherContainerDispatchProps {
 type IWeatherContainerProps = IWeatherContainerOwnProps & IWeatherContainerStateProps & IWeatherContainerDispatchProps;
 
 const WeatherContainer: React.FC<IWeatherContainerProps> = (props: IWeatherContainerProps) => {
-  const [selectedYear, setselectedYear] = useState<number>(new Date().getFullYear());
+  const [selectedYear, setselectedYear] = useState<number>(new Date().getFullYear() - 1);
 
   useEffect(() => {
     props.currentWeatherFetch({
@@ -39,16 +38,12 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (props: IWeatherConta
 
   useEffect(() => {
     const futureDateFrom = new Date(props.trip.dateFrom);
-    const futureDateTo = new Date(props.trip.dateTo);
     const pastDateFrom = new Date(selectedYear, futureDateFrom.getMonth(), futureDateFrom.getDate());
-    const pastDateTo = new Date(selectedYear, futureDateTo.getMonth(), futureDateTo.getDate());
 
     props.pastWeatherFetch({
       lat: props.trip.location.coordinates.y,
       lon: props.trip.location.coordinates.x,
-
-      timestampFrom: pastDateFrom.getTime() / 1000,
-      timestampTo: pastDateTo.getTime() / 1000,
+      timestamp: pastDateFrom.getTime() / 1000,
     });
 
     return () => {
