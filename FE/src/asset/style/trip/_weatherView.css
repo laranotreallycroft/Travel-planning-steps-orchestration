@@ -1,7 +1,34 @@
-.rw-forecast-days-panel {
-  height: 10rem;
-}
-
 .weatherView__select {
   width: 6rem;
+}
+
+.weatherView__col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 992px) and (max-width: 1155px), (max-width: 576px) {
+  .rw-forecast-days-panel {
+    flex-wrap: wrap;
+  }
+}
+
+.rw-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rw-forecast-days-panel {
+  height: 100%;
+}
+
+.rw-container-left,
+.rw-container-right {
+  background-color: #2e3e59 !important;
+}
+
+.rw-forecast-icon > svg {
+  fill: #41689d;
 }

@@ -51,7 +51,7 @@ const WeatherContainer: React.FC<IWeatherContainerProps> = (props: IWeatherConta
     };
   }, [props.trip.dateFrom, props.trip.dateTo, props.trip.location.coordinates, selectedYear]);
 
-  return <React.Fragment>{props.pastWeather && props.currentWeather && <WeatherView currentWeather={props.currentWeather} pastWeather={props.pastWeather} selectedYear={selectedYear} setSelectedYear={setselectedYear} />} </React.Fragment>;
+  return <WeatherView currentWeather={props.currentWeather} pastWeather={props.pastWeather} selectedYear={selectedYear} setSelectedYear={setselectedYear} />;
 };
 
 const mapStateToProps = (state: any): IWeatherContainerStateProps => ({

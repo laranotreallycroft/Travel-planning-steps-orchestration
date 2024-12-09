@@ -53,6 +53,9 @@ const en: any = {
 
   'TRIP_VIEW.RETURN_TO_UPCOMING': 'Return to upcoming trips',
   'TRIP_VIEW.RETURN_TO_PAST': 'Return to past trips',
+
+  'WEATHER_VIEW.CURRENT_WEATHER': 'Current weather',
+  'WEATHER_VIEW.PAST_WEATHER': 'Weather in %{year}',
 };
 
 export default en;

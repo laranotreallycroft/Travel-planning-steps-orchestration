@@ -29,7 +29,7 @@ const TripTabs: React.FC<ITripTabsProps> = (props: ITripTabsProps) => {
     navigator(e.key);
   };
 
-  return <Menu onClick={handleMenuSelect} mode="horizontal" selectedKeys={[currentTab]} items={items} />;
+  return <Menu className="margin-bottom-lg" onClick={handleMenuSelect} mode="horizontal" selectedKeys={[currentTab]} items={items} />;
 };
 
 export default TripTabs;

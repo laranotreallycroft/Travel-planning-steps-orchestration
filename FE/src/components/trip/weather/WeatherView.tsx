@@ -1,5 +1,6 @@
-import { Col, Row, Select } from 'antd';
+import { Col, Row, Select, Spin } from 'antd';
 import Title from 'antd/es/typography/Title';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import { IWeather } from 'model/trip/weather/Weather';
 import React from 'react';
 import ReactWeather from 'react-open-weather';
@@ -11,19 +12,25 @@ export interface IWeatherViewOwnProps {
   setSelectedYear: (year: number) => void;
 }
 
-type IWeatherViewProps = IWeatherViewOwnProps;
+type IWeatherViewProps = IWeatherViewOwnProps & IWithLocalizeOwnProps;
 
 const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
   return (
     <Row gutter={[16, 16]}>
-      <Col span={12}>
-        <Title level={4}>Current weather</Title>
-        <ReactWeather data={props.currentWeather} lang="en" locationLabel={props.currentWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
+      <Col md={24} lg={12} className="weatherView__col">
+        <Title level={4}>{props.translate('WEATHER_VIEW.CURRENT_WEATHER')}</Title>
+        {props.currentWeather ? (
+          <ReactWeather data={props.currentWeather} lang="en" locationLabel={props.currentWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
+        ) : (
+          <Row justify={'center'} align={'middle'} className="fullHeight">
+            <Spin />
+          </Row>
+        )}
       </Col>
 
-      <Col span={12}>
+      <Col md={24} lg={12} className="weatherView__col">
         <Row justify={'space-between'}>
-          <Title level={4}>Past year's weather on your travel dates</Title>
+          <Title level={4}>{props.translate('WEATHER_VIEW.PAST_WEATHER', { year: props.selectedYear })}</Title>
           <Select
             value={props.selectedYear}
             onChange={props.setSelectedYear}
@@ -37,10 +44,16 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
             className="weatherView__select"
           />
         </Row>
-        <ReactWeather data={props.pastWeather} lang="en" locationLabel={props.pastWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
+        {props.pastWeather ? (
+          <ReactWeather data={props.pastWeather} lang="en" locationLabel={props.pastWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
+        ) : (
+          <Row justify={'center'} align={'middle'} className="fullHeight">
+            <Spin />
+          </Row>
+        )}
       </Col>
     </Row>
   );
 };
 
-export default WeatherView;
+export default withLocalize<IWeatherViewOwnProps>(WeatherView as any);

@@ -18,8 +18,8 @@ const TripView: React.FC<ITripViewProps> = (props: ITripViewProps) => {
   return (
     <React.Fragment>
       <ReturnHeader label={isUpcoming ? props.translate('TRIP_VIEW.RETURN_TO_UPCOMING') : props.translate('TRIP_VIEW.RETURN_TO_PAST')} to={isUpcoming ? '/trips/upcoming' : '/trips/past'} />
-      <div className="panel">
-        <TripCard trip={props.trip} />
+      <TripCard trip={props.trip} />
+      <div className="tripView__content">
         <TripTabs />
         <Outlet />
       </div>

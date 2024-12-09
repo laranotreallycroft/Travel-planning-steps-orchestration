@@ -10,7 +10,7 @@ import TripSettingsPage from 'components/pages/TripSettingsPage';
 import UpcomingTripListPage from 'components/pages/UpcomingTripListPage';
 import WeatherPage from 'components/pages/WeatherPage';
 import ProtectedRoute from 'components/ProtectedRoute';
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom';
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +29,7 @@ const appRouter = createBrowserRouter(
             <Route path="upcoming" element={<UpcomingTripListPage />} />
             <Route path="past" element={<PastTripsPage />} />
             <Route path=":tripId" element={<TripPage />}>
+              <Route index element={<Navigate to="weather" replace />} />
               <Route path="weather" element={<WeatherPage />} />
               <Route path="itinerary" element={<ItineraryPage />} />
               <Route path="packinglist" element={<PackingListPage />} />
