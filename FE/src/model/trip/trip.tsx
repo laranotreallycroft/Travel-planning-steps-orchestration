@@ -1,4 +1,4 @@
-import { ICoordinates } from 'model/geometry/Coordinates';
+import { ICoordinates, ILocation } from 'model/geometry/Coordinates';
 import { IPackingList } from 'model/trip/packingList/PackingList';
 import { IItinerary } from 'model/trip/itinerary/Itinerary';
 
@@ -8,8 +8,8 @@ export interface ITrip {
   dateFrom: string;
   dateTo: string;
   location: ILocation;
-  packingLists?: IPackingList[];
-  itineraries?: IItinerary[];
+  packingLists: IPackingList[];
+  itineraries: IItinerary[];
 }
 
 export interface ITripCreatePayload {
@@ -17,10 +17,4 @@ export interface ITripCreatePayload {
   dateFrom: string;
   dateTo: string;
   location: ILocation;
-}
-
-export interface ILocation {
-  coordinates: ICoordinates;
-  label: string;
-  id: number;
 }

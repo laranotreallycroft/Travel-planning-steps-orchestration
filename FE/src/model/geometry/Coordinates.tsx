@@ -1,5 +1,3 @@
-import { IIdRef } from 'model/common/IdRef';
-
 export interface ICoordinates {
   x: number;
   y: number;
@@ -12,7 +10,8 @@ export interface IGeosearchResult extends ICoordinates {
   };
 }
 
-export interface IGeosearchData extends IIdRef {
-  label: string;
+export interface ILocation {
   coordinates: ICoordinates;
+  label: string;
+  id: number;
 }

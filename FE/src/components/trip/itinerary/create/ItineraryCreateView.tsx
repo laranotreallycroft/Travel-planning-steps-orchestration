@@ -1,24 +1,27 @@
 import { Form, Steps } from 'antd';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ITrip } from 'model/trip/Trip';
-import { IItineraryForm } from 'service/business/trip/itinerary/ItineraryBusinessStore';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import ItineraryDurationView from 'components/trip/itinerary/create/ItineraryDurationView';
 import ItineraryStopsView from 'components/trip/itinerary/create/ItineraryStopsView';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { IItineraryForm } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 
 export interface IItineraryCreateViewOwnProps {
-  trip: ITrip;
+  values?: Partial<IItineraryForm>;
+  initialValues?: Partial<IItineraryForm>;
   onSubmit: (itineraryRoutePayload: IItineraryForm) => void;
 }
 
-type IItineraryCreateViewProps = IItineraryCreateViewOwnProps;
+type IItineraryCreateViewProps = IItineraryCreateViewOwnProps & IWithLocalizeOwnProps;
 
 const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (props: IItineraryCreateViewProps) => {
   const [form] = Form.useForm<IItineraryForm>();
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
 
   useEffect(() => {
-    resetFields();
-  }, [props.trip]);
+    if (props.values) {
+      form.setFieldsValue(props.values);
+    } else form.resetFields();
+  }, [props.values]);
 
   const handleNextStep = useCallback(() => {
     setCurrentStep((currentStep) => currentStep + 1);
@@ -32,19 +35,14 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (props: IItiner
     props.onSubmit(form.getFieldsValue(true));
   }, []);
 
-  const resetFields = useCallback(() => {
-    setCurrentStep(0);
-    form.resetFields();
-  }, []);
-
   const steps = useMemo(
     () => [
       {
-        title: 'Select your stops',
-        content: <ItineraryStopsView onNextStep={handleNextStep} trip={props.trip} />,
+        title: props.translate('ITINERARY_CREATE_VIEW.STEP_ONE'),
+        content: <ItineraryStopsView onNextStep={handleNextStep} />,
       },
       {
-        title: 'Decide your visit duration',
+        title: props.translate('ITINERARY_CREATE_VIEW.STEP_TWO'),
         content: <ItineraryDurationView onPreviousStep={handlePreviousStep} onNextStep={handleFinish} />,
       },
     ],
@@ -54,39 +52,11 @@ const ItineraryCreateView: React.FC<IItineraryCreateViewProps> = (props: IItiner
   const items = useMemo(() => steps.map((item) => ({ key: item.title, title: item.title })), [steps]);
 
   return (
-    <Form<IItineraryForm>
-      form={form}
-      onFinish={handleFinish}
-      initialValues={
-        props.trip?.itineraries && props.trip.itineraries?.length > 0
-          ? {
-              locations: props.trip.itineraries.flatMap((itinerary) =>
-                itinerary.itineraryElements.map((itineraryElement) => {
-                  return {
-                    id: itineraryElement.id,
-                    label: itineraryElement.label,
-                    x: itineraryElement.location.coordinates.x,
-                    y: itineraryElement.location.coordinates.y,
-                    duration: itineraryElement.duration,
-                  };
-                })
-              ),
-              routeOptions: {
-                optimize: false,
-                vehicleProfile: props.trip.itineraries[0].transportationMethod,
-              },
-            }
-          : {
-              locations: [],
-              routeOptions: { optimize: false, vehicleProfile: 'driving-car' },
-            }
-      }
-      className="flex-container"
-    >
-      <Steps current={currentStep} items={items} className={props.trip?.itineraries && props.trip.itineraries.length > 0 ? 'itineraryCreateView__steps' : ''} />
+    <Form<IItineraryForm> form={form} onFinish={handleFinish} initialValues={props.initialValues}>
+      <Steps current={currentStep} items={items} />
       {steps[currentStep].content}
     </Form>
   );
 };
 
-export default ItineraryCreateView;
+export default withLocalize<IItineraryCreateViewOwnProps>(ItineraryCreateView as any);

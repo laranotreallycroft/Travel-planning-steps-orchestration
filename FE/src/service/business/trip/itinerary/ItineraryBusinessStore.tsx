@@ -1,6 +1,6 @@
 import { AppointmentModel } from '@devexpress/dx-react-scheduler';
-import { IGeosearchData } from 'model/geometry/Coordinates';
-import { IItinerary } from 'model/trip/itinerary/Itinerary';
+import { ILocation } from 'model/geometry/Coordinates';
+
 import { Observable, catchError, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
@@ -8,68 +8,54 @@ import EntityApiService from 'service/business/utils';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
-export interface IItineraryElementPayload extends IGeosearchData {
+export interface IItineraryElementPayload {
+  location: ILocation;
   duration: number;
 }
 
 export interface IItineraryForm {
-  locations: IItineraryElementPayload[];
-  settings: IItinerarySettings;
+  stops: IItineraryElementPayload[];
+  optimize: boolean;
+  transportationMethod: string;
 }
 export interface IItineraryPayload extends IItineraryForm {
   tripId: string;
 }
 
-export interface IItinerarySettings {
-  routeOptions: {
-    optimize: boolean;
-    vehicleProfile: string;
-  };
-}
 // -
 // -------------------- Selectors
-const getItinerary = (store: any): IItinerary => store.itinerary;
 
 // -
 // -------------------- Actions
 const actions = {
-  ITINERARIES_CREATE: 'ITINERARIES_CREATE',
-  ITINERARIES_UPDATE: 'ITINERARIES_UPDATE',
+  ITINERARY_CREATE: 'ITINERARY_CREATE',
+  ITINERARY_UPDATE: 'ITINERARY_UPDATE',
   ITINERARY_SCHEDULE_UPDATE: 'ITINERARY_SCHEDULE_UPDATE',
-  ITINERARIES_DELETE: 'ITINERARIES_DELETE',
-  ITINERARY_STORE: 'ITINERARY_STORE',
-  ITINERARY_CLEAR: 'ITINERARY_CLEAR',
+  ITINERARY_DELETE: 'ITINERARY_DELETE',
 };
 
-export const itinerariesCreate = (payload: IItineraryPayload): IPayloadAction<IItineraryPayload> => {
-  return { type: actions.ITINERARIES_CREATE, payload: payload };
+export const itineraryCreate = (payload: IItineraryPayload): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARY_CREATE, payload: payload };
 };
 
-export const itinerariesUpdate = (payload: IItineraryPayload): IPayloadAction<IItineraryPayload> => {
-  return { type: actions.ITINERARIES_UPDATE, payload: payload };
+export const itineraryUpdate = (payload: IItineraryPayload): IPayloadAction<IItineraryPayload> => {
+  return { type: actions.ITINERARY_UPDATE, payload: payload };
 };
 
 export const itineraryScheduleUpdate = (payload: AppointmentModel[]): IPayloadAction<AppointmentModel[]> => {
   return { type: actions.ITINERARY_SCHEDULE_UPDATE, payload: payload };
 };
-export const itinerariesDelete = (): IAction => {
-  return { type: actions.ITINERARIES_DELETE };
-};
-export const itineraryStore = (payload: IItinerary): IPayloadAction<IItinerary> => {
-  return { type: actions.ITINERARY_STORE, payload: payload };
-};
-
-export const itineraryClear = (): IAction => {
-  return { type: actions.ITINERARY_CLEAR };
+export const itineraryDelete = (): IAction => {
+  return { type: actions.ITINERARY_DELETE };
 };
 
 // -
 // -------------------- Side-effects
 
-const itinerariesCreateEffect = (action$: Observable<IPayloadAction<IItineraryPayload>>, state$: Observable<any>) => {
+const itineraryCreateEffect = (action$: Observable<IPayloadAction<IItineraryPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARIES_CREATE;
+      return action.type === actions.ITINERARY_CREATE;
     }),
     mergeMap((action) => {
       return from(
@@ -95,10 +81,10 @@ const itinerariesCreateEffect = (action$: Observable<IPayloadAction<IItineraryPa
   );
 };
 
-const itinerariesUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPayload>>, state$: Observable<any>) => {
+const itineraryUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARIES_UPDATE;
+      return action.type === actions.ITINERARY_UPDATE;
     }),
     mergeMap((action) => {
       return from(
@@ -151,10 +137,10 @@ const itineraryScheduleUpdateEffect = (action$: Observable<IPayloadAction<Appoin
   );
 };
 
-const itinerariesDeleteEffect = (action$: Observable<IAction>, state$: Observable<any>) => {
+const itineraryDeleteEffect = (action$: Observable<IAction>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
-      return action.type === actions.ITINERARIES_DELETE;
+      return action.type === actions.ITINERARY_DELETE;
     }),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
@@ -174,7 +160,7 @@ const itinerariesDeleteEffect = (action$: Observable<IAction>, state$: Observabl
       ).pipe(trackAction(action));
     }),
     filter((data) => data !== undefined),
-    switchMap((data) => of(tripStore(data), itineraryClear())),
+    switchMap((data) => of(tripStore(data))),
 
     catchError((error: any, o: Observable<any>) => {
       return o;
@@ -184,31 +170,19 @@ const itinerariesDeleteEffect = (action$: Observable<IAction>, state$: Observabl
 // -
 // -------------------- Reducers
 
-const itinerary = (state: any = null, action: IPayloadAction<IItinerary>) => {
-  if (action.type === actions.ITINERARY_STORE) {
-    if (action.payload) return { ...action.payload };
-    else return null;
-  } else if (action.type === actions.ITINERARY_CLEAR) {
-    return null;
-  }
-  return state;
-};
-
 export const ItineraryBusinessStore = {
-  selectors: { getItinerary },
+  selectors: {},
   actions: {
-    itinerariesCreate,
-    itinerariesUpdate,
+    itineraryCreate,
+    itineraryUpdate,
     itineraryScheduleUpdate,
-    itinerariesDelete,
-    itineraryStore,
-    itineraryClear,
+    itineraryDelete,
   },
   effects: {
-    itinerariesCreateEffect,
-    itinerariesUpdateEffect,
+    itineraryCreateEffect,
+    itineraryUpdateEffect,
     itineraryScheduleUpdateEffect,
-    itinerariesDeleteEffect,
+    itineraryDeleteEffect,
   },
-  reducers: { itinerary },
+  reducers: {},
 };

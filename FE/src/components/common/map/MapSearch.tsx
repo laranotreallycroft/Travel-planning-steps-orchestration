@@ -1,8 +1,9 @@
 import { DataSelect } from 'components/common/input/DataSelect';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { debounce } from 'lodash';
-import { IGeosearchData, IGeosearchResult } from 'model/geometry/Coordinates';
+import { ILocation, IGeosearchResult } from 'model/geometry/Coordinates';
 import { useCallback, useState } from 'react';
 import AppConfigService from 'service/common/AppConfigService';
 import { LangUtils } from 'service/util/LangUtils';
@@ -11,8 +12,8 @@ const debounceTimeout = AppConfigService.getValue('common.debounceTimeout');
 const minSearchLength = AppConfigService.getValue('common.minSearchStringLength');
 
 export interface IMapSearchOwnProps {
-  value?: IGeosearchData;
-  onChange: (value: IGeosearchData) => void;
+  value?: ILocation;
+  onChange: (value: ILocation) => void;
   showValueAfterSearch?: boolean;
   initialValue?: string;
 }
@@ -22,7 +23,7 @@ type IMapSearchProps = IMapSearchOwnProps & IWithLocalizeOwnProps;
 const provider = new OpenStreetMapProvider();
 
 const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
-  const [searchLocationArray, setSearchLocationArray] = useState<IGeosearchData[]>();
+  const [searchLocationArray, setSearchLocationArray] = useState<ILocation[]>();
 
   const handleLocationSearch = useCallback(
     debounce((value?: string) => {
@@ -46,7 +47,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
   );
 
   const handleLocationSelect = useCallback(
-    (value?: IGeosearchData | IGeosearchData[]) => {
+    (value?: ILocation | ILocation[]) => {
       if (value && !LangUtils.isArray(value)) {
         props.onChange(value);
         setSearchLocationArray([]);
@@ -56,13 +57,14 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
   );
 
   return (
-    <DataSelect<IGeosearchData>
+    <DataSelect<ILocation>
+      className="fullWidth"
       enableSearch={true}
       placeholder={props.translate('MAP_SEARCH.PLACEHOLDER')}
       defaultValue={props.initialValue}
       onChange={handleLocationSelect}
       onSearch={handleLocationSearch}
-      options={searchLocationArray?.map((location: IGeosearchData) => {
+      options={searchLocationArray?.map((location: ILocation) => {
         return {
           id: location.id,
           value: location.id,

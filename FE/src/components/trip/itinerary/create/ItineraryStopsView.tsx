@@ -1,202 +1,199 @@
-import { DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
-import { Accessible, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
+import { ZoomInOutlined } from '@ant-design/icons';
+import { Accessible, DeleteOutlined, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
 import SportsMotorsportsIcon from '@mui/icons-material/SportsMotorsports';
 import { Button, Col, Form, Radio, Row, Select, Tooltip } from 'antd';
-import Title from 'antd/es/typography/Title';
 import DragAndDropTable from 'components/common/list/DragAndDropTable';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import MapElement from 'components/common/map/MapElement';
-import { IGeosearchData } from 'model/geometry/Coordinates';
-import { ITrip } from 'model/trip/Trip';
+import MapSearch from 'components/common/map/MapSearch';
+import { ILocation } from 'model/geometry/Coordinates';
+import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
 import React, { useCallback, useState } from 'react';
-import { IItineraryElementPayload, IItineraryForm } from 'service/business/trip/itinerary/ItineraryBusinessStore';
+import { IItineraryElementPayload, IItineraryPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 import notificationService from 'service/util/notificationService';
-const vehicleProfiles = [
-  {
-    label: (
-      <Row>
-        <DirectionsCar className="margin-right-sm" />
-        Car
-      </Row>
-    ),
-    value: 'driving-car',
-  },
-  {
-    label: (
-      <Row>
-        <DirectionsBike className="margin-right-sm" />
-        Bicycle
-      </Row>
-    ),
-    value: 'cycling-regular',
-  },
-  {
-    label: (
-      <Row>
-        <SportsMotorsportsIcon className="margin-right-sm" />
-        Mountain bicycle
-      </Row>
-    ),
-    value: 'cycling-mountain',
-  },
-  {
-    label: (
-      <Row>
-        <DirectionsWalk className="margin-right-sm" />
-        Walking
-      </Row>
-    ),
-    value: 'foot-walking',
-  },
-  {
-    label: (
-      <Row>
-        <Hiking className="margin-right-sm" />
-        Hiking
-      </Row>
-    ),
-    value: 'foot-hiking',
-  },
-  {
-    label: (
-      <Row>
-        <Accessible className="margin-right-sm" />
-        Wheelchair
-      </Row>
-    ),
-    value: 'wheelchair',
-  },
-];
 
 export interface IItineraryStopsViewOwnProps {
-  trip: ITrip;
   onNextStep: () => void;
 }
 
-type IItineraryStopsViewProps = IItineraryStopsViewOwnProps;
+type IItineraryStopsViewProps = IItineraryStopsViewOwnProps & IWithLocalizeOwnProps;
 
 const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItineraryStopsViewProps) => {
-  const form = Form.useFormInstance<IItineraryForm>();
-  const locations = Form.useWatch('locations', form);
-  const [selectedLocation, setSelectedLocation] = useState<IItineraryElementPayload>(form.getFieldValue('locations')[0]);
-  const setLocations = useCallback((locations: IItineraryElementPayload[]) => {
-    form.setFieldValue('locations', locations);
-  }, []);
-  /*
-  const handleAddLocation = useCallback(
-    (value: string) => {
-      const parsedValue: IItineraryElementPayload = {
-        ...JSON.parse(value),
-        id: uuidv4(),
+  const form = Form.useFormInstance<IItineraryPayload>();
+  const stops = Form.useWatch('stops', form);
+  const [selectedStop, setSelectedStop] = useState<IItineraryElementPayload | undefined>(stops?.[0]);
+
+  const handleAddStop = useCallback(
+    (value: ILocation) => {
+      const payload: IItineraryElementPayload = {
+        location: value,
         duration: 60,
       };
-      setSelectedLocation(parsedValue);
-      setLocations([...locations, parsedValue]);
+      setSelectedStop(payload);
+      if (stops) {
+        form.setFieldValue('stops', [...stops, payload]);
+      } else {
+        form.setFieldValue('stops', [payload]);
+      }
     },
-    [locations]
-  );*/
-
-  const handleRemoveLocation = useCallback(
-    (e: any, value: IGeosearchData) => {
-      e.stopPropagation();
-      e.preventDefault();
-      const newLocations = locations.filter((location) => location.id !== value.id);
-      setSelectedLocation(newLocations[0]);
-      setLocations(newLocations);
-    },
-    [locations]
+    [stops]
   );
 
-  const handleNext = () => {
-    if (locations.length === 0) notificationService.error('Unable to generate route', 'Please select at least one stop');
-    /* else if (
-      locations.every((element) => {
-        return element.x === props.trip.location.x && element.y === props.trip.location.y;
-      })
-    )
-      notificationService.error('Unable to generate route', 'All stops are the same as trip origin');
-    else props.onNextStep();*/
-  };
-  return (
-    <React.Fragment>
-      <Row>
-        <Title level={4}>Select your stops</Title>
-      </Row>
+  const handleRemoveStop = useCallback(
+    (e: any, value: IItineraryElementPayload) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const newLocations = stops.filter((stop) => stop.location.id !== value.location.id);
+      setSelectedStop(newLocations[0]);
+      form.setFieldValue('stops', newLocations);
+    },
+    [stops]
+  );
 
-      <Row gutter={16}>
-        <Col span={12}>
-          {
-            //<MapSearch onSelectLocation={handleAddLocation} />
-          }
+  const handleNext = useCallback(() => {
+    if (stops == null) {
+      notificationService.error(props.translate('ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.TITLE'), props.translate('ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.DESCRIPTION'));
+    } else props.onNextStep();
+  }, [stops?.length, props.onNextStep]);
+
+  const transportationMethods = [
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <DirectionsCar />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.CAR}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.CAR,
+    },
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <DirectionsBike />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.BICYCLE}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.BICYCLE,
+    },
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <SportsMotorsportsIcon />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.MOUNTAIN_BICYCLE}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.MOUNTAIN_BICYCLE,
+    },
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <DirectionsWalk />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.WALKING}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.WALKING,
+    },
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <Hiking />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.HIKING}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.HIKING,
+    },
+    {
+      label: (
+        <Row gutter={8}>
+          <Col>
+            <Accessible />
+          </Col>
+          <Col>{props.translate(`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.WHEELCHAIR}`)}</Col>
+        </Row>
+      ),
+      value: TransportationMethodEnum.WHEELCHAIR,
+    },
+  ];
+
+  return (
+    <div className="margin-top-lg">
+      <Row gutter={[16, 16]}>
+        <Col xs={24} xl={12}>
+          <MapSearch onChange={handleAddStop} />
         </Col>
-        <Col span={8}>
-          <Form.Item name={['routeOptions', 'optimize']}>
+
+        <Col xs={24} sm={16} lg={12} xl={8}>
+          <Form.Item name={'optimize'}>
             <Radio.Group>
-              <Radio.Button value={false}>Keep original route order</Radio.Button>
-              <Radio.Button value={true}>Optimize route</Radio.Button>
+              <Radio.Button value={false}>{props.translate('ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.FALSE')}</Radio.Button>
+              <Radio.Button value={true}>{props.translate('ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.TRUE')}</Radio.Button>
             </Radio.Group>
           </Form.Item>
         </Col>
 
-        <Col span={4}>
-          <Form.Item name={['routeOptions', 'vehicleProfile']} className="fullWidth">
-            <Select options={vehicleProfiles} />
+        <Col xs={24} sm={8} lg={12} xl={4}>
+          <Form.Item name={'transportationMethod'}>
+            <Select options={transportationMethods} />
           </Form.Item>
         </Col>
-      </Row>
 
-      <Row gutter={16} className="itineraryStopsView__container">
-        <Col span={12} className="fullHeight">
-          <Form.List name="locations">
+        <Col xs={24} xl={12}>
+          <Form.List name="stops">
             {() => (
               <DragAndDropTable
-                sortableContextItems={locations ? locations.map((location) => location.id) : form.getFieldValue('locations').map((location: IGeosearchData) => location.id)}
+                sortableContextItems={stops?.map((stop) => stop.location.id) ?? []}
                 tableDataSource={
-                  locations
-                    ? locations.map((location) => {
-                        return { ...location, key: location.id };
-                      })
-                    : form.getFieldValue('locations').map((location: IGeosearchData) => {
-                        return { ...location, key: location.id };
-                      })
+                  stops?.map((stop) => {
+                    return { ...stop, key: stop.location.id };
+                  }) ?? []
                 }
                 tableColumns={[
                   {
-                    title: 'Location',
-                    dataIndex: 'label',
+                    title: props.translate('ITINERARY_STOPS_VIEW.TABLE.DESTINATION'),
+                    render: (value: IItineraryElementPayload) => value.location.label,
                   },
                   {
-                    title: 'Action',
                     key: 'action',
                     width: 100,
-                    render: (_, location) => (
+                    render: (stop: IItineraryElementPayload) => (
                       <Row justify={'space-between'}>
-                        <Tooltip placement="bottom" title={'Remove stop'}>
-                          <Button icon={<DeleteOutlined />} onClick={(e) => handleRemoveLocation(e, location)} size="small" />
+                        <Tooltip placement="bottom" title={props.translate('ITINERARY_STOPS_VIEW.TABLE.REMOVE_STOP')}>
+                          <Button icon={<DeleteOutlined />} onClick={(e) => handleRemoveStop(e, stop)} size="small" />
                         </Tooltip>
-                        <Tooltip placement="bottom" title={'Zoom to location'}>
-                          <Button icon={<ZoomInOutlined />} onClick={() => setSelectedLocation(location)} size="small" />
+                        <Tooltip placement="bottom" title={props.translate('ITINERARY_STOPS_VIEW.TABLE.ZOOM')}>
+                          <Button icon={<ZoomInOutlined />} onClick={() => setSelectedStop(stop)} size="small" />
                         </Tooltip>
                       </Row>
                     ),
                   },
                 ]}
-                setLocations={setLocations}
+                setStops={(stops) => form.setFieldValue('stops', stops)}
               />
             )}
           </Form.List>
         </Col>
-        <Col span={12}>
-          <MapElement selectedLocation={selectedLocation} locationList={[locations]} className="fullHeight" />
+        <Col xs={24} xl={12}>
+          <MapElement className="itineraryStopsView__map" selectedLocation={selectedStop?.location} locationList={[stops?.map((stop) => stop.location)]} />
         </Col>
       </Row>
 
       <Row justify={'end'} align={'bottom'} className="margin-top-md">
         <Button type="primary" onClick={handleNext}>
-          Next
+          {props.translate('ITINERARY_STOPS_VIEW.NEXT_STEP')}
         </Button>
       </Row>
-    </React.Fragment>
+    </div>
   );
 };
 
-export default ItineraryStopsView;
+export default withLocalize<IItineraryStopsViewOwnProps>(ItineraryStopsView as any);

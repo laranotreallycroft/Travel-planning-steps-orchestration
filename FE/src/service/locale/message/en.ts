@@ -1,3 +1,5 @@
+import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
+
 const en: any = {
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
@@ -45,7 +47,7 @@ const en: any = {
   'TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL': 'Travel dates',
   'TRIP_CREATE_VIEW.FORM.LOCATION.LABEL': 'Travel destination',
 
-  'MAP_SEARCH.PLACEHOLDER': 'Destination',
+  'MAP_SEARCH.PLACEHOLDER': 'Select destination',
   'MAP_ELEMENT.PATH_POPUP.LABEL': 'Day %{count} of your trip',
 
   'TRIP_CARD.FIRST_WORD': 'Trip',
@@ -56,6 +58,25 @@ const en: any = {
 
   'WEATHER_VIEW.CURRENT_WEATHER': 'Current weather',
   'WEATHER_VIEW.PAST_WEATHER': 'Weather in %{year}',
+
+  'ITINERARY_CREATE_VIEW.STEP_ONE': 'Select your stops',
+  'ITINERARY_CREATE_VIEW.STEP_TWO': 'Decide your visit duration',
+
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.CAR}`]: 'Car',
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.BICYCLE}`]: 'Bicycle',
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.MOUNTAIN_BICYCLE}`]: 'Mountain bicycle',
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.WALKING}`]: 'Walking',
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.HIKING}`]: 'Hiking',
+  [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.WHEELCHAIR}`]: 'Wheelchair',
+
+  'ITINERARY_STOPS_VIEW.NEXT_STEP': 'Next',
+  'ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.TRUE': 'Optimize route',
+  'ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.FALSE': 'Keep original route',
+  'ITINERARY_STOPS_VIEW.TABLE.DESTINATION': 'Destination',
+  'ITINERARY_STOPS_VIEW.TABLE.REMOVE_STOP': 'Remove stop',
+  'ITINERARY_STOPS_VIEW.TABLE.ZOOM': 'Zoom to location',
+  'ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.TITLE': 'Unable to generate route',
+  'ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.DESCRIPTION': 'Please select at least one stop',
 };
 
 export default en;

@@ -1,12 +1,10 @@
-import ItineraryContainer from "components/trip/itinerary/ItineraryContainer";
+import ItineraryContainer from 'components/trip/itinerary/ItineraryContainer';
 
 export interface IItineraryPageOwnProps {}
 
 type IItineraryPageProps = IItineraryPageOwnProps;
 
-const ItineraryPage: React.FC<IItineraryPageProps> = (
-  props: IItineraryPageProps
-) => {
+const ItineraryPage: React.FC<IItineraryPageProps> = (props: IItineraryPageProps) => {
   return <ItineraryContainer />;
 };
 

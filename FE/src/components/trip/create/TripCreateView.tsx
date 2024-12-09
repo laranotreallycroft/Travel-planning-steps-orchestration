@@ -3,7 +3,7 @@ import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/
 import MapElement from 'components/common/map/MapElement';
 import MapSearch from 'components/common/map/MapSearch';
 import { Dayjs } from 'dayjs';
-import { IGeosearchData } from 'model/geometry/Coordinates';
+import { ILocation } from 'model/geometry/Coordinates';
 import { ITripCreatePayload } from 'model/trip/Trip';
 import { RangeValue } from 'rc-picker/lib/interface';
 import React, { useCallback, useState } from 'react';
@@ -16,14 +16,14 @@ export interface ITripCreateViewOwnProps {
 export interface ITripCreateForm {
   label: string;
   dateRange: RangeValue<Dayjs>;
-  location: IGeosearchData;
+  location: ILocation;
 }
 
 type ITripCreateViewProps = ITripCreateViewOwnProps & IWithLocalizeOwnProps;
 
 const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewProps) => {
   const [form] = Form.useForm<ITripCreateForm>();
-  const [selectedLocation, setSelectedLocation] = useState<IGeosearchData>();
+  const [selectedLocation, setSelectedLocation] = useState<ILocation>();
 
   const handleFinish = useCallback(
     (values: ITripCreateForm) => {

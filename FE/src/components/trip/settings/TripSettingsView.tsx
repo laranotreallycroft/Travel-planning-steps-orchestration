@@ -3,7 +3,7 @@ import Title from 'antd/es/typography/Title';
 import MapSearch from 'components/common/map/MapSearch';
 import { ITripCreateForm } from 'components/trip/create/TripCreateView';
 import dayjs from 'dayjs';
-import { IGeosearchData } from 'model/geometry/Coordinates';
+import { ILocation } from 'model/geometry/Coordinates';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect } from 'react';
 
@@ -26,7 +26,7 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (props: ITripSettings
       dateRange: [dayjs(props.trip.dateFrom), dayjs(props.trip.dateTo)],
     });
   }, [props.trip]);
-  const handleSelectLocation = useCallback((value?: IGeosearchData | IGeosearchData[]) => {
+  const handleSelectLocation = useCallback((value?: ILocation | ILocation[]) => {
     // const parsedValue: IGeosearchPayload = JSON.parse(value);
     //  form.setFieldValue('location', parsedValue);
   }, []);

@@ -5,7 +5,7 @@ import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/
 import { ChangeView } from 'components/common/map/utils';
 import L, { LatLngExpression } from 'leaflet';
 import { COLORS } from 'model/geometry/Colors';
-import { IGeosearchData } from 'model/geometry/Coordinates';
+import { ILocation } from 'model/geometry/Coordinates';
 import AppConfigService from 'service/common/AppConfigService';
 
 const defaultLocation = AppConfigService.getValue('common.location.coordinates');
@@ -13,8 +13,8 @@ const defaultZoom = AppConfigService.getValue('common.location.zoom');
 const tileLayer = AppConfigService.getValue('common.location.tileLayer');
 
 export interface IMapElementOwnProps {
-  selectedLocation?: IGeosearchData;
-  locationList?: IGeosearchData[][];
+  selectedLocation?: ILocation;
+  locationList?: ILocation[][];
   pathList?: LatLngExpression[][];
   className?: string;
 }
