@@ -76,7 +76,7 @@ const TripSettingsView: React.FC<ITripSettingsViewProps> = (props: ITripSettings
         <DatePicker.RangePicker allowClear={false} />
       </Form.Item>
       <Form.Item name={'location'} label={'Travel destination'} className="fullWidth">
-        <MapSearch onChange={handleSelectLocation} showValueAfterSearch={true} initialValue={props.trip.location.label} />
+        <MapSearch onChange={handleSelectLocation} initialValue={props.trip.location.label} />
       </Form.Item>
     </Form>
   );

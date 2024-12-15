@@ -19,6 +19,7 @@ export interface IDataSelectOwnProps<T> {
   className?: string;
   notFoundContent?: React.ReactNode;
   dropdownStyle?: any;
+  hideValueAfterSelect?: boolean;
 }
 type IDataSelectProps<T> = IDataSelectOwnProps<T>;
 
@@ -73,7 +74,7 @@ export const DataSelect = <T extends IIdRef>(props: IDataSelectProps<T>) => {
       onSearch={handleSearch}
       filterOption={props.enableSearch ? (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase()) : undefined}
       mode={props.mode}
-      value={getValueIds(props.value)}
+      value={!props.hideValueAfterSelect ? getValueIds(props.value) : null}
       onChange={handleChange}
       placeholder={props.placeholder}
       notFoundContent={props.notFoundContent}

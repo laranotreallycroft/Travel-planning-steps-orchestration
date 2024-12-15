@@ -14,7 +14,7 @@ const minSearchLength = AppConfigService.getValue('common.minSearchStringLength'
 export interface IMapSearchOwnProps {
   value?: ILocation;
   onChange: (value: ILocation) => void;
-  showValueAfterSearch?: boolean;
+  hideValueAfterSelect?: boolean;
   initialValue?: string;
 }
 
@@ -75,6 +75,7 @@ const MapSearch: React.FC<IMapSearchProps> = (props: IMapSearchProps) => {
       })}
       notFoundContent={null}
       dropdownStyle={{ zIndex: 10000 }}
+      hideValueAfterSelect={props.hideValueAfterSelect}
     />
   );
 };

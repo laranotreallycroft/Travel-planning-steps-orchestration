@@ -136,7 +136,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
     <div className="margin-top-lg">
       <Row gutter={[16, 16]}>
         <Col xs={24} xl={12}>
-          <MapSearch onChange={handleAddStop} />
+          <MapSearch onChange={handleAddStop} hideValueAfterSelect={true} />
         </Col>
 
         <Col xs={24} sm={16} lg={12} xl={8}>

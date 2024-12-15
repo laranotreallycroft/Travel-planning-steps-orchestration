@@ -76,7 +76,7 @@ const TripCreateView: React.FC<ITripCreateViewProps> = (props: ITripCreateViewPr
             },
           ]}
         >
-          <MapSearch onChange={setSelectedLocation} showValueAfterSearch={true} />
+          <MapSearch onChange={setSelectedLocation} />
         </Form.Item>
         <MapElement selectedLocation={selectedLocation} locationList={selectedLocation ? [[selectedLocation]] : undefined} />
       </Form>
