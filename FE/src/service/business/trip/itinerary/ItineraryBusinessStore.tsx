@@ -9,6 +9,7 @@ import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
 export interface IItineraryElementPayload {
+  id: string;
   location: ILocation;
   duration: number;
 }

@@ -25,16 +25,23 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
 
   const handleAddStop = useCallback(
     (value: ILocation) => {
-      const payload: IItineraryElementPayload = {
-        location: value,
-        duration: 60,
-      };
-      setSelectedStop(payload);
+      let payload: IItineraryElementPayload;
       if (stops) {
+        payload = {
+          id: `${value.id}-${stops.length}`,
+          location: value,
+          duration: 60,
+        };
         form.setFieldValue('stops', [...stops, payload]);
       } else {
+        payload = {
+          id: `${value.id}-0`,
+          location: value,
+          duration: 60,
+        };
         form.setFieldValue('stops', [payload]);
       }
+      setSelectedStop(payload);
     },
     [stops]
   );
@@ -43,7 +50,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
     (e: any, value: IItineraryElementPayload) => {
       e.stopPropagation();
       e.preventDefault();
-      const newLocations = stops.filter((stop) => stop.location.id !== value.location.id);
+      const newLocations = stops.filter((stop) => stop.id !== value.id);
       setSelectedStop(newLocations[0]);
       form.setFieldValue('stops', newLocations);
     },
@@ -151,10 +158,10 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
           <Form.List name="stops">
             {() => (
               <DragAndDropTable
-                sortableContextItems={stops?.map((stop, index) => `${stop.location.id}_${index}`) ?? []}
+                sortableContextItems={stops?.map((stop) => stop.id) ?? []}
                 tableDataSource={
-                  stops?.map((stop, index) => {
-                    return { ...stop, key: `${stop.location.id}_${index}` };
+                  stops?.map((stop) => {
+                    return { ...stop, key: stop.id };
                   }) ?? []
                 }
                 tableColumns={[

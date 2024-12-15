@@ -1,6 +1,8 @@
 import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
 
 const en: any = {
+  'COMMON.FORM.SUBMIT': 'Submit',
+
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
   'NAVIGATION.CREATE': 'Sign up',
@@ -70,6 +72,7 @@ const en: any = {
   [`ITINERARY_STOPS_VIEW.VEHICLE_PROFILES.${TransportationMethodEnum.WHEELCHAIR}`]: 'Wheelchair',
 
   'ITINERARY_STOPS_VIEW.NEXT_STEP': 'Next',
+  'ITINERARY_STOPS_VIEW.PREVIOUS_STEP': 'Back',
   'ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.TRUE': 'Optimize route',
   'ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.FALSE': 'Keep original route',
   'ITINERARY_STOPS_VIEW.TABLE.DESTINATION': 'Destination',
@@ -77,6 +80,10 @@ const en: any = {
   'ITINERARY_STOPS_VIEW.TABLE.ZOOM': 'Zoom to location',
   'ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.TITLE': 'Unable to generate route',
   'ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.DESCRIPTION': 'Please select at least one stop',
+
+  'ITINERARY_DURATION_VIEW.TABLE.DESTINATION': 'Destination',
+  'ITINERARY_DURATION_VIEW.TABLE.DURATION': 'Duration',
+  'ITINERARY_DURATION_VIEW.TABLE.DURATION.MINUTES': 'minutes',
 };
 
 export default en;

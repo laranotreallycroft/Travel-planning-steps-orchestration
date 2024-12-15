@@ -1,11 +1,10 @@
-.itineraryDurationView__input {
-    width: 4vw;
+.itineraryDurationView__tableContainer {
+  overflow: auto;
+  height: 100%;
+  border: 2px solid #f0f0f0;
+  border-radius: 4px;
 }
 
-
-.itineraryDurationView__tableContainer {
-    overflow: auto;
-    height: 100%;
-    border: 1px solid #f0f0f0;
-    border-radius: 8px;
+.itineraryDurationView__tableContainer .ant-table-tbody > tr:last-child > td {
+  border: none;
 }
