@@ -1,5 +1,5 @@
-import { ZoomInOutlined } from '@ant-design/icons';
-import { Accessible, DeleteOutlined, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
+import { ZoomInOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Accessible, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
 import SportsMotorsportsIcon from '@mui/icons-material/SportsMotorsports';
 import { Button, Col, Form, Radio, Row, Select, Tooltip } from 'antd';
 import DragAndDropTable from 'components/common/list/DragAndDropTable';
@@ -151,10 +151,10 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
           <Form.List name="stops">
             {() => (
               <DragAndDropTable
-                sortableContextItems={stops?.map((stop) => stop.location.id) ?? []}
+                sortableContextItems={stops?.map((stop, index) => `${stop.location.id}_${index}`) ?? []}
                 tableDataSource={
-                  stops?.map((stop) => {
-                    return { ...stop, key: stop.location.id };
+                  stops?.map((stop, index) => {
+                    return { ...stop, key: `${stop.location.id}_${index}` };
                   }) ?? []
                 }
                 tableColumns={[

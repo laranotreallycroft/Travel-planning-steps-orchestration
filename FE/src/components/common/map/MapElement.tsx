@@ -33,9 +33,9 @@ const MapElement: React.FC<IMapElementProps> = (props: IMapElementProps) => {
         </Polyline>
       ))}
       {props.locationList?.map((locationArray, index) =>
-        locationArray?.map((location) => (
+        locationArray?.map((location, index) => (
           <Marker
-            key={`marker-${location.id}`}
+            key={`marker-${location.id}-${index}`}
             position={[location.coordinates.y, location.coordinates.x]}
             icon={
               new L.Icon({
