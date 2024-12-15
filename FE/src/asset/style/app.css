@@ -49,6 +49,5 @@ body {
 @import 'trip/common/_tripCard.css';
 @import 'trip/itinerary/_itineraryView.css';
 @import 'trip/itinerary/create/_itineraryDurationView.css';
-@import 'trip/itinerary/create/_itineraryStopsView.css';
 @import 'trip/itinerary/schedule/_schedule.css';
 @import 'trip/itinerary/update/_itineraryMapUpdateView.css';

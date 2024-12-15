@@ -190,7 +190,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
           </Form.List>
         </Col>
         <Col xs={24} xl={12}>
-          <MapElement className="itineraryStopsView__map" selectedLocation={selectedStop?.location} locationList={[stops?.map((stop) => stop.location)]} />
+          <MapElement className="fullheight" selectedLocation={selectedStop?.location} locationList={[stops?.map((stop) => stop.location)]} />
         </Col>
       </Row>
 
