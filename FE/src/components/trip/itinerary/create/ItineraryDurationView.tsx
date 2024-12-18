@@ -1,5 +1,6 @@
 import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import StartCheckbox from 'components/trip/itinerary/create/StartCheckbox';
 import React from 'react';
 import { IItineraryElementPayload, IItineraryPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 
@@ -13,14 +14,24 @@ type IItineraryDurationViewProps = IItineraryDurationViewOwnProps & IWithLocaliz
 const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IItineraryDurationViewProps) => {
   const form = Form.useFormInstance<IItineraryPayload>();
 
-  const handleDurationChange = (value: number, locationId: string) => {
+  const handleDurationChange = (value: number, stopId: string) => {
     const stops = form.getFieldsValue(true).stops;
-    const newLocations = stops.map((stop: IItineraryElementPayload) => {
-      if (stop.id === locationId) stop.duration = value;
+    const newStops = stops.map((stop: IItineraryElementPayload) => {
+      if (stop.id === stopId) stop.duration = value;
       return stop;
     });
-    form.setFieldValue('stops', newLocations);
+    form.setFieldValue('stops', newStops);
   };
+
+  const handleStartChange = (value: boolean, stopId: string) => {
+    const stops = form.getFieldsValue(true).stops;
+    const newStops = stops.map((stop: IItineraryElementPayload) => {
+      if (stop.id === stopId) stop.start = value;
+      return stop;
+    });
+    form.setFieldValue('stops', newStops);
+  };
+
   return (
     <div className="margin-top-lg">
       <Row className="itineraryDurationView__tableContainer">
@@ -42,6 +53,17 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IIt
                 <Row gutter={16} justify={'center'}>
                   <InputNumber defaultValue={stop.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, stop.id)} />
                   <Col>{props.translate('ITINERARY_DURATION_VIEW.TABLE.DURATION.MINUTES')}</Col>
+                </Row>
+              ),
+              width: 180,
+            },
+
+            {
+              title: props.translate('ITINERARY_DURATION_VIEW.TABLE.START'),
+              key: 'start',
+              render: (stop: IItineraryElementPayload) => (
+                <Row gutter={16} justify={'center'}>
+                  <StartCheckbox onChange={(value) => handleStartChange(value, stop.id)} value={stop.start} />
                 </Row>
               ),
               width: 180,

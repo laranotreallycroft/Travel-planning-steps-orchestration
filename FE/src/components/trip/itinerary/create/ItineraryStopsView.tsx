@@ -1,4 +1,4 @@
-import { ZoomInOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
 import { Accessible, DirectionsBike, DirectionsCar, DirectionsWalk, Hiking } from '@mui/icons-material';
 import SportsMotorsportsIcon from '@mui/icons-material/SportsMotorsports';
 import { Button, Col, Form, Radio, Row, Select, Tooltip } from 'antd';
@@ -8,9 +8,9 @@ import MapElement from 'components/common/map/MapElement';
 import MapSearch from 'components/common/map/MapSearch';
 import { ILocation } from 'model/geometry/Coordinates';
 import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { IItineraryElementPayload, IItineraryPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
-import notificationService from 'service/util/notificationService';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface IItineraryStopsViewOwnProps {
   onNextStep: () => void;
@@ -25,20 +25,15 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
 
   const handleAddStop = useCallback(
     (value: ILocation) => {
-      let payload: IItineraryElementPayload;
+      const payload: IItineraryElementPayload = {
+        id: uuidv4(),
+        location: value,
+        duration: 60,
+        start: false,
+      };
       if (stops) {
-        payload = {
-          id: `${value.id}-${stops.length}`,
-          location: value,
-          duration: 60,
-        };
         form.setFieldValue('stops', [...stops, payload]);
       } else {
-        payload = {
-          id: `${value.id}-0`,
-          location: value,
-          duration: 60,
-        };
         form.setFieldValue('stops', [payload]);
       }
       setSelectedStop(payload);
@@ -57,12 +52,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
     [stops]
   );
 
-  const handleNext = useCallback(() => {
-    if (stops == null) {
-      notificationService.error(props.translate('ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.TITLE'), props.translate('ITINERARY_STOPS_VIEW.NOTIFICATION_ERROR.ZERO_STOPS.DESCRIPTION'));
-    } else props.onNextStep();
-  }, [stops?.length, props.onNextStep]);
-
+  const isNextButtonDisabled = useMemo(() => stops?.length < 2, [stops?.length]);
   const transportationMethods = [
     {
       label: (
@@ -195,9 +185,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
       </Row>
 
       <Row justify={'end'} align={'bottom'} className="margin-top-md">
-        <Button type="primary" onClick={handleNext}>
-          {props.translate('ITINERARY_STOPS_VIEW.NEXT_STEP')}
-        </Button>
+        <Tooltip title={isNextButtonDisabled ? props.translate('ITINERARY_STOPS_VIEW.NEXT_STEP.DISBALED_TOOLTIP') : ''}>
+          <Button disabled={isNextButtonDisabled} type="primary" onClick={props.onNextStep}>
+            {props.translate('ITINERARY_STOPS_VIEW.NEXT_STEP')}
+          </Button>
+        </Tooltip>
       </Row>
     </div>
   );

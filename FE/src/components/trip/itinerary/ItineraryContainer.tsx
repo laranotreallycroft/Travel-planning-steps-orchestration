@@ -1,11 +1,12 @@
-import ItineraryView from 'components/trip/itinerary/ItineraryView';
 import ItineraryCreateView from 'components/trip/itinerary/create/ItineraryCreateView';
 import { ITrip } from 'model/trip/Trip';
+import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 import { IItineraryForm, IItineraryPayload, ItineraryBusinessStore } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 import { createTrackableAction, ITrackableAction } from 'service/util/trackAction';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface IItineraryContainerOwnProps {}
 
@@ -47,7 +48,12 @@ const ItineraryContainer: React.FC<IItineraryContainerProps> = (props: IItinerar
     };
   }, [props.trip.itineraries]);*/
 
-  return props.trip?.itineraries.length > 0 ? <ItineraryView trip={props.trip} onItinerariesDelete={props.itineraryDelete} /> : <ItineraryCreateView onSubmit={handleItinerariesCreate} initialValues={{ optimize: false, transportationMethod: 'driving-car' }} />;
+  return (
+    <ItineraryCreateView onSubmit={handleItinerariesCreate} initialValues={{ stops: [{ location: props.trip.location, duration: 0, id: uuidv4(), start: true }], optimize: false, transportationMethod: TransportationMethodEnum.CAR }} />
+    /*props.trip?.itineraries.length > 0 ? (
+    <ItineraryView trip={props.trip} onItinerariesDelete={props.itineraryDelete} />
+  */
+  );
 };
 
 const mapStateToProps = (state: any): IItineraryContainerStateProps => ({

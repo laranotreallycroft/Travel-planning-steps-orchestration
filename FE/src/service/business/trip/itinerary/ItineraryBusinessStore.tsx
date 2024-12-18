@@ -12,6 +12,7 @@ export interface IItineraryElementPayload {
   id: string;
   location: ILocation;
   duration: number;
+  start: boolean;
 }
 
 export interface IItineraryForm {

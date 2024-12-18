@@ -107,7 +107,9 @@ public class Itinerary {
     }
 
     public Coordinate[] getRouteGeometry() {
-        return routeGeometry.getCoordinates();
+        if (routeGeometry != null)
+            return routeGeometry.getCoordinates();
+        return null;
     }
 
     public void setRouteGeometry(LineString routeGeometry) {

@@ -1,11 +1,11 @@
 package com.odysseus.controller;
 
 import com.odysseus.model.location.Location;
-import com.odysseus.model.trip.Trip;
-import com.odysseus.model.user.User;
 import com.odysseus.model.location.LocationRequest;
-import com.odysseus.model.trip.TripListFilter;
+import com.odysseus.model.trip.Trip;
 import com.odysseus.model.trip.TripCreateRequest;
+import com.odysseus.model.trip.TripListFilter;
+import com.odysseus.model.user.User;
 import com.odysseus.repository.LocationRepository;
 import com.odysseus.repository.TripRepository;
 import org.springframework.http.HttpStatus;
@@ -80,7 +80,7 @@ public class TripController {
         }
         return ResponseEntity.badRequest().body("Something went wrong");
     }
-
+/*
     @PutMapping("/{tripId}")
     public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId,
                                      @RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
@@ -111,6 +111,6 @@ public class TripController {
         }
 
         return ResponseEntity.badRequest().body("Something went wrong");
-    }
+    }*/
 
 }
