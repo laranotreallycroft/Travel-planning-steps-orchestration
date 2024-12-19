@@ -15,6 +15,11 @@ export interface IWeatherViewOwnProps {
 type IWeatherViewProps = IWeatherViewOwnProps & IWithLocalizeOwnProps;
 
 const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
+  const lastYear = new Date().getFullYear() - 1;
+  const yearArray = Array.from({ length: 5 }, (_, i) => {
+    const year = lastYear - i;
+    return { value: year, label: year.toString() };
+  });
   return (
     <Row gutter={[16, 16]}>
       <Col md={24} lg={12} className="weatherView__col">
@@ -31,18 +36,7 @@ const WeatherView: React.FC<IWeatherViewProps> = (props: IWeatherViewProps) => {
       <Col md={24} lg={12} className="weatherView__col">
         <Row justify={'space-between'}>
           <Title level={4}>{props.translate('WEATHER_VIEW.PAST_WEATHER', { year: props.selectedYear })}</Title>
-          <Select
-            value={props.selectedYear}
-            onChange={props.setSelectedYear}
-            options={[
-              { value: 2022, label: '2022' },
-              { value: 2021, label: '2021' },
-              { value: 2020, label: '2020' },
-              { value: 2019, label: '2019' },
-              { value: 2018, label: '2018' },
-            ]}
-            className="weatherView__select"
-          />
+          <Select value={props.selectedYear} onChange={props.setSelectedYear} options={yearArray} className="weatherView__select" />
         </Row>
         {props.pastWeather ? (
           <ReactWeather data={props.pastWeather} lang="en" locationLabel={props.pastWeather?.name} unitsLabels={{ temperature: 'C', windSpeed: 'Km/h' }} showForecast />
