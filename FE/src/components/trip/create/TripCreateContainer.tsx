@@ -5,7 +5,6 @@ import { ITripCreatePayload, TripBusinessStore } from 'service/business/trip/Tri
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface ITripCreateContainerOwnProps {
-  onTripCreate?: () => void;
   onTripCreateModalClose: () => void;
 }
 
@@ -23,10 +22,9 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (props: ITripCr
         .track()
         .subscribe(() => {
           props.onTripCreateModalClose();
-          props.onTripCreate?.();
         });
     },
-    [props.tripCreate, props.onTripCreate]
+    [props.tripCreate]
   );
   return <TripCreateModal onTripCreate={handleTripCreate} onTripCreateModalClose={props.onTripCreateModalClose} />;
 };

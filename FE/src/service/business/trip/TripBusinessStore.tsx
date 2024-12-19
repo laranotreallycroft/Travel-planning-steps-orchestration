@@ -1,6 +1,6 @@
 import { ILocation } from 'model/geometry/Coordinates';
 import { ITrip } from 'model/trip/Trip';
-import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap } from 'rxjs';
+import { Observable, filter, from, map, mergeMap, of, switchMap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
@@ -70,7 +70,7 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
       return from(
         EntityApiService.postEntity('/trips', action.payload)
           .then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
               notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.CREATE.SUCCESS'));
               return response.data;
             }
@@ -81,7 +81,7 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
       ).pipe(trackAction(action));
     }),
 
-    ignoreElements()
+    map((data) => tripListStore(data))
   );
 };
 
@@ -103,7 +103,6 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
     map((data) => tripStore(data))
   );
 };
@@ -119,10 +118,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripUpdatePayload>>
           .then((response) => {
             if (response.status === 200) {
               notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.UPDATE.SUCCESS'));
-              return {
-                tripList: response.data,
-                trip: response.data.find((tripPayload: ITrip) => tripPayload.id === action.payload.id),
-              };
+              return response.data;
             }
           })
           .catch((error) => {
@@ -130,8 +126,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripUpdatePayload>>
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
+    map((data) => tripStore(data))
   );
 };
 

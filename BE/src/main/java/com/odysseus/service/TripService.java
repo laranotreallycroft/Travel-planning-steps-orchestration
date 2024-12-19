@@ -4,7 +4,6 @@ import com.odysseus.model.location.Location;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.model.trip.TripCreateRequest;
 import com.odysseus.model.trip.TripListFilter;
-import com.odysseus.model.trip.TripUpdateRequest;
 import com.odysseus.model.user.User;
 import com.odysseus.repository.TripRepository;
 import org.springframework.stereotype.Service;
@@ -99,7 +98,7 @@ public class TripService {
      * @return the trip with the specified ID.
      * @throws IllegalArgumentException if the user is null, the trip is not found, or the user doesn't have permission to access the trip.
      */
-    public List<Trip> deleteTrip(Long tripId, User user) {
+    public void deleteTrip(Long tripId, User user) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
 
@@ -109,26 +108,26 @@ public class TripService {
         }
 
         tripRepository.delete(trip);
-        return user.getTrips();
+
     }
 
     /**
      * Updates the trip details based on the provided update request.
      *
-     * @param tripUpdateRequest the updated trip details.
+     * @param tripId            the updated trip id.
+     * @param tripCreateRequest the updated trip details.
      * @return the updated trip if successful, or null if the trip with the specified ID does not exist.
      */
-    public Trip updateTrip(TripUpdateRequest tripUpdateRequest) {
+    public Trip updateTrip(Long tripId, TripCreateRequest tripCreateRequest) {
         // Find the existing trip by ID
-        Trip trip = tripRepository.findById(tripUpdateRequest.getId())
+        Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
 
         // If the trip exists, update the fields and save it
-
-        trip.setLabel(tripUpdateRequest.getLabel());
-        trip.setDateFrom(tripUpdateRequest.getDateFrom());
-        trip.setDateTo(tripUpdateRequest.getDateTo());
-        Location location = locationService.getLocation(tripUpdateRequest.getLocation());
+        trip.setLabel(tripCreateRequest.getLabel());
+        trip.setDateFrom(tripCreateRequest.getDateFrom());
+        trip.setDateTo(tripCreateRequest.getDateTo());
+        Location location = locationService.getLocation(tripCreateRequest.getLocation());
         trip.setLocation(location);
 
         tripRepository.save(trip);

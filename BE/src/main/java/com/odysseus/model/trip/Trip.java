@@ -159,4 +159,8 @@ public class Trip {
         return newItinerary;
     }
 
+    public boolean hasDateToPassed() {
+        return dateTo != null && dateTo.isBefore(LocalDate.now());
+    }
+
 }
