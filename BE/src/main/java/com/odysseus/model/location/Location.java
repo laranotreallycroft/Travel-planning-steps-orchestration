@@ -1,6 +1,8 @@
 package com.odysseus.model.location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.odysseus.model.itinerary.ItineraryElement;
 import com.odysseus.model.trip.Trip;
 import jakarta.persistence.*;
 import org.locationtech.jts.geom.Coordinate;
@@ -21,11 +23,14 @@ public class Location {
     private Point coordinates;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("location")
+    @JsonIgnore
     private List<Trip> trips;
 
-    public Location() {
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ItineraryElement> itineraryElements;
 
+    public Location() {
     }
 
     public Location(Long id, String label, Point coordinates) {
@@ -34,7 +39,6 @@ public class Location {
         this.label = label;
         this.coordinates = coordinates;
     }
-
 
     public Long getId() {
         return id;
@@ -52,7 +56,6 @@ public class Location {
         this.label = label;
     }
 
-
     public Coordinate getCoordinates() {
         return coordinates.getCoordinate();
     }
@@ -61,16 +64,21 @@ public class Location {
         this.coordinates = location;
     }
 
-
     public List<Trip> getTrips() {
         if (trips != null)
             trips.sort(Comparator.comparing(Trip::getId));
         return trips;
     }
 
-    public void setPackingLists(List<Trip> trips) {
+    public List<ItineraryElement> getItineraryElements() {
+        return itineraryElements;
+    }
+
+    public void setTrips(List<Trip> trips) {
         this.trips = trips;
     }
 
-
+    public void setItineraryElements(List<ItineraryElement> itineraryElements) {
+        this.itineraryElements = itineraryElements;
+    }
 }

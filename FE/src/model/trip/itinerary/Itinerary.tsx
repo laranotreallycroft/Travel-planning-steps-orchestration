@@ -3,7 +3,7 @@ import { ICoordinates, ILocation } from 'model/geometry/Coordinates';
 export interface IItinerary {
   id: number;
   date: string;
-  routeGeometry: ICoordinates[];
+  routeGeometry?: ICoordinates[];
   itineraryElements: IItineraryElement[];
   transportationMethod: string;
 }

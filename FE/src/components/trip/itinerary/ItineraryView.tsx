@@ -4,10 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Button, Popconfirm, Radio, Row } from 'antd';
+import MapElement from 'components/common/map/MapElement';
 import Schedule from 'components/trip/itinerary/schedule/Schedule';
 import ItineraryMapUpdateContainer from 'components/trip/itinerary/update/ItineraryMapUpdateContainer';
+import { LatLngExpression } from 'leaflet';
 import { ITrip } from 'model/trip/Trip';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
 export interface IItineraryViewOwnProps {
   trip: ITrip;
   onItinerariesDelete: () => void;
@@ -24,6 +27,12 @@ const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps
   const toggleIsEditing = useCallback(() => {
     setIsEditing((prevState) => !prevState);
   }, []);
+
+  const pathList: LatLngExpression[][] = useMemo(() => {
+    const filteredItineraries = props.trip.itineraries.filter((itinerary) => itinerary.routeGeometry != null);
+    const mappedItineraries: LatLngExpression[][] = filteredItineraries.map((itinerary) => itinerary.routeGeometry!.map((coordinates) => [coordinates.x, coordinates.y]));
+    return mappedItineraries;
+  }, [props.trip.itineraries]);
 
   return (
     <React.Fragment>
@@ -52,24 +61,16 @@ const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps
           <ItineraryMapUpdateContainer />
         ) : (
           <React.Fragment>
-            {/* <MapElement
-            selectedLocation={{ ...props.trip, ...props.trip.location }}
-            locations={props.trip.itineraries?.map((itineraryElement) =>
-              itineraryElement.itineraryElements.map((element) => {
-                return {
-                  ...element,
-                  ...element.location,
-                };
-              })
-            )}
-            pathList={props.trip.itineraries?.map((itinerary) =>
-              itinerary.routeGeometry.map((coordinates) => [
-                coordinates.x,
-                coordinates.y,
-              ])
-            )}
-            className="fullHeight"
-          />*/}
+            <MapElement
+              selectedLocation={{ ...props.trip, ...props.trip.location }}
+              locationList={props.trip.itineraries?.map((itineraryElement) =>
+                itineraryElement.itineraryElements.map((element) => {
+                  return element.location;
+                })
+              )}
+              pathList={pathList}
+              className="fullHeight"
+            />
           </React.Fragment>
         )}
       </React.Fragment>

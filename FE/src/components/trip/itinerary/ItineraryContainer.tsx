@@ -1,6 +1,8 @@
+import ItineraryView from 'components/trip/itinerary/ItineraryView';
 import ItineraryCreateView from 'components/trip/itinerary/create/ItineraryCreateView';
 import { ITrip } from 'model/trip/Trip';
 import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
+import React from 'react';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
@@ -27,32 +29,15 @@ const ItineraryContainer: React.FC<IItineraryContainerProps> = (props: IItinerar
     },
     [props.trip.id]
   );
-  /*
-  const mappedValues = useMemo(() => {
-    return {
-      locations: props.trip.itineraries.flatMap((itinerary) =>
-        itinerary.itineraryElements.map((itineraryElement) => {
-          return {
-            id: itineraryElement.id,
-            label: itineraryElement.label,
-            x: itineraryElement.location.coordinates.x,
-            y: itineraryElement.location.coordinates.y,
-            duration: itineraryElement.duration,
-          };
-        })
-      ),
-      routeOptions: {
-        optimize: false,
-        transportationMethod: props.trip.itineraries[0].transportationMethod,
-      },
-    };
-  }, [props.trip.itineraries]);*/
 
   return (
-    <ItineraryCreateView onSubmit={handleItinerariesCreate} initialValues={{ stops: [{ location: props.trip.location, duration: 0, id: uuidv4(), start: true }], optimize: false, transportationMethod: TransportationMethodEnum.CAR }} />
-    /*props.trip?.itineraries.length > 0 ? (
-    <ItineraryView trip={props.trip} onItinerariesDelete={props.itineraryDelete} />
-  */
+    <React.Fragment>
+      {props.trip?.itineraries.length > 0 ? (
+        <ItineraryView trip={props.trip} onItinerariesDelete={props.itineraryDelete} />
+      ) : (
+        <ItineraryCreateView onSubmit={handleItinerariesCreate} initialValues={{ stops: [{ location: props.trip.location, duration: 0, id: uuidv4(), start: true }], optimize: false, transportationMethod: TransportationMethodEnum.CAR }} />
+      )}
+    </React.Fragment>
   );
 };
 

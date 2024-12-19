@@ -1,19 +1,10 @@
 package com.odysseus.model.itinerary;
 
-import java.sql.Timestamp;
-
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Point;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.odysseus.model.location.Location;
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "itinerary_elements")
@@ -22,8 +13,11 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String label;
-    private Point location;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    @JsonIgnoreProperties("itinerary_elements")
+    private Location location;
 
     @Column(name = "start_date")
     private Timestamp startDate;
@@ -36,7 +30,7 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 
     @ManyToOne
     @JoinColumn(name = "itinerary_id")
-    @JsonIgnoreProperties("itineraryElements")
+    @JsonIgnoreProperties("itinerary_elements")
     private Itinerary itinerary;
 
     private Integer duration;
@@ -45,10 +39,9 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 
     }
 
-    public ItineraryElement(String label, Point location, Timestamp commuteStartDate, Timestamp commuteEndDate,
+    public ItineraryElement(Location location, Timestamp commuteStartDate, Timestamp commuteEndDate,
                             Timestamp startDate, Timestamp endDate, Itinerary itinerary, Integer duration) {
         super();
-        this.label = label;
         this.location = location;
         this.commuteStartDate = commuteStartDate;
         this.commuteEndDate = commuteEndDate;
@@ -98,20 +91,12 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
         this.id = id;
     }
 
-    public Coordinate getLocation() {
-        return location.getCoordinate();
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocation(Point location) {
+    public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Itinerary getItinerary() {

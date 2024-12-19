@@ -50,12 +50,14 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IIt
               title: props.translate('ITINERARY_DURATION_VIEW.TABLE.DURATION'),
               key: 'duration',
               render: (stop: IItineraryElementPayload) => (
-                <Row gutter={16} justify={'center'}>
-                  <InputNumber defaultValue={stop.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, stop.id)} />
+                <Row gutter={16} justify={'center'} align={'middle'}>
+                  <Col>
+                    <InputNumber defaultValue={stop.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, stop.id)} />
+                  </Col>
                   <Col>{props.translate('ITINERARY_DURATION_VIEW.TABLE.DURATION.MINUTES')}</Col>
                 </Row>
               ),
-              width: 180,
+              width: 250,
             },
 
             {

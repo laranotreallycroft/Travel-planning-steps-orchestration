@@ -8,6 +8,7 @@ import com.odysseus.model.itinerary.openRouteService.directions.OpenRouteService
 import com.odysseus.model.itinerary.openRouteService.directions.OpenRouteServiceDirectionsResponse;
 import com.odysseus.model.itinerary.openRouteService.distanceMatrix.OpenRouteServiceDistanceMatrixPayload;
 import com.odysseus.model.itinerary.openRouteService.distanceMatrix.OpenRouteServiceDistanceMatrixResponse;
+import com.odysseus.model.location.Location;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.utils.GeometryDecoder;
 import org.json.JSONArray;
@@ -28,6 +29,7 @@ import java.util.List;
 public class ItineraryService {
 
     private final RestTemplate restTemplate;
+    private final LocationService locationService;
 
     @Value("${openRouteService.matrix.baseUrl}")
     private String openRouteServiceMatrixBaseUrl;
@@ -36,8 +38,9 @@ public class ItineraryService {
     @Value("${openRouteService.apiKey}")
     private String openRouteServiceApiKey;
 
-    public ItineraryService(RestTemplate restTemplate) {
+    public ItineraryService(RestTemplate restTemplate, LocationService locationService) {
         this.restTemplate = restTemplate;
+        this.locationService = locationService;
     }
 
     public OpenRouteServiceDistanceMatrixResponse getOpenRouteServiceDistanceMatrix(List<ItineraryElementRequest> itineraryElementRequests, TransportationMethodEnum transportationMethodEnum) {
@@ -168,9 +171,11 @@ public class ItineraryService {
         LocalDateTime commuteEndTime = lastEndDateTime.plusMinutes(commuteDuration);
         LocalDateTime stopEndTime = commuteEndTime.plusMinutes(stop.getDuration());
 
+        Location location = locationService.getLocation(stop.getLocation());
+
+
         ItineraryElement element = new ItineraryElement(
-                stop.getLocation().getLabel(),
-                stop.getLocation().getCoordinates().toPoint(),
+                location,
                 Timestamp.valueOf(lastEndDateTime),
                 Timestamp.valueOf(commuteEndTime),
                 Timestamp.valueOf(commuteEndTime),

@@ -8,6 +8,7 @@ import com.odysseus.model.trip.TripListFilter;
 import com.odysseus.model.user.User;
 import com.odysseus.repository.LocationRepository;
 import com.odysseus.repository.TripRepository;
+import com.odysseus.service.LocationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,30 +23,22 @@ import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
 @RestController
 @RequestMapping("/trips")
 public class TripController {
+
     private final TripRepository tripRepository;
-    private final LocationRepository locationRepository;
+    private final LocationService locationService;
 
-    public TripController(TripRepository tripRepository, LocationRepository locationRepository) {
+    public TripController(TripRepository tripRepository, LocationService locationService) {
         this.tripRepository = tripRepository;
-        this.locationRepository = locationRepository;
+        this.locationService = locationService;
     }
 
-    public Location getLocation(LocationRequest locationRequest) {
-        Location location = locationRepository.findById(locationRequest.getId()).orElse(null);
-        if (location == null) {
-            location = new Location(locationRequest.getId(), locationRequest.getLabel(), locationRequest.getCoordinates().toPoint());
-            locationRepository.save(location);
-
-        }
-        return location;
-    }
 
     @PostMapping
     public ResponseEntity<?> createTrip(@RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
         User user = getCurrentUser();
 
         if (user != null) {
-            Location location = getLocation(tripCreateRequest.getLocation());
+            Location location = locationService.getLocation(tripCreateRequest.getLocation());
             Trip trip = new Trip(tripCreateRequest.getLabel(), tripCreateRequest.getDateFrom(),
                     tripCreateRequest.getDateTo(), location, user);
             tripRepository.save(trip);
