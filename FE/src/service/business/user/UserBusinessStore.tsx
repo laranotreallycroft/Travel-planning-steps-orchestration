@@ -38,12 +38,12 @@ const userCreateEffect = (action$: Observable<IPayloadAction<IUserCreatePayload>
         EntityApiService.postEntity('/users', action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success(LocalizeService.translate('USER.CREATE.SUCCESS_MESSAGE'));
+              notificationService.success(LocalizeService.translate('USER_BUSINESS_STORE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to create user', error.response.data);
+            notificationService.error(LocalizeService.translate('USER_BUSINESS_STORE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

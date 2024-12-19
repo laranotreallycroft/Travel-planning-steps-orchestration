@@ -5,6 +5,7 @@ import EntityApiService from 'service/business/utils';
 import { mapIcon } from 'service/business/weather/utils';
 import AppConfigService from 'service/common/AppConfigService';
 import { CookieManager } from 'service/util/CookieManager';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -67,7 +68,7 @@ const currentWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPa
             return response.data;
           })
           .catch((error) => {
-            notificationService.error('Unable to fetch weather data', error.response.data.message);
+            notificationService.error(LocalizeService.translate('WEATHER_BUSINESS_STORE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -90,7 +91,7 @@ const pastWeatherFetchEffect = (action$: Observable<IPayloadAction<IWeatherPaylo
             return response.data;
           })
           .catch((error) => {
-            notificationService.error('Unable to fetch weather data', error.response.data.message);
+            notificationService.error(LocalizeService.translate('WEATHER_BUSINESS_STORE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

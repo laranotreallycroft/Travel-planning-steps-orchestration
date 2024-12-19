@@ -47,7 +47,6 @@ const mapStateToProps = (state: any): IItineraryContainerStateProps => ({
 
 const mapDispatchToProps = (dispatch: any): IItineraryContainerDispatchProps => ({
   itineraryCreate: (itineraryCreatePayload: IItineraryPayload) => dispatch(createTrackableAction(ItineraryBusinessStore.actions.itineraryCreate(itineraryCreatePayload))),
-
   itineraryDelete: () => dispatch(ItineraryBusinessStore.actions.itineraryDelete()),
 });
 

@@ -4,6 +4,7 @@ import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
 import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction from 'service/util/trackAction';
 
@@ -69,7 +70,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
         EntityApiService.postEntity(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success('New packing list successfully created');
+              notificationService.success(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS'));
 
               return {
                 tripList: response.data,
@@ -78,7 +79,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to create packing list', error.response.data);
+            notificationService.error(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.CREATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -99,7 +100,7 @@ const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCo
         EntityApiService.postEntity(`/packinglists/copy`, action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success('New packing lists successfully created');
+              notificationService.success(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS'));
               return {
                 tripList: response.data,
                 trip: response.data.find((value: ITrip) => value.id === trip.id),
@@ -107,7 +108,7 @@ const packingListCopyEffect = (action$: Observable<IPayloadAction<IPackingListCo
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to create packing lists', error.response.data);
+            notificationService.error(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.CREATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -130,7 +131,7 @@ const packingListUpdateffect = (action$: Observable<IPayloadAction<IPackingListU
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update trip', error.response.data);
+            notificationService.error(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -153,7 +154,7 @@ const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingList
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update trip', error.response.data);
+            notificationService.error(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

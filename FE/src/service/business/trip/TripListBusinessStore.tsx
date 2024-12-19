@@ -2,6 +2,7 @@ import { ITrip } from 'model/trip/Trip';
 import { Observable, filter, from, map, mergeMap } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import EntityApiService from 'service/business/utils';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -49,7 +50,7 @@ const tripListFetchEffect = (action$: Observable<IPayloadAction<ITripListFilter>
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to fetch trip list', error.response.data);
+            notificationService.error(LocalizeService.translate('TRIP_LIST_BUSINESS_STORE.FETCH.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

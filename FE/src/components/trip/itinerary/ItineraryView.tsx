@@ -3,7 +3,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Button, Popconfirm, Radio, Row } from 'antd';
+import { Button, Col, Popconfirm, Radio, Row } from 'antd';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import MapElement from 'components/common/map/MapElement';
 import Schedule from 'components/trip/itinerary/schedule/Schedule';
 import ItineraryMapUpdateContainer from 'components/trip/itinerary/update/ItineraryMapUpdateContainer';
@@ -16,7 +17,7 @@ export interface IItineraryViewOwnProps {
   onItinerariesDelete: () => void;
 }
 
-type IItineraryViewProps = IItineraryViewOwnProps;
+type IItineraryViewProps = IItineraryViewOwnProps & IWithLocalizeOwnProps;
 const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps) => {
   const [scheduleView, setScheduleView] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(true);
@@ -36,46 +37,47 @@ const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps
 
   return (
     <React.Fragment>
-      <Row className="itineraryView__header">
-        <Radio.Group value={scheduleView} onChange={(e) => setScheduleView(e.target.value)}>
-          <Radio.Button value={false}>
-            <LocationOnIcon />
-          </Radio.Button>
-          <Radio.Button value={true}>
-            <CalendarTodayIcon />
-          </Radio.Button>
-        </Radio.Group>
-
-        <Button onClick={toggleIsEditing} icon={isEditing ? <CloseIcon /> : <EditIcon />} className="margin-left-sm" />
-
-        {isEditing && (
-          <Popconfirm title="Delete itinerary" description="Are you sure to delete this itinerary?" onConfirm={props.onItinerariesDelete} okText="Yes" cancelText="No" placement="topRight" className="margin-left-xl">
-            <Button icon={<DeleteIcon />} />
-          </Popconfirm>
-        )}
+      <Row className="margin-md" justify={'end'} gutter={[8, 8]}>
+        <Col>
+          <Radio.Group value={scheduleView} onChange={(e) => setScheduleView(e.target.value)}>
+            <Radio.Button value={false}>
+              <LocationOnIcon />
+            </Radio.Button>
+            <Radio.Button value={true}>
+              <CalendarTodayIcon />
+            </Radio.Button>
+          </Radio.Group>
+        </Col>
+        <Col>
+          <Button onClick={toggleIsEditing} icon={isEditing ? <CloseIcon /> : <EditIcon />} className="margin-left-sm" />
+        </Col>
+        <Col xs={2} sm={1}>
+          {isEditing && (
+            <Popconfirm title={props.translate('ITINERARY_VIEW.DELETE_ITINERARY.TITLE')} description={props.translate('ITINERARY_VIEW.DELETE_ITINERARY.DESCRIPTION')} onConfirm={props.onItinerariesDelete} okText={props.translate('COMMON.YES')} cancelText={props.translate('COMMON.NO')} placement="topRight">
+              <Button icon={<DeleteIcon />} />
+            </Popconfirm>
+          )}
+        </Col>
       </Row>
-      <React.Fragment>
-        {scheduleView ? (
-          <Schedule itineraries={props.trip.itineraries!} isEditing={isEditing} />
-        ) : isEditing ? (
-          <ItineraryMapUpdateContainer />
-        ) : (
-          <React.Fragment>
-            <MapElement
-              selectedLocation={{ ...props.trip, ...props.trip.location }}
-              locationList={props.trip.itineraries?.map((itineraryElement) =>
-                itineraryElement.itineraryElements.map((element) => {
-                  return element.location;
-                })
-              )}
-              pathList={pathList}
-              className="fullHeight"
-            />
-          </React.Fragment>
-        )}
-      </React.Fragment>
+
+      {scheduleView ? (
+        <Schedule itineraries={props.trip.itineraries!} isEditing={isEditing} />
+      ) : isEditing ? (
+        <ItineraryMapUpdateContainer />
+      ) : (
+        <MapElement
+          selectedLocation={props.trip.location}
+          locationList={props.trip.itineraries?.map((itineraryElement) =>
+            itineraryElement.itineraryElements.map((element) => {
+              return element.location;
+            })
+          )}
+          pathList={pathList}
+          className="fullHeight"
+        />
+      )}
     </React.Fragment>
   );
 };
 
-export default ItineraryView;
+export default withLocalize<IItineraryViewOwnProps>(ItineraryView as any);

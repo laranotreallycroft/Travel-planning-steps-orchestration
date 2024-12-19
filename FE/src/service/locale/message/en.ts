@@ -2,6 +2,8 @@ import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMet
 
 const en: any = {
   'COMMON.FORM.SUBMIT': 'Submit',
+  'COMMON.YES': 'Yes',
+  'COMMON.NO': 'No',
 
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
@@ -10,7 +12,8 @@ const en: any = {
   'NAVIGATION.UPCOMING_TRIPS': 'Upcoming trips',
   'NAVIGATION.PAST_TRIPS': 'Past trips',
 
-  'LOGIN.SUCCESS_MESSAGE': 'Login successful',
+  'LOGIN.SUCCESS': 'Login successful',
+  'LOGIN.ERROR': 'Unable to sign in',
 
   'LOGIN_VIEW.FORM.EMAIL_MESSAGE': 'Please enter email',
   'LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER': 'Email address',
@@ -22,7 +25,8 @@ const en: any = {
   'LOGIN_VIEW.OR': 'Or',
   'LOGIN_VIEW.SIGN_UP': "Don't have an account? Create one.",
 
-  'USER.CREATE.SUCCESS_MESSAGE': 'Account successfully created',
+  'USER_BUSINESS_STORE.SUCCESS': 'Account successfully created',
+  'USER_BUSINESS_STORE.ERROR': 'Unable to create account',
   'REGISTRATION_VIEW.PASSWORD_VALIDATION.REJECT': 'Your password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number',
   'REGISTRATION_VIEW.PASSWORD_VALIDATION.NOT_THE_SAME': 'Make sure your passwords match.',
   'REGISTRATION_VIEW.FORM.EMAIL_MESSAGE': 'The input is not a valid e-mail.',
@@ -34,6 +38,15 @@ const en: any = {
   'REGISTRATION_VIEW.OR': 'Or',
   'REGISTRATION_VIEW.GOOGLE_SIGN_UP_FAIL': 'Unable to sign up with Google',
   'REGISTRATION_VIEW.LOG_IN': 'Already have an account? Sign in.',
+
+  'TRIP_BUSINESS_STORE.CREATE.SUCCESS': 'New trip successfully created',
+  'TRIP_BUSINESS_STORE.CREATE.ERROR': 'Unable to create trip',
+  'TRIP_BUSINESS_STORE.FETCH.ERROR': 'Unable to fetch trip data',
+  'TRIP_BUSINESS_STORE.UPDATE.SUCCESS': 'Trip successfully updated',
+  'TRIP_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update trip',
+  'TRIP_BUSINESS_STORE.DELETE.ERROR': 'Unable to delete trip',
+
+  'TRIP_LIST_BUSINESS_STORE.FETCH.ERROR': 'Unable to fetch trip list',
 
   'TRIP_LIST_VIEW.UPCOMING.NO_DATA': 'No Upcoming Trips',
   'TRIP_LIST_VIEW.PAST.NO_DATA': 'No Past Trips',
@@ -60,6 +73,7 @@ const en: any = {
 
   'WEATHER_VIEW.CURRENT_WEATHER': 'Current weather',
   'WEATHER_VIEW.PAST_WEATHER': 'Weather in %{year}',
+  'WEATHER_BUSINESS_STORE.ERROR': 'Unable to fetch weather data',
 
   'ITINERARY_CREATE_VIEW.STEP_ONE': 'Select your stops',
   'ITINERARY_CREATE_VIEW.STEP_TWO': 'Decide your visit duration',
@@ -83,6 +97,22 @@ const en: any = {
   'ITINERARY_DURATION_VIEW.TABLE.DESTINATION': 'Destination',
   'ITINERARY_DURATION_VIEW.TABLE.DURATION': 'Duration (minutes)',
   'ITINERARY_DURATION_VIEW.TABLE.START': 'Starting point for the day',
+
+  'ITINERARY_VIEW.DELETE_ITINERARY.TITLE': 'Delete itinerary',
+  'ITINERARY_VIEW.DELETE_ITINERARY.DESCRIPTION': 'Are you sure you want to delete this itinerary?',
+
+  'ITINERARY_BUSINESS_STORE.CREATE.SUCCESS': 'New itinerary successfully created',
+  'ITINERARY_BUSINESS_STORE.CREATE.ERROR': 'Unable to create itinerary',
+  'ITINERARY_BUSINESS_STORE.UPDATE.SUCCESS': 'Itinerary successfully updated',
+  'ITINERARY_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update itinerary',
+  'ITINERARY_BUSINESS_STORE.SCHEDULE_UPDATE.SUCCESS': 'Itinerary schedule successfully updated',
+  'ITINERARY_BUSINESS_STORE.SCHEDULE_UPDATE.ERROR': 'Unable to update itinerary schedule',
+  'ITINERARY_BUSINESS_STORE.DELETE.SUCCESS': 'Itinerary successfully deleted',
+  'ITINERARY_BUSINESS_STORE.DELETE.ERROR': 'Unable to delete itinerary',
+
+  'PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS': 'New packing list successfully created',
+  'PACKING_LIST_BUSINESS_STORE.CREATE.ERROR': 'Unable to create packing list',
+  'PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update packing list',
 };
 
 export default en;

@@ -5,6 +5,7 @@ import { Observable, catchError, filter, from, map, mergeMap, of, switchMap, wit
 import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
 import EntityApiService from 'service/business/utils';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -64,12 +65,12 @@ const itineraryCreateEffect = (action$: Observable<IPayloadAction<IItineraryPayl
         EntityApiService.postEntity(`/itineraries`, action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success('New itineraries successfully created');
+              notificationService.success(LocalizeService.translate('ITINERARY_BUSINESS_STORE.CREATE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to create itineraries', error.response.data);
+            notificationService.error(LocalizeService.translate('ITINERARY_BUSINESS_STORE.CREATE.ERROR'));
             throw error;
           })
       ).pipe(trackAction(action));
@@ -93,12 +94,12 @@ const itineraryUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPayl
         EntityApiService.putEntity(`/itineraries`, action.payload)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success('Itineraries successfully updated');
+              notificationService.success(LocalizeService.translate('ITINERARY_BUSINESS_STORE.UPDATE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update itineraries', error.response.data);
+            notificationService.error(LocalizeService.translate('ITINERARY_BUSINESS_STORE.UPDATE.ERROR'));
             throw error;
           })
       ).pipe(trackAction(action));
@@ -121,12 +122,12 @@ const itineraryScheduleUpdateEffect = (action$: Observable<IPayloadAction<Appoin
         EntityApiService.putEntity(`/itineraries/schedule`, action.payload)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success('Itinerary schedules successfully updated');
+              notificationService.success(LocalizeService.translate('ITINERARY_BUSINESS_STORE.SCHEDULE_UPDATE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update itinerary schedules', error.response.data);
+            notificationService.error(LocalizeService.translate('ITINERARY_BUSINESS_STORE.SCHEDULE_UPDATE.ERROR'));
             throw error;
           })
       ).pipe(trackAction(action));
@@ -151,12 +152,12 @@ const itineraryDeleteEffect = (action$: Observable<IAction>, state$: Observable<
         EntityApiService.deleteEntity(`/itineraries/${trip.id}`)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success('Itineraries successfully deleted');
+              notificationService.success(LocalizeService.translate('ITINERARY_BUSINESS_STORE.DELETE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to delete itinerary', error.response.data);
+            notificationService.error(LocalizeService.translate('ITINERARY_BUSINESS_STORE.DELETE.ERROR'));
             throw error;
           })
       ).pipe(trackAction(action));

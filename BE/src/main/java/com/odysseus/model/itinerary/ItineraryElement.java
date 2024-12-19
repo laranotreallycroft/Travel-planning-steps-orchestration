@@ -34,13 +34,14 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
     private Itinerary itinerary;
 
     private Integer duration;
+    private boolean start;
 
     public ItineraryElement() {
 
     }
 
     public ItineraryElement(Location location, Timestamp commuteStartDate, Timestamp commuteEndDate,
-                            Timestamp startDate, Timestamp endDate, Itinerary itinerary, Integer duration) {
+                            Timestamp startDate, Timestamp endDate, Itinerary itinerary, Integer duration, boolean start) {
         super();
         this.location = location;
         this.commuteStartDate = commuteStartDate;
@@ -49,6 +50,7 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
         this.endDate = endDate;
         this.itinerary = itinerary;
         this.duration = duration;
+        this.start = start;
     }
 
     public Timestamp getStartDate() {
@@ -113,6 +115,14 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
     }
 
     @Override

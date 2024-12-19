@@ -3,6 +3,7 @@ import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap,
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
+import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
 
@@ -58,12 +59,12 @@ const tripCreateEffect = (action$: Observable<IPayloadAction<ITripCreatePayload>
         EntityApiService.postEntity('/trips', action.payload)
           .then((response) => {
             if (response.status === 201) {
-              notificationService.success('New trip successfully created');
+              notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.CREATE.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to create trip', error.response.data);
+            notificationService.error(LocalizeService.translate('TRIP_BUSINESS_STORE.CREATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -86,7 +87,7 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to fetch trip data', error.response.data);
+            notificationService.error(LocalizeService.translate('TRIP_BUSINESS_STORE.FETCH.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -107,7 +108,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>
         EntityApiService.putEntity('/trips/' + trip.id, action.payload)
           .then((response) => {
             if (response.status === 200) {
-              notificationService.success('Trip successfully changed');
+              notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.UPDATE.SUCCESS'));
               return {
                 tripList: response.data,
                 trip: response.data.find((tripPayload: ITrip) => tripPayload.id === trip.id),
@@ -115,7 +116,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update trip', error.response.data);
+            notificationService.error(LocalizeService.translate('TRIP_BUSINESS_STORE.UPDATE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -139,7 +140,7 @@ const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) 
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to update trip', error.response.data);
+            notificationService.error(LocalizeService.translate('TRIP_BUSINESS_STORE.DELETE.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

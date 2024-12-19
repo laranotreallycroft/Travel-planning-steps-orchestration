@@ -181,7 +181,8 @@ public class ItineraryService {
                 Timestamp.valueOf(commuteEndTime),
                 Timestamp.valueOf(stopEndTime),
                 itinerary,
-                stop.getDuration()
+                stop.getDuration(),
+                stop.getStart()
         );
 
         itinerary.addItineraryElement(element);

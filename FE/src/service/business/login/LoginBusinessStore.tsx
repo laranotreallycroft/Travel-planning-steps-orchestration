@@ -68,12 +68,12 @@ const loginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, state$:
                 AuthTokenManager.saveToken(response.data.token, true);
               }
 
-              notificationService.success('Login Successful');
+              notificationService.success(LocalizeService.translate('LOGIN.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to log in', error.response.data);
+            notificationService.error(LocalizeService.translate('LOGIN.ERROR'));
           })
       ).pipe(trackAction(action));
     }),
@@ -97,12 +97,12 @@ const googleLoginEffect = (action$: Observable<IPayloadAction<ILoginPayload>>, s
                 AuthTokenManager.saveToken(response.data.token, true);
               }
 
-              notificationService.success(LocalizeService.translate('LOGIN.SUCCESS_MESSAGE'));
+              notificationService.success(LocalizeService.translate('LOGIN.SUCCESS'));
               return response.data;
             }
           })
           .catch((error) => {
-            notificationService.error('Unable to log in', error.response.data);
+            notificationService.error(LocalizeService.translate('LOGIN.ERROR'));
           })
       ).pipe(trackAction(action));
     }),

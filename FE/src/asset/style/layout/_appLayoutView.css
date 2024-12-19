@@ -21,4 +21,6 @@
 
 .appLayoutView__content {
   padding: 1.5vh 3vw;
+  display: flex;
+  flex-direction: column;
 }
