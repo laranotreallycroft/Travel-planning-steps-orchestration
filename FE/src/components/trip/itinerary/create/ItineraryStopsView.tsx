@@ -8,7 +8,7 @@ import MapElement from 'components/common/map/MapElement';
 import MapSearch from 'components/common/map/MapSearch';
 import { ILocation } from 'model/geometry/Coordinates';
 import { TransportationMethodEnum } from 'model/trip/itinerary/TransportationMethodEnum';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { IItineraryElementPayload, IItineraryPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,6 +22,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
   const form = Form.useFormInstance<IItineraryPayload>();
   const stops = Form.useWatch('stops', form);
   const [selectedStop, setSelectedStop] = useState<IItineraryElementPayload | undefined>(stops?.[0]);
+  useEffect(() => {
+    if (!selectedStop) {
+      setSelectedStop(stops?.[0]);
+    }
+  }, [stops?.[0]]);
 
   const handleAddStop = useCallback(
     (value: ILocation) => {
