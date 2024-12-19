@@ -1,11 +1,23 @@
-import { ITrip, ITripCreatePayload } from 'model/trip/Trip';
-import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import { ILocation } from 'model/geometry/Coordinates';
+import { ITrip } from 'model/trip/Trip';
+import { Observable, filter, from, ignoreElements, map, mergeMap, of, switchMap } from 'rxjs';
 import { IIdPayload, IPayloadAction } from 'service/business/common/types';
 import { tripListStore } from 'service/business/trip/TripListBusinessStore';
 import EntityApiService from 'service/business/utils';
 import LocalizeService from 'service/util/localize/LocalizeService';
 import notificationService from 'service/util/notificationService';
 import trackAction, { IAction } from 'service/util/trackAction';
+
+export interface ITripCreatePayload {
+  label: string;
+  dateFrom: string;
+  dateTo: string;
+  location: ILocation;
+}
+
+export interface ITripUpdatePayload extends ITripCreatePayload {
+  id: string;
+}
 
 // -
 // -------------------- Selectors
@@ -30,12 +42,12 @@ export const tripFetch = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
   return { type: actions.TRIP_FETCH, payload: payload };
 };
 
-export const tripUpdate = (payload: ITripCreatePayload): IPayloadAction<ITripCreatePayload> => {
+export const tripUpdate = (payload: ITripUpdatePayload): IPayloadAction<ITripUpdatePayload> => {
   return { type: actions.TRIP_UPDATE, payload: payload };
 };
 
-export const tripDelete = (): IAction => {
-  return { type: actions.TRIP_DELETE };
+export const tripDelete = (payload: IIdPayload): IPayloadAction<IIdPayload> => {
+  return { type: actions.TRIP_DELETE, payload: payload };
 };
 
 export const tripStore = (payload: ITrip): IPayloadAction<ITrip> => {
@@ -96,22 +108,20 @@ const tripFetchEffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
   );
 };
 
-const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>, state$: Observable<any>) => {
+const tripUpdateffect = (action$: Observable<IPayloadAction<ITripUpdatePayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.TRIP_UPDATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+    mergeMap((action) => {
       return from(
-        EntityApiService.putEntity('/trips/' + trip.id, action.payload)
+        EntityApiService.putEntity('/trips', action.payload)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.UPDATE.SUCCESS'));
               return {
                 tripList: response.data,
-                trip: response.data.find((tripPayload: ITrip) => tripPayload.id === trip.id),
+                trip: response.data.find((tripPayload: ITrip) => tripPayload.id === action.payload.id),
               };
             }
           })
@@ -124,16 +134,16 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripCreatePayload>>
     switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
   );
 };
-const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) => {
+
+const tripDeleteffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.TRIP_DELETE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+    mergeMap((action) => {
+      const tripId = action.payload.id;
       return from(
-        EntityApiService.deleteEntity('/trips/' + trip.id)
+        EntityApiService.deleteEntity(`/trips/${tripId}`)
           .then((response) => {
             if (response.status === 200) {
               return response.data;
@@ -144,10 +154,10 @@ const tripDeleteffect = (action$: Observable<IAction>, state$: Observable<any>) 
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
     switchMap((data) => of(tripListStore(data), tripClear()))
   );
 };
+
 // -
 // -------------------- Reducers
 

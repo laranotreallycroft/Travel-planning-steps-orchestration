@@ -4,6 +4,7 @@ const en: any = {
   'COMMON.FORM.SUBMIT': 'Submit',
   'COMMON.YES': 'Yes',
   'COMMON.NO': 'No',
+  'COMMON.DELETE': 'Delete',
 
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
@@ -56,7 +57,8 @@ const en: any = {
   'TRIP_LIST_VIEW.TABLE.LOCATION_LABEL': 'Destination',
   'TRIP_LIST_VIEW.TABLE.DATE': 'Travel dates',
 
-  'TRIP_CREATE_VIEW.MODAL_TITLE': 'Add Trip',
+  'TRIP_CREATE_MODAL.TITLE': 'Add Trip',
+
   'TRIP_CREATE_VIEW.FORM.LABEL.LABEL': 'Trip name',
   'TRIP_CREATE_VIEW.FORM.LABEL.PLACEHOLDER': 'Enter trip name',
   'TRIP_CREATE_VIEW.FORM.DATE_RANGE.LABEL': 'Travel dates',
@@ -70,6 +72,14 @@ const en: any = {
 
   'TRIP_VIEW.RETURN_TO_UPCOMING': 'Return to upcoming trips',
   'TRIP_VIEW.RETURN_TO_PAST': 'Return to past trips',
+
+  'TRIP_EDIT_VIEW.DELETE_TRIP.TITLE': 'Delete trip',
+  'TRIP_EDIT_VIEW.DELETE_TRIP.DESCRIPTION': 'Are you sure you want to delete this trip?',
+
+  'TRIP_TABS.WEATHER': 'Weather',
+  'TRIP_TABS.ITINERARY': 'Itinerary',
+  'TRIP_TABS.PACKING_LIST': 'Packing list',
+  'TRIP_TABS.EDIT': 'Edit',
 
   'WEATHER_VIEW.CURRENT_WEATHER': 'Current weather',
   'WEATHER_VIEW.PAST_WEATHER': 'Weather in %{year}',

@@ -4,6 +4,7 @@ import com.odysseus.model.location.Location;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.model.trip.TripCreateRequest;
 import com.odysseus.model.trip.TripListFilter;
+import com.odysseus.model.trip.TripUpdateRequest;
 import com.odysseus.model.user.User;
 import com.odysseus.repository.TripRepository;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,6 @@ public class TripService {
      * @throws IllegalArgumentException if the user is null.
      */
     public void createTrip(User user, TripCreateRequest tripCreateRequest) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
         Location location = locationService.getLocation(tripCreateRequest.getLocation());
         Trip trip = new Trip(
                 tripCreateRequest.getLabel(),
@@ -55,10 +52,6 @@ public class TripService {
      * @throws IllegalArgumentException if the current user is null.
      */
     public List<Trip> getFilteredTripList(User currentUser, TripListFilter tripListFilter) {
-        if (currentUser == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
         List<Trip> trips = tripRepository.findByUserId(currentUser.getId());
 
         if (tripListFilter.isUpcomingOnly()) {
@@ -86,10 +79,6 @@ public class TripService {
      * @throws IllegalArgumentException if the user is null, the trip is not found, or the user doesn't have permission to access the trip.
      */
     public Trip getTripById(Long tripId, User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
 
@@ -99,5 +88,52 @@ public class TripService {
         }
 
         return trip;
+    }
+
+    /**
+     * Deletes a trip by its ID for the given user.
+     * Throws an exception if the trip is not found or if the user does not have permission to access the trip.
+     *
+     * @param tripId the ID of the trip to delete.
+     * @param user   the user who is requesting the trip.
+     * @return the trip with the specified ID.
+     * @throws IllegalArgumentException if the user is null, the trip is not found, or the user doesn't have permission to access the trip.
+     */
+    public List<Trip> deleteTrip(Long tripId, User user) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
+
+        // Check if the trip belongs to the current user
+        if (!Objects.equals(trip.getUser().getId(), user.getId())) {
+            throw new IllegalArgumentException("User does not have permission for this action.");
+        }
+
+        tripRepository.delete(trip);
+        return user.getTrips();
+    }
+
+    /**
+     * Updates the trip details based on the provided update request.
+     *
+     * @param tripUpdateRequest the updated trip details.
+     * @return the updated trip if successful, or null if the trip with the specified ID does not exist.
+     */
+    public Trip updateTrip(TripUpdateRequest tripUpdateRequest) {
+        // Find the existing trip by ID
+        Trip trip = tripRepository.findById(tripUpdateRequest.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
+
+        // If the trip exists, update the fields and save it
+
+        trip.setLabel(tripUpdateRequest.getLabel());
+        trip.setDateFrom(tripUpdateRequest.getDateFrom());
+        trip.setDateTo(tripUpdateRequest.getDateTo());
+        Location location = locationService.getLocation(tripUpdateRequest.getLocation());
+        trip.setLocation(location);
+
+        tripRepository.save(trip);
+        return trip;
+
+
     }
 }

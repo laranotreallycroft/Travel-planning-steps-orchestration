@@ -105,7 +105,7 @@ const LocaleProvider: React.FC<ILocaleProviderProps> = (props: ILocaleProviderPr
           colorText: '#2B3E58',
           colorInfo: '#2B3E58',
           colorWarning: '#f8d410',
-          colorError: '#f4ca96',
+          colorError: '#fd9448',
           colorBgBase: '#fff',
           colorBgContainer: '#fff',
           fontFamily: 'Verdana',

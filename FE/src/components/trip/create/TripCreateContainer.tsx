@@ -1,8 +1,7 @@
-import TripCreateView from 'components/trip/create/TripCreateView';
-import { ITripCreatePayload } from 'model/trip/Trip';
+import TripCreateModal from 'components/trip/create/TripCreateModal';
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
-import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { ITripCreatePayload, TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
 export interface ITripCreateContainerOwnProps {
@@ -23,12 +22,13 @@ const TripCreateContainer: React.FC<ITripCreateContainerProps> = (props: ITripCr
         .tripCreate(payload)
         .track()
         .subscribe(() => {
+          props.onTripCreateModalClose();
           props.onTripCreate?.();
         });
     },
     [props.tripCreate, props.onTripCreate]
   );
-  return <TripCreateView onTripCreate={handleTripCreate} onTripCreateModalClose={props.onTripCreateModalClose} />;
+  return <TripCreateModal onTripCreate={handleTripCreate} onTripCreateModalClose={props.onTripCreateModalClose} />;
 };
 
 const mapStateToProps = (state: any): ITripCreateContainerStateProps => ({});

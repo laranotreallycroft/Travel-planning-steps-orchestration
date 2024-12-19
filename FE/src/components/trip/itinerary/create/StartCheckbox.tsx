@@ -11,7 +11,7 @@ type IStartCheckboxProps = IStartCheckboxOwnProps;
 
 const StartCheckbox: React.FC<IStartCheckboxProps> = (props: IStartCheckboxProps) => {
   const [checked, setChecked] = useState<boolean>(props.value ?? false);
-  console.log(props.value);
+
   const handleToggle = () => {
     const newValue = !checked;
     setChecked(newValue);

@@ -5,6 +5,7 @@ import com.odysseus.model.location.LocationRequest;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.model.trip.TripCreateRequest;
 import com.odysseus.model.trip.TripListFilter;
+import com.odysseus.model.trip.TripUpdateRequest;
 import com.odysseus.model.user.User;
 import com.odysseus.repository.LocationRepository;
 import com.odysseus.repository.TripRepository;
@@ -93,37 +94,47 @@ public class TripController {
         }
         return ResponseEntity.badRequest().body("User is not authenticated");
     }
-/*
+
+
+    /**
+     * Updates a trip based on the provided trip update request.
+     * The method validates the request and updates the specified trip.
+     *
+     * @param tripUpdateRequest the updated details of the trip.
+     * @return a ResponseEntity containing the trip or an error message.
+     */
     @PutMapping("/{tripId}")
-    public ResponseEntity updateTrip(@PathVariable(value = "tripId") Long tripId,
-                                     @RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
-        Trip trip = tripRepository.findById(tripId).orElse(null);
-        if (trip != null) {
-            trip.setLabel(tripCreateRequest.getLabel());
-            trip.setDateFrom(tripCreateRequest.getDateFrom());
-            trip.setDateTo(tripCreateRequest.getDateTo());
-            Location location = getLocation(tripCreateRequest.getLocation());
-            trip.setLocation(location);
-
-            tripRepository.save(trip);
-            return ResponseEntity.ok(trip.getUser().getTrips());
-
+    public ResponseEntity<?> updateTrip(
+            @RequestBody TripUpdateRequest tripUpdateRequest) {
+        try {
+            Trip trip = tripService.updateTrip(tripUpdateRequest);
+            return ResponseEntity.ok(trip);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.badRequest().body("Something went wrong");
     }
 
+    /**
+     * Deletes a trip based on the specified trip ID and the authenticated user.
+     *
+     * @param tripId the ID of the trip to be deleted.
+     * @return a ResponseEntity with the status of the operation and the updated list of trips for the user if successful.
+     * Else return an error message.
+     */
     @DeleteMapping("/{tripId}")
-    public ResponseEntity deleteTrip(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
-        Trip trip = tripRepository.findById(tripId).orElse(null);
-        if (trip != null) {
-            User user = trip.getUser();
-            tripRepository.delete(trip);
-            return ResponseEntity.ok(user.getTrips());
+    public ResponseEntity<?> deleteTrip(@PathVariable(value = "tripId") Long tripId) {
+        User currentUser = getCurrentUser();
 
+        if (currentUser != null) {
+            try {
+                List<Trip> tripList = tripService.deleteTrip(tripId, currentUser);
+                return ResponseEntity.ok(tripList);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
-
-        return ResponseEntity.badRequest().body("Something went wrong");
-    }*/
+        return ResponseEntity.badRequest().body("User is not authenticated");
+    }
 
 }

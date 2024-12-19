@@ -21,6 +21,6 @@ export default class EntityApiService {
   }
 
   static deleteEntity<T>(url: string, payload?: T) {
-    return axios.post(url, { data: payload, headers: getAuthHeaders() });
+    return axios.delete(url, { data: payload, headers: getAuthHeaders() });
   }
 }

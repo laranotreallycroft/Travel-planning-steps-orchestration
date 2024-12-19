@@ -42,8 +42,7 @@ body {
 @import 'login/_loginView.css';
 @import 'trip/_packingListCopyView.css';
 @import 'trip/_packingListUpdateElement.css';
-@import 'trip/_tripCreateView.css';
-@import 'trip/_tripSettingsView.css';
+@import 'trip/_tripCreateModal.css';
 @import 'trip/_tripView.css';
 @import 'trip/_weatherView.css';
 @import 'trip/common/_tripCard.css';

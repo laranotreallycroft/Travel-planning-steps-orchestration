@@ -6,11 +6,11 @@ import PackingListPage from 'components/pages/PackingListPage';
 import PastTripsPage from 'components/pages/PastTripsPage';
 import RegistrationPage from 'components/pages/RegistrationPage';
 import TripPage from 'components/pages/TripPage';
-import TripSettingsPage from 'components/pages/TripSettingsPage';
 import UpcomingTripListPage from 'components/pages/UpcomingTripListPage';
 import WeatherPage from 'components/pages/WeatherPage';
 import ProtectedRoute from 'components/ProtectedRoute';
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom';
+import TripEditPage from 'components/pages/TripEditPage';
 
 const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -33,7 +33,7 @@ const appRouter = createBrowserRouter(
               <Route path="weather" element={<WeatherPage />} />
               <Route path="itinerary" element={<ItineraryPage />} />
               <Route path="packinglist" element={<PackingListPage />} />
-              <Route path="settings" element={<TripSettingsPage />} />
+              <Route path="edit" element={<TripEditPage />} />
             </Route>
           </Route>
         </Route>
