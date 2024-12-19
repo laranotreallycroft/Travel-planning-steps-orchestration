@@ -1,22 +1,13 @@
 package com.odysseus.controller;
 
-import com.odysseus.model.itinerary.*;
-import com.odysseus.model.itinerary.openRouteService.distanceMatrix.OpenRouteServiceDistanceMatrixResponse;
+import com.odysseus.model.itinerary.ItineraryCreateRequest;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.repository.ItineraryElementRepository;
 import com.odysseus.repository.TripRepository;
 import com.odysseus.service.ItineraryService;
-import com.odysseus.utils.DistanceMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/itineraries")
@@ -32,91 +23,48 @@ public class ItineraryController {
         this.itineraryService = itineraryService;
     }
 
-
+    /**
+     * Creates a new itinerary based on the provided itinerary create request.
+     *
+     * @param itineraryCreateRequest the details of the itinerary to be created.
+     * @return a ResponseEntity with the status of the operation and the created trip if successful.
+     */
     @PostMapping
     public ResponseEntity<?> createItinerary(@RequestBody ItineraryCreateRequest itineraryCreateRequest) {
-
-        Trip trip = tripRepository.findById(itineraryCreateRequest.getTripId()).orElse(null);
-        if (trip != null) {
-            int tripDay = 0;
-            if (itineraryCreateRequest.isOptimize()) {
-
-                OpenRouteServiceDistanceMatrixResponse response = itineraryService.getOpenRouteServiceDistanceMatrix(
-                        itineraryCreateRequest.getStops(), itineraryCreateRequest.getTransportationMethod());
-                if (response.getDurations() == null) {
-                    return ResponseEntity.badRequest().body("Unable to find route between stops.");
-                }
-
-                try {
-                    List<List<Integer>> clusters = DistanceMatrix.getClusters(response.getDurations(), itineraryCreateRequest.getStops());
-                    for (List<Integer> cluster : clusters) {
-                        List<ItineraryElementRequest> clusterLocations = IntStream
-                                .range(0, itineraryCreateRequest.getStops().size()).filter(cluster::contains)
-                                .mapToObj(itineraryCreateRequest.getStops()::get).collect(Collectors.toList());
-                        itineraryService.createItinerariesFromPayload(trip, clusterLocations, itineraryCreateRequest.getTransportationMethod(), tripDay++);
-
-                    }
-                } catch (Exception e) {
-                    return ResponseEntity.badRequest().body(e.getMessage());
-                }
-            } else {
-                try {
-                    List<List<ItineraryElementRequest>> clusters = DistanceMatrix.getClusters(itineraryCreateRequest.getStops());
-                    for (List<ItineraryElementRequest> cluster : clusters) {
-                        itineraryService.createItinerariesFromPayload(trip, cluster, itineraryCreateRequest.getTransportationMethod(), tripDay++);
-
-                    }
-                } catch (Exception e) {
-                    return ResponseEntity.badRequest().body(e.getMessage());
-                }
+        try {
+            Trip trip = itineraryService.createItinerary(itineraryCreateRequest);
+            if (trip == null) {
+                return ResponseEntity.badRequest().body("Trip with the specified ID does not exist.");
             }
-            tripRepository.save(trip);
             return ResponseEntity.status(HttpStatus.CREATED).body(trip);
-        } else {
-            return ResponseEntity.badRequest().body("Trip with id doesnt exist.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
 
-    ;
-
-    /*
+    /**
+     * Updates an existing itinerary based on the provided itinerary update request.
+     *
+     * @param itineraryUpdateRequest the details of the itinerary to be updated.
+     * @return a ResponseEntity with the status of the operation and the updated trip if successful.
+     */
     @PutMapping
-    public ResponseEntity updateItineraries(@RequestBody ItineraryCreateRequest itineraryPayload) throws URISyntaxException {
-
-        Trip trip = tripRepository.findById(itineraryPayload.getTripId()).orElse(null);
-        trip.getItineraries().clear();
-        Integer tripDay = 0;
-        if (itineraryPayload.getRouteOptions().isOptimize()) {
-            try {
-                OpenRouteServiceDistanceMatrixResponse response = getOpenRouteServiceDistanceMatrix(
-                        itineraryPayload.getLocations(), itineraryPayload.getRouteOptions());
-
-                List<List<Integer>> clusters = DistanceMatrix.getClusters(response.getDurations(), null);
-                for (List<Integer> cluster : clusters) {
-                    List<ItineraryElementRequest> clusterLocations = IntStream
-                            .range(0, itineraryPayload.getLocations().size()).filter(i -> cluster.contains(i))
-                            .mapToObj(itineraryPayload.getLocations()::get).collect(Collectors.toList());
-                    createItinerariesFromPayload(trip, clusterLocations, itineraryPayload.getRouteOptions(), tripDay++);
-
-                }
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<?> updateItinerary(@RequestBody ItineraryCreateRequest itineraryUpdateRequest) {
+        try {
+            Trip trip = itineraryService.createItinerary(itineraryUpdateRequest);
+            if (trip == null) {
+                return ResponseEntity.badRequest().body("Trip with the specified ID does not exist.");
             }
-
-        } else {
-            try {
-                createItinerariesFromPayload(trip, itineraryPayload.getLocations(), itineraryPayload.getRouteOptions(),
-                        tripDay);
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-
-            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(trip);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
-        tripRepository.save(trip);
-        return ResponseEntity.ok(trip);
-
     }
-
+/*
     public void moveItineraryElements(ItineraryElement changedElement, Itinerary itinerary) {
         Timestamp commuteStartDate = changedElement.getCommuteStartDate();
         Timestamp commuteEndDate = changedElement.getCommuteEndDate();

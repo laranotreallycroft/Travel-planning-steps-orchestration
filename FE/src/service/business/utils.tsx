@@ -12,8 +12,8 @@ export default class EntityApiService {
     return axios.post(url, payload, { headers: getAuthHeaders() });
   }
 
-  static getEntity<T>(url: string, payload?: T, baseURL?: string) {
-    return axios.get(url, { params: payload, headers: getAuthHeaders(), baseURL });
+  static getEntity<T>(url: string, payload?: T) {
+    return axios.get(url, { params: payload, headers: getAuthHeaders() });
   }
 
   static putEntity<T>(url: string, payload: T) {

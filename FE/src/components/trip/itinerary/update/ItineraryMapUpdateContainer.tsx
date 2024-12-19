@@ -11,15 +11,17 @@ export interface IItineraryMapUpdateContainerOwnProps {}
 export interface IItineraryMapUpdateContainerStateProps {
   trip: ITrip;
 }
+
 export interface IItineraryMapUpdateContainerDispatchProps {
-  itinerariesUpdate: (itineraryUpdatePayload: IItineraryPayload) => ITrackableAction;
+  itineraryUpdate: (payload: IItineraryPayload) => ITrackableAction;
 }
+
 type IItineraryMapUpdateContainerProps = IItineraryMapUpdateContainerOwnProps & IItineraryMapUpdateContainerStateProps & IItineraryMapUpdateContainerDispatchProps;
 
 const ItineraryMapUpdateContainer: React.FC<IItineraryMapUpdateContainerProps> = (props: IItineraryMapUpdateContainerProps) => {
   const handleItineraryUpdate = useCallback(
     (values: IItineraryForm) => {
-      return props.itinerariesUpdate({ ...values, tripId: props.trip.id });
+      return props.itineraryUpdate({ ...values, tripId: props.trip.id });
     },
     [props.trip.id]
   );
@@ -39,7 +41,7 @@ const mapStateToProps = (state: any): IItineraryMapUpdateContainerStateProps => 
 });
 
 const mapDispatchToProps = (dispatch: any): IItineraryMapUpdateContainerDispatchProps => ({
-  itinerariesUpdate: (itineraryUpdatePayload: IItineraryPayload) => dispatch(createTrackableAction(ItineraryBusinessStore.actions.itineraryUpdate(itineraryUpdatePayload))),
+  itineraryUpdate: (itineraryUpdatePayload: IItineraryPayload) => dispatch(createTrackableAction(ItineraryBusinessStore.actions.itineraryUpdate(itineraryUpdatePayload))),
 });
 
 export default connect<IItineraryMapUpdateContainerStateProps, IItineraryMapUpdateContainerDispatchProps, IItineraryMapUpdateContainerOwnProps>(mapStateToProps, mapDispatchToProps)(ItineraryMapUpdateContainer);

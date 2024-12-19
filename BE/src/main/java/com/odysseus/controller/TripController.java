@@ -9,6 +9,7 @@ import com.odysseus.model.user.User;
 import com.odysseus.repository.LocationRepository;
 import com.odysseus.repository.TripRepository;
 import com.odysseus.service.LocationService;
+import com.odysseus.service.TripService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,54 +25,73 @@ import static com.odysseus.utils.JwtAuthenticationFilter.getCurrentUser;
 @RequestMapping("/trips")
 public class TripController {
 
-    private final TripRepository tripRepository;
-    private final LocationService locationService;
+    private final TripService tripService;
 
-    public TripController(TripRepository tripRepository, LocationService locationService) {
-        this.tripRepository = tripRepository;
-        this.locationService = locationService;
+    public TripController(TripService tripService) {
+        this.tripService = tripService;
     }
 
 
+    /**
+     * Creates a new trip for the authenticated user based on the provided trip create request.
+     *
+     * @param tripCreateRequest the details of the trip to be created.
+     * @return a ResponseEntity with the status of the operation.
+     */
     @PostMapping
-    public ResponseEntity<?> createTrip(@RequestBody TripCreateRequest tripCreateRequest) throws URISyntaxException {
+    public ResponseEntity<?> createTrip(@RequestBody TripCreateRequest tripCreateRequest) {
         User user = getCurrentUser();
-
         if (user != null) {
-            Location location = locationService.getLocation(tripCreateRequest.getLocation());
-            Trip trip = new Trip(tripCreateRequest.getLabel(), tripCreateRequest.getDateFrom(),
-                    tripCreateRequest.getDateTo(), location, user);
-            tripRepository.save(trip);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-
+            try {
+                tripService.createTrip(user, tripCreateRequest);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Error creating trip: " + e.getMessage());
+            }
         }
-        return ResponseEntity.badRequest().body("Something went wrong");
-
+        return ResponseEntity.badRequest().body("User is not authenticated");
     }
 
+    /**
+     * Retrieves a list of trips for the authenticated user, optionally filtered by the provided trip list filter.
+     *
+     * @param tripListFilter the filter criteria to apply to the trip list.
+     * @return a ResponseEntity containing the filtered list of trips.
+     */
     @GetMapping
     public ResponseEntity<?> getTripList(@ModelAttribute TripListFilter tripListFilter) {
         User currentUser = getCurrentUser();
-        List<Trip> trips = tripRepository.findByUserId(currentUser.getId());
-        if (tripListFilter.isUpcomingOnly())
-            trips = trips.stream().filter(trip -> trip.getDateTo().isAfter(LocalDate.now())).toList();
-        if (tripListFilter.isPastOnly())
-            trips = trips.stream().filter(trip -> trip.getDateTo().isBefore(LocalDate.now())).toList();
 
-        return ResponseEntity.ok(trips.toArray());
+        if (currentUser != null) {
+            try {
+                List<Trip> trips = tripService.getFilteredTripList(currentUser, tripListFilter);
+                return ResponseEntity.ok(trips.toArray());
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Error fetching trips: " + e.getMessage());
+            }
+        }
+        return ResponseEntity.badRequest().body("User is not authenticated");
     }
 
+    /**
+     * Retrieves a specific trip by its ID for the authenticated user.
+     *
+     * @param tripId the ID of the trip to retrieve.
+     * @return a ResponseEntity containing the trip or an error message.
+     */
     @GetMapping("/{tripId}")
-    public ResponseEntity<?> getTrip(@PathVariable(value = "tripId") Long tripId) throws URISyntaxException {
-        Trip trip = tripRepository.findById(tripId).orElse(null);
-        if (!Objects.equals(trip.getUser().getId(), getCurrentUser().getId())) {
-            return ResponseEntity.badRequest().body("User does not have permission for this action.");
-        }
-        if (trip != null) {
-            return ResponseEntity.ok(trip);
+    public ResponseEntity<?> getTrip(@PathVariable(value = "tripId") Long tripId) {
+        User currentUser = getCurrentUser();
 
+        if (currentUser != null) {
+            try {
+                Trip trip = tripService.getTripById(tripId, currentUser);
+                return ResponseEntity.ok(trip);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
-        return ResponseEntity.badRequest().body("Something went wrong");
+        return ResponseEntity.badRequest().body("User is not authenticated");
     }
 /*
     @PutMapping("/{tripId}")
