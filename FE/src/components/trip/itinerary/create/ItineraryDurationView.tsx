@@ -1,4 +1,4 @@
-import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
+import { Button, Form, InputNumber, Row, Table } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import StartCheckbox from 'components/trip/itinerary/create/StartCheckbox';
 import React from 'react';
@@ -49,14 +49,7 @@ const ItineraryDurationView: React.FC<IItineraryDurationViewProps> = (props: IIt
             {
               title: props.translate('ITINERARY_DURATION_VIEW.TABLE.DURATION'),
               key: 'duration',
-              render: (stop: IItineraryElementPayload) => (
-                <Row gutter={16} justify={'center'} align={'middle'}>
-                  <Col>
-                    <InputNumber defaultValue={stop.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, stop.id)} />
-                  </Col>
-                  <Col>{props.translate('ITINERARY_DURATION_VIEW.TABLE.DURATION.MINUTES')}</Col>
-                </Row>
-              ),
+              render: (stop: IItineraryElementPayload) => <InputNumber defaultValue={stop.duration} min={1} max={600} onChange={(value) => handleDurationChange(value ?? 1, stop.id)} />,
               width: 250,
             },
 
