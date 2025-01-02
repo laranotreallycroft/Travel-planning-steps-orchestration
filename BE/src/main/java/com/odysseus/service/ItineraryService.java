@@ -472,7 +472,7 @@ public class ItineraryService {
                     lastEndDateTime,
                     0
             );
-
+            itinerary.setRouteGeometry(null);
         }
     }
 
