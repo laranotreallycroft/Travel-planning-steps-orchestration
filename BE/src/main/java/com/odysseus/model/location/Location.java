@@ -64,6 +64,10 @@ public class Location {
         return new Coordinates(coordinates.getX(), coordinates.getY());
     }
 
+    public LocationRequest getLocationRequest() {
+        return new LocationRequest(id, getCoordinatesModel(), label);
+    }
+
     public void setCoordinates(Point location) {
         this.coordinates = location;
     }

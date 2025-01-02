@@ -1,4 +1,4 @@
-import { AppointmentModel, EditingState, ViewState } from '@devexpress/dx-react-scheduler';
+import { EditingState, ViewState } from '@devexpress/dx-react-scheduler';
 import { AppointmentTooltip, Appointments, DateNavigator, DragDropProvider, EditRecurrenceMenu, Scheduler, Toolbar, WeekView } from '@devexpress/dx-react-scheduler-material-ui';
 import SaveIcon from '@mui/icons-material/Save';
 import { Paper } from '@mui/material';
@@ -47,7 +47,7 @@ const ScheduleContainer: React.FC<IScheduleContainerProps> = (props: IScheduleCo
 
   const handleSave = useCallback(() => {
     const mappedPayload: IScheduleElement[] = schedulerData.map((element) => {
-      const castId: string = typeof element.id === 'number' ? element.id?.toString() : element.id!;
+      const castId: string = typeof element.id === 'number' ? element.id?.toString() : element.id?.slice(0, -1)!;
       return {
         id: castId,
         startDate: dayjs(element.startDate).toISOString(),

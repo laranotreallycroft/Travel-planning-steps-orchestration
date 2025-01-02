@@ -3,7 +3,6 @@ package com.odysseus.controller;
 import com.odysseus.model.itinerary.ItineraryCreateRequest;
 import com.odysseus.model.itinerary.ScheduleElement;
 import com.odysseus.model.trip.Trip;
-import com.odysseus.repository.ItineraryElementRepository;
 import com.odysseus.service.ItineraryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +69,7 @@ public class ItineraryController {
      * @param scheduleElements the details of the schedule to be updated.
      * @return a ResponseEntity with the status of the operation and the updated trip if successful.
      */
-      
+
     @PutMapping("/schedule")
     public ResponseEntity<?> updateItinerarySchedule(@RequestBody List<ScheduleElement> scheduleElements) {
         try {
