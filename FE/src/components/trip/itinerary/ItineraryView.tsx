@@ -6,8 +6,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Button, Col, Popconfirm, Radio, Row } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import MapElement from 'components/common/map/MapElement';
-import Schedule from 'components/trip/itinerary/schedule/Schedule';
-import ItineraryMapUpdateContainer from 'components/trip/itinerary/update/ItineraryMapUpdateContainer';
+import ScheduleContainer from 'components/trip/itinerary/schedule/ScheduleContainer';
+import ItineraryUpdateContainer from 'components/trip/itinerary/update/ItineraryUpdateContainer';
 import { LatLngExpression } from 'leaflet';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -61,9 +61,9 @@ const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps
       </Row>
 
       {scheduleView ? (
-        <Schedule itineraries={props.trip.itineraries!} isEditing={isEditing} />
+        <ScheduleContainer itineraries={props.trip.itineraries} isEditing={isEditing} />
       ) : isEditing ? (
-        <ItineraryMapUpdateContainer />
+        <ItineraryUpdateContainer onItineraryUpdate={toggleIsEditing} />
       ) : (
         <MapElement
           selectedLocation={props.trip.location}

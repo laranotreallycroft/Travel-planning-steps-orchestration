@@ -1,4 +1,4 @@
-import { ICoordinates, ILocation } from 'model/geometry/Coordinates';
+import { ICoordinates } from 'model/geometry/Coordinates';
 import { IItineraryElementPayload } from 'service/business/trip/itinerary/ItineraryBusinessStore';
 
 export interface IItinerary {
@@ -9,7 +9,6 @@ export interface IItinerary {
   transportationMethod: string;
 }
 export interface IItineraryElement extends IItineraryElementPayload {
-  travelDuration: number;
   commuteStartDate: Date;
   commuteEndDate: Date;
   startDate: Date;

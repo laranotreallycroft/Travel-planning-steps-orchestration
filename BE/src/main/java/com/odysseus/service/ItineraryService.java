@@ -6,7 +6,9 @@ import com.odysseus.model.itinerary.openRouteService.directions.OpenRouteService
 import com.odysseus.model.itinerary.openRouteService.distanceMatrix.OpenRouteServiceDistanceMatrixPayload;
 import com.odysseus.model.itinerary.openRouteService.distanceMatrix.OpenRouteServiceDistanceMatrixResponse;
 import com.odysseus.model.location.Location;
+import com.odysseus.model.location.LocationRequest;
 import com.odysseus.model.trip.Trip;
+import com.odysseus.repository.ItineraryElementRepository;
 import com.odysseus.repository.TripRepository;
 import com.odysseus.utils.DistanceMatrix;
 import com.odysseus.utils.GeometryDecoder;
@@ -21,8 +23,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,6 +33,7 @@ public class ItineraryService {
     private final RestTemplate restTemplate;
     private final LocationService locationService;
     private final TripRepository tripRepository;
+    private final ItineraryElementRepository itineraryElementRepository;
 
     @Value("${openRouteService.matrix.baseUrl}")
     private String openRouteServiceMatrixBaseUrl;
@@ -40,10 +42,11 @@ public class ItineraryService {
     @Value("${openRouteService.apiKey}")
     private String openRouteServiceApiKey;
 
-    public ItineraryService(RestTemplate restTemplate, LocationService locationService, TripRepository tripRepository) {
+    public ItineraryService(RestTemplate restTemplate, LocationService locationService, TripRepository tripRepository, ItineraryElementRepository itineraryElementRepository) {
         this.restTemplate = restTemplate;
         this.locationService = locationService;
         this.tripRepository = tripRepository;
+        this.itineraryElementRepository = itineraryElementRepository;
     }
 
     /**
@@ -266,8 +269,9 @@ public class ItineraryService {
 
     /**
      * Adds an itinerary element to an itinerary.
-     * @param itinerary The itinerary to which the element is added.
-     * @param stop The stop to add.
+     *
+     * @param itinerary       The itinerary to which the element is added.
+     * @param stop            The stop to add.
      * @param lastEndDateTime The end time of the last element.
      * @param commuteDuration The duration of the commute to the stop.
      * @return The end date and time of the new element.
@@ -293,4 +297,127 @@ public class ItineraryService {
         itinerary.addItineraryElement(element);
         return stopEndTime;
     }
+
+    /**
+     * Deletes the itinerary for a given trip.
+     *
+     * @param tripId ID of the Trip object
+     * @return The updated Trip object with deleted itineraries.
+     * @throws Exception If any error occurs during itinerary deletion.
+     */
+    public Trip deleteItinerary(Long tripId) {
+        // Retrieve the trip using the given trip ID
+        Trip trip = tripRepository.findById(tripId).orElse(null);
+        if (trip == null) {
+            throw new IllegalArgumentException("Trip with the specified ID does not exist.");
+        }
+
+        // Clear existing itineraries if any
+        if (trip.getItineraries() != null) {
+            trip.getItineraries().clear();
+        }
+
+        // Save the updated trip with itineraries
+        return tripRepository.save(trip);
+    }
+
+    public Trip updateItinerarySchedule(List<ScheduleElement> scheduleElements) {
+        Set<Itinerary> itinerariesToUpdate = new HashSet<>();
+        Trip trip = null;
+        for (ScheduleElement scheduleElement : scheduleElements) {
+            ItineraryElement itineraryElement = itineraryElementRepository
+                    .findById(scheduleElement.getId()).orElse(null);
+            if (trip == null)
+                trip = itineraryElement.getItinerary().getTrip();
+
+            LocalDateTime originalStartDateTime = itineraryElement.getStartDate().toLocalDateTime();
+            LocalDateTime originalEndDateTime = itineraryElement.getEndDate().toLocalDateTime();
+            LocalDateTime newStartDateTime = scheduleElement.getStartDate().toLocalDateTime();
+            LocalDateTime newEndDateTime = scheduleElement.getEndDate().toLocalDateTime();
+
+            if (!originalStartDateTime.equals(newStartDateTime) || !originalEndDateTime.equals(newEndDateTime)) {
+
+                long previousCommuteLength = itineraryElement.getCommuteEndDate().getTime()
+                        - itineraryElement.getCommuteStartDate().getTime();
+
+                itineraryElement.setCommuteStartDate(
+                        new Timestamp(scheduleElement.getStartDate().getTime() - previousCommuteLength));
+                itineraryElement.setCommuteEndDate(scheduleElement.getStartDate());
+                itineraryElement.setStartDate(scheduleElement.getStartDate());
+                itineraryElement.setEndDate(scheduleElement.getEndDate());
+                itineraryElement.setDuration(
+                        (int) ((scheduleElement.getEndDate().getTime() - scheduleElement.getStartDate().getTime())
+                                / 60000));
+
+                moveItineraryElements(itineraryElement,
+                        trip.findItineraryWithDate(originalStartDateTime.toLocalDate()));
+                if (!originalStartDateTime.toLocalDate().equals(newStartDateTime.toLocalDate())) {
+                    Itinerary originalItinerary = trip.findItineraryWithDate(originalStartDateTime.toLocalDate());
+                    originalItinerary.removeItineraryElement(itineraryElement);
+                    itinerariesToUpdate.add(originalItinerary);
+
+                    Itinerary newItinerary = trip.findItineraryWithDate(newStartDateTime.toLocalDate());
+                    newItinerary.addItineraryElement(itineraryElement);
+                    itinerariesToUpdate.add(newItinerary);
+                }
+            }
+        }
+        for (Itinerary itinerary : itinerariesToUpdate) {
+            try {
+                itinerary.sortElementsAsc();
+                List<ItineraryElementRequest> itineraryLocations = new ArrayList<>();
+                for (ItineraryElement itineraryElement : itinerary.getItineraryElements()) {
+                    LocationRequest locationRequest = new LocationRequest(itineraryElement.getLocation().getId(), itineraryElement.getLocation().getCoordinatesModel(), itineraryElement.getLocation().getLabel());
+                    itineraryLocations.add(new ItineraryElementRequest(itineraryElement.getDuration(), locationRequest, itineraryElement.isStart()));
+                }
+                itinerary.getItineraryElements().clear();
+
+                createItinerariesFromPayload(trip, itineraryLocations, TransportationMethodEnum.fromValue(itinerary.getTransportationMethod()), 0);
+
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error in updating itinerary schedule!");
+            }
+        }
+
+        return tripRepository.save(trip);
+    }
+
+
+    public void moveItineraryElements(ItineraryElement changedElement, Itinerary itinerary) {
+        Timestamp commuteStartDate = changedElement.getCommuteStartDate();
+        Timestamp commuteEndDate = changedElement.getCommuteEndDate();
+        Timestamp endDate = changedElement.getEndDate();
+        for (ItineraryElement element : itinerary.getItineraryElements()) {
+            if (!element.getId().equals(changedElement.getId())) {
+
+                Timestamp elementCommuteStartDate = element.getCommuteStartDate();
+                Timestamp elementCommuteEndDate = element.getCommuteEndDate();
+                Timestamp elementStartDate = element.getStartDate();
+                Timestamp elementEndDate = element.getEndDate();
+
+                boolean overlapsBefore = commuteStartDate.before(elementEndDate)
+                        && (commuteEndDate.equals(elementEndDate) || commuteEndDate.after(elementEndDate));
+                boolean overlapsAfter = endDate.after(elementCommuteStartDate)
+                        && (endDate.before(elementCommuteEndDate) || endDate.equals(elementCommuteEndDate));
+
+                if (overlapsBefore || overlapsAfter) {
+                    long offset = overlapsBefore
+                            ? commuteStartDate.getTime() - elementEndDate.getTime()
+                            : endDate.getTime() - elementCommuteStartDate.getTime();
+
+                    element.setCommuteStartDate(new Timestamp(elementCommuteStartDate.getTime() + offset));
+                    element.setCommuteEndDate(new Timestamp(elementCommuteEndDate.getTime() + offset));
+                    element.setStartDate(new Timestamp(elementStartDate.getTime() + offset));
+                    element.setEndDate(new Timestamp(elementEndDate.getTime() + offset));
+
+                    moveItineraryElements(element, itinerary);
+                }
+
+            }
+        }
+
+    }
+
+
 }
+

@@ -2,6 +2,7 @@ package com.odysseus.model.itinerary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.odysseus.model.location.Location;
+import com.odysseus.model.trip.Trip;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -124,6 +125,7 @@ public class ItineraryElement implements Comparable<ItineraryElement> {
     public void setStart(boolean start) {
         this.start = start;
     }
+
 
     @Override
     public int compareTo(ItineraryElement o) {

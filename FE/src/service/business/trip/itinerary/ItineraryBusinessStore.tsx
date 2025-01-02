@@ -1,7 +1,6 @@
-import { AppointmentModel } from '@devexpress/dx-react-scheduler';
 import { ILocation } from 'model/geometry/Coordinates';
 
-import { Observable, catchError, filter, from, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import { Observable, catchError, filter, from, map, mergeMap, withLatestFrom } from 'rxjs';
 import { IPayloadAction } from 'service/business/common/types';
 import { getTrip, tripStore } from 'service/business/trip/TripBusinessStore';
 import EntityApiService from 'service/business/utils';
@@ -25,6 +24,12 @@ export interface IItineraryPayload extends IItineraryForm {
   tripId: string;
 }
 
+export interface IScheduleElement {
+  id: string;
+  startDate: string;
+  endDate: string;
+}
+
 // -
 // -------------------- Selectors
 
@@ -45,7 +50,7 @@ export const itineraryUpdate = (payload: IItineraryPayload): IPayloadAction<IIti
   return { type: actions.ITINERARY_UPDATE, payload: payload };
 };
 
-export const itineraryScheduleUpdate = (payload: AppointmentModel[]): IPayloadAction<AppointmentModel[]> => {
+export const itineraryScheduleUpdate = (payload: IScheduleElement[]): IPayloadAction<IScheduleElement[]> => {
   return { type: actions.ITINERARY_SCHEDULE_UPDATE, payload: payload };
 };
 export const itineraryDelete = (): IAction => {
@@ -75,7 +80,6 @@ const itineraryCreateEffect = (action$: Observable<IPayloadAction<IItineraryPayl
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
     map((data) => tripStore(data)),
 
     catchError((error: any, o: Observable<any>) => {
@@ -104,7 +108,6 @@ const itineraryUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPayl
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
     map((data) => tripStore(data)),
 
     catchError((error: any, o: Observable<any>) => {
@@ -112,7 +115,7 @@ const itineraryUpdateEffect = (action$: Observable<IPayloadAction<IItineraryPayl
     })
   );
 };
-const itineraryScheduleUpdateEffect = (action$: Observable<IPayloadAction<AppointmentModel[]>>, state$: Observable<any>) => {
+const itineraryScheduleUpdateEffect = (action$: Observable<IPayloadAction<IScheduleElement[]>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.ITINERARY_SCHEDULE_UPDATE;
@@ -162,8 +165,7 @@ const itineraryDeleteEffect = (action$: Observable<IAction>, state$: Observable<
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    switchMap((data) => of(tripStore(data))),
+    map((data) => tripStore(data)),
 
     catchError((error: any, o: Observable<any>) => {
       return o;

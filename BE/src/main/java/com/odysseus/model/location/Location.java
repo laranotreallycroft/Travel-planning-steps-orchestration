@@ -60,6 +60,10 @@ public class Location {
         return coordinates.getCoordinate();
     }
 
+    public Coordinates getCoordinatesModel() {
+        return new Coordinates(coordinates.getX(), coordinates.getY());
+    }
+
     public void setCoordinates(Point location) {
         this.coordinates = location;
     }

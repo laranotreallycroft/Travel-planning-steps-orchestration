@@ -123,6 +123,8 @@ const en: any = {
   'PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS': 'New packing list successfully created',
   'PACKING_LIST_BUSINESS_STORE.CREATE.ERROR': 'Unable to create packing list',
   'PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update packing list',
+
+  'SCHEDULE_VIEW.COMMUTE_LABEL': 'Commute to',
 };
 
 export default en;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ScheduleElement implements Comparable<ScheduleElement> {
-    private String id;
+    private Long id;
     private Timestamp startDate;
     private Timestamp endDate;
 
@@ -14,18 +14,18 @@ public class ScheduleElement implements Comparable<ScheduleElement> {
 
     }
 
-    public ScheduleElement(String id, Timestamp startDate, Timestamp endDate) {
+    public ScheduleElement(Long id, Timestamp startDate, Timestamp endDate) {
         super();
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
