@@ -114,7 +114,7 @@ const tripUpdateffect = (action$: Observable<IPayloadAction<ITripUpdatePayload>>
     }),
     mergeMap((action) => {
       return from(
-        EntityApiService.putEntity('/trips', action.payload)
+        EntityApiService.putEntity(`/trips/${action.payload.id}`, action.payload)
           .then((response) => {
             if (response.status === 200) {
               notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.UPDATE.SUCCESS'));
