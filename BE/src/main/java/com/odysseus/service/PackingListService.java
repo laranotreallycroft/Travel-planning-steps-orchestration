@@ -1,8 +1,6 @@
 package com.odysseus.service;
 
-import com.odysseus.model.packingList.PackingList;
-import com.odysseus.model.packingList.PackingListCheckedPayload;
-import com.odysseus.model.packingList.PackingListCreatePayload;
+import com.odysseus.model.packingList.*;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.repository.PackingListRepository;
 import com.odysseus.repository.TripRepository;
@@ -51,6 +49,43 @@ public class PackingListService {
         return packingList.getTrip();
 
 
+    }
+
+    /**
+     * Update and delete packing lists
+     *
+     * @param packingListUpdateDeletePayload list of packing lists to update and delete
+     * @throws IllegalArgumentException if the packing list is null.
+     */
+    public Trip updateDeletePackingLists(PackingListUpdateDeletePayload packingListUpdateDeletePayload) {
+        Trip trip = null;
+        for (Long id : packingListUpdateDeletePayload.getDelete()) {
+
+            PackingList packingListToDelete = packingListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Packing list not found"));
+            if (trip == null) {
+                trip = packingListToDelete.getTrip();
+            }
+            packingListRepository.delete(packingListToDelete);
+
+        }
+
+        for (PackingListUpdatePayload packingListUpdatePayload : packingListUpdateDeletePayload.getUpdate()) {
+            PackingList packingListToUpdate = packingListRepository.findById(packingListUpdatePayload.getId()).orElseThrow(() -> new IllegalArgumentException("Packing list not found"));
+            if (trip == null) {
+                trip = packingListToUpdate.getTrip();
+            }
+            if (packingListUpdatePayload.getItems() != null) {
+                packingListToUpdate.setItems(packingListUpdatePayload.getItems());
+                packingListToUpdate.filterAndSetCheckedItems(packingListUpdatePayload.getItems());
+            }
+            if (packingListUpdatePayload.getLabel() != null)
+                packingListToUpdate.setLabel(packingListUpdatePayload.getLabel());
+
+            packingListRepository.save(packingListToUpdate);
+
+        }
+
+        return trip;
     }
 
 }

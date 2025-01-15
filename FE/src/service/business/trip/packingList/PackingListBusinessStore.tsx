@@ -20,7 +20,7 @@ export interface IPackingListCheckedPayload {
   checkedItems?: string[];
 }
 export interface IPackingListUpdatePayload {
-  packingListId: number;
+  id: number;
   label?: string;
   items?: string[];
 }
@@ -126,6 +126,8 @@ const packingListUpdateffect = (action$: Observable<IPayloadAction<IPackingListU
         EntityApiService.putEntity(`/packinglists`, action.payload)
           .then((response) => {
             if (response.status === 200) {
+              notificationService.success(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.UPDATE.SUCCESS'));
+
               return response.data;
             }
           })

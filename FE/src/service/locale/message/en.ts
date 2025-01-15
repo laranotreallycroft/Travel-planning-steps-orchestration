@@ -5,6 +5,8 @@ const en: any = {
   'COMMON.YES': 'Yes',
   'COMMON.NO': 'No',
   'COMMON.DELETE': 'Delete',
+  'COMMON.CANCEL': 'Cancel',
+  'COMMON.SAVE': 'Save',
 
   'NAVIGATION.INFO': 'How it works',
   'NAVIGATION.LOGIN': 'Sign in',
@@ -121,6 +123,7 @@ const en: any = {
   'ITINERARY_BUSINESS_STORE.DELETE.ERROR': 'Unable to delete itinerary',
 
   'PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS': 'New packing list successfully created',
+  'PACKING_LIST_BUSINESS_STORE.UPDATE.SUCCESS': 'Packing lists successfully updated',
   'PACKING_LIST_BUSINESS_STORE.CREATE.ERROR': 'Unable to create packing list',
   'PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update packing list',
 
@@ -135,6 +138,9 @@ const en: any = {
   'PACKING_LIST_HEADER.ITEMS.PLACEHOLDER': 'Add your items',
 
   'CUSTOM_DROPDOWN_INPUT.ADD': 'Add new item',
+
+  'PACKING_LIST_UPDATE.DELETE_MODAL.TITLE': 'Delete packing list',
+  'PACKING_LIST_UPDATE.DELETE_MODAL.DESCRIPTION': 'Are you sure you want to delete this packing list?',
 };
 
 export default en;

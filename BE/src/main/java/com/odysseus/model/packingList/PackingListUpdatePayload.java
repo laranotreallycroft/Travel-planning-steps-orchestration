@@ -3,7 +3,7 @@ package com.odysseus.model.packingList;
 import java.util.List;
 
 public class PackingListUpdatePayload {
-    private Long packingListId;
+    private Long id;
     private String label;
     private List<String> items;
 
@@ -11,22 +11,22 @@ public class PackingListUpdatePayload {
 
     }
 
-    public PackingListUpdatePayload(Long packingListId, String label, List<String> items) {
+    public PackingListUpdatePayload(Long id, String label, List<String> items) {
         super();
-        this.packingListId = packingListId;
+        this.id = id;
         this.label = label;
         this.items = items;
     }
 
-    public PackingListUpdatePayload(Long packingListId, List<String> items) {
+    public PackingListUpdatePayload(Long id, List<String> items) {
         super();
-        this.packingListId = packingListId;
+        this.id = id;
         this.items = items;
     }
 
-    public PackingListUpdatePayload(Long packingListId, String label) {
+    public PackingListUpdatePayload(Long id, String label) {
         super();
-        this.packingListId = packingListId;
+        this.id = id;
         this.label = label;
     }
 
@@ -39,12 +39,12 @@ public class PackingListUpdatePayload {
         this.label = label;
     }
 
-    public Long getPackingListId() {
-        return packingListId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPackingListId(Long packingListId) {
-        this.packingListId = packingListId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<String> getItems() {

@@ -75,33 +75,12 @@ public class PackingListController {
     }
 
     @PutMapping
-    public ResponseEntity updatePackingLists(
-            @RequestBody PackingListUpdateDeletePayload packingListUpdateDeletePayload) {
-
-        PackingList packingList = null;
-        for (Long id : packingListUpdateDeletePayload.getDelete()) {
-            packingList = packingListRepository.findById(id).orElse(null);
-            if (packingList != null) {
-                packingListRepository.delete(packingList);
-            }
+    public ResponseEntity updatePackingLists(@RequestBody PackingListUpdateDeletePayload packingListUpdateDeletePayload) {
+        try {
+            Trip trip = packingListService.updateDeletePackingLists(packingListUpdateDeletePayload);
+            return ResponseEntity.ok(trip);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        for (PackingListUpdatePayload packingListUpdatePayload : packingListUpdateDeletePayload.getUpdate()) {
-            packingList = packingListRepository.findById(packingListUpdatePayload.getPackingListId()).orElse(null);
-            if (packingList != null) {
-                if (packingListUpdatePayload.getItems() != null) {
-                    packingList.setItems(packingListUpdatePayload.getItems());
-                    packingList.filterAndSetCheckedItems(packingListUpdatePayload.getItems());
-                }
-                if (packingListUpdatePayload.getLabel() != null)
-                    packingList.setLabel(packingListUpdatePayload.getLabel());
-
-                packingListRepository.save(packingList);
-            }
-        }
-        if (packingList != null)
-            return ResponseEntity.ok(packingList.getTrip());
-        else
-            return ResponseEntity.badRequest().body("Something went wrong");
     }
 }

@@ -41,7 +41,6 @@ body {
 @import 'locale/_localePicker.css';
 @import 'login/_loginView.css';
 @import 'trip/_packingListCopyView.css';
-@import 'trip/_packingListUpdateElement.css';
 @import 'trip/_tripCreateModal.css';
 @import 'trip/_tripView.css';
 @import 'trip/_weatherView.css';

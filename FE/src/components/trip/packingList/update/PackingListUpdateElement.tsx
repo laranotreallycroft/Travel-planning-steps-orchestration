@@ -1,8 +1,9 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Row } from 'antd';
-import Title from 'antd/es/typography/Title';
+import { Button, Col, Form, Input, Popconfirm, Row } from 'antd';
 import CustomDropdownInput from 'components/common/input/CustomDropdownInput';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import { IPackingList } from 'model/trip/packingList/PackingList';
+import { useCallback } from 'react';
 import { IPackingListUpdatePayload } from 'service/business/trip/packingList/PackingListBusinessStore';
 
 export interface IPackingListUpdateElementOwnProps {
@@ -10,40 +11,42 @@ export interface IPackingListUpdateElementOwnProps {
   onPackingListChange: (packingListUpdatePayload: IPackingListUpdatePayload) => void;
   onPackingListDelete: (packingListId: number) => void;
 }
-type IPackingListUpdateElementProps = IPackingListUpdateElementOwnProps;
+type IPackingListUpdateElementProps = IPackingListUpdateElementOwnProps & IWithLocalizeOwnProps;
 
 const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (props: IPackingListUpdateElementProps) => {
   const [form] = Form.useForm<IPackingListUpdatePayload>();
 
+  const handleValuesChange = useCallback(
+    (changedValues: Partial<IPackingListUpdatePayload>, values: IPackingListUpdatePayload) => {
+      props.onPackingListChange(values);
+    },
+    [props.onPackingListChange]
+  );
+
   return (
-    <Form<IPackingListUpdatePayload>
-      form={form}
-      initialValues={{ items: props.packingList.items }}
-      onValuesChange={(values: IPackingListUpdatePayload) =>
-        props.onPackingListChange({
-          packingListId: props.packingList.id,
-          items: values.items,
-        })
-      }
-    >
-      <Row justify={'space-between'}>
-        <Col span={20} className="margin-left-sm">
-          <Title
-            level={5}
-            editable={{
-              onChange: (value: string) =>
-                props.onPackingListChange({
-                  packingListId: props.packingList.id,
-                  label: value,
-                }),
-              triggerType: ['text'],
-              enterIcon: null,
-            }}
-          >
-            {props.packingList.label}
-          </Title>
+    <Form<IPackingListUpdatePayload> form={form} initialValues={props.packingList} onValuesChange={handleValuesChange}>
+      <Form.Item name={'id'} hidden={true} noStyle={true}>
+        <Input />
+      </Form.Item>
+      <Row gutter={[8, 8]}>
+        <Col flex={'auto'}>
+          <Form.Item name="label">
+            <Input />
+          </Form.Item>
         </Col>
-        <Button icon={<CloseOutlined />} className="margin-left-sm packingListUpdateElement__deleteListButton" onClick={() => props.onPackingListDelete(props.packingList.id)} />
+
+        <Popconfirm
+          title={props.translate('PACKING_LIST_UPDATE.DELETE_MODAL.TITLE')}
+          description={props.translate('PACKING_LIST_UPDATE.DELETE_MODAL.DESCRIPTION')}
+          onConfirm={() => props.onPackingListDelete(props.packingList.id)}
+          okText={props.translate('COMMON.YES')}
+          cancelText={props.translate('COMMON.NO')}
+          placement="topRight"
+        >
+          <Col>
+            <Button icon={<CloseOutlined />} />
+          </Col>
+        </Popconfirm>
       </Row>
       <Form.Item name={'items'}>
         <CustomDropdownInput
@@ -53,7 +56,7 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (prop
           })}
           additionalElementAddFunction={(items: string[]) =>
             props.onPackingListChange({
-              packingListId: props.packingList.id,
+              id: props.packingList.id,
               items: items,
             })
           }
@@ -63,4 +66,4 @@ const PackingListUpdateElement: React.FC<IPackingListUpdateElementProps> = (prop
   );
 };
 
-export default PackingListUpdateElement;
+export default withLocalize<IPackingListUpdateElementOwnProps>(PackingListUpdateElement as any);
