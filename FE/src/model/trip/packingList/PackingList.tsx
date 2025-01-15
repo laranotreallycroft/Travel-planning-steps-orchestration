@@ -1,5 +1,5 @@
 export interface IPackingList {
-  id: number;
+  id: string;
   label: string;
   items: string[];
   checkedItems: string[];

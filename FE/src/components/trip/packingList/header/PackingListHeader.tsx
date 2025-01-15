@@ -1,16 +1,16 @@
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Col, Row } from 'antd';
-import React from 'react';
-import { ITrip } from 'model/trip/Trip';
-import PackingListCopyView, { IPackingListCopyForm } from 'components/trip/packingList/header/PackingListCopyView';
-import PackingListCreateView, { IPackingListCreateForm } from 'components/trip/packingList/header/PackingListCreateView';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import PackingListCopyView from 'components/trip/packingList/header/PackingListCopyView';
+import PackingListCreateView, { IPackingListCreateForm } from 'components/trip/packingList/header/PackingListCreateView';
+import { ITrip } from 'model/trip/Trip';
+import React from 'react';
 
 export interface IPackingListHeaderOwnProps {
   trip: ITrip;
-  tripList?: ITrip[];
+  tripList: ITrip[];
   onPackingListCreate: (packingListCreatePayload: IPackingListCreateForm) => void;
-  onPackingListCopy: (packingListCopyPayload: IPackingListCopyForm) => void;
+  onPackingListCopy: (packingListIds: string[]) => void;
   toggleEdit: () => void;
 }
 
@@ -20,7 +20,7 @@ const PackingListHeader: React.FC<IPackingListHeaderProps> = (props: IPackingLis
   return (
     <Row justify={'end'} gutter={[16, 16]}>
       <PackingListCreateView onPackingListCreate={props.onPackingListCreate} />
-      <PackingListCopyView trip={props.trip} tripList={props.tripList} onPackingListCopy={props.onPackingListCopy} />
+      <PackingListCopyView tripList={props.tripList} onPackingListCopy={props.onPackingListCopy} />
 
       {props.trip.packingLists.length > 0 && (
         <Col>

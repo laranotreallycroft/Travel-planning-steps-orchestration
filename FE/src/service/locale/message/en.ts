@@ -141,6 +141,17 @@ const en: any = {
 
   'PACKING_LIST_UPDATE.DELETE_MODAL.TITLE': 'Delete packing list',
   'PACKING_LIST_UPDATE.DELETE_MODAL.DESCRIPTION': 'Are you sure you want to delete this packing list?',
+
+  'PACKING_LIST_COPY_VIEW.BUTTON_LABEL': 'Copy',
+  'PACKING_LIST_COPY_VIEW.MODAL_TITLE': 'Copy packing list from another trip',
+  'PACKING_LIST_COPY_VIEW.YOUR_TRIPS_TAB': 'Your trips',
+  'PACKING_LIST_COPY_VIEW.PRESETS_TAB': 'Presets',
+  'PACKING_LIST_COPY_VIEW.FORM.TRIP_LABEL': 'Trip',
+  'PACKING_LIST_COPY_VIEW.FORM.PRESET_LABEL': 'Preset',
+  'PACKING_LIST_COPY_VIEW.FORM.TRIP_PLACEHOLDER': 'Select a trip',
+  'PACKING_LIST_COPY_VIEW.FORM.PRESET_PLACEHOLDER': 'Select a preset',
+  'PACKING_LIST_COPY_VIEW.FORM.PACKING_LIST_LABEL': 'Packing lists',
+  'PACKING_LIST_COPY_VIEW.FORM.PACKING_LIST_PLACEHOLDER': 'Select a packing list',
 };
 
 export default en;

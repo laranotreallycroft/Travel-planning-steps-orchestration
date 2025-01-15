@@ -15,24 +15,24 @@ export interface IPackingListCreatePayload {
 }
 
 export interface IPackingListCheckedPayload {
-  id: number;
+  id: string;
   label?: string;
   checkedItems?: string[];
 }
 export interface IPackingListUpdatePayload {
-  id: number;
+  id: string;
   label?: string;
   items?: string[];
 }
 
 export interface IPackingListUpdateCombinedPayload {
   update: IPackingListUpdatePayload[];
-  delete: number[];
+  delete: string[];
 }
 
 export interface IPackingListCopyPayload {
   tripId: string;
-  packingListIds: number[];
+  packingListIds: string[];
 }
 // -
 // -------------------- Selectors

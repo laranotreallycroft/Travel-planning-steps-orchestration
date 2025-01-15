@@ -4,7 +4,7 @@ import com.odysseus.model.packingList.*;
 import com.odysseus.model.trip.Trip;
 import com.odysseus.repository.PackingListRepository;
 import com.odysseus.repository.TripRepository;
-import org.springframework.http.ResponseEntity;
+import com.odysseus.utils.PackingListPresets;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,4 +88,29 @@ public class PackingListService {
         return trip;
     }
 
+    /**
+     * Copy packing lists
+     *
+     * @param packingListCopyPayload list of packing lists to add
+     * @throws IllegalArgumentException if the trip is null.
+     */
+    public Trip copyPackingLists(PackingListCopyPayload packingListCopyPayload) {
+        Trip trip = tripRepository.findById(packingListCopyPayload.getTripId()).orElseThrow(() -> new IllegalArgumentException("Trip not found"));
+
+        for (Long packingListId : packingListCopyPayload.getPackingListIds()) {
+            if (packingListId <= 26) {
+                PackingList newPackingList = new PackingList(trip,
+                        PackingListPresets.getPresetLabelById(packingListId),
+                        PackingListPresets.getPresetItemById(packingListId));
+                packingListRepository.save(newPackingList);
+            } else {
+                PackingList packingList = packingListRepository.findById(packingListId).orElseThrow(() -> new IllegalArgumentException("Packing list not found"));
+                PackingList newPackingList = new PackingList(trip, packingList);
+                packingListRepository.save(newPackingList);
+
+            }
+        }
+        return trip;
+
+    }
 }

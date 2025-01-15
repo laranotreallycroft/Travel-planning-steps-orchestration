@@ -22,7 +22,7 @@ type IPackingListUpdateContainerProps = IPackingListUpdateContainerOwnProps & IP
 
 const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (props: IPackingListUpdateContainerProps) => {
   const [changedPackingLists, setChangedPackingLists] = useState<IPackingListUpdatePayload[]>([]);
-  const [deletedPackingLists, setDeletedPackingLists] = useState<number[]>([]);
+  const [deletedPackingLists, setDeletedPackingLists] = useState<string[]>([]);
 
   const handlePackingListChange = useCallback(
     (payload: IPackingListUpdatePayload) => {
@@ -38,7 +38,7 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
   );
 
   const handlePackingListDelete = useCallback(
-    (packingListId: number) => {
+    (packingListId: string) => {
       setDeletedPackingLists((value) => [...value, packingListId]);
     },
     [setDeletedPackingLists]

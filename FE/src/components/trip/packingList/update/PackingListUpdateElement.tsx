@@ -9,7 +9,7 @@ import { IPackingListUpdatePayload } from 'service/business/trip/packingList/Pac
 export interface IPackingListUpdateElementOwnProps {
   packingList: IPackingList;
   onPackingListChange: (packingListUpdatePayload: IPackingListUpdatePayload) => void;
-  onPackingListDelete: (packingListId: number) => void;
+  onPackingListDelete: (packingListId: string) => void;
 }
 type IPackingListUpdateElementProps = IPackingListUpdateElementOwnProps & IWithLocalizeOwnProps;
 
