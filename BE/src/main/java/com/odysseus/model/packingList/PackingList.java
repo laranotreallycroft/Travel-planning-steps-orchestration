@@ -52,7 +52,10 @@ public class PackingList {
         super();
         this.trip = trip;
         this.label = label;
-        this.items = items;
+        if (items == null || items.isEmpty())
+            this.items = new ArrayList<>();
+        else
+            this.items = items;
         this.checkedItems = new ArrayList<>();
     }
 

@@ -1,6 +1,8 @@
 package com.odysseus.controller;
 
 
+import com.odysseus.model.packingList.*;
+import com.odysseus.service.PackingListService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,12 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.odysseus.model.packingList.PackingList;
 import com.odysseus.model.trip.Trip;
-import com.odysseus.model.packingList.PackingListCopyPayload;
-import com.odysseus.model.packingList.PackingListCreatePayload;
-import com.odysseus.model.packingList.PackingListUpdateDeletePayload;
-import com.odysseus.model.packingList.PackingListUpdatePayload;
 import com.odysseus.repository.PackingListRepository;
 import com.odysseus.repository.TripRepository;
 import com.odysseus.utils.PackingListPresets;
@@ -24,23 +21,24 @@ import com.odysseus.utils.PackingListPresets;
 public class PackingListController {
     private final TripRepository tripRepository;
     private final PackingListRepository packingListRepository;
+    private final PackingListService packingListService;
 
-    public PackingListController(TripRepository tripRepository, PackingListRepository packingListRepository) {
+    public PackingListController(TripRepository tripRepository, PackingListRepository packingListRepository, PackingListService packingListService) {
 
         this.tripRepository = tripRepository;
         this.packingListRepository = packingListRepository;
+        this.packingListService = packingListService;
     }
 
     @PostMapping
-    public ResponseEntity createPackingList(@RequestBody PackingListCreatePayload packingListCreatePayload) {
-        Trip trip = tripRepository.findById(packingListCreatePayload.getTripId()).orElse(null);
-        if (trip != null) {
-            PackingList packingList = new PackingList(trip, packingListCreatePayload.getLabel(),
-                    packingListCreatePayload.getItems());
-            packingListRepository.save(packingList);
-            return ResponseEntity.status(HttpStatus.CREATED).body(trip.getUser().getTrips());
+    public ResponseEntity<?> createPackingList(@RequestBody PackingListCreatePayload packingListCreatePayload) {
+        try {
+            Trip trip = packingListService.createPackingList(packingListCreatePayload);
+            return ResponseEntity.ok(trip);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.badRequest().body("Something went wrong");
+
     }
 
     @PostMapping("/copy")
@@ -67,15 +65,13 @@ public class PackingListController {
     }
 
     @PutMapping("/checked")
-    public ResponseEntity updatePackingListChecked(@RequestBody PackingListUpdatePayload packingListUpdatePayload) {
-        PackingList packingList = packingListRepository.findById(packingListUpdatePayload.getPackingListId())
-                .orElse(null);
-        if (packingList != null) {
-            packingList.setCheckedItems(packingListUpdatePayload.getItems());
-            packingListRepository.save(packingList);
-            return ResponseEntity.ok(packingList.getTrip());
+    public ResponseEntity updatePackingListChecked(@RequestBody PackingListCheckedPayload packingListCheckedPayload) {
+        try {
+            Trip trip = packingListService.checkPackingList(packingListCheckedPayload);
+            return ResponseEntity.ok(trip);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.badRequest().body("Something went wrong");
     }
 
     @PutMapping

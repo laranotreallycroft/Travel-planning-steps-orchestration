@@ -1,19 +1,13 @@
-.customDropdownInput>*>*>*>*>*>*>button:nth-child(2) {
-    display: none;
-}
-
-.customDropdownInput__notFoundContentRender {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.customDropdownInput > * > * > * > * > * > * > button:nth-child(2) {
+  display: none;
 }
 
 .customDropdownInput__deleteButton {
-    border: none;
-    background-color: inherit;
+  border: none;
+  background-color: inherit;
 }
 
-div.ant-select-item-option-selected>*:nth-child(2) {
-    position: absolute;
-    right: 40px;
+div.ant-select-item-option-selected > *:nth-child(2) {
+  position: absolute;
+  right: 40px;
 }

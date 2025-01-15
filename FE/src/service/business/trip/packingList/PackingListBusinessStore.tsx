@@ -13,6 +13,12 @@ export interface IPackingListCreatePayload {
   label: string;
   items: string[];
 }
+
+export interface IPackingListCheckedPayload {
+  id: number;
+  label?: string;
+  checkedItems?: string[];
+}
 export interface IPackingListUpdatePayload {
   packingListId: number;
   label?: string;
@@ -51,7 +57,7 @@ export const packingListUpdate = (payload: IPackingListUpdateCombinedPayload): I
   return { type: actions.PACKING_LIST_UPDATE, payload: payload };
 };
 
-export const packingListChecked = (payload: IPackingListUpdatePayload): IPayloadAction<IPackingListUpdatePayload> => {
+export const packingListChecked = (payload: IPackingListCheckedPayload): IPayloadAction<IPackingListCheckedPayload> => {
   return { type: actions.PACKING_LIST_CHECKED, payload: payload };
 };
 
@@ -63,19 +69,13 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
     filter((action) => {
       return action.type === actions.PACKING_LIST_CREATE;
     }),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      const trip = getTrip(state);
+    mergeMap((action) => {
       return from(
         EntityApiService.postEntity(`/packinglists`, action.payload)
           .then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
               notificationService.success(LocalizeService.translate('PACKING_LIST_BUSINESS_STORE.CREATE.SUCCESS'));
-
-              return {
-                tripList: response.data,
-                trip: response.data.find((value: ITrip) => value.id === trip.id),
-              };
+              return response.data;
             }
           })
           .catch((error) => {
@@ -83,8 +83,7 @@ const packingListCreateEffect = (action$: Observable<IPayloadAction<IPackingList
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
-    switchMap((data) => of(tripListStore(data?.tripList), tripStore(data?.trip)))
+    map((data) => tripStore(data))
   );
 };
 
@@ -140,7 +139,7 @@ const packingListUpdateffect = (action$: Observable<IPayloadAction<IPackingListU
   );
 };
 
-const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingListUpdatePayload>>, state$: Observable<any>) => {
+const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingListCheckedPayload>>, state$: Observable<any>) => {
   return action$.pipe(
     filter((action) => {
       return action.type === actions.PACKING_LIST_CHECKED;
@@ -158,7 +157,6 @@ const packingListCheckedffect = (action$: Observable<IPayloadAction<IPackingList
           })
       ).pipe(trackAction(action));
     }),
-    filter((data) => data !== undefined),
     map((data) => tripStore(data))
   );
 };

@@ -1,19 +1,12 @@
-import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
-import { Button, Row } from "antd";
-import React, { useCallback } from "react";
-import { connect } from "react-redux";
-import { ITrip } from "model/trip/Trip";
-import { TripBusinessStore } from "service/business/trip/TripBusinessStore";
-import {
-  IPackingListUpdateCombinedPayload,
-  IPackingListUpdatePayload,
-  PackingListBusinessStore,
-} from "service/business/trip/packingList/PackingListBusinessStore";
-import {
-  ITrackableAction,
-  createTrackableAction,
-} from "service/util/trackAction";
-import PackingListUpdateView from "components/trip/packingList/update/PackingListUpdateView";
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, Row } from 'antd';
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+import { ITrip } from 'model/trip/Trip';
+import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
+import { IPackingListUpdateCombinedPayload, IPackingListUpdatePayload, PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
+import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
+import PackingListUpdateView from 'components/trip/packingList/update/PackingListUpdateView';
 
 export interface IPackingListUpdateContainerOwnProps {
   toggleEdit: () => void;
@@ -22,17 +15,11 @@ export interface IPackingListUpdateContainerStateProps {
   trip: ITrip;
 }
 export interface IPackingListUpdateContainerDispatchProps {
-  packingListUpdate: (
-    packingListUpdatePayload: IPackingListUpdateCombinedPayload
-  ) => ITrackableAction;
+  packingListUpdate: (packingListUpdatePayload: IPackingListUpdateCombinedPayload) => ITrackableAction;
 }
-type IPackingListUpdateContainerProps = IPackingListUpdateContainerOwnProps &
-  IPackingListUpdateContainerStateProps &
-  IPackingListUpdateContainerDispatchProps;
+type IPackingListUpdateContainerProps = IPackingListUpdateContainerOwnProps & IPackingListUpdateContainerStateProps & IPackingListUpdateContainerDispatchProps;
 
-const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
-  props: IPackingListUpdateContainerProps
-) => {
+const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (props: IPackingListUpdateContainerProps) => {
   let changedPackingLists: Map<number, IPackingListUpdatePayload> = new Map();
   let deletedPackingLists: number[] = [];
   const handlePackingListChange = useCallback(
@@ -54,11 +41,9 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
 
   const handlePackingListUpdate = useCallback(() => {
     let updatePayloadArray: IPackingListUpdatePayload[] = [];
-    changedPackingLists.forEach(
-      (items: IPackingListUpdatePayload, packingListId: number) => {
-        updatePayloadArray.push(items);
-      }
-    );
+    changedPackingLists.forEach((items: IPackingListUpdatePayload, packingListId: number) => {
+      updatePayloadArray.push(items);
+    });
 
     if (updatePayloadArray.length > 0 || deletedPackingLists.length > 0)
       props
@@ -80,54 +65,25 @@ const PackingListUpdateContainer: React.FC<IPackingListUpdateContainerProps> = (
   };
   return (
     <React.Fragment>
-      <Row justify={"end"}>
+      <Row justify={'end'}>
         <Button type="primary" onClick={handleCancel} icon={<CloseOutlined />}>
-          {"Cancel"}
+          {'Cancel'}
         </Button>
-        <Button
-          type="primary"
-          onClick={handlePackingListUpdate}
-          icon={<SaveOutlined />}
-          className="margin-left-sm"
-        >
-          {"Save"}
+        <Button type="primary" onClick={handlePackingListUpdate} icon={<SaveOutlined />} className="margin-left-sm">
+          {'Save'}
         </Button>
       </Row>
-      <PackingListUpdateView
-        packingLists={props.trip.packingLists}
-        onPackingListChange={handlePackingListChange}
-        onPackingListDelete={handlePackingListDelete}
-      />
+      <PackingListUpdateView packingLists={props.trip.packingLists} onPackingListChange={handlePackingListChange} onPackingListDelete={handlePackingListDelete} />
     </React.Fragment>
   );
 };
 
-const mapStateToProps = (
-  state: any
-): IPackingListUpdateContainerStateProps => ({
+const mapStateToProps = (state: any): IPackingListUpdateContainerStateProps => ({
   trip: TripBusinessStore.selectors.getTrip(state),
 });
 
-const mapDispatchToProps = (
-  dispatch: any
-): IPackingListUpdateContainerDispatchProps => ({
-  packingListUpdate: (
-    packingListUpdatePayload: IPackingListUpdateCombinedPayload
-  ) =>
-    dispatch(
-      createTrackableAction(
-        PackingListBusinessStore.actions.packingListUpdate(
-          packingListUpdatePayload
-        )
-      )
-    ),
+const mapDispatchToProps = (dispatch: any): IPackingListUpdateContainerDispatchProps => ({
+  packingListUpdate: (packingListUpdatePayload: IPackingListUpdateCombinedPayload) => dispatch(createTrackableAction(PackingListBusinessStore.actions.packingListUpdate(packingListUpdatePayload))),
 });
 
-export default connect<
-  IPackingListUpdateContainerStateProps,
-  IPackingListUpdateContainerDispatchProps,
-  IPackingListUpdateContainerOwnProps
->(
-  mapStateToProps,
-  mapDispatchToProps
-)(PackingListUpdateContainer);
+export default connect<IPackingListUpdateContainerStateProps, IPackingListUpdateContainerDispatchProps, IPackingListUpdateContainerOwnProps>(mapStateToProps, mapDispatchToProps)(PackingListUpdateContainer);

@@ -1,4 +1,4 @@
 export interface ILabelValue {
-  label: string;
+  label: string | React.ReactNode;
   value: string;
 }

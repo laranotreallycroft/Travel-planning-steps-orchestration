@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { TripBusinessStore } from 'service/business/trip/TripBusinessStore';
 import { TripListBusinessStore } from 'service/business/trip/TripListBusinessStore';
-import { IPackingListCopyPayload, IPackingListCreatePayload, IPackingListUpdatePayload, PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
+import { IPackingListCheckedPayload, IPackingListCopyPayload, IPackingListCreatePayload, PackingListBusinessStore } from 'service/business/trip/packingList/PackingListBusinessStore';
 
 import { ITrackableAction, createTrackableAction } from 'service/util/trackAction';
 
@@ -21,7 +21,7 @@ export interface IPackingListContainerDispatchProps {
   packingListCreate: (packingListCreatePayload: IPackingListCreatePayload) => void;
   packingListCopy: (packingListCopyPayload: IPackingListCopyPayload) => void;
 
-  packingListChecked: (packingListUpdatePayload: IPackingListUpdatePayload) => ITrackableAction;
+  packingListChecked: (packingListCheckedPayload: IPackingListCheckedPayload) => ITrackableAction;
 }
 type IPackingListContainerProps = IPackingListContainerOwnProps & IPackingListContainerStateProps & IPackingListContainerDispatchProps;
 
@@ -76,7 +76,7 @@ const mapDispatchToProps = (dispatch: any): IPackingListContainerDispatchProps =
   packingListCreate: (packingListCreatePayload: IPackingListCreatePayload) => dispatch(PackingListBusinessStore.actions.packingListCreate(packingListCreatePayload)),
   packingListCopy: (packingListCopyPayload: IPackingListCopyPayload) => dispatch(PackingListBusinessStore.actions.packingListCopy(packingListCopyPayload)),
 
-  packingListChecked: (packingListUpdatePayload: IPackingListUpdatePayload) => dispatch(createTrackableAction(PackingListBusinessStore.actions.packingListChecked(packingListUpdatePayload))),
+  packingListChecked: (packingListCheckedPayload: IPackingListCheckedPayload) => dispatch(createTrackableAction(PackingListBusinessStore.actions.packingListChecked(packingListCheckedPayload))),
 });
 
 export default connect<IPackingListContainerStateProps, IPackingListContainerDispatchProps, IPackingListContainerOwnProps>(mapStateToProps, mapDispatchToProps)(PackingListContainer);

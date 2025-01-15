@@ -9,11 +9,7 @@
   display: none;
 }
 
-:where(.css-dev-only-do-not-override-1bby1ad).ant-checkbox-wrapper + .ant-checkbox-wrapper {
-  margin-inline-start: 0;
-}
-
-.ant-checkbox-wrapper.css-dev-only-do-not-override-1x6cogk.ant-checkbox-wrapper-in-form-item.ant-checkbox-group-item + .ant-checkbox-wrapper {
+.customCheckboxGroup__container .ant-checkbox-wrapper {
   margin-inline-start: 0px !important;
 }
 

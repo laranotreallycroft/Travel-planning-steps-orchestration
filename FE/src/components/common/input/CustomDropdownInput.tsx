@@ -1,23 +1,24 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Select } from "antd";
-import React, { useCallback, useMemo, useState } from "react";
-import { ILabelValue } from "model/common/input";
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Select } from 'antd';
+import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
+import { ILabelValue } from 'model/common/input';
+import React, { useCallback, useMemo, useState } from 'react';
 
 export interface ICustomDropdownInputOwnProps {
+  placeholder?: string;
   formItemName: string;
-  label?: string;
-  dropdownItems: ILabelValue[];
-  setDropdownItems?: (items: ILabelValue[]) => void;
+  value?: ILabelValue | ILabelValue[];
+  initialOptions?: ILabelValue[];
+  onChange?: (data?: ILabelValue | ILabelValue[]) => void;
   additionalElementAddFunction?: (items: string[]) => void;
 }
-type ICustomDropdownInputProps = ICustomDropdownInputOwnProps;
+type ICustomDropdownInputProps = ICustomDropdownInputOwnProps & IWithLocalizeOwnProps;
 
-const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
-  props: ICustomDropdownInputProps
-) => {
+const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (props: ICustomDropdownInputProps) => {
   const form = Form.useFormInstance();
 
-  const [searchValue, setSearchValue] = useState("");
+  const [options, setOptions] = useState<ILabelValue[] | undefined>(props.initialOptions);
+  const [searchValue, setSearchValue] = useState('');
 
   const handleAdd = useCallback(
     (value: string) => {
@@ -26,55 +27,48 @@ const CustomDropdownInput: React.FC<ICustomDropdownInputProps> = (
         value: value,
       };
 
-      if (
-        newDropdownItem.value.length > 0 &&
-        !props.dropdownItems.find((item) => item.label === value)
-      ) {
-        const newDropdownItems = [...props.dropdownItems, newDropdownItem];
-        props.setDropdownItems?.(newDropdownItems);
+      const newOptions = [...(options ?? []), newDropdownItem];
+      setOptions(newOptions);
 
-        const selectedItems = form.getFieldValue(props.formItemName);
-        form.setFieldValue(props.formItemName, [
-          ...(selectedItems ?? []),
-          newDropdownItem.value,
-        ]);
-        props.additionalElementAddFunction?.([
-          ...(selectedItems ?? []),
-          newDropdownItem.value,
-        ]);
+      const selectedItems = form.getFieldValue(props.formItemName);
+      form.setFieldValue(props.formItemName, [...(selectedItems ?? []), newDropdownItem.value]);
+      props.additionalElementAddFunction?.([...(selectedItems ?? []), newDropdownItem.value]);
 
-        setSearchValue("");
-      }
+      setSearchValue('');
     },
-    [props.dropdownItems]
+    [options, props.additionalElementAddFunction]
   );
 
-  const notFoundContentRender = useMemo(
-    () => (
-      <div className="customDropdownInput__notFoundContentRender">
-        No matches found
-        <Button onClick={() => handleAdd(searchValue)} icon={<PlusOutlined />}>
-          Create new
-        </Button>
-      </div>
-    ),
-    [searchValue]
-  );
+  const addButton = useMemo(() => {
+    const isDisabled = searchValue.length === 0 || options?.some((option) => option.label === searchValue);
+
+    return (
+      <Button onClick={() => handleAdd(searchValue)} disabled={isDisabled} icon={<PlusOutlined />} className="fullWidth margin-bottom-sm">
+        {props.translate('CUSTOM_DROPDOWN_INPUT.ADD')}
+      </Button>
+    );
+  }, [searchValue, options]);
 
   return (
-    <Form.Item name={props.formItemName} label={props.label}>
-      <Select
-        placeholder="Packing list items"
-        mode="multiple"
-        allowClear
-        options={props.dropdownItems}
-        className="customDropdownInput"
-        searchValue={searchValue}
-        onSearch={setSearchValue}
-        notFoundContent={notFoundContentRender}
-      ></Select>
-    </Form.Item>
+    <Select
+      value={props.value}
+      placeholder={props.placeholder}
+      mode="multiple"
+      allowClear
+      options={options}
+      className="customDropdownInput"
+      searchValue={searchValue}
+      onSearch={setSearchValue}
+      onChange={props.onChange}
+      notFoundContent={<></>}
+      dropdownRender={(menu) => (
+        <React.Fragment>
+          {addButton}
+          {menu}
+        </React.Fragment>
+      )}
+    ></Select>
   );
 };
 
-export default CustomDropdownInput;
+export default withLocalize<ICustomDropdownInputOwnProps>(CustomDropdownInput as any);

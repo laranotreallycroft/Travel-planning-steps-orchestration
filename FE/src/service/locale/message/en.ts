@@ -125,6 +125,16 @@ const en: any = {
   'PACKING_LIST_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update packing list',
 
   'SCHEDULE_VIEW.COMMUTE_LABEL': 'Commute to',
+
+  'PACKING_LIST_HEADER.EDIT': 'Edit',
+  'PACKING_LIST_HEADER.CREATE_NEW': 'Create new',
+  'PACKING_LIST_HEADER.MODAL_TITLE': 'Create a new packing list',
+  'PACKING_LIST_HEADER.LABEL.LABEL': 'Name',
+  'PACKING_LIST_HEADER.LABEL.PLACEHOLDER': 'Enter a name for your packing list',
+  'PACKING_LIST_HEADER.ITEMS.LABEL': 'Items',
+  'PACKING_LIST_HEADER.ITEMS.PLACEHOLDER': 'Add your items',
+
+  'CUSTOM_DROPDOWN_INPUT.ADD': 'Add new item',
 };
 
 export default en;
