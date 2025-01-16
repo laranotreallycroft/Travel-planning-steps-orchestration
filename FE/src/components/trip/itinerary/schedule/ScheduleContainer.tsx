@@ -1,4 +1,3 @@
-import { AppointmentModel } from '@devexpress/dx-react-scheduler';
 import ScheduleView from 'components/trip/itinerary/schedule/ScheduleView';
 import { IItinerary } from 'model/trip/itinerary/Itinerary';
 import { useCallback } from 'react';

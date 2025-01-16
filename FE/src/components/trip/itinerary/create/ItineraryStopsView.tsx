@@ -130,11 +130,11 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
   return (
     <div className="margin-top-lg">
       <Row gutter={[16, 16]}>
-        <Col xs={24} xl={12}>
+        <Col xs={24} xl={11}>
           <MapSearch onChange={handleAddStop} hideValueAfterSelect={true} />
         </Col>
 
-        <Col xs={24} sm={16} lg={12} xl={8}>
+        <Col xs={24} sm={15} lg={12} xl={8}>
           <Form.Item name={'optimize'}>
             <Radio.Group>
               <Radio.Button value={false}>{props.translate('ITINERARY_STOPS_VIEW.ROUTE_OPTIMIZE.FALSE')}</Radio.Button>
@@ -143,7 +143,7 @@ const ItineraryStopsView: React.FC<IItineraryStopsViewProps> = (props: IItinerar
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={8} lg={12} xl={4}>
+        <Col xs={24} sm={9} lg={12} xl={5}>
           <Form.Item name={'transportationMethod'}>
             <Select options={transportationMethods} />
           </Form.Item>
