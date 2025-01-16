@@ -141,6 +141,8 @@ const tripDeleteffect = (action$: Observable<IPayloadAction<IIdPayload>>, state$
         EntityApiService.deleteEntity(`/trips/${tripId}`)
           .then((response) => {
             if (response.status === 200) {
+              notificationService.success(LocalizeService.translate('TRIP_BUSINESS_STORE.DELETE.SUCCESS'));
+
               return response.data;
             }
           })

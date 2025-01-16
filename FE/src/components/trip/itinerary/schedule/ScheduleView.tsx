@@ -1,7 +1,6 @@
+import { SaveOutlined } from '@ant-design/icons';
 import { EditingState, ViewState } from '@devexpress/dx-react-scheduler';
 import { AppointmentTooltip, Appointments, DateNavigator, DragDropProvider, EditRecurrenceMenu, Scheduler, Toolbar, WeekView } from '@devexpress/dx-react-scheduler-material-ui';
-import SaveIcon from '@mui/icons-material/Save';
-import { Paper } from '@mui/material';
 import { Button } from 'antd';
 import { mapDataToScheduler, moveRecursively } from 'components/trip/itinerary/schedule/utils';
 import dayjs from 'dayjs';
@@ -58,8 +57,8 @@ const ScheduleContainer: React.FC<IScheduleContainerProps> = (props: IScheduleCo
   }, [schedulerData, props.onItineraryScheduleUpdate]);
 
   return (
-    <Paper className="schedule__container">
-      {props.isEditing && <Button onClick={handleSave} icon={<SaveIcon />} className="schedule__saveButton" />}
+    <div className="panel schedule__container">
+      {props.isEditing && <Button onClick={handleSave} icon={<SaveOutlined />} className="schedule__saveButton" />}
       {/* @ts-ignore */}
       <Scheduler data={schedulerData}>
         <ViewState defaultCurrentDate={props.itineraries[0].date} />
@@ -72,7 +71,7 @@ const ScheduleContainer: React.FC<IScheduleContainerProps> = (props: IScheduleCo
         <Toolbar />
         <DateNavigator />
       </Scheduler>
-    </Paper>
+    </div>
   );
 };
 

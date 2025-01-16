@@ -1,8 +1,4 @@
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { CalendarOutlined, CloseOutlined, DeleteOutlined, EditOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Button, Col, Popconfirm, Radio, Row } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import MapElement from 'components/common/map/MapElement';
@@ -41,20 +37,20 @@ const ItineraryView: React.FC<IItineraryViewProps> = (props: IItineraryViewProps
         <Col>
           <Radio.Group value={scheduleView} onChange={(e) => setScheduleView(e.target.value)}>
             <Radio.Button value={false}>
-              <LocationOnIcon />
+              <PushpinOutlined />
             </Radio.Button>
             <Radio.Button value={true}>
-              <CalendarTodayIcon />
+              <CalendarOutlined />
             </Radio.Button>
           </Radio.Group>
         </Col>
         <Col>
-          <Button onClick={toggleIsEditing} icon={isEditing ? <CloseIcon /> : <EditIcon />} className="margin-left-sm" />
+          <Button onClick={toggleIsEditing} icon={isEditing ? <CloseOutlined /> : <EditOutlined />} className="margin-left-sm" />
         </Col>
         <Col xs={2} sm={1}>
           {isEditing && (
             <Popconfirm title={props.translate('ITINERARY_VIEW.DELETE_ITINERARY.TITLE')} description={props.translate('ITINERARY_VIEW.DELETE_ITINERARY.DESCRIPTION')} onConfirm={props.onItinerariesDelete} okText={props.translate('COMMON.YES')} cancelText={props.translate('COMMON.NO')} placement="topRight">
-              <Button icon={<DeleteIcon />} />
+              <Button icon={<DeleteOutlined />} />
             </Popconfirm>
           )}
         </Col>

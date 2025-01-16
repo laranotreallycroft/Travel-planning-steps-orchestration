@@ -17,6 +17,7 @@ const en: any = {
 
   'LOGIN.SUCCESS': 'Login successful',
   'LOGIN.ERROR': 'Unable to sign in',
+  'LOGOUT.SUCCESS': 'Logout successful',
 
   'LOGIN_VIEW.FORM.EMAIL_MESSAGE': 'Please enter email',
   'LOGIN_VIEW.FORM.EMAIL_PLACEHOLDER': 'Email address',
@@ -47,6 +48,7 @@ const en: any = {
   'TRIP_BUSINESS_STORE.FETCH.ERROR': 'Unable to fetch trip data',
   'TRIP_BUSINESS_STORE.UPDATE.SUCCESS': 'Trip successfully updated',
   'TRIP_BUSINESS_STORE.UPDATE.ERROR': 'Unable to update trip',
+  'TRIP_BUSINESS_STORE.DELETE.SUCCESS': 'Trip successfully deleted',
   'TRIP_BUSINESS_STORE.DELETE.ERROR': 'Unable to delete trip',
 
   'TRIP_LIST_BUSINESS_STORE.FETCH.ERROR': 'Unable to fetch trip list',

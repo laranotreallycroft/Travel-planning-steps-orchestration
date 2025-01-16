@@ -122,6 +122,7 @@ const logoutEffect = (action$: Observable<IAction>, state$: Observable<any>) => 
         tap(() => {
           AuthTokenManager.deleteToken();
           StoreService.getPersistor().purge();
+          notificationService.success(LocalizeService.translate('LOGOUT.SUCCESS'));
         }),
 
         trackAction(action)

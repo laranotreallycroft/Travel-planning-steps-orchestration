@@ -1,4 +1,5 @@
-import { Button, Col, Form, Row } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Popconfirm, Row } from 'antd';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import TripCreateForm from 'components/trip/create/TripCreateForm';
 import dayjs, { Dayjs } from 'dayjs';
@@ -46,9 +47,11 @@ const TripCreateModal: React.FC<ITripCreateModalProps> = (props: ITripCreateModa
       <TripCreateForm initialValues={initialValues} formRef={form} onSubmit={handleSubmit} />
       <Row justify={'end'} gutter={[16, 16]} className="margin-top-lg">
         <Col>
-          <Button danger onClick={props.onTripDelete}>
-            {props.translate('COMMON.DELETE')}
-          </Button>
+          <Popconfirm title={props.translate('TRIP_EDIT_VIEW.DELETE_TRIP.TITLE')} description={props.translate('TRIP_EDIT_VIEW.DELETE_TRIP.DESCRIPTION')} onConfirm={props.onTripDelete} okText={props.translate('COMMON.YES')} cancelText={props.translate('COMMON.NO')} placement="topRight">
+            <Button danger icon={<DeleteOutlined />}>
+              {props.translate('COMMON.DELETE')}
+            </Button>
+          </Popconfirm>
         </Col>
         <Col>
           <Button type="primary" onClick={form.submit}>
