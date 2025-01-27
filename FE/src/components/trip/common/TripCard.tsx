@@ -1,3 +1,4 @@
+import { ArrowRightOutlined, MinusOutlined } from '@ant-design/icons';
 import { Col, Row, Tag } from 'antd';
 import Paragraph from 'antd/es/typography/Paragraph';
 import imagePlaceholder from 'asset/img/trip_image_placeholder.svg';
@@ -17,15 +18,6 @@ export interface ITripCardOwnProps {
 type ITripCardProps = ITripCardOwnProps & IWithLocalizeOwnProps;
 
 const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
-  const [showImageCol, setShowImageCol] = useState<boolean>(true);
-  const ref = useResizeObserver((size) => {
-    if (size.width < 250) {
-      setShowImageCol(false);
-    } else {
-      setShowImageCol(true);
-    }
-  });
-
   const navigator = useNavigate();
   const cityName = props.trip.location.label.substring(0, props.trip.location.label.indexOf(','));
 
@@ -45,8 +37,8 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
   }, [props.trip.id]);
 
   return (
-    <Row ref={ref} className={cardClassName} onClick={props.isClickable ? handleCardClick : undefined}>
-      <Col span={showImageCol ? 14 : 24}>
+    <Row className={cardClassName} onClick={props.isClickable ? handleCardClick : undefined} gutter={[12, 12]}>
+      <Col xs={24} sm={14}>
         <div className="tripCard__dataContainer">
           <Paragraph ellipsis={{ tooltip: props.trip.label }} className="tripCard__title">
             {props.trip.label}
@@ -61,7 +53,9 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
               <Tag className="tripCard__tag">{toLocalDateFormat(props.trip.dateFrom)}</Tag>
             </Col>
             <Col>
-              <span className="tripCard__label">-</span>
+              <span className="tripCard__dash">
+                <MinusOutlined />
+              </span>
             </Col>
             <Col>
               <Tag className="tripCard__tag">{toLocalDateFormat(props.trip.dateTo)}</Tag>
@@ -69,11 +63,10 @@ const TripCard: React.FC<ITripCardProps> = (props: ITripCardProps) => {
           </Row>
         </div>
       </Col>
-      {showImageCol && (
-        <Col span={10} className="tripCard__imgCol">
-          <img src={imagePlaceholder} className="tripCard__img" alt=""></img>
-        </Col>
-      )}
+
+      <Col xs={24} sm={10} className="tripCard__imgCol">
+        <img src={imagePlaceholder} className="tripCard__img" alt=""></img>
+      </Col>
     </Row>
   );
 };
