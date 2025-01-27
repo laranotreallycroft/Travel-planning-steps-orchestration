@@ -1,4 +1,4 @@
-import PastTripListView from 'components/trip/list/PastTripListView';
+import TripListView from 'components/trip/list/TripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -26,7 +26,7 @@ const PastTripListContainer: React.FC<IPastTripListContainerProps> = (props: IPa
     };
   }, [fetchTripList]);
 
-  return <React.Fragment>{props.tripList && <PastTripListView tripList={props.tripList} />}</React.Fragment>;
+  return <React.Fragment>{props.tripList && <TripListView tripList={props.tripList} />}</React.Fragment>;
 };
 
 const mapStateToProps = (state: any): IPastTripListContainerStateProps => ({

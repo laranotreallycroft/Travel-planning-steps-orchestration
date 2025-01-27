@@ -1,5 +1,5 @@
 import TripCreateContainer from 'components/trip/create/TripCreateContainer';
-import UpcomingTripListView from 'components/trip/list/UpcomingTripListView';
+import TripListView from 'components/trip/list/TripListView';
 import { ITrip } from 'model/trip/Trip';
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
@@ -35,7 +35,7 @@ const UpcomingTripListContainer: React.FC<IUpcomingTripListContainerProps> = (pr
 
   return (
     <React.Fragment>
-      {props.tripList && <UpcomingTripListView tripList={props.tripList} onTripCreateModalOpen={toggleTripCreateModal} />} {isTripCreateModalOpen && <TripCreateContainer onTripCreateModalClose={toggleTripCreateModal} />}
+      {props.tripList && <TripListView tripList={props.tripList} canCreateTrip={true} onTripCreateModalOpen={toggleTripCreateModal} />} {isTripCreateModalOpen && <TripCreateContainer onTripCreateModalClose={toggleTripCreateModal} />}
     </React.Fragment>
   );
 };

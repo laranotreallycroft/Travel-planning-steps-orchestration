@@ -6,25 +6,28 @@ import TripListEmpty from 'components/trip/list/TripListEmpty';
 import { ITrip } from 'model/trip/Trip';
 import React from 'react';
 
-export interface IUpcomingTripListViewOwnProps {
+export interface ITripListViewOwnProps {
   tripList: ITrip[];
-  onTripCreateModalOpen: () => void;
+  canCreateTrip?: boolean;
+  onTripCreateModalOpen?: () => void;
 }
 
-type IUpcomingTripListViewProps = IUpcomingTripListViewOwnProps & IWithLocalizeOwnProps;
+type ITripListViewProps = ITripListViewOwnProps & IWithLocalizeOwnProps;
 
-const UpcomingTripListView: React.FC<IUpcomingTripListViewProps> = (props: IUpcomingTripListViewProps) => {
+const TripListView: React.FC<ITripListViewProps> = (props: ITripListViewProps) => {
   return (
     <React.Fragment>
       {props.tripList.length > 0 ? (
         <React.Fragment>
-          <Row className="margin-md">
-            <Col>
-              <Button type="primary" onClick={props.onTripCreateModalOpen} icon={<PlusOutlined />}>
-                {props.translate('TRIP_LIST_VIEW.CREATE_TRIP_BUTTON')}
-              </Button>
-            </Col>
-          </Row>
+          {props.canCreateTrip && (
+            <Row className="margin-md">
+              <Col>
+                <Button type="primary" onClick={props.onTripCreateModalOpen} icon={<PlusOutlined />}>
+                  {props.translate('TRIP_LIST_VIEW.CREATE_TRIP_BUTTON')}
+                </Button>
+              </Col>
+            </Row>
+          )}
 
           <Row gutter={[4, 4]}>
             {props.tripList.map((trip) => (
@@ -35,10 +38,10 @@ const UpcomingTripListView: React.FC<IUpcomingTripListViewProps> = (props: IUpco
           </Row>
         </React.Fragment>
       ) : (
-        <TripListEmpty isUpcomingTrips={true} onTripCreateModalOpen={props.onTripCreateModalOpen} />
+        <TripListEmpty isUpcomingTrips={props.canCreateTrip} onTripCreateModalOpen={props.onTripCreateModalOpen} />
       )}
     </React.Fragment>
   );
 };
 
-export default withLocalize<IUpcomingTripListViewOwnProps>(UpcomingTripListView as any);
+export default withLocalize<ITripListViewOwnProps>(TripListView as any);
