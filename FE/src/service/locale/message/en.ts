@@ -84,6 +84,7 @@ const en: any = {
   'TRIP_TABS.ITINERARY': 'Itinerary',
   'TRIP_TABS.PACKING_LIST': 'Packing list',
   'TRIP_TABS.EDIT': 'Edit',
+  'TRIP_TABS.CALENDAR': 'Add to calendar',
 
   'WEATHER_VIEW.CURRENT_WEATHER': 'Current weather',
   'WEATHER_VIEW.PAST_WEATHER': 'Weather in %{year}',

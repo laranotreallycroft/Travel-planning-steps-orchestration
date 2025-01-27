@@ -11,3 +11,7 @@
 .ant-notification-notice-close {
   position: unset !important;
 }
+
+.ant-menu {
+  margin-bottom: 0;
+}

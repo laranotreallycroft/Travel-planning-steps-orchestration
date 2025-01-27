@@ -1,4 +1,4 @@
-import { ArrowRightOutlined, MinusOutlined } from '@ant-design/icons';
+import { MinusOutlined } from '@ant-design/icons';
 import { Col, Row, Tag } from 'antd';
 import Paragraph from 'antd/es/typography/Paragraph';
 import imagePlaceholder from 'asset/img/trip_image_placeholder.svg';
@@ -6,9 +6,8 @@ import { toLocalDateFormat } from 'components/common/localize/utils';
 import withLocalize, { IWithLocalizeOwnProps } from 'components/common/localize/withLocalize';
 import { classNames } from 'components/common/util/classNames';
 import { ITrip } from 'model/trip/Trip';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useResizeObserver } from 'service/util/resizeService';
 
 export interface ITripCardOwnProps {
   trip: ITrip;
